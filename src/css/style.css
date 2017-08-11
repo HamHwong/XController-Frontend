@@ -1,0 +1,43 @@
+.sidebar-nav .section .open a,.sidebar-nav .section .subsection a:active,.sidebar-nav .section .subsection a:hover,.sidebar-nav .section .subsection a:link,.sidebar-nav .section .subsection a:visited{color:#000}
+#sideNav_wapper,.sidebar-nav .section a:hover,.sidebar-nav .section a:visited{background-color:#31578B}
+*{margin:0;padding:0}
+.page-header .header_userInfo .avatar{float:left}
+.page-header .header_userInfo .information{margin-left:30%}
+.page-header .header_userInfo .information .account,.page-header .header_userInfo .information .profile{display:inline-block;float:left}
+#right_wapper{margin-left:200px}
+#right_wapper.extend{animation:extend 1s forwards}
+#right_wapper.shrunk{animation:shrunk 1s forwards}
+#content_wapper{background-color:red}
+.row{margin-left:0;margin-right:0}
+@keyframes extend{from{margin-left:200px}
+to{margin-left:0}
+}
+@keyframes shrunk{from{margin-left:0}
+to{margin-left:200px}
+}
+#sideNav_wapper{color:#FFF;height:100%;float:left}
+#sideNav_wapper .sideNav{display:block;float:left;background-color:#40679C;padding-top:20px;width:200px;height:100%;-webkit-animation:open-sideBar 1s forwards}
+#sideNav_wapper .sideNav li,#sideNav_wapper .sideNav ul{list-style:none;float:left}
+#sideNav_wapper .sideNav.collased{-webkit-animation:close-sideBar 1s forwards}
+@keyframes close-sideBar{from{left:0}
+to{left:-200px}
+}
+@keyframes open-sideBar{from{left:-200px}
+to{left:0}
+}
+@keyframes close-sideBtn{from{left:200px}
+to{left:0}
+}
+@keyframes open-sideBtn{from{left:0}
+to{left:200px}
+}
+.sidebar-nav .section{float:left;width:100%}
+.sidebar-nav .section a:active,.sidebar-nav .section a:hover,.sidebar-nav .section a:link,.sidebar-nav .section a:visited{color:#FFF}
+.sidebar-nav .section .open a,.sidebar-nav .section .subsection a:active,.sidebar-nav .section .subsection a:hover,.sidebar-nav .section .subsection a:link,.sidebar-nav .section .subsection a:visited{color:#000}
+.sidebar-nav .section .dropdown-menu{border-radius:0;border:none;box-shadow:none;margin:0;padding:0;position:relative;width:100%}
+.sidebar-nav .section .subsection a{padding:10px}
+.sidebar-nav .section .glyphicon{padding-right:10px}
+.sideBtn{position:fixed;display:block;background-color:#123;left:200px;color:#31578B;font-size:16px;border-radius:0 6px 6px 0;height:50px;-webkit-animation:open-sideBtn 1s forwards;margin-top:100px}
+.sideBtn .glyphicon{color:#fff;display:block;top:35%}
+.sideBtn.collased{-webkit-animation:close-sideBtn 1s forwards}
+.sidebar-nav .caret{margin-left:40%}
