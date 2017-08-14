@@ -38,7 +38,6 @@ gulp.task('revHtml', ['revCss', 'revJs'], function() {
   return gulp.src([config.path.config + '/*.json', 'src/**/*.html'])
     .pipe(revCollector())
     .pipe(gulp.dest('dist'));
-  console.log("done");
 });
 
 var jsSrc = config.path.js

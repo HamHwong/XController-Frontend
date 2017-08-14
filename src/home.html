@@ -27,31 +27,40 @@
     </header>
     <div id="content_wapper" class="container-fluid">
       <div class="search_wapper ">
-        <div class="querycontrols">
-          <form class="form" role="form">
-            <div class="form-group col-md-3 col-xs-6">
-              <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
-            </div>
-            <div class="form-group col-md-3 col-xs-6">
-              <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
-            </div>
-            <div class="form-group col-md-3 col-xs-6">
-              <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
-            </div>
-            <div class="form-group col-md-3 col-xs-6">
-              <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
-            </div>
+        <form class="form" role="form">
+          <div class="querycontrols clearfix">
 
-            <div class="input-group col-md-12 col-xs-12">
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+              <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
+            </div>
+            <div class="form-group col-md-3 col-sm-6  col-xs-12">
+              <!-- <label for="name">选择列表</label> -->
+              <select class="form-control col-md-10">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+              </select>
+              <!-- <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" /> -->
+            </div>
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+              <input type="text" name="" value="" class="form-control" placeholder="输入筛选条件" />
+            </div>
+            <div class="form-group col-md-3 col-sm-6 col-xs-12">
+              <input class="form-control" id="disabledInput" type="text" placeholder="该输入框禁止输入..." disabled>
+            </div>
+            <div class="form-group">
               <div class="search_box_warp col-md-10 col-xs-10">
                 <input type="text" name="" id="search_box" value="" class="form-control col-md-11" placeholder="在这里输入关键字">
-                <ul class="dropdown-menu keyhint col-md-12 col-xs-12">
+                <ul class="dropdown-menu keyhint col-md-11 col-xs-11">
                 </ul>
               </div>
-              <button type="submit" class="btn btn-default col-md-2  col-xs-2 ">提交</button>
+              <button type="submit" class="btn btn-success col-md-2  col-xs-2 ">Query</button>
             </div>
-          </form>
-        </div>
+
+          </div>
+        </form>
       </div>
       <div class="tabs">
         <ul class="nav nav-tabs" id="myTab">
@@ -69,9 +78,9 @@
               <th key="key">h1</th>
               <th key="prop">h2</th>
               <th key="prop">h3</th>
-              <th key="prop">h4</th>
+              <th key="key">h4</th>
               <th key="prop">h5</th>
-              <th key="prop">h6</th>
+              <th key="operation">h6</th>
             </tr>
             <tr>
               <td>a1a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5</td>
@@ -81,7 +90,6 @@
               <td>a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5</td>
               <td><a href="#">Del</a>&nbsp;<a href="#">Edit</a></td>
             </tr>
-
             <tr>
               <td>b1</td>
               <td>b2</td>
@@ -90,7 +98,8 @@
               <td>b5</td>
               <td><a href="#">Del</a>&nbsp;<a href="#">Edit</a></td>
             </tr>
-            <tr class="info_card_row">
+            <!-- hack TODO:改成模板 -->
+            <tr class="info_card_row hide">
               <td colspan="1">
                 <div class="card col-xs-12 row">
                   <div class="card_head row">
@@ -143,12 +152,12 @@
         <div class="tab-pane" id="unfinished">
           <table class="table table-bordered table-hover">
             <tr>
-              <th key="key">h1</th>
+              <th key="prop">h1</th>
               <th key="prop">h2</th>
               <th key="prop">h3</th>
               <th key="key">h4</th>
               <th key="prop">h5</th>
-              <th key="prop">h6</th>
+              <th key="operation">h6</th>
             </tr>
             <tr>
               <td>a1</td>
@@ -168,7 +177,6 @@
             </tr>
           </table>
         </div>
-
         <ul class="pagination">
           <li><a href="#">&laquo;</a></li>
           <li><a href="#">1</a></li>
@@ -282,6 +290,7 @@
   <link rel="stylesheet" href="./css/plugs/buttons.css">
   <link rel="stylesheet" href="./css/plugs/blue.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
 
   <!--  -->
   <!-- <link rel="stylesheet" href="./test/style.css"> -->
@@ -290,36 +299,38 @@
   <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
   <script type="text/javascript" src="./js/sidenav.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
-<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="./js/plugs/icheck.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss.js"></script>
   <script type="text/javascript">
     $(function() {
       $("[data-toggle='popover']").popover();
     });
     $(document).ready(function() {
-  $('#myTab a:first').tab('show');
-  $('#myTab a').click(function(e) {
-    e.preventDefault();
-    $(this).tab('show');
-  })
+      $('#myTab a:first').tab('show');
+      $('#myTab a').click(function(e) {
+        e.preventDefault();
+        $(this).tab('show');
+      })
 
-  $(".form_datetime").datetimepicker({
-    minView: "month", //设置只显示到月份
-    format: 'yyyy-mm-dd',
-    autoclose: true, //选中关闭
-  });
+      $(".form_datetime").datetimepicker({
+        minView: "month", //设置只显示到月份
+        format: 'yyyy-mm-dd',
+        autoclose: true, //选中关闭
+      });
 
-  //插件check
-  $('input').iCheck({
-    checkboxClass: 'icheckbox_flat-blue',
-    radioClass: 'iradio_flat-blue'
-  });
-
-  hideColunmInMobile('finished')
-  hideColunmInMobile('unfinished')
-  addAllRowsCards("finished")
-  // addAllRowsCards("unfinished")
-})
+      //插件check
+      $('input').iCheck({
+        checkboxClass: 'icheckbox_flat-blue',
+        radioClass: 'iradio_flat-blue'
+      });
+      var $finishedTable = $('#finished table')
+      var $unfinishedTable = $('#unfinished table')
+      hideColunmInMobile($finishedTable)
+      hideColunmInMobile($unfinishedTable)
+      addAllRowsCards($finishedTable)
+      addAllRowsCards($unfinishedTable)
+    })
   </script>
 
 </body>

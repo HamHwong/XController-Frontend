@@ -1,12 +1,13 @@
 @import "browserConfig.less"; //处理scroll
 @import "../../config/StyleConfig.less"; //配置颜色
+
 @media (min-width: 768px) {
   #header_wapper {
     .header_logo {
       .logo:before {
         display: inline-block;
-        width: 200px;
-        height: 36px;
+        width: 20rem;
+        height: 3.6rem;
         content: '';
         background: url('../img/icons-blue-1.0.5.svg') no-repeat 0 -2450px;
       }
@@ -15,7 +16,7 @@
 
   #right_wapper {
     // float: left;
-    margin-left: 200px;
+    margin-left: 20rem;
   }
 
   #right_wapper.extend {
@@ -29,15 +30,15 @@
   #sideNav_wapper {}
 
   #content_wapper {
-    overflow: scroll;
+    // overflow: scroll;
     // word-wrap:break-word;
     background-color: @home-content-background-color;
-    padding: 20px;
+    padding: 2rem;
     height: 100%;
     //TO-DO
-    div {
-      background-color: @home-content-background-color;
-    }
+    // div {
+    //   background-color: @home-content-background-color;
+    // }
   }
 
   .row {
@@ -82,7 +83,7 @@
   }
 
   #content_wapper {
-    overflow: scroll;
+    // overflow: scroll;
     // word-wrap:break-word;
     background-color: @home-content-background-color;
   }

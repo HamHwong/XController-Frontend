@@ -3,6 +3,10 @@
 #content_wapper {
   .search_wapper {
     .querycontrols {
+      div {
+        background-color: #40679C;
+      }
+
       .search_box_warp {
         ul.keyhint {}
       }
@@ -19,6 +23,7 @@
     width: 100%;
     background-color: @home-sideNav-bg-color;
     padding: 0.5rem 0.3rem;
+    border-radius: 0 1rem 0 0;
 
     button {
       float: right;
@@ -47,19 +52,19 @@
           border-radius: 0 0 0.3rem 0.3rem;
           box-shadow: 0 0.5rem 1rem #888888;
           border: 1px solid #4A8BC2;
+
           .card_head {
             padding: 0.4rem;
-            background-color: #4A8BC2;
-            color:#fff;
+            // background-color: #4A8BC2;
+            color: #fff;
           }
 
           .card_body {
             font-size: 0.8rem;
             margin: 1rem;
             // word-wrap: break-word;
-
             .card_data_row {
-                border-bottom:  1px solid #e5e5e5;
+              border-bottom: 0.1rem solid #e5e5e5;
             }
 
             .card_data_title {
@@ -69,7 +74,7 @@
 
           .card_foot {
             // float: left;
-            border-top: 1px solid #e5e5e5;
+            border-top: 0.1rem solid #e5e5e5;
             margin: 1rem;
 
             .date {
@@ -136,6 +141,12 @@
   }
 }
 @media (max-width:768px) {
+  .content_wapper {
+    .nav-tabs {
+      border-bottom: none !important;
+    }
+  }
+
   .info_card_row {}
 
   .info_card_row.closeRow {
