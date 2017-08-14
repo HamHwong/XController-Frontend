@@ -1,33 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title>HomePage</title>
-</head>
-
-<body>
-
-  <div id="right_wapper" class="shrunk">
-    <header id="header_wapper">
-  <div class="page-header row">
-    <div class="header_logo col-md-4 col-sm-4 ">
-      <span class="logo text-info h1"><small>Econtroller Tools</small></span>
-    </div>
-    <div class="header_userInfo col-md-4 col-sm-4 col-md-offset-4 col-sm-offset-4">
-      <div class="avatar">
-        <a href="#"><img class="img-responsive" src="img/avatar.jpg" alt="" height="60px" width="60px" title="Popover title" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" data-content="左侧的 Popover 中的一些内容" ></a>
-      </div>
-      <div class="information">
-        <span class="account">Hello, Mr.User</span><br>
-        <span class="profile"><a href="#">Profile</a> <a href="#">Profile</a></span>
-      </div>
-    </div>
-  </div>
-</header>
-
-
-      <div id="content_wapper" class="container-fluid">
+<div id="content_wapper" class="container-fluid">
   <div class="search_wapper ">
     <form class="form" role="form">
       <div class="querycontrols clearfix">
@@ -261,88 +232,16 @@
 自动检测table用div重画
 数据绑定？
 -->
+<%#
+<link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+<link rel="stylesheet" href="./css/content-046e1c0547.css">
+<link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
+<link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
+<link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+<!-- 只有使用字体图标时才需要加载 Font-Awesome -->
 
-
-  </div>
-  <div id="sideNav_wapper" class="nav-show">
-    <span class="logo"><small>Econtroller</small></span>
-    <nav class="navbar navbar-default navbar-fixed-top sideNav" id="sidebar-wrapper">
-      <ul class="nav sidebar-nav section-group">
-        <li class="section"><a href="#"><span class="glyphicon glyphicon-th-list"></span>Contract</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-list-alt"></span>Invoice</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon glyphicon-download-alt"></span>PAC/FAC</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-yen"></span>Cash In</a></li>
-        <li class="section dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>F&C data<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li class="section subsection "><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-            <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-            <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-          </ul>
-        </li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon glyphicon-download-alt"></span>Report</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-user"></span>User Admin</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-option-horizontal"></span>System Admin</a></li>
-      </ul>
-    </nav>
-    <div class="sideBtn text-center">
-      <span class="glyphicon glyphicon-triangle-left"></span>
-    </div>
-  </div>
-
-
-    <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-    <link rel="stylesheet" href="./css/sidenav.css">
-    <link rel="stylesheet" href="./css/header.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/content.css">
-    <!--  -->
-    <link rel="stylesheet" href="./css/plugs/buttons.css">
-    <link rel="stylesheet" href="./css/plugs/blue.css">
-    <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
-    <!--  -->
-    <!-- <link rel="stylesheet" href="./test/style.css"> -->
-    <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-    <script type="text/javascript" src="./js/sidenav.js"></script>
-    <script type="text/javascript" src="./js/content.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="./js/plugs/icheck.js"></script>
-    <script type="text/javascript" src="./js/plugs/xss.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $("[data-toggle='popover']").popover(); //悬浮框
-        $('#myTab a:first').tab('show'); //切换栏
-        $('#myTab a').click(function(e) {
-          e.preventDefault();
-          $(this).tab('show');
-        })
-
-        $(".form_datetime").datetimepicker({
-          minView: "month", //设置只显示到月份
-          format: 'yyyy-mm-dd',
-          autoclose: true, //选中关闭
-        }); //timepicker
-        //插件check
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_flat-blue',
-          radioClass: 'iradio_flat-blue'
-        });
-
-        if($(window).innerWidth()<768){
-          sideclose()
-        }//hack
-
-        var $finishedTable = $('#finished table')
-        var $unfinishedTable = $('#unfinished table')
-        hideColunmInMobile($finishedTable)
-        hideColunmInMobile($unfinishedTable)
-        addAllRowsCards($finishedTable)
-        addAllRowsCards($unfinishedTable)
-      })
-    </script>
-
-</body>
-
-</html>
+<script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+<script type="text/javascript" src="./js/content-aff7324402.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
+<script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>%>

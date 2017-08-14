@@ -10,6 +10,7 @@ var revCollector = require('gulp-rev-collector')
 var pug = require('gulp-pug')
 var concat = require('gulp-concat')
 var cssmin = require('gulp-minify-css')
+var ejs = require('gulp-ejs')
 
 var config = require('./config/ServerConfig.js')
 var __dist = config.path.dist
@@ -73,18 +74,22 @@ gulp.task('clean-js', function(event) {
       force: true
     }));
 })
+// gulp.task('ejs', function() {
+//   gulp.src("src/templates/content.ejs")
+//   .pipe(ejs({},{},{ejs:".html"}))
+//   .pipe(gulp.dest("src/templates/"))
+// })
+
+gulp.task('ejs', function() {
+  gulp.src("./src/templates/**/*.ejs")
+    .pipe(ejs({}, {}, {ext:".html"}))
+    .pipe(gulp.dest("./src"))
+});
 
 gulp.task('watch', function() {
-  // gulp.watch([__src + '/less/**/*.less',
-  //   __src + '/css/**/*.css',
-  //   __src + '/js/**/*.js',
-  //   __src + '/pug/**/*.pug',
-  //   __src + '/**/*.html',
-  //   './config/*Config.*',
-  // ], ['revHtml'])
-  // gulp.watch([__src + '/css/**/*.css','./config/*Config.css'], ['revCss'])
   gulp.watch([__src + '/less/**/*.less', './config/*Config.less'], ['revHtml'])
   gulp.watch([__src + '/js/**/*.js', './config/*Config.js'], ['revHtml'])
+  gulp.watch(['src/templates/**/*.ejs'], ['ejs'])
   gulp.watch([__src + '/pug/**/*.pug',
     __src + '/**/*.html',
     './config/*Config.*',
@@ -118,6 +123,6 @@ gulp.task('concat-css', function() {
     .pipe(gulp.dest('dist/test'))
 })
 
-gulp.task('default', ['watch', 'revHtml', 'webserver'], function() {
+gulp.task('default', ['ejs','watch', 'revHtml', 'webserver'], function() {
   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })

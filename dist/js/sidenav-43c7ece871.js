@@ -1,13 +1,3 @@
-$(document).ready(function() {
-  $('.sideBtn').click(function() {
-    if ($('.sideBtn').hasClass('nav_collapse')) {
-      sideopen()
-    } else {
-      sideclose()
-    }
-  })
-})
-
 var sideopen = function() {
   $('.sideBtn').removeClass('nav_collapse').addClass('nav_open');
   $('.sideNav').removeClass('nav_collapse').addClass('nav_open');
@@ -21,3 +11,14 @@ var sideclose = function() {
   $('.sideBtn .glyphicon').removeClass().addClass('glyphicon').addClass('glyphicon-triangle-right')
   $('#right_wapper').removeClass().addClass('extend')
 }
+
+$(document).ready(function() {
+  // console.log($('.sideBtn').click())
+  $('.sideBtn').click(function() {
+    if ($('.sideBtn').hasClass('nav_collapse')) {
+      sideopen()
+    } else {
+      sideclose()
+    }
+  })
+})

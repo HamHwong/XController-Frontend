@@ -1,68 +1,30 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title>HomePage</title>
-</head>
-
-<body>
-
-  <div id="right_wapper" class="shrunk">
-    <header id="header_wapper">
-  <div class="page-header row">
-    <div class="header_logo col-md-4 col-sm-4 ">
-      <span class="logo text-info h1"><small>Econtroller Tools</small></span>
-    </div>
-    <div class="header_userInfo col-md-4 col-sm-4 col-md-offset-4 col-sm-offset-4">
-      <div class="avatar">
-        <a href="#"><img class="img-responsive" src="img/avatar.jpg" alt="" height="60px" width="60px" title="Popover title" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" data-content="左侧的 Popover 中的一些内容" ></a>
-      </div>
-      <div class="information">
-        <span class="account">Hello, Mr.User</span><br>
-        <span class="profile"><a href="#">Profile</a> <a href="#">Profile</a></span>
-      </div>
-    </div>
-  </div>
-</header>
-
-
-      <div id="content_wapper" class="container-fluid">
+<div id="content_wapper" class="container-fluid">
   <div class="search_wapper ">
-    <form class="form" role="form">
-      <div class="querycontrols clearfix">
-
-        <div class="form-group col-md-3 col-sm-6 col-xs-12">
+    <div class="querycontrols">
+      <form class="form" role="form">
+        <div class="form-group col-md-3 col-xs-6">
           <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
         </div>
-        <div class="form-group col-md-3 col-sm-6  col-xs-12">
-          <!-- <label for="name">选择列表</label> -->
-          <select class="form-control col-md-10">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-              </select>
-          <!-- <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" /> -->
+        <div class="form-group col-md-3 col-xs-6">
+          <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
         </div>
-        <div class="form-group col-md-3 col-sm-6 col-xs-12">
-          <input type="text" name="" value="" class="form-control" placeholder="输入筛选条件" />
+        <div class="form-group col-md-3 col-xs-6">
+          <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
         </div>
-        <div class="form-group col-md-3 col-sm-6 col-xs-12">
-          <input class="form-control" id="disabledInput" type="text" placeholder="该输入框禁止输入..." disabled>
-        </div>
-        <div class="form-group">
-          <div class="search_box_warp col-md-10 col-xs-10">
-            <input type="text" name="" id="search_box" value="" class="form-control col-md-11" placeholder="在这里输入关键字">
-            <ul class="dropdown-menu keyhint col-md-11 col-xs-11">
-            </ul>
-          </div>
-          <button type="submit" class="btn btn-success col-md-2  col-xs-2 ">Query</button>
+        <div class="form-group col-md-3 col-xs-6">
+          <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
         </div>
 
-      </div>
-    </form>
+        <div class="input-group col-md-12 col-xs-12">
+          <div class="search_box_warp col-md-10 col-xs-10">
+            <input type="text" name="" id="search_box" value="" class="form-control col-md-11" placeholder="在这里输入关键字">
+            <ul class="dropdown-menu keyhint col-md-12 col-xs-12">
+            </ul>
+          </div>
+          <button type="submit" class="btn btn-default col-md-2  col-xs-2 ">提交</button>
+        </div>
+      </form>
+    </div>
   </div>
   <div class="tabs">
     <ul class="nav nav-tabs" id="myTab">
@@ -80,9 +42,9 @@
           <th key="key">h1</th>
           <th key="prop">h2</th>
           <th key="prop">h3</th>
-          <th key="key">h4</th>
+          <th key="prop">h4</th>
           <th key="prop">h5</th>
-          <th key="operation">h6</th>
+          <th key="prop">h6</th>
         </tr>
         <tr>
           <td>a1a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5</td>
@@ -100,8 +62,7 @@
           <td>b5</td>
           <td><a href="#">Del</a>&nbsp;<a href="#">Edit</a></td>
         </tr>
-        <!-- hack TODO:改成模板 -->
-        <tr class="info_card_row hide">
+        <tr class="info_card_row">
           <td colspan="1">
             <div class="card col-xs-12 row">
               <div class="card_head row">
@@ -154,12 +115,12 @@
     <div class="tab-pane" id="unfinished">
       <table class="table table-bordered table-hover">
         <tr>
-          <th key="prop">h1</th>
-          <th key="prop">h2</th>
+          <th key="key">h1</th>
+          <th key="key">h2</th>
           <th key="prop">h3</th>
           <th key="key">h4</th>
           <th key="prop">h5</th>
-          <th key="operation">h6</th>
+          <th key="prop">h6</th>
         </tr>
         <tr>
           <td>a1</td>
@@ -179,6 +140,7 @@
         </tr>
       </table>
     </div>
+
     <ul class="pagination">
       <li><a href="#">&laquo;</a></li>
       <li><a href="#">1</a></li>
@@ -262,87 +224,15 @@
 数据绑定？
 -->
 
+<link rel="stylesheet" href="./css/plugs/bootstrap.css">
+<link rel="stylesheet" href="./css/content.css">
+<link rel="stylesheet" href="./css/plugs/buttons.css">
+<link rel="stylesheet" href="./css/plugs/blue.css">
+<link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
+<!-- 只有使用字体图标时才需要加载 Font-Awesome -->
 
-  </div>
-  <div id="sideNav_wapper" class="nav-show">
-    <span class="logo"><small>Econtroller</small></span>
-    <nav class="navbar navbar-default navbar-fixed-top sideNav" id="sidebar-wrapper">
-      <ul class="nav sidebar-nav section-group">
-        <li class="section"><a href="#"><span class="glyphicon glyphicon-th-list"></span>Contract</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-list-alt"></span>Invoice</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon glyphicon-download-alt"></span>PAC/FAC</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-yen"></span>Cash In</a></li>
-        <li class="section dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>F&C data<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li class="section subsection "><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-            <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-            <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
-          </ul>
-        </li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon glyphicon-download-alt"></span>Report</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-user"></span>User Admin</a></li>
-        <li class="section "><a href="#"><span class="glyphicon glyphicon-option-horizontal"></span>System Admin</a></li>
-      </ul>
-    </nav>
-    <div class="sideBtn text-center">
-      <span class="glyphicon glyphicon-triangle-left"></span>
-    </div>
-  </div>
-
-
-    <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-    <link rel="stylesheet" href="./css/sidenav.css">
-    <link rel="stylesheet" href="./css/header.css">
-    <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/content.css">
-    <!--  -->
-    <link rel="stylesheet" href="./css/plugs/buttons.css">
-    <link rel="stylesheet" href="./css/plugs/blue.css">
-    <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
-    <!--  -->
-    <!-- <link rel="stylesheet" href="./test/style.css"> -->
-    <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-    <script type="text/javascript" src="./js/sidenav.js"></script>
-    <script type="text/javascript" src="./js/content.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="./js/plugs/icheck.js"></script>
-    <script type="text/javascript" src="./js/plugs/xss.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $("[data-toggle='popover']").popover(); //悬浮框
-        $('#myTab a:first').tab('show'); //切换栏
-        $('#myTab a').click(function(e) {
-          e.preventDefault();
-          $(this).tab('show');
-        })
-
-        $(".form_datetime").datetimepicker({
-          minView: "month", //设置只显示到月份
-          format: 'yyyy-mm-dd',
-          autoclose: true, //选中关闭
-        }); //timepicker
-        //插件check
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_flat-blue',
-          radioClass: 'iradio_flat-blue'
-        });
-
-        if($(window).innerWidth()<768){
-          sideclose()
-        }//hack
-
-        var $finishedTable = $('#finished table')
-        var $unfinishedTable = $('#unfinished table')
-        hideColunmInMobile($finishedTable)
-        hideColunmInMobile($unfinishedTable)
-        addAllRowsCards($finishedTable)
-        addAllRowsCards($unfinishedTable)
-      })
-    </script>
-
-</body>
-
-</html>
+<script type="text/javascript" src="./js/plugs/jquery.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+<script type="text/javascript" src="./js/content.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="./js/plugs/icheck.js"></script>

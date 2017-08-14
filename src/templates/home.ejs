@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>HomePage</title>
+</head>
+
+<body>
+
+  <div id="right_wapper" class="shrunk">
+    <%-include("./header.ejs")%>
+      <%-include("./content.ejs")%>
+  </div>
+  <%-include("./sideNav.ejs")%>
+
+    <link rel="stylesheet" href="./css/plugs/bootstrap.css">
+    <link rel="stylesheet" href="./css/sidenav.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/content.css">
+    <!--  -->
+    <link rel="stylesheet" href="./css/plugs/buttons.css">
+    <link rel="stylesheet" href="./css/plugs/blue.css">
+    <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
+    <!--  -->
+    <!-- <link rel="stylesheet" href="./test/style.css"> -->
+    <script type="text/javascript" src="./js/plugs/jquery.js"></script>
+    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/sidenav.js"></script>
+    <script type="text/javascript" src="./js/content.js"></script>
+    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="./js/plugs/icheck.js"></script>
+    <script type="text/javascript" src="./js/plugs/xss.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("[data-toggle='popover']").popover(); //悬浮框
+        $('#myTab a:first').tab('show'); //切换栏
+        $('#myTab a').click(function(e) {
+          e.preventDefault();
+          $(this).tab('show');
+        })
+
+        $(".form_datetime").datetimepicker({
+          minView: "month", //设置只显示到月份
+          format: 'yyyy-mm-dd',
+          autoclose: true, //选中关闭
+        }); //timepicker
+        //插件check
+        $('input').iCheck({
+          checkboxClass: 'icheckbox_flat-blue',
+          radioClass: 'iradio_flat-blue'
+        });
+
+        if($(window).innerWidth()<768){
+          sideclose()
+        }//hack
+
+        var $finishedTable = $('#finished table')
+        var $unfinishedTable = $('#unfinished table')
+        hideColunmInMobile($finishedTable)
+        hideColunmInMobile($unfinishedTable)
+        addAllRowsCards($finishedTable)
+        addAllRowsCards($unfinishedTable)
+      })
+    </script>
+
+</body>
+
+</html>

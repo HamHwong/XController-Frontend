@@ -13,6 +13,8 @@
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
     "gulp-connect": "^5.0.0",
+    "gulp-ejs": "^3.0.1",
+    "gulp-ejs-template": "^0.2.0",
     "gulp-file-include": "^1.1.0",
     "gulp-less": "^3.3.2",
     "gulp-livereload": "^3.8.1",
