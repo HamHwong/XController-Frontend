@@ -1,8 +1,7 @@
 @import "../../config/StyleConfig.less"; //配置颜色
+@import "../less/sidenav_common.less";
 @media (max-width: 768px) {
   #sideNav_wapper {
-    float: left;
-
     .logo {
       position: fixed;
       display: block;
@@ -12,9 +11,7 @@
       color: #FFF;
       font-size: 2rem;
     }
-    /**
-  TO-DO：需要统一根字体大小
-  **/
+
     .logo::before {
       width: 14rem;
       // margin: 0 auto;
@@ -29,8 +26,6 @@
 
     .sideNav {
       display: inline-block;
-      float: left;
-      background-color: @home-sideNav-bg-color;
       padding-top: @mobile-home-topNav-height;
       overflow: hidden;
       -webkit-animation: open-sideBar 0.1s forwards;
@@ -38,8 +33,6 @@
       li,
       ul {
         width: 100%;
-        list-style: none;
-        float: left;
       }
     }
 
@@ -50,110 +43,51 @@
     .sideNav.collased {
       -webkit-animation: close-sideBar 0.1s forwards;
     }
-  }
-  @keyframes close-sideBar {
-    from {
-      height: auto;
-    }
-
-    to {
-      height: @mobile-home-topNav-height;
-    }
-  }
-  @keyframes open-sideBar {
-    from {
-      height: @mobile-home-topNav-height;
-    }
-
-    to {
-      height: auto;
-    }
-  }
-  @keyframes close-sideBtn {
-    from {
-      left: @home-sideNav-width;
-    }
-
-    to {
-      left: 0;
-    }
-  }
-  @keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-
-    to {
-      left: @home-sideNav-width;
-    }
-  }
-
-  .sidebar-nav {
-    .section {
-      float: left;
-      width: 100%;
-
-      a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: @home-sideNav-section-color;
+    @keyframes close-sideBar {
+      from {
+        height: auto;
       }
 
-      a:hover,
-      a:visited {
-        background-color: @home-sideNav-section-hover-color;
-      }
-
-      .dropdown-menu {
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        width: 100%;
-      }
-
-      .open a {
-        color: #000;
-      }
-
-      .glyphicon {
-        padding-right: 1rem;
+      to {
+        height: @mobile-home-topNav-height;
       }
     }
-
-    .section.subsection {
-      a {
-        padding: 1rem;
+    @keyframes open-sideBar {
+      from {
+        height: @mobile-home-topNav-height;
       }
 
-      a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: @home-sideNav-subsection-color;
+      to {
+        height: auto;
+      }
+    }
+    @keyframes close-sideBtn {
+      from {
+        left: @home-sideNav-width;
+      }
+
+      to {
+        left: 0;
+      }
+    }
+    @keyframes open-sideBtn {
+      from {
+        left: 0;
+      }
+
+      to {
+        left: @home-sideNav-width;
       }
     }
   }
 
   .sideBtn {
-    position: fixed;
     top: 0;
-    display: block;
-    background-color: @home-sideNav-btn-bg-color;
     font-size: 2rem;
+    right: 0;
     height: @mobile-home-topNav-height;
     width: @mobile-home-topNav-height;
     z-index: 1032;
-    right: 0;
-
-    .glyphicon {
-      color: @home-sideNav-btn-color;
-      display: block;
-      top: 35%;
-    }
   }
 
   .glyphicon-triangle-left::before {
@@ -162,13 +96,5 @@
 
   .glyphicon-triangle-right::before {
     content: '\e236' !important;
-  }
-
-  .sideBtn.nav_collapse {}
-
-  .sidebar-nav .caret {
-    position: absolute;
-    right: 1rem;
-    top: 1.5rem;
   }
 }

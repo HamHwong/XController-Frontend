@@ -1,0 +1,84 @@
+@import "../../config/StyleConfig.less"; //配置颜色
+
+#sideNav_wapper {
+  float: left;
+
+  .sideNav {
+    float: left;
+    background-color: @home-sideNav-bg-color;
+
+    li,
+    ul {
+      list-style: none;
+      float: left;
+    }
+  }
+
+  .sidebar-nav {
+    .section {
+      float: left;
+      width: 100%;
+
+      a:active,
+      a:hover,
+      a:link,
+      a:visited {
+        color: @home-sideNav-section-color;
+      }
+
+      a:hover,
+      a:visited {
+        background-color: @home-sideNav-section-hover-color;
+      }
+
+      .dropdown-menu {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        width: 100%;
+      }
+
+      .open a {
+        color: #000;
+      }
+
+      .glyphicon {
+        padding-right: 1rem;
+      }
+    }
+
+    .section.subsection {
+      a {
+        padding: 1rem;
+      }
+
+      a:active,
+      a:hover,
+      a:link,
+      a:visited {
+        color: @home-sideNav-subsection-color;
+      }
+    }
+
+    .caret {
+      position: absolute;
+      right: 1rem;
+      top: 1.5rem;
+    }
+  }
+
+  .sideBtn {
+    position: fixed;
+    display: block;
+    background-color: @home-sideNav-btn-bg-color;
+
+    .glyphicon {
+      color: @home-sideNav-btn-color;
+      display: block;
+      top: 35%;
+    }
+  }
+}

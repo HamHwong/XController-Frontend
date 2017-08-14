@@ -1,26 +1,18 @@
 @import "../../config/StyleConfig.less"; //配置颜色
 @import "../less/sidenav_mobile.less";
+@import "../less/sidenav_common.less";
 @media (min-width: 768px) {
   #sideNav_wapper {
-    height: 100%;
-    float: left;
-
+    // height: 100%;
     .logo {
       display: none;
     }
 
     .sideNav {
       display: block;
-      float: left;
-      background-color: @home-sideNav-bg-color;
       padding-top: 2rem;
       width: @home-sideNav-width;
       height: 100%;
-      li,
-      ul {
-        list-style: none;
-        float: left;
-      }
     }
 
     .sideNav.nav_collapse {
@@ -30,110 +22,51 @@
     .sideNav.nav_open {
       -webkit-animation: open-sideBar @home-sideNav-timer forwards;
     }
-  }
-  @keyframes close-sideBar {
-    from {
-      left: 0;
-    }
-
-    to {
-      left: 0 - @home-sideNav-width;
-    }
-  }
-  @keyframes open-sideBar {
-    from {
-      left: 0 - @home-sideNav-width;
-    }
-
-    to {
-      left: 0;
-    }
-  }
-  @keyframes close-sideBtn {
-    from {
-      left: @home-sideNav-width;
-    }
-
-    to {
-      left: 0;
-    }
-  }
-  @keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-
-    to {
-      left: @home-sideNav-width;
-    }
-  }
-
-  .sidebar-nav {
-    .section {
-      float: left;
-      width: 100%;
-
-      a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: @home-sideNav-section-color;
+    @keyframes close-sideBar {
+      from {
+        left: 0;
       }
 
-      a:hover,
-      a:visited {
-        background-color: @home-sideNav-section-hover-color;
-      }
-
-      .dropdown-menu {
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        width: 100%;
-      }
-
-      .open a {
-        color: #000;
-      }
-
-      .glyphicon {
-        padding-right: 1rem;
+      to {
+        left: 0 - @home-sideNav-width;
       }
     }
-
-    .section.subsection {
-      a {
-        padding: 1rem;
+    @keyframes open-sideBar {
+      from {
+        left: 0 - @home-sideNav-width;
       }
 
-      a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: @home-sideNav-subsection-color;
+      to {
+        left: 0;
+      }
+    }
+    @keyframes close-sideBtn {
+      from {
+        left: @home-sideNav-width;
+      }
+
+      to {
+        left: 0;
+      }
+    }
+    @keyframes open-sideBtn {
+      from {
+        left: 0;
+      }
+
+      to {
+        left: @home-sideNav-width;
       }
     }
   }
 
   .sideBtn {
-    position: fixed;
-    display: block;
-    background-color: @home-sideNav-btn-bg-color;
-    left: @home-sideNav-width;
+    top: 30rem;
     font-size: 1.6rem;
+    left: @home-sideNav-width;
     border-radius: 0 0.6rem 0.6rem 0;
     height: 5rem;
     z-index: 1030;
-    top: 30rem;
-
-    .glyphicon {
-      color: @home-sideNav-btn-color;
-      display: block;
-      top: 35%;
-    }
   }
 
   .sideBtn.nav_collapse {
@@ -142,9 +75,5 @@
 
   .sideBtn.nav_open {
     -webkit-animation: open-sideBtn @home-sideNav-timer forwards;
-  }
-
-  .sidebar-nav .caret {
-    margin-left: 40%;
   }
 }
