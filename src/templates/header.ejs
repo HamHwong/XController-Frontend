@@ -14,8 +14,9 @@
     </div>
   </div>
 </header>
-<%#
+<%if(!locals.homePage){%>
   <script type="text/javascript" src="./js/plugs/jquery.js"></script>
   <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
   <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-  <link rel="stylesheet" href="/css/header.css">%>
+  <link rel="stylesheet" href="/css/header.css">
+<%}%>

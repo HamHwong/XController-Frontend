@@ -1,5 +1,6 @@
 {
   "content.js": "content-1d90733dac.js",
+  "init.js": "init-c4775ea9fd.js",
   "plugs/bootstrap-datetimepicker.js": "plugs/bootstrap-datetimepicker-9ae21e5aa6.js",
   "plugs/bootstrap-datetimepicker.min.js": "plugs/bootstrap-datetimepicker-133134d91c.min.js",
   "plugs/bootstrap.js": "plugs/bootstrap-fb81549ee2.js",
@@ -9,5 +10,5 @@
   "plugs/npm.js": "plugs/npm-ccb7f3909e.js",
   "plugs/xss.js": "plugs/xss-3b1b5a0af8.js",
   "plugs/xss.min.js": "plugs/xss-17b6986036.min.js",
-  "sidenav.js": "sidenav-43c7ece871.js"
+  "sidenav.js": "sidenav-afb958003b.js"
 }

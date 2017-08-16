@@ -13,7 +13,6 @@ var sideclose = function() {
 }
 
 $(document).ready(function() {
-  // console.log($('.sideBtn').click())
   $('.sideBtn').click(function() {
     if ($('.sideBtn').hasClass('nav_collapse')) {
       sideopen()

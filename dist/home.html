@@ -7,9 +7,9 @@
 </head>
 
 <body>
-
-  <div id="right_wapper" class="shrunk">
-    <header id="header_wapper">
+  
+    <div id="right_wapper">
+      <header id="header_wapper">
   <div class="page-header row">
     <div class="header_logo col-md-4 col-sm-4 ">
       <span class="logo text-info h1"><small>Econtroller Tools</small></span>
@@ -27,11 +27,10 @@
 </header>
 
 
-      <div id="content_wapper" class="container-fluid">
+        <div id="content_wapper" class="container-fluid">
   <div class="search_wapper ">
     <form class="form" role="form">
       <div class="querycontrols clearfix">
-
         <div class="form-group col-md-3 col-sm-6 col-xs-12">
           <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
         </div>
@@ -60,7 +59,6 @@
           </div>
           <button type="submit" class="btn btn-success col-md-2  col-xs-2 ">Query</button>
         </div>
-
       </div>
     </form>
   </div>
@@ -262,8 +260,9 @@
 -->
 
 
-  </div>
-  <div id="sideNav_wapper" class="nav-show">
+    </div>
+    <div id="left_wapper">
+      <div id="sideNav_wapper" class="nav-show">
   <span class="logo"><small>Econtroller</small></span>
   <div class="sideavatar">
     <div class="avatar">
@@ -302,10 +301,11 @@
 </div>
 
 
+    </div>
     <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
     <link rel="stylesheet" href="./css/sidenav-cc3e694348.css">
     <link rel="stylesheet" href="./css/header-fa4714a8d3.css">
-    <link rel="stylesheet" href="./css/main-283ce817bc.css">
+    <link rel="stylesheet" href="./css/main-5d33946e58.css">
     <link rel="stylesheet" href="./css/content-63b60e7f29.css">
     <!--  -->
     <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
@@ -316,41 +316,18 @@
     <!-- <link rel="stylesheet" href="./test/style-bea307c18b.css"> -->
     <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
     <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
-    <script type="text/javascript" src="./js/sidenav-43c7ece871.js"></script>
+    <script type="text/javascript" src="./js/sidenav-afb958003b.js"></script>
     <script type="text/javascript" src="./js/content-1d90733dac.js"></script>
     <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
     <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
     <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
+    <script type="text/javascript" src="./js/init-c4775ea9fd.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-        $("[data-toggle='popover']").popover(); //悬浮框
-        $('#myTab a:first').tab('show'); //切换栏
-        $('#myTab a').click(function(e) {
-          e.preventDefault();
-          $(this).tab('show');
-        })
-
-        $(".form_datetime").datetimepicker({
-          minView: "month", //设置只显示到月份
-          format: 'yyyy-mm-dd',
-          autoclose: true, //选中关闭
-        }); //timepicker
-        //插件check
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_flat-blue',
-          radioClass: 'iradio_flat-blue'
-        });
-
-        if($(window).innerWidth()<768){
-          sideclose()
-        }//hack
-
-        var $finishedTable = $('#finished table')
-        var $unfinishedTable = $('#unfinished table')
-        hideColunmInMobile($finishedTable)
-        hideColunmInMobile($unfinishedTable)
-        addAllRowsCards($finishedTable)
-        addAllRowsCards($unfinishedTable)
+        for (var i in init) {
+          for (var j in init[i])
+            init[i][j]()
+        }
       })
     </script>
 

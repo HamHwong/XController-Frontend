@@ -15,6 +15,10 @@ html {
     content: '';
     background: url('../img/icons-blue-1.0.5.svg') no-repeat 0 -2450px;
   }
+  #header_wapper .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
   #right_wapper {
     margin-left: 20rem;
   }
@@ -30,10 +34,6 @@ html {
     background-color: #fff;
     padding: 2rem;
     height: 100%;
-  }
-  .row {
-    margin-left: 0;
-    margin-right: 0;
   }
   @-webkit-keyframes extend {
     from {
