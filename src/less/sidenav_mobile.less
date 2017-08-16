@@ -7,9 +7,11 @@
       display: block;
       z-index: 1031;
       width: 100%;
+      min-width: 24rem;
       top: 1rem;
       color: #FFF;
       font-size: 2rem;
+      overflow: hidden;
     }
 
     .logo::before {
@@ -29,7 +31,7 @@
       position: fixed;
       top: 0.5rem;
       right: @mobile-home-topNav-height+1rem;
-      z-index: 9999;
+      z-index: 1032;
 
       .avatar {
         position: relative;
@@ -55,18 +57,29 @@
 
       .greet,
       .logout {
-        display: inline-block;
         float: left;
         padding-left: 1rem;
       }
-      .logout a{
+
+      .logout a {
         color: #FFF;
       }
-      @media (max-width: 500px) {
-        .greet,
-        .logout {
-          display: none;
-        }
+    }
+    @media (min-width: 400px) and (max-width: 500px) {
+      .greet,
+      .logout {
+        display: none;
+      }
+    }
+    @media (min-width: 320px) and (max-width: 400px) {
+      .sideavatar {
+        display: none;
+      }
+    }
+    @media (max-width: 320px) {
+      .logo small,
+      .sideavatar {
+        display: none;
       }
     }
 
@@ -134,13 +147,39 @@
     height: @mobile-home-topNav-height;
     width: @mobile-home-topNav-height;
     z-index: 1032;
+
+    @media (max-width: 768px) {
+      .sideBtnIcon-open::before {
+        content: '\e011';
+      }
+
+      .sideBtnIcon-close::before {
+        content: '\e236';
+      }
+    }
+    @media (max-width: 1080px) {
+      .sideBtnIcon-open::before {
+        content: '\e251';
+      }
+
+      .sideBtnIcon-close::before {
+        content: '\e250';
+      }
+    }
   }
 
-  .glyphicon-triangle-left::before {
-    content: '\e011' !important;
-  }
+  // .glyphicon-triangle-left::before {
+  //   content: '\e011' !important;
+  // }
+  //
+  // .glyphicon-triangle-right::before {
+  //   content: '\e236' !important;
+  // }
+      .sideBtnIcon-open::before {
+      content: '\e251';
+    }
 
-  .glyphicon-triangle-right::before {
-    content: '\e236' !important;
-  }
+    .sideBtnIcon-close::before {
+      content: '\e250';
+    }
 }

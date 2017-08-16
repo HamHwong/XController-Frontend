@@ -11,9 +11,11 @@ html {
     display: block;
     z-index: 1031;
     width: 100%;
+    min-width: 24rem;
     top: 1rem;
     color: #FFF;
     font-size: 2rem;
+    overflow: hidden;
   }
   #sideNav_wapper .logo::before {
     width: 14rem;
@@ -31,7 +33,7 @@ html {
     position: fixed;
     top: 0.5rem;
     right: 6rem;
-    z-index: 9999;
+    z-index: 1032;
   }
   #sideNav_wapper .sideavatar .avatar {
     position: relative;
@@ -57,7 +59,6 @@ html {
   }
   #sideNav_wapper .sideavatar .greet,
   #sideNav_wapper .sideavatar .logout {
-    display: inline-block;
     float: left;
     padding-left: 1rem;
   }
@@ -152,17 +153,44 @@ html {
     width: 5rem;
     z-index: 1032;
   }
-  .glyphicon-triangle-left::before {
-    content: '\e011' !important;
+  .sideBtnIcon-open::before {
+    content: '\e251';
   }
-  .glyphicon-triangle-right::before {
-    content: '\e236' !important;
+  .sideBtnIcon-close::before {
+    content: '\e250';
   }
 }
-@media (max-width: 768px) and (max-width: 500px) {
-  #sideNav_wapper .sideavatar .greet,
-  #sideNav_wapper .sideavatar .logout {
+@media (max-width: 768px) and (min-width: 400px) and (max-width: 500px) {
+  #sideNav_wapper .greet,
+  #sideNav_wapper .logout {
     display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 320px) and (max-width: 400px) {
+  #sideNav_wapper .sideavatar {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (max-width: 320px) {
+  #sideNav_wapper .logo small,
+  #sideNav_wapper .sideavatar {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (max-width: 768px) {
+  .sideBtn .sideBtnIcon-open::before {
+    content: '\e011';
+  }
+  .sideBtn .sideBtnIcon-close::before {
+    content: '\e236';
+  }
+}
+@media (max-width: 768px) and (max-width: 1080px) {
+  .sideBtn .sideBtnIcon-open::before {
+    content: '\e251';
+  }
+  .sideBtn .sideBtnIcon-close::before {
+    content: '\e250';
   }
 }
 #sideNav_wapper {
@@ -322,7 +350,7 @@ html {
     -webkit-border-radius: 0 0.6rem 0.6rem 0;
             border-radius: 0 0.6rem 0.6rem 0;
     height: 5rem;
-    z-index: 1030;
+    z-index: 1032;
   }
   .sideBtn.nav_collapse {
     -webkit-animation: close-sideBtn 0.5s forwards;
