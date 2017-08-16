@@ -24,6 +24,52 @@
       background-size: auto 100%;
     }
 
+    .sideavatar {
+      color: #fff;
+      position: fixed;
+      top: 0.5rem;
+      right: @mobile-home-topNav-height+1rem;
+      z-index: 9999;
+
+      .avatar {
+        position: relative;
+        text-align: center;
+        float: left;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 4rem;
+        overflow: hidden;
+
+        img {
+          position: absolute;
+          left: -50%;
+          right: -50%;
+          // width: 100%;
+          height: 100%;
+          // border-radius: 14rem;
+          vertical-align: middle;
+          margin: 0 auto;
+          flex: auto;
+        }
+      }
+
+      .greet,
+      .logout {
+        display: inline-block;
+        float: left;
+        padding-left: 1rem;
+      }
+      .logout a{
+        color: #FFF;
+      }
+      @media (max-width: 500px) {
+        .greet,
+        .logout {
+          display: none;
+        }
+      }
+    }
+
     .sideNav {
       display: inline-block;
       padding-top: @mobile-home-topNav-height;

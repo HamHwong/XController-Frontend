@@ -1,5 +1,6 @@
 var gulp = require('gulp')
 var less = require('gulp-less')
+var autoprefixer = require('gulp-autoprefixer')
 var webserver = require('gulp-webserver')
 var open = require('gulp-open')
 var connect = require('gulp-connect')
@@ -31,6 +32,9 @@ gulp.task('webserver', function() {
 gulp.task('less', function() {
   return gulp.src(__src + '/less/*.less')
     .pipe(less())
+    .pipe(autoprefixer({
+      browsers: ['last 20 versions']
+    }))
     .pipe(gulp.dest(__src + '/css/'))
 })
 
@@ -82,7 +86,9 @@ gulp.task('clean-js', function(event) {
 
 gulp.task('ejs', function() {
   gulp.src("./src/templates/**/*.ejs")
-    .pipe(ejs({}, {}, {ext:".html"}))
+    .pipe(ejs({}, {}, {
+      ext: ".html"
+    }))
     .pipe(gulp.dest("./src"))
 });
 
@@ -123,6 +129,6 @@ gulp.task('concat-css', function() {
     .pipe(gulp.dest('dist/test'))
 })
 
-gulp.task('default', ['ejs','watch', 'revHtml', 'webserver'], function() {
+gulp.task('default', ['ejs', 'watch', 'revHtml', 'webserver'], function() {
   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })

@@ -32,9 +32,11 @@ html {
   background-color: #31578B;
 }
 #sideNav_wapper .sidebar-nav .section .dropdown-menu {
-  border-radius: 0;
+  -webkit-border-radius: 0;
+          border-radius: 0;
   border: none;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
   margin: 0;
   padding: 0;
   position: relative;
@@ -88,7 +90,46 @@ html {
     content: "";
     display: block;
     background: url('../img/logo-white.png') no-repeat;
-    background-size: auto 100%;
+    -webkit-background-size: auto 100%;
+            background-size: auto 100%;
+  }
+  #sideNav_wapper .sideavatar {
+    color: #fff;
+    position: fixed;
+    top: 0.5rem;
+    right: 6rem;
+    z-index: 9999;
+  }
+  #sideNav_wapper .sideavatar .avatar {
+    position: relative;
+    text-align: center;
+    float: left;
+    height: 4rem;
+    width: 4rem;
+    -webkit-border-radius: 4rem;
+            border-radius: 4rem;
+    overflow: hidden;
+  }
+  #sideNav_wapper .sideavatar .avatar img {
+    position: absolute;
+    left: -50%;
+    right: -50%;
+    height: 100%;
+    vertical-align: middle;
+    margin: 0 auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: auto;
+        -ms-flex: auto;
+            flex: auto;
+  }
+  #sideNav_wapper .sideavatar .greet,
+  #sideNav_wapper .sideavatar .logout {
+    display: inline-block;
+    float: left;
+    padding-left: 1rem;
+  }
+  #sideNav_wapper .sideavatar .logout a {
+    color: #FFF;
   }
   #sideNav_wapper .sideNav {
     display: inline-block;
@@ -106,12 +147,28 @@ html {
   #sideNav_wapper .sideNav.collased {
     -webkit-animation: close-sideBar 0.1s forwards;
   }
+  @-webkit-keyframes close-sideBar {
+    from {
+      height: auto;
+    }
+    to {
+      height: 5rem;
+    }
+  }
   @keyframes close-sideBar {
     from {
       height: auto;
     }
     to {
       height: 5rem;
+    }
+  }
+  @-webkit-keyframes open-sideBar {
+    from {
+      height: 5rem;
+    }
+    to {
+      height: auto;
     }
   }
   @keyframes open-sideBar {
@@ -122,12 +179,28 @@ html {
       height: auto;
     }
   }
+  @-webkit-keyframes close-sideBtn {
+    from {
+      left: 20rem;
+    }
+    to {
+      left: 0;
+    }
+  }
   @keyframes close-sideBtn {
     from {
       left: 20rem;
     }
     to {
       left: 0;
+    }
+  }
+  @-webkit-keyframes open-sideBtn {
+    from {
+      left: 0;
+    }
+    to {
+      left: 20rem;
     }
   }
   @keyframes open-sideBtn {
@@ -151,5 +224,11 @@ html {
   }
   .glyphicon-triangle-right::before {
     content: '\e236' !important;
+  }
+}
+@media (max-width: 768px) and (max-width: 500px) {
+  #sideNav_wapper .sideavatar .greet,
+  #sideNav_wapper .sideavatar .logout {
+    display: none;
   }
 }

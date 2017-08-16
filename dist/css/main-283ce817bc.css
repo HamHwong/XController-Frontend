@@ -19,10 +19,12 @@ html {
     margin-left: 20rem;
   }
   #right_wapper.extend {
-    animation: extend 0.5s forwards;
+    -webkit-animation: extend 0.5s forwards;
+            animation: extend 0.5s forwards;
   }
   #right_wapper.shrunk {
-    animation: shrunk 0.5s forwards;
+    -webkit-animation: shrunk 0.5s forwards;
+            animation: shrunk 0.5s forwards;
   }
   #content_wapper {
     background-color: #fff;
@@ -33,12 +35,28 @@ html {
     margin-left: 0;
     margin-right: 0;
   }
+  @-webkit-keyframes extend {
+    from {
+      margin-left: 20rem;
+    }
+    to {
+      margin-left: 0;
+    }
+  }
   @keyframes extend {
     from {
       margin-left: 20rem;
     }
     to {
       margin-left: 0;
+    }
+  }
+  @-webkit-keyframes shrunk {
+    from {
+      margin-left: 0;
+    }
+    to {
+      margin-left: 20rem;
     }
   }
   @keyframes shrunk {
@@ -58,10 +76,12 @@ html {
     margin-top: 5rem;
   }
   #right_wapper.extend {
-    animation: extend 0.5s forwards;
+    -webkit-animation: extend 0.5s forwards;
+            animation: extend 0.5s forwards;
   }
   #right_wapper.shrunk {
-    animation: shrunk 0.5s forwards;
+    -webkit-animation: shrunk 0.5s forwards;
+            animation: shrunk 0.5s forwards;
   }
   #content_wapper {
     background-color: #fff;

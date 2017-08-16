@@ -53,9 +53,9 @@ var loadTable = function(result) {
   this.datacount = this.hasHeader ? this.data.length - 1 : data.length
   this.pages = Math.ceil(this.datacount / this.rowsperpage)
   //page应该后台做，这里只模拟
-  var pageGroup={}
+  var pageGroup = {}
   for (var page = 1; page <= this.pages; page++) {
-    pageGroup[page]=new page(page, sliptPageData(this.data, (page-1)*100, page*100))//不含最后一位
+    pageGroup[page] = new page(page, sliptPageData(this.data, (page - 1) * 100, page * 100)) //不含最后一位
   }
   // var p1 = new page(1, sliptPageData(this.data, 0, 100))//不含最后一位
   // showpage(this.data, 100, 200)
@@ -67,7 +67,7 @@ function sliptPageData(datas, startRow, endRow) {
   tablecontent.empty()
 
   var pagecontent = []
-  var dt = this.data.slice(startRow, endRow)//不含最后一位
+  var dt = this.data.slice(startRow, endRow) //不含最后一位
   if (this.hasHeader) {
     var $row = $("<tr></tr>")
     for (var h in datas[0]) {
@@ -135,7 +135,7 @@ var hideColunmInMobile = function($table) {
     responsiveColsArr.add(indexOfRow)
   }
   for (var j of responsiveColsArr) {
-    table.find('tr:not(".info_card_row")').find('*').addClass('hidden-xs')
+    table.find('tr:not(".info_card_row")').children('*').addClass('hidden-xs')
   }
 }
 
@@ -156,7 +156,7 @@ $("#search_box").on('keyup', function() {
   if (data.length > 0 && this.value != "") {
     $(".search_box_warp").addClass("open")
     $(".keywords").on('click', function(e) {
-      $("#search_box").val(this.innerHTML)
+      $("#search_box").val(this.innerText)
       droplist.empty()
       $(".search_box_warp").removeClass("open")
     })
@@ -169,14 +169,16 @@ var queryKeyWords = function(keys, dic) {
   var r = []
   for (var i in dic) {
     if (dic[i].includes(keys)) {
-      r.push(dic[i])
+      var keywords = dic[i].match(keys)
+      var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
+      r.push(blodKeyWord)
     }
   }
   return r
 }
 
 var keywordsdata = [
-  "as", "asd", "zxccwr", "zxcer", "utjy", "ndftr"
+  "as", "asd", "zxccwr", "zxcer", "utjy", "ndftr", "啊水水水水"
 ]
 //===========================================================================================================================
 // $(".card>div:not('.card_head')").hide(100)
@@ -260,12 +262,9 @@ var rowToJson = function($row, $headrow) {
   var $thtds = $headrow.children() //获取表头的tds
   // var $row = $(trs[1])
   var $trtds = $row.children() //获取该行的tds
-
   var keys = $headrow.find("*[key='key']")
   var headers = {}
   for (var j = 0; j < keys.length; j++) {
-    // console.log(keys.length+","+$(keys[j]).html());
-    // console.log(keys[j].cellIndex);
     headers[keys[j].cellIndex] = $(keys[j]).html()
   }
   var r = {
@@ -274,9 +273,10 @@ var rowToJson = function($row, $headrow) {
     "Props": {},
     "Date": "yyyy-mm-dd"
   }
-  // console.log($thtds.length)
   for (var i = 0; i < $thtds.length; i++) {
-    r["Props"][filterXSS($thtds[i].innerHTML)] = filterXSS($trtds[i].innerHTML)
+    // r["Props"][filterXSS($thtds[i].innerHTML)] = filterXSS($trtds[i].innerHTML)
+    r["Props"][filterXSS($thtds[i].innerHTML)] = $trtds[i].innerHTML
+    console.log(filterXSS($thtds[i].innerHTML)+","+$trtds[i].innerHTML);
     r["Bgcolor"] = colorarr[Math.floor(Math.random() * colorarr.length)]
   }
   return r

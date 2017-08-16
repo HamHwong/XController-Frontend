@@ -17,7 +17,8 @@ html {
   width: 100%;
   background-color: #40679C;
   padding: 0.5rem 0.3rem;
-  border-radius: 0 1rem 0 0;
+  -webkit-border-radius: 0 1rem 0 0;
+          border-radius: 0 1rem 0 0;
 }
 #content_wapper .operation-menu button {
   float: right;
@@ -38,8 +39,10 @@ html {
 }
 #content_wapper .tab-content tr.info_card_row td .card {
   margin: 0 0 0.2rem;
-  border-radius: 0 0 0.3rem 0.3rem;
-  box-shadow: 0 0.5rem 1rem #888888;
+  -webkit-border-radius: 0 0 0.3rem 0.3rem;
+          border-radius: 0 0 0.3rem 0.3rem;
+  -webkit-box-shadow: 0 0.5rem 1rem #888888;
+          box-shadow: 0 0.5rem 1rem #888888;
   border: 1px solid #4A8BC2;
 }
 #content_wapper .tab-content tr.info_card_row td .card .card_head {
@@ -67,7 +70,8 @@ html {
   margin: 2rem 0;
   background-color: #40679C;
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  -webkit-border-radius: 0.5rem;
+          border-radius: 0.5rem;
 }
 #content_wapper .selection-group::after {
   clear: both;
@@ -84,10 +88,20 @@ html {
   .info_card_row.closeRow {
     overflow: hidden;
     -webkit-animation: closeHeight 1s forwards;
+            animation: closeHeight 1s forwards;
   }
   .info_card_row.openRow {
     overflow: hidden;
     -webkit-animation: extendHeight 1s forwards;
+            animation: extendHeight 1s forwards;
+  }
+  @-webkit-keyframes extendHeight {
+    from {
+      height: 0;
+    }
+    to {
+      height: 20rem;
+    }
   }
   @keyframes extendHeight {
     from {
@@ -95,6 +109,14 @@ html {
     }
     to {
       height: 20rem;
+    }
+  }
+  @-webkit-keyframes closeHeight {
+    from {
+      height: 20rem;
+    }
+    to {
+      height: 0;
     }
   }
   @keyframes closeHeight {
