@@ -5,194 +5,6 @@
 html {
   font-size: 10px;
 }
-@media (max-width: 768px) {
-  #sideNav_wapper .logo {
-    position: fixed;
-    display: block;
-    z-index: 1031;
-    width: 100%;
-    min-width: 24rem;
-    top: 1rem;
-    color: #FFF;
-    font-size: 2rem;
-    overflow: hidden;
-  }
-  #sideNav_wapper .logo::before {
-    width: 14rem;
-    margin-left: 1rem;
-    float: left;
-    height: 2.2rem;
-    content: "";
-    display: block;
-    background: url('../img/logo-white.png') no-repeat;
-    -webkit-background-size: auto 100%;
-            background-size: auto 100%;
-  }
-  #sideNav_wapper .sideavatar {
-    color: #fff;
-    position: fixed;
-    top: 0.5rem;
-    right: 6rem;
-    z-index: 1032;
-  }
-  #sideNav_wapper .sideavatar .avatar {
-    position: relative;
-    text-align: center;
-    float: left;
-    height: 4rem;
-    width: 4rem;
-    -webkit-border-radius: 4rem;
-            border-radius: 4rem;
-    overflow: hidden;
-  }
-  #sideNav_wapper .sideavatar .avatar img {
-    position: absolute;
-    left: -50%;
-    right: -50%;
-    height: 100%;
-    vertical-align: middle;
-    margin: 0 auto;
-    -webkit-box-flex: 1;
-    -webkit-flex: auto;
-        -ms-flex: auto;
-            flex: auto;
-  }
-  #sideNav_wapper .sideavatar .greet,
-  #sideNav_wapper .sideavatar .logout {
-    float: left;
-    padding-left: 1rem;
-  }
-  #sideNav_wapper .sideavatar .logout a {
-    color: #FFF;
-  }
-  #sideNav_wapper .sideNav {
-    display: inline-block;
-    padding-top: 5rem;
-    overflow: hidden;
-    -webkit-animation: open-sideBar 0.1s forwards;
-  }
-  #sideNav_wapper .sideNav li,
-  #sideNav_wapper .sideNav ul {
-    width: 100%;
-  }
-  #sideNav_wapper .sideNav.nav_collapse {
-    -webkit-animation: close-sideBar 0.1s forwards;
-  }
-  #sideNav_wapper .sideNav.collased {
-    -webkit-animation: close-sideBar 0.1s forwards;
-  }
-  @-webkit-keyframes close-sideBar {
-    from {
-      height: auto;
-    }
-    to {
-      height: 5rem;
-    }
-  }
-  @keyframes close-sideBar {
-    from {
-      height: auto;
-    }
-    to {
-      height: 5rem;
-    }
-  }
-  @-webkit-keyframes open-sideBar {
-    from {
-      height: 5rem;
-    }
-    to {
-      height: auto;
-    }
-  }
-  @keyframes open-sideBar {
-    from {
-      height: 5rem;
-    }
-    to {
-      height: auto;
-    }
-  }
-  @-webkit-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-webkit-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  .sideBtn {
-    top: 0;
-    font-size: 2rem;
-    right: 0;
-    height: 5rem;
-    width: 5rem;
-    z-index: 1032;
-  }
-  .sideBtnIcon-open::before {
-    content: '\e251';
-  }
-  .sideBtnIcon-close::before {
-    content: '\e250';
-  }
-}
-@media (max-width: 768px) and (min-width: 400px) and (max-width: 500px) {
-  #sideNav_wapper .greet,
-  #sideNav_wapper .logout {
-    display: none;
-  }
-}
-@media (max-width: 768px) and (min-width: 320px) and (max-width: 400px) {
-  #sideNav_wapper .sideavatar {
-    display: none;
-  }
-}
-@media (max-width: 768px) and (max-width: 320px) {
-  #sideNav_wapper .logo small,
-  #sideNav_wapper .sideavatar {
-    display: none;
-  }
-}
-@media (max-width: 768px) and (max-width: 768px) {
-  .sideBtn .sideBtnIcon-open::before {
-    content: '\e011';
-  }
-  .sideBtn .sideBtnIcon-close::before {
-    content: '\e236';
-  }
-}
-@media (max-width: 768px) and (max-width: 1080px) {
-  .sideBtn .sideBtnIcon-open::before {
-    content: '\e251';
-  }
-  .sideBtn .sideBtnIcon-close::before {
-    content: '\e250';
-  }
-}
 #sideNav_wapper {
   float: left;
 }
@@ -352,10 +164,188 @@ html {
     height: 5rem;
     z-index: 1032;
   }
+  .sideBtn .sideBtnIcon-open::before {
+    content: '\e251';
+  }
+  .sideBtn .sideBtnIcon-close::before {
+    content: '\e250';
+  }
   .sideBtn.nav_collapse {
     -webkit-animation: close-sideBtn 0.5s forwards;
   }
   .sideBtn.nav_open {
     -webkit-animation: open-sideBtn 0.5s forwards;
+  }
+}
+@media (max-width: 768px) {
+  #sideNav_wapper .logo {
+    position: fixed;
+    display: block;
+    z-index: 1031;
+    width: 100%;
+    min-width: 24rem;
+    top: 1rem;
+    color: #FFF;
+    font-size: 2rem;
+    overflow: hidden;
+  }
+  #sideNav_wapper .logo::before {
+    width: 14rem;
+    margin-left: 1rem;
+    float: left;
+    height: 2.2rem;
+    content: "";
+    display: block;
+    background: url('../img/logo-white.png') no-repeat;
+    -webkit-background-size: auto 100%;
+            background-size: auto 100%;
+  }
+  #sideNav_wapper .sideavatar {
+    color: #fff;
+    position: fixed;
+    top: 0.5rem;
+    right: 6rem;
+    z-index: 1032;
+  }
+  #sideNav_wapper .sideavatar .avatar {
+    position: relative;
+    text-align: center;
+    float: left;
+    height: 4rem;
+    width: 4rem;
+    -webkit-border-radius: 4rem;
+            border-radius: 4rem;
+    overflow: hidden;
+  }
+  #sideNav_wapper .sideavatar .avatar img {
+    position: absolute;
+    left: -50%;
+    right: -50%;
+    height: 100%;
+    vertical-align: middle;
+    margin: 0 auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: auto;
+        -ms-flex: auto;
+            flex: auto;
+  }
+  #sideNav_wapper .sideavatar .greet,
+  #sideNav_wapper .sideavatar .logout {
+    float: left;
+    padding-left: 1rem;
+  }
+  #sideNav_wapper .sideavatar .logout a {
+    color: #FFF;
+  }
+  #sideNav_wapper .sideNav {
+    display: inline-block;
+    padding-top: 5rem;
+    overflow: hidden;
+    -webkit-animation: open-sideBar 0.1s forwards;
+  }
+  #sideNav_wapper .sideNav li,
+  #sideNav_wapper .sideNav ul {
+    width: 100%;
+  }
+  #sideNav_wapper .sideNav.nav_collapse {
+    -webkit-animation: close-sideBar 0.1s forwards;
+  }
+  #sideNav_wapper .sideNav.collased {
+    -webkit-animation: close-sideBar 0.1s forwards;
+  }
+  @-webkit-keyframes close-sideBar {
+    from {
+      height: auto;
+    }
+    to {
+      height: 5rem;
+    }
+  }
+  @keyframes close-sideBar {
+    from {
+      height: auto;
+    }
+    to {
+      height: 5rem;
+    }
+  }
+  @-webkit-keyframes open-sideBar {
+    from {
+      height: 5rem;
+    }
+    to {
+      height: auto;
+    }
+  }
+  @keyframes open-sideBar {
+    from {
+      height: 5rem;
+    }
+    to {
+      height: auto;
+    }
+  }
+  @-webkit-keyframes close-sideBtn {
+    from {
+      left: 20rem;
+    }
+    to {
+      left: 0;
+    }
+  }
+  @keyframes close-sideBtn {
+    from {
+      left: 20rem;
+    }
+    to {
+      left: 0;
+    }
+  }
+  @-webkit-keyframes open-sideBtn {
+    from {
+      left: 0;
+    }
+    to {
+      left: 20rem;
+    }
+  }
+  @keyframes open-sideBtn {
+    from {
+      left: 0;
+    }
+    to {
+      left: 20rem;
+    }
+  }
+  .sideBtn {
+    top: 0;
+    font-size: 2rem;
+    right: 0;
+    height: 5rem;
+    width: 5rem;
+    z-index: 1032;
+  }
+  .sideBtnIcon-open::before {
+    content: '\e011';
+  }
+  .sideBtnIcon-close::before {
+    content: '\e236';
+  }
+}
+@media (max-width: 768px) and (min-width: 400px) and (max-width: 500px) {
+  #sideNav_wapper .greet,
+  #sideNav_wapper .logout {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (min-width: 320px) and (max-width: 400px) {
+  #sideNav_wapper .sideavatar {
+    display: none;
+  }
+}
+@media (max-width: 768px) and (max-width: 320px) {
+  #sideNav_wapper .logo small,
+  #sideNav_wapper .sideavatar {
+    display: none;
   }
 }

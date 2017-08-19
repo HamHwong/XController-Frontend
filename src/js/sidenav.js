@@ -11,13 +11,3 @@ var sideclose = function() {
   $('.sideBtn .glyphicon').removeClass().addClass('glyphicon').addClass('sideBtnIcon-close')
   $('#right_wapper').removeClass().addClass('extend')
 }
-
-$(document).ready(function() {
-  $('.sideBtn').click(function() {
-    if ($('.sideBtn').hasClass('nav_collapse')) {
-      sideopen()
-    } else {
-      sideclose()
-    }
-  })
-})

@@ -11,8 +11,8 @@
   "plugs/buttons.css": "plugs/buttons-b4b26cbdf1.css",
   "plugs/datetimepicker.css": "plugs/datetimepicker-797a04f9f5.css",
   "plugs/font-awesome.min.css": "plugs/font-awesome-feda974a77.min.css",
-  "sidenav.css": "sidenav-d54945e41d.css",
-  "sidenav_common.css": "sidenav_common-50357df289.css",
-  "sidenav_mobile.css": "sidenav_mobile-501bf673e1.css",
+  "sidenav.css": "sidenav-0285c5aeaf.css",
+  "sidenav_common.css": "sidenav_common-8b406ebe5b.css",
+  "sidenav_mobile.css": "sidenav_mobile-8b406ebe5b.css",
   "style.css": "style-bea307c18b.css"
 }

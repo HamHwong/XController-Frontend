@@ -1,27 +1,3 @@
-// $(document).ready(function() {
-//   $('#myTab a:first').tab('show');
-//   $('#myTab a').click(function(e) {
-//     e.preventDefault();
-//     $(this).tab('show');
-//   })
-//
-//   $(".form_datetime").datetimepicker({
-//     minView: "month", //设置只显示到月份
-//     format: 'yyyy-mm-dd',
-//     autoclose: true, //选中关闭
-//   });
-//
-//   //插件check
-//   $('input').iCheck({
-//     checkboxClass: 'icheckbox_flat-blue',
-//     radioClass: 'iradio_flat-blue'
-//   });
-//
-//   hideColunmInMobile('finished')
-//   hideColunmInMobile('unfinished')
-//   addAllRowsCards("finished")
-//   // addAllRowsCards("unfinished")
-// })
 
 var getTablesObject = function() {
   var r = $.getJSON("/test/table.json", function() {
@@ -124,7 +100,10 @@ $("#myModal").modal({
 })
 //===========================================================================================================================
 //隐藏列
-
+/**
+ * 初始化table，将key属性非'key'的列标记下来，并将所有的非key的列添加上Bootstrap的hidden-xs类标签
+ * @param  {JQuery.TableObject} $table 传入一个Table（可为非JQuery Table，会自动转换）
+ */
 var hideColunmInMobile = function($table) {
   var table = $($table)
   var keys = $($table).find("tr>*[key='prop']")
@@ -141,7 +120,10 @@ var hideColunmInMobile = function($table) {
 
 //===========================================================================================================================
 //搜索条
-//TODO-要有个sleep
+//TODO-要有个sleep,函数执行太快
+/**
+ * @description 为搜索框绑定keyup事件，调用queryKeyWords动态地查询关键字，然后添加到下拉列表中
+ */
 $("#search_box").on('keyup', function() {
   var droplist = $(".search_box_warp .keyhint")
   droplist.empty()
@@ -164,7 +146,12 @@ $("#search_box").on('keyup', function() {
     $(".search_box_warp").removeClass("open")
   }
 })
-
+/**
+ * @description 从字典数组中查询到
+ * @param  {String} keys 输入的关键字字符串
+ * @param  {StringArray} dic  Dictionary字符串字典数组
+ * @return {StringArray}      返回一个装有所有搜索结果的字符数组
+ */
 var queryKeyWords = function(keys, dic) {
   var r = []
   for (var i in dic) {
@@ -176,7 +163,10 @@ var queryKeyWords = function(keys, dic) {
   }
   return r
 }
-
+/**
+ * 搜索框字典数组
+ * @type {Array}
+ */
 var keywordsdata = [
   "as", "asd", "zxccwr", "zxcer", "utjy", "ndftr", "啊水水水水"
 ]
@@ -185,10 +175,11 @@ var keywordsdata = [
 //===========================================================================================================================
 //最笨的方法先全生成所有card
 //获取所有table的row信息，除了header，包装成json
+/**
+ * 为已有的table对象添加卡片显示模式
+ * @param  {JQuery.TableObject} $table
+ */
 var addAllRowsCards = function($table) {
-  // var trs = $(".tab-content #" + $tablename + " table tr")
-  // var mod = $(".info_card_row").clone() //模板不变
-  // modifyMod(mod, json)
   $table = $($table)
   var arr = tableToJsonArr($table, true)
   console.log(arr)
@@ -199,14 +190,15 @@ var addAllRowsCards = function($table) {
     mod.find(".card_head").siblings('div').hide()
     $table.find("tbody").append(mod)
   }
-  // $("#finished table tbody").append(mod)
   $table.find(".card_head").on('click', function() {
     $(this).siblings('div').toggle(100)
   })
-  // $(".card .card_head").on('click', function() {
-  //   $(this).siblings('div').toggle(100)
-  // })
 }
+/**
+ * 修改模板
+ * @param  {JQuery.mod} mod 传入模板
+ * @param  {json} Obj 传入需要修改成的json对象
+ */
 var modifyMod = function(mod, Obj) {
   mod.removeClass("hide")
   var header = Obj.Header
@@ -218,10 +210,6 @@ var modifyMod = function(mod, Obj) {
   var body = mod.find(".card_body")
   var headertext = ""
   for (var k in header) {
-    // if (k > 2) {
-    //   headertext += "...."
-    //   continue
-    // }
     var headertextcontent = props[header[k]]
     if (headertextcontent.length > 20)
       headertextcontent = headertextcontent.substring(0, 20) + "..."
@@ -243,6 +231,10 @@ var modifyMod = function(mod, Obj) {
     body.append(row)
   }
 }
+/**
+ * 卡片title的背景色数组
+ * @type {Array}
+ */
 var colorarr = [
   "#011935",
   "#00343F",
@@ -254,13 +246,16 @@ var colorarr = [
   "#044D22",
   "#495A80",
 ]
+/**
+ * 将行对象转换成Json对象
+ * @param  {JQuery.rowObject} $row    传入一个Jquery的row对象
+ * @param  {JQuery.rowObject} $headrow 传入一个的Jquery的HeaderRow对象
+ * @return {json}          返回一个Json对象，结构为r变量
+ */
 var rowToJson = function($row, $headrow) {
   $row = $($row)
   $headrow = $($headrow)
-  // var trs = $("#finished tr")
-  // var $ths = $(trs[0])
   var $thtds = $headrow.children() //获取表头的tds
-  // var $row = $(trs[1])
   var $trtds = $row.children() //获取该行的tds
   var keys = $headrow.find("*[key='key']")
   var headers = {}
@@ -274,13 +269,18 @@ var rowToJson = function($row, $headrow) {
     "Date": "yyyy-mm-dd"
   }
   for (var i = 0; i < $thtds.length; i++) {
-    // r["Props"][filterXSS($thtds[i].innerHTML)] = filterXSS($trtds[i].innerHTML)
     r["Props"][filterXSS($thtds[i].innerHTML)] = $trtds[i].innerHTML
-    console.log(filterXSS($thtds[i].innerHTML)+","+$trtds[i].innerHTML);
+    // console.log(filterXSS($thtds[i].innerHTML)+","+$trtds[i].innerHTML);
     r["Bgcolor"] = colorarr[Math.floor(Math.random() * colorarr.length)]
   }
   return r
 }
+/**
+ * 将Table对象转换为Json数组
+ * @param  {Jquery.Table}  $table    传入一个table对象
+ * @param  {Boolean} hasHeader 是否带头标签th
+ * @return {JsonArr}            返回一个带有Json对象的数组
+ */
 var tableToJsonArr = function($table, hasHeader) {
   // var $tb = $("#finished table") //$table
   $table = $($table)

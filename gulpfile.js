@@ -85,7 +85,8 @@ gulp.task('clean-js', function(event) {
 // })
 
 gulp.task('ejs', function() {
-  gulp.src("./src/templates/**/*.ejs")
+  // gulp.src(["./src/templates/**/*.ejs","!src/templates/components/**/*.ejs"])
+  gulp.src(["./src/templates/**/*.ejs"])
     .pipe(ejs({}, {}, {
       ext: ".html"
     }))
