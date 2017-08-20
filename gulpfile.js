@@ -39,7 +39,7 @@ gulp.task('less', function() {
 })
 
 //Html替换css、js文件版本
-gulp.task('revHtml', ['revCss', 'revJs'], function() {
+gulp.task('revHtml', ['ejs','revCss', 'revJs'], function() {
   return gulp.src([config.path.config + '/*.json', 'src/**/*.html'])
     .pipe(revCollector())
     .pipe(gulp.dest('dist'));
@@ -78,11 +78,6 @@ gulp.task('clean-js', function(event) {
       force: true
     }));
 })
-// gulp.task('ejs', function() {
-//   gulp.src("src/templates/content.ejs")
-//   .pipe(ejs({},{},{ejs:".html"}))
-//   .pipe(gulp.dest("src/templates/"))
-// })
 
 gulp.task('ejs', function() {
   // gulp.src(["./src/templates/**/*.ejs","!src/templates/components/**/*.ejs"])
@@ -130,6 +125,6 @@ gulp.task('concat-css', function() {
     .pipe(gulp.dest('dist/test'))
 })
 
-gulp.task('default', ['ejs', 'watch', 'revHtml', 'webserver'], function() {
+gulp.task('default', ['watch', 'revHtml', 'webserver'], function() {
   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })

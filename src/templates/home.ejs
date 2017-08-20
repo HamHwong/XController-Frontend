@@ -7,14 +7,15 @@
 </head>
 
 <body>
-  <%locals.homePage=true%>
+    <%locals.homePage=true%>
     <div id="right_wapper">
-      <%-include("./header.ejs")%>
-      <%-include("./content.ejs")%>
+      <%-include("./header")%>
+      <%-include("./content")%>
     </div>
     <div id="left_wapper">
-      <%-include("./sideNav.ejs")%>
+      <%-include("./sideNav")%>
     </div>
+
     <link rel="stylesheet" href="./css/plugs/bootstrap.css">
     <link rel="stylesheet" href="./css/sidenav.css">
     <link rel="stylesheet" href="./css/header.css">
