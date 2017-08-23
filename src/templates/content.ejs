@@ -33,6 +33,9 @@
       </div>
     </form>
   </div>
+  <div class="steps clearfix">
+    <%-include('./components/progressbar/progressbar')%>
+  </div>
   <div class="tabs">
     <ul class="nav nav-tabs" id="myTab">
       <li class="active"><a href="#finished">已完成</a></li>
@@ -70,54 +73,7 @@
           <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
         </tr>
         <!-- hack TODO:改成模板 -->
-        <tr class="info_card_row hide">
-          <td colspan="1">
-            <div class="card col-xs-12 row">
-              <div class="card_head row">
-                header
-              </div>
-              <div class="card_body">
-                <div class="row card_data_row">
-                  <div class="col-xs-2 card_data_title">
-                    PropName:
-                  </div>
-                  <div class="col-xs-10 card_data">
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                  </div>
-                </div>
-                <div class="row card_data_row">
-                  <div class="col-xs-2 card_data_title">
-                    PropName:
-                  </div>
-                  <div class="col-xs-10">
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                  </div>
-                </div>
-                <div class="row card_data_row">
-                  <div class="col-xs-2 card_data_title">
-                    PropName:
-                  </div>
-                  <div class="col-xs-10">
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                  </div>
-                </div>
-                <div class="row card_data_row">
-                  <div class="col-xs-2 card_data_title">
-                    PropName:
-                  </div>
-                  <div class="col-xs-10">
-                    aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                  </div>
-                </div>
-              </div>
-              <div class="card_foot row">
-                <div class="date">
-                  data:yyyy-mm-dd
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
+        <%-include('./components/TableCard/cardRow')%>
       </table>
     </div>
     <div class="tab-pane" id="unfinished">
@@ -128,7 +84,6 @@
           <th key="prop">header3[property]</th>
           <th key="key">header4[key]</th>
           <th key="prop">header5[property]</th>
-          <th key="prop">header6[property]</th>
           <th key="operation">OPERATION[operation]</th>
         </tr>
         <tr>
@@ -137,7 +92,6 @@
           <td>content3</td>
           <td>content4</td>
           <td>content5</td>
-          <td>content6</td>
           <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
         </tr>
         <tr>
@@ -146,7 +100,6 @@
           <td>content3</td>
           <td>content4</td>
           <td>content5</td>
-          <td>content6</td>
           <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
         </tr>
       </table>
@@ -222,13 +175,6 @@
     <!-- /.modal -->
   </div>
 </div>
-<!--
-状态栏分页？手机端如何？
-查询
-分页前端？后端？
-自动检测table用div重画
-数据绑定？
--->
 <%if(!locals.homePage){%>
   <link rel="stylesheet" href="./css/plugs/bootstrap.css">
   <link rel="stylesheet" href="./css/content.css">

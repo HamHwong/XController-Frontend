@@ -1,0 +1,18 @@
+<%# <link rel="stylesheet" type="text/css" href="./css/components.css" />%>
+<%#
+  ComponentsName:JumpInput
+  Description:a input components that can jump out from bottom
+  Author:Ham
+  Required:
+    name:The name of this input components, It will fill in `name`,`id` and their lable `for` property
+    type:just like the type of regular input type, text,password, etc.
+  Options:
+    placeholder:placeholder ,if empty, the placeholder attribute will not be displayed
+    index:
+%>
+<div class="JumpInput" <% if(locals.index){%>style="animation-delay:<%=(locals.index * 0.1)%>s"<%}%>>
+  <%if(locals.icons){%>
+    <span class="icon-input  glyphicon <%-locals.icons%> "></span>
+  <%}%>
+  <input type="<%-locals.type%>" name="<%-locals.name%>" id="<%-locals.name%>"<% if(locals.placeholder){%> placeholder="<%-locals.placeholder%>" <%}%>/>
+</div>

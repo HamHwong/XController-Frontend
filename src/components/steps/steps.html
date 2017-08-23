@@ -1,0 +1,85 @@
+<!-- progressbar -->
+<ul id="progressbar">
+  <li class="active"><a href="#">提出申请</a></li>
+  <li class="active"><a href="#">直线经理</a></li>
+  <li><a href="#">BU经理</a></li>
+</ul>
+
+<script type="text/javascript" src="../../js/plugs/jquery.js"></script>
+<style media="screen">
+  * {
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    font-size: 10px;
+  }
+
+  #progressbar {
+    counter-reset: go;
+  }
+
+  #progressbar li {
+    display: block;
+    position: relative;
+    margin-left: 10rem;
+    float: left;
+    list-style: none;
+    color: #000;
+    line-height: 4rem;
+    /*width: 100px;*/
+    z-index: 1029;
+  }
+
+  #progressbar li a {
+    display: block;
+    /*float:left;*/
+    width: 100%;
+  }
+
+  #progressbar li::before {
+    counter-increment: go;
+    content: counter(go);
+    display: block;
+    text-align: center;
+    font-size: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+    margin: 0 auto;
+    background-color: #d4d4d4;
+    position:relative;
+    z-index: 1030;
+  }
+
+  #progressbar li:after {
+    position: absolute;
+    left: 2rem;
+    float:left;
+    height: 0.2rem;
+    width: 15rem;
+    top: 2rem;
+    content: "";
+    display: inline-block;
+    background-color: #d4d4d4;
+    z-index: 1029;
+  }
+
+  #progressbar li:last-child::after {
+    display: none;
+  }
+
+  #progressbar li:first-child {
+    margin-left: 0;
+  }
+
+  #progressbar li.active::before {
+    background-color: #36908d;
+    color: #FFF;
+  }
+
+  #progressbar li.active::after {
+    background-color: #36908d;
+  }
+</style>

@@ -29,8 +29,8 @@ gulp.task('webserver', function() {
   })
 });
 
-gulp.task('less', function() {
-  return gulp.src(__src + '/less/*.less')
+gulp.task('less',['clean-css'], function() {
+  return gulp.src([__src + '/less/*.less', './src/templates/**/*.less'])
     .pipe(less())
     .pipe(autoprefixer({
       browsers: ['last 20 versions']
@@ -57,8 +57,8 @@ gulp.task('revJs', ['clean-js'], function() {
     }))
     .pipe(gulp.dest('config'));
 });
-gulp.task('revCss', ['clean-css', 'less'], function() {
-  return gulp.src([cssSrc + "/**/*.css"])
+gulp.task('revCss', ['concat-conponent-css'], function() {
+  gulp.src([cssSrc + "/**/*.css", '!src/templates/components/**/*.css'])
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/css"))
     .pipe(rev.manifest({
@@ -80,21 +80,20 @@ gulp.task('clean-js', function(event) {
 })
 
 gulp.task('ejs', function() {
-  // gulp.src(["./src/templates/**/*.ejs","!src/templates/components/**/*.ejs"])
-  gulp.src(["./src/templates/**/*.ejs"])
+  gulp.src([__src +"/templates/**/*.ejs", "!/src/templates/components/*.ejs"])
     .pipe(ejs({}, {}, {
       ext: ".html"
     }))
-    .pipe(gulp.dest("./src"))
+    .pipe(gulp.dest("./src/"))
 });
 
 gulp.task('watch', function() {
-  gulp.watch([__src + '/less/**/*.less', './config/*Config.less'], ['revHtml'])
-  gulp.watch([__src + '/js/**/*.js', './config/*Config.js'], ['revHtml'])
-  gulp.watch(['src/templates/**/*.ejs'], ['ejs'])
-  gulp.watch([__src + '/pug/**/*.pug',
-    __src + '/**/*.html',
+  gulp.watch([
+    __src + '/less/**/*.less',
+    __src + '/templates/**/*.less',
+    __src + '/js/**/*.js',
     './config/*Config.*',
+    __src + '/templates/**/*.ejs'
   ], ['revHtml'])
 })
 
@@ -122,9 +121,22 @@ gulp.task('concat-css', function() {
       keepSpecialComments: '*'
       //保留所有特殊前缀 当你用autoprefixer生成的浏览器前缀，如果不加这个参数，有可能将会删除你的部分前缀
     }))
-    .pipe(gulp.dest('dist/test'))
+    .pipe(gulp.dest('dist/css'))
+})
+gulp.task('concat-conponent-css',['less'], function() {
+  return gulp.src(['./src/css/components/**/*.css'])
+    .pipe(concat('components.css'))
+    .pipe(cssmin({
+      advanced: true, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]
+      compatibility: 'ie7', //保留ie7及以下兼容写法 类型：String 默认：''or'*' [启用兼容模式； 'ie7'：IE7兼容模式，'ie8'：IE8兼容模式，'*'：IE9+兼容模式]
+      keepBreaks: true, //类型：Boolean 默认：false [是否保留换行]
+      keepSpecialComments: '*'
+      //保留所有特殊前缀 当你用autoprefixer生成的浏览器前缀，如果不加这个参数，有可能将会删除你的部分前缀
+    }))
+    .pipe(gulp.dest('src/css'))
 })
 
-gulp.task('default', ['watch', 'revHtml', 'webserver'], function() {
+gulp.task('default', [ 'revHtml', 'webserver'], function() {
+  gulp.start('watch') //被弃用，仍能用，4.0官方将提供同步任务
   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })

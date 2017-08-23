@@ -1,0 +1,11 @@
+<%#
+  ComponentsName:JumpButton
+  Description:Jumping Button
+  Author:Ham
+  Required:
+    value:
+    type:
+%>
+<div class="JumpButton" <% if(locals.index){%>style="animation-delay:<%=(locals.index * 0.1)%>s"<%}%>>
+  <button type="button" name="button">Submit</button>
+</div>

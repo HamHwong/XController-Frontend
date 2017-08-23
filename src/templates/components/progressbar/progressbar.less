@@ -1,0 +1,68 @@
+#progressbar {
+  counter-reset: go;
+  margin: 0 auto;
+}
+
+#progressbar:after {
+  clear: both;
+}
+
+#progressbar li {
+  display: block;
+  float: left;
+  list-style: none;
+  color: #000;
+  line-height: 4rem;
+  width: 30%;
+  /*z-index: 1029;*/
+}
+
+#progressbar li a {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+#progressbar li::before {
+  counter-increment: go;
+  content: counter(go);
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+  margin: 0 auto;
+  background-color: #d4d4d4;
+  position: relative;
+  /*z-index: 1030;*/
+}
+
+#progressbar li:after {
+  position: relative;
+  height: 0.2rem;
+  width: calc(100% - 4rem);
+  top: -6rem;
+  left: calc(50% + 2rem);
+  content: "";
+  display: block;
+  background-color: #d4d4d4;
+  /*z-index: 10;*/
+}
+
+#progressbar li:last-child::after {
+  display: none;
+}
+
+#progressbar li:first-child {
+  margin-left: 0;
+}
+
+#progressbar li.active::before {
+  background-color: #36908d;
+  color: #FFF;
+}
+
+#progressbar li.active::after {
+  background-color: #36908d;
+}
