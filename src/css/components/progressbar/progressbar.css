@@ -27,8 +27,7 @@
   font-size: 2rem;
   width: 4rem;
   height: 4rem;
-  -webkit-border-radius: 2rem;
-          border-radius: 2rem;
+  border-radius: 2rem;
   margin: 0 auto;
   background-color: #d4d4d4;
   position: relative;
@@ -37,10 +36,8 @@
 #progressbar li:after {
   position: relative;
   height: 0.2rem;
-  width: -webkit-calc(96%);
   width: calc(96%);
   top: -6rem;
-  left: -webkit-calc(52%);
   left: calc(52%);
   content: "";
   display: block;

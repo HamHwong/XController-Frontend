@@ -113,9 +113,9 @@ var hideColunmInMobile = function($table) {
     var indexOfRow = cell.cellIndex
     responsiveColsArr.add(indexOfRow)
   }
-  for (var j of responsiveColsArr) {
+  // for (var j in responsiveColsArr) {
     table.find('tr:not(".info_card_row")').children('*').addClass('hidden-xs')
-  }
+  // }ie
 }
 
 //===========================================================================================================================

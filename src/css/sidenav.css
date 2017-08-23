@@ -32,11 +32,9 @@ html {
   background-color: #31578B;
 }
 #sideNav_wapper .sidebar-nav .section .dropdown-menu {
-  -webkit-border-radius: 0;
-          border-radius: 0;
+  border-radius: 0;
   border: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+  box-shadow: none;
   margin: 0;
   padding: 0;
   position: relative;
@@ -87,9 +85,11 @@ html {
   }
   #sideNav_wapper .sideNav.nav_collapse {
     -webkit-animation: close-sideBar 0.5s forwards;
+            animation: close-sideBar 0.5s forwards;
   }
   #sideNav_wapper .sideNav.nav_open {
     -webkit-animation: open-sideBar 0.5s forwards;
+            animation: open-sideBar 0.5s forwards;
   }
   @-webkit-keyframes close-sideBar {
     from {
@@ -159,8 +159,7 @@ html {
     top: 30rem;
     font-size: 1.6rem;
     left: 20rem;
-    -webkit-border-radius: 0 0.6rem 0.6rem 0;
-            border-radius: 0 0.6rem 0.6rem 0;
+    border-radius: 0 0.6rem 0.6rem 0;
     height: 5rem;
     z-index: 1032;
   }
@@ -172,9 +171,11 @@ html {
   }
   .sideBtn.nav_collapse {
     -webkit-animation: close-sideBtn 0.5s forwards;
+            animation: close-sideBtn 0.5s forwards;
   }
   .sideBtn.nav_open {
     -webkit-animation: open-sideBtn 0.5s forwards;
+            animation: open-sideBtn 0.5s forwards;
   }
 }
 @media (max-width: 768px) {
@@ -197,8 +198,7 @@ html {
     content: "";
     display: block;
     background: url('../img/logo-white.png') no-repeat;
-    -webkit-background-size: auto 100%;
-            background-size: auto 100%;
+    background-size: auto 100%;
   }
   #sideNav_wapper .sideavatar {
     color: #fff;
@@ -213,8 +213,7 @@ html {
     float: left;
     height: 4rem;
     width: 4rem;
-    -webkit-border-radius: 4rem;
-            border-radius: 4rem;
+    border-radius: 4rem;
     overflow: hidden;
   }
   #sideNav_wapper .sideavatar .avatar img {
@@ -225,8 +224,6 @@ html {
     vertical-align: middle;
     margin: 0 auto;
     -webkit-box-flex: 1;
-    -webkit-flex: auto;
-        -ms-flex: auto;
             flex: auto;
   }
   #sideNav_wapper .sideavatar .greet,
@@ -242,6 +239,7 @@ html {
     padding-top: 5rem;
     overflow: hidden;
     -webkit-animation: open-sideBar 0.1s forwards;
+            animation: open-sideBar 0.1s forwards;
   }
   #sideNav_wapper .sideNav li,
   #sideNav_wapper .sideNav ul {
@@ -249,9 +247,11 @@ html {
   }
   #sideNav_wapper .sideNav.nav_collapse {
     -webkit-animation: close-sideBar 0.1s forwards;
+            animation: close-sideBar 0.1s forwards;
   }
   #sideNav_wapper .sideNav.collased {
     -webkit-animation: close-sideBar 0.1s forwards;
+            animation: close-sideBar 0.1s forwards;
   }
   @-webkit-keyframes close-sideBar {
     from {

@@ -37,7 +37,16 @@
 
     table {
       table-layout: fixed;
+      // table-layout: auto;
       word-wrap: break-word;
+      // white-space:normal;
+      td {
+        button {
+          float: left;
+          font-size: 1rem;
+          width: 100%;
+        }
+      }
     }
 
     tr.info_card_row {
@@ -45,6 +54,10 @@
         border: 0;
         padding: 0;
         margin: 0;
+
+        button {
+          float: left;
+        }
 
         .card {
           margin: 0 0 0.2rem;
@@ -82,42 +95,6 @@
             }
           }
         }
-        // .card.cllospe {
-        //   animation: deshadow .5s forwards;
-        //   // animation: cutup 1s forwards;
-        //   @keyframes deshadow {
-        //     from {
-        //       box-shadow: 0 0 2rem #888888;
-        //     }
-        //
-        //     to {
-        //       box-shadow: 0 0 0 #888888;
-        //     }
-        //   }
-        //   @keyframes cutup {
-        //     0% {
-        //       position: relative;
-        //       top: 0;
-        //     }
-        //
-        //     25% {
-        //       top: 200px;
-        //     }
-        //
-        //     50% {
-        //       top: 100px;
-        //     }
-        //
-        //     75% {
-        //       top: 200px;
-        //     }
-        //
-        //     100% {
-        //       top: 0;
-        //     }
-        //   }
-        // }
-        //暂时不做
       }
     }
   }
@@ -128,7 +105,9 @@
     padding: 1rem 0.5rem;
     border-radius: 0.5rem;
 
-    .querycontrols {}
+    .querycontrols {
+        color:#fff;
+    }
   }
 
   .selection-group::after {
@@ -146,8 +125,6 @@
       border-bottom: none !important;
     }
   }
-
-  .info_card_row {}
 
   .info_card_row.closeRow {
     // height: 0px;

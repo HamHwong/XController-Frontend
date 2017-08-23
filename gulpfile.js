@@ -33,7 +33,7 @@ gulp.task('less',['clean-css'], function() {
   return gulp.src([__src + '/less/*.less', './src/templates/**/*.less'])
     .pipe(less())
     .pipe(autoprefixer({
-      browsers: ['last 20 versions']
+      browsers: ['> 1%']
     }))
     .pipe(gulp.dest(__src + '/css/'))
 })
