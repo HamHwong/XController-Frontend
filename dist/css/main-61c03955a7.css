@@ -8,16 +8,8 @@ html {
   font-size: 10px;
 }
 @media (min-width: 768px) {
-  #header_wapper .header_logo .logo:before {
-    display: inline-block;
-    width: 20rem;
-    height: 3.6rem;
-    content: '';
-    background: url('../img/icons-blue-1.0.5.svg') no-repeat 0 -2450px;
-  }
-  #header_wapper .row {
-    margin-left: 0;
-    margin-right: 0;
+  #header_wapper {
+    display: block;
   }
   #right_wapper {
     margin-left: 20rem;

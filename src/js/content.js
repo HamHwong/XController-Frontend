@@ -90,6 +90,7 @@ var page = function(page, data) {
     data: data
   }
 }
+
 //
 //===========================================================================================================================
 //模态配置
@@ -124,7 +125,7 @@ var hideColunmInMobile = function($table) {
 /**
  * @description 为搜索框绑定keyup事件，调用queryKeyWords动态地查询关键字，然后添加到下拉列表中
  */
-$("#search_box").on('keyup', function() {
+$(".search_box").on('keyup', function() {
   var droplist = $(".search_box_warp .keyhint")
   droplist.empty()
   var data = queryKeyWords(this.value, keywordsdata)
@@ -282,7 +283,6 @@ var rowToJson = function($row, $headrow) {
  * @return {JsonArr}            返回一个带有Json对象的数组
  */
 var tableToJsonArr = function($table, hasHeader) {
-  // var $tb = $("#finished table") //$table
   $table = $($table)
   $trs = $table.find("tr:not('.info_card_row')")
   $ths = $($trs[0])

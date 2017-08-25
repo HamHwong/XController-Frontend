@@ -5,82 +5,69 @@
 html {
   font-size: 10px;
 }
-#content_wapper .search_wapper .querycontrols div {
-  background-color: #40679C;
-}
-#content_wapper .operation-menu::before {
+.operation-menu::before {
   clear: both;
   content: '';
 }
-#content_wapper .operation-menu {
+.operation-menu {
   float: left;
   width: 100%;
   background-color: #40679C;
   padding: 0.5rem 0.3rem;
   border-radius: 0 1rem 0 0;
 }
-#content_wapper .operation-menu button {
+.operation-menu button {
   float: right;
   margin-left: 0.5rem;
 }
-#content_wapper .tab-content {
+.tab-content {
   width: 100%;
   float: left;
 }
-#content_wapper .tab-content table {
+.tab-content table {
   table-layout: fixed;
   word-wrap: break-word;
 }
-#content_wapper .tab-content table td button {
+.tab-content table td button {
   float: left;
-  font-size: 1rem;
   width: 100%;
 }
-#content_wapper .tab-content tr.info_card_row td {
+.tab-content tr.info_card_row td {
   border: 0;
   padding: 0;
   margin: 0;
 }
-#content_wapper .tab-content tr.info_card_row td button {
+.tab-content tr.info_card_row td button {
   float: left;
 }
-#content_wapper .tab-content tr.info_card_row td .card {
+.tab-content tr.info_card_row td .card {
   margin: 0 0 0.2rem;
   border-radius: 0 0 0.3rem 0.3rem;
   box-shadow: 0 0.5rem 1rem #888888;
   border: 1px solid #4A8BC2;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_head {
+.tab-content tr.info_card_row td .card .card_head {
   padding: 0.4rem;
   color: #fff;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_body {
+.tab-content tr.info_card_row td .card .card_body {
   font-size: 0.8rem;
   margin: 1rem;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_body .card_data_row {
+.tab-content tr.info_card_row td .card .card_body .card_data_row {
   border-bottom: 0.1rem solid #e5e5e5;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_body .card_data_title {
+.tab-content tr.info_card_row td .card .card_body .card_data_title {
   font-weight: bolder;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_foot {
+.tab-content tr.info_card_row td .card .card_foot {
   border-top: 0.1rem solid #e5e5e5;
   margin: 1rem;
 }
-#content_wapper .tab-content tr.info_card_row td .card .card_foot .date {
+.tab-content tr.info_card_row td .card .card_foot .date {
   float: right;
 }
-#content_wapper .search_wapper {
-  margin: 2rem 0;
-  background-color: #40679C;
-  padding: 1rem 0.5rem;
-  border-radius: 0.5rem;
-}
-#content_wapper .search_wapper .querycontrols {
-  color: #fff;
-}
-#content_wapper .selection-group::after {
+.selection-group::after {
   clear: both;
 }
 @media (min-width: 768px) {

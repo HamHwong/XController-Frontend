@@ -1,4 +1,5 @@
-@import "../../config/StyleConfig.less";//配置颜色
+@import "../../config/StyleConfig.less"; //配置颜色
+
 .page-header {
   .header_userInfo {
     .avatar {
@@ -6,12 +7,28 @@
     }
 
     .information {
-      margin-left:30%;
+      margin-left: 30%;
+
       .account,
       .profile {
         display: inline-block;
         float: left;
       }
     }
+  }
+}
+@media (min-width: 768px) {
+  .header_logo {
+    .logo:before {
+      display: inline-block;
+      width: 20rem;
+      height: 3.6rem;
+      content: '';
+      background: url('../img/icons-blue-1.0.5.svg') no-repeat 0 -2450px;
+    }
+  }
+  .page-header.row {
+    margin-left: 0;
+    margin-right: 0;
   }
 }

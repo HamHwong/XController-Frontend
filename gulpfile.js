@@ -29,7 +29,7 @@ gulp.task('webserver', function() {
   })
 });
 
-gulp.task('less',['clean-css'], function() {
+gulp.task('less', ['clean-css'], function() {
   return gulp.src([__src + '/less/*.less', './src/templates/**/*.less'])
     .pipe(less())
     .pipe(autoprefixer({
@@ -39,7 +39,7 @@ gulp.task('less',['clean-css'], function() {
 })
 
 //Html替换css、js文件版本
-gulp.task('revHtml', ['ejs','revCss', 'revJs'], function() {
+gulp.task('revHtml', ['ejs', 'revCss', 'revJs'], function() {
   return gulp.src([config.path.config + '/*.json', 'src/**/*.html'])
     .pipe(revCollector())
     .pipe(gulp.dest('dist'));
@@ -48,7 +48,7 @@ gulp.task('revHtml', ['ejs','revCss', 'revJs'], function() {
 var jsSrc = config.path.js
 var cssSrc = config.path.css
 
-gulp.task('revJs', ['clean-js'], function() {
+gulp.task('revJs', ['concat-conponent-js'], function() {
   return gulp.src([jsSrc + "/**/*.js"])
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/js"))
@@ -58,7 +58,7 @@ gulp.task('revJs', ['clean-js'], function() {
     .pipe(gulp.dest('config'));
 });
 gulp.task('revCss', ['concat-conponent-css'], function() {
-  gulp.src([cssSrc + "/**/*.css", '!src/templates/components/**/*.css'])
+  return gulp.src([cssSrc + "/**/*.css", '!src/templates/components/**/*.css'])
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/css"))
     .pipe(rev.manifest({
@@ -80,8 +80,10 @@ gulp.task('clean-js', function(event) {
 })
 
 gulp.task('ejs', function() {
-  gulp.src([__src +"/templates/**/*.ejs", "!/src/templates/components/*.ejs"])
-    .pipe(ejs({}, {}, {
+  return gulp.src([__src + "/templates/**/*.ejs", "!/src/templates/components/*.ejs"])
+    .pipe(ejs({}, {
+      root:"./src/templates"
+    }, {
       ext: ".html"
     }))
     .pipe(gulp.dest("./src/"))
@@ -91,9 +93,10 @@ gulp.task('watch', function() {
   gulp.watch([
     __src + '/less/**/*.less',
     __src + '/templates/**/*.less',
-    __src + '/js/**/*.js',
+    // __src + '/js/**/*.js',
     './config/*Config.*',
-    __src + '/templates/**/*.ejs'
+    __src + '/templates/**/*.ejs',
+    __src + '/templates/**/*.js',
   ], ['revHtml'])
 })
 
@@ -123,7 +126,8 @@ gulp.task('concat-css', function() {
     }))
     .pipe(gulp.dest('dist/css'))
 })
-gulp.task('concat-conponent-css',['less'], function() {
+
+gulp.task('concat-conponent-css', ['less'], function() {
   return gulp.src(['./src/css/components/**/*.css'])
     .pipe(concat('components.css'))
     .pipe(cssmin({
@@ -136,7 +140,13 @@ gulp.task('concat-conponent-css',['less'], function() {
     .pipe(gulp.dest('src/css'))
 })
 
-gulp.task('default', [ 'revHtml', 'webserver'], function() {
+gulp.task('concat-conponent-js',['clean-js'], function() {
+  return gulp.src(['./src/templates/components/**/*.js'])
+    .pipe(concat('components.js'))
+    .pipe(gulp.dest('src/js'))
+})
+
+gulp.task('default', ['revHtml', 'webserver'], function() {
   gulp.start('watch') //被弃用，仍能用，4.0官方将提供同步任务
   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })

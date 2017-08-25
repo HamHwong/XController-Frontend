@@ -7,13 +7,18 @@
 </head>
 
 <body>
-    <%locals.homePage=true%>
     <div id="right_wapper">
-      <%-include("./header")%>
-      <%-include("./content/agent-content")%>
+      <header id="header_wapper">
+        <%-include("/header")%>
+      </header>
+      <div id="content_wapper" class="container-fluid">
+        <%-include("/content/agent-content")%>
+      </div>
     </div>
     <div id="left_wapper">
-      <%-include("./sideNav")%>
+      <div id="sideNav_wapper" class="nav-show">
+        <%-include("/sideNav")%>
+      </div>
     </div>
 
     <link rel="stylesheet" href="./css/plugs/bootstrap.css">
@@ -21,6 +26,7 @@
     <link rel="stylesheet" href="./css/header.css">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/content.css">
+    <link rel="stylesheet" href="./css/components.css">
     <!--  -->
     <link rel="stylesheet" href="./css/plugs/buttons.css">
     <link rel="stylesheet" href="./css/plugs/blue.css">
@@ -36,6 +42,8 @@
     <script type="text/javascript" src="./js/plugs/icheck.js"></script>
     <script type="text/javascript" src="./js/plugs/xss.js"></script>
     <script type="text/javascript" src="./js/init.js"></script>
+    <script type="text/javascript" src="./js/components.js"></script>
+
     <script type="text/javascript">
       $(document).ready(function() {
         for (var i in init) {

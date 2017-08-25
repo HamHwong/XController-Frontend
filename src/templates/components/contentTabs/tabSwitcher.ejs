@@ -1,0 +1,8 @@
+  <div class="tabs">
+    <ul class="nav nav-tabs" id="myTab">
+      <% var tabs = locals.tabs%>
+      <%for (var r in tabs){%>
+        <li><a href=#<%=r%>><%=tabs[r]%></a></li>
+      <%}%>
+    </ul>
+  </div>
