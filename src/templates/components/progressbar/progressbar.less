@@ -1,6 +1,10 @@
 #progressbar {
   counter-reset: go;
   margin: 0 auto;
+
+  .operationtime {
+    display: block;
+  }
 }
 
 #progressbar:after {
@@ -14,6 +18,8 @@
   color: #000;
   line-height: 4rem;
   width: 30%;
+  list-style-type: none;
+  list-style-position: outside;
   /*z-index: 1029;*/
 }
 
@@ -21,6 +27,7 @@
   display: block;
   width: 100%;
   text-align: center;
+  line-height: 2rem;
 }
 
 #progressbar li::before {

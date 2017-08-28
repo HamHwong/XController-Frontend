@@ -16,11 +16,15 @@ html {
   }
   #right_wapper.extend {
     -webkit-animation: extend 0.5s forwards;
-            animation: extend 0.5s forwards;
+    -moz-animation: extend 0.5s forwards;
+    -o-animation: extend 0.5s forwards;
+    animation: extend 0.5s forwards;
   }
   #right_wapper.shrunk {
     -webkit-animation: shrunk 0.5s forwards;
-            animation: shrunk 0.5s forwards;
+    -moz-animation: shrunk 0.5s forwards;
+    -o-animation: shrunk 0.5s forwards;
+    animation: shrunk 0.5s forwards;
   }
   #content_wapper {
     background-color: #fff;
@@ -28,6 +32,22 @@ html {
     height: 100%;
   }
   @-webkit-keyframes extend {
+    from {
+      margin-left: 20rem;
+    }
+    to {
+      margin-left: 0;
+    }
+  }
+  @-moz-keyframes extend {
+    from {
+      margin-left: 20rem;
+    }
+    to {
+      margin-left: 0;
+    }
+  }
+  @-o-keyframes extend {
     from {
       margin-left: 20rem;
     }
@@ -44,6 +64,22 @@ html {
     }
   }
   @-webkit-keyframes shrunk {
+    from {
+      margin-left: 0;
+    }
+    to {
+      margin-left: 20rem;
+    }
+  }
+  @-moz-keyframes shrunk {
+    from {
+      margin-left: 0;
+    }
+    to {
+      margin-left: 20rem;
+    }
+  }
+  @-o-keyframes shrunk {
     from {
       margin-left: 0;
     }
@@ -69,11 +105,15 @@ html {
   }
   #right_wapper.extend {
     -webkit-animation: extend 0.5s forwards;
-            animation: extend 0.5s forwards;
+    -moz-animation: extend 0.5s forwards;
+    -o-animation: extend 0.5s forwards;
+    animation: extend 0.5s forwards;
   }
   #right_wapper.shrunk {
     -webkit-animation: shrunk 0.5s forwards;
-            animation: shrunk 0.5s forwards;
+    -moz-animation: shrunk 0.5s forwards;
+    -o-animation: shrunk 0.5s forwards;
+    animation: shrunk 0.5s forwards;
   }
   #content_wapper {
     background-color: #fff;

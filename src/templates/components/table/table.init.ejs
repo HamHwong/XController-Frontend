@@ -1,0 +1,11 @@
+<script type="text/javascript">
+    /**
+   * @description Table初始化
+   */
+  var table_init = function() {
+    var $tablecontainer = $("<%=locals.container%>")
+    var t = new table(true)
+    t.load("<%=locals.url%>").to($tablecontainer)
+    t.bindModal()
+  }
+</script>

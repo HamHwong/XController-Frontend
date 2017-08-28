@@ -1,0 +1,215 @@
+
+
+<div class="contentTitle">
+<h3>主页</h3>
+</div>
+
+  <div class="search_wapper ">
+    <form class="form" role="form">
+      <div class="querycontrols clearfix">
+        <div class="form-group col-md-3 col-sm-6 col-xs-12">
+          <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" />
+        </div>
+        <div class="form-group col-md-3 col-sm-6  col-xs-12">
+          <!-- <label for="name">选择列表</label> -->
+          <select class="form-control col-md-10">
+              <option>option1</option>
+              <option>option2</option>
+              <option>option3</option>
+              <option>option4</option>
+              <option>option5</option>
+          </select>
+          <!-- <input type="text" name="" value="" class="form-control col-md-10" placeholder="输入筛选条件" /> -->
+        </div>
+        <div class="form-group col-md-3 col-sm-6 col-xs-12">
+          <input type="text" name="" value="" class="form-control" placeholder="输入筛选条件" />
+        </div>
+        <div class="form-group col-md-3 col-sm-6 col-xs-12">
+          <input class="form-control" id="disabledInput" type="text" placeholder="该输入框禁止输入..." disabled>
+        </div>
+        <div class="form-group">
+          <div class="search_box_warp col-md-10 col-xs-10">
+              <input type="text" name="" id="search_box" value="" class="search_box form-control col-md-11" placeholder="在这里输入关键字">
+<ul class="dropdown-menu keyhint"></ul>
+
+          </div>
+          <button type="submit" class="btn btn-success col-md-2  col-xs-2 ">Query</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="tabs">
+    <ul class="nav nav-tabs" id="myTab">
+      
+      
+        <li><a href=#finished>已完成</a></li>
+      
+        <li><a href=#unfinished>未完成</a></li>
+      
+    </ul>
+  </div>
+
+  <div class="operation-menu">
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="finished">
+        <table class="table table-bordered table-hover">
+<tr class="info_card_row hide">
+  <td colspan="1">
+    <div class="card col-xs-12 row">
+      <div class="card_head row">
+        header
+      </div>
+      <div class="card_body">
+        <div class="row card_data_row">
+          <div class="col-xs-4 card_data_title">
+            PropName:
+          </div>
+          <div class="col-xs-8 card_data">
+          </div>
+        </div>
+      </div>
+      <div class="card_foot row">
+        <div class="date">
+          data:yyyy-mm-dd
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>
+</table>
+
+    </div>
+    <div class="tab-pane" id="unfinished">
+      <table class="table table-bordered table-hover">
+<tr class="info_card_row hide">
+  <td colspan="1">
+    <div class="card col-xs-12 row">
+      <div class="card_head row">
+        header
+      </div>
+      <div class="card_body">
+        <div class="row card_data_row">
+          <div class="col-xs-4 card_data_title">
+            PropName:
+          </div>
+          <div class="col-xs-8 card_data">
+          </div>
+        </div>
+      </div>
+      <div class="card_foot row">
+        <div class="date">
+          data:yyyy-mm-dd
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>
+</table>
+
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="modal fade" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">OrderDetail</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix">
+            <!-- progressbar -->
+<ul id="progressbar" class="clearfix">
+  <li class="active"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="active"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+</ul>
+
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="8" disabled>
+              备注填写
+              备注填写
+              备注填写
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-infopart Approval">
+          <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+    /**
+   * @description Table初始化
+   */
+  var table_init = function() {
+    var $tablecontainer = $("#finished")
+    var t = new table(true)
+    t.load("./test/order-table-data.json").to($tablecontainer)
+    t.bindModal()
+  }
+</script>
+
+<table class="table table-bordered table-hover">
+<tr class="info_card_row hide">
+  <td colspan="1">
+    <div class="card col-xs-12 row">
+      <div class="card_head row">
+        header
+      </div>
+      <div class="card_body">
+        <div class="row card_data_row">
+          <div class="col-xs-4 card_data_title">
+            PropName:
+          </div>
+          <div class="col-xs-8 card_data">
+          </div>
+        </div>
+      </div>
+      <div class="card_foot row">
+        <div class="date">
+          data:yyyy-mm-dd
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>
+</table>
+

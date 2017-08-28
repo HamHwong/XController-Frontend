@@ -4,101 +4,14 @@
   </div>
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{finished:"已完成",unfinished:"未完成"}})%>
   <div class="operation-menu">
-    <button class="button button-middle button-plain button-border button-box" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></button>
+    <button class="button button-middle button-plain button-border button-box" data-toggle="modal" data-target="#addRecord"><i class="fa fa-plus"></i></button>
   </div>
-  <div class="tab-content">
+  <div class="table-content tab-content">
     <div class="tab-pane active" id="finished">
-      <table class="table table-bordered table-hover">
-        <tr>
-          <th key="key">序列</th>
-          <th key="key">姓名</th>
-          <th key="prop">手机号</th>
-          <th key="prop">账号</th>
-          <th key="prop">密码</th>
-          <th key="prop">邮箱</th>
-          <th key="prop">代理商</th>
-          <th key="prop">区域</th>
-          <th key="prop">创建时间</th>
-          <th key="operation">操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>李军</td>
-          <td>18622114455</td>
-          <td>EliteSource001</td>
-          <td>EliteSource@2017</td>
-          <td>371725458@qq.com</td>
-          <td>百度</td>
-          <td>华东地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">编辑</button>&nbsp;<button type="button" name="button" class="btn btn-danger">删除</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>李四</td>
-          <td>18211447788</td>
-          <td>EliteSource002</td>
-          <td>EliteSource@2017</td>
-          <td>lisi2017@outlook.com</td>
-          <td>谷歌</td>
-          <td>华南地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>王五</td>
-          <td>13144557896</td>
-          <td>EliteSource003</td>
-          <td>EliteSource@2017</td>
-          <td>wangwu000@email.com</td>
-          <td>百度</td>
-          <td>华中地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <%-include('/components/tableCard/cardRow')%>
-      </table>
+        <%-include('/components/table/cardRow')%>
     </div>
     <div class="tab-pane" id="unfinished">
-      <table class="table table-bordered table-hover">
-        <tr>
-          <th key="key">序列</th>
-          <th key="key">姓名</th>
-          <th key="prop">手机号</th>
-          <th key="prop">账号</th>
-          <th key="prop">密码</th>
-          <th key="prop">邮箱</th>
-          <th key="prop">代理商</th>
-          <th key="prop">区域</th>
-          <th key="prop">创建时间</th>
-          <th key="operation">操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>李军</td>
-          <td>18622114455</td>
-          <td>EliteSource001</td>
-          <td>EliteSource@2017</td>
-          <td>371725458@qq.com</td>
-          <td>百度</td>
-          <td>华东地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>李四</td>
-          <td>18211447788</td>
-          <td>EliteSource002</td>
-          <td>EliteSource@2017</td>
-          <td>lisi2017@outlook.com</td>
-          <td>谷歌</td>
-          <td>华南地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-      </table>
+      <%-include('/components/table/cardRow')%>
     </div>
     <nav style="text-align: center">
       <ul class="pagination">
@@ -112,18 +25,4 @@
       </ul>
     </nav>
   </div>
-<%-include('/components/modal/modal')%>
-<%if(!locals.homePage){%>
-  <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-  <link rel="stylesheet" href="./css/content.css">
-  <link rel="stylesheet" href="./css/plugs/buttons.css">
-  <link rel="stylesheet" href="./css/plugs/blue.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
-  <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-  <script type="text/javascript" src="./js/content.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-  <script type="text/javascript" src="./js/plugs/icheck.js"></script>
-  <script type="text/javascript" src="./js/init.js"></script>
-  $(document).ready(function() { initPageByName("content") })
-  <%}%>
+<%-include('/components/modal/modal',{type:"recordAdd"})%>

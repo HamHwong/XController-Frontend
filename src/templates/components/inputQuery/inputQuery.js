@@ -7,7 +7,7 @@
 var queryKeyWords = function(keys, dic) {
   var r = []
   for (var i in dic) {
-    if (dic[i].includes(keys)) {
+    if (dic[i].search(keys)>-1) {
       var keywords = dic[i].match(keys)
       var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
       r.push(blodKeyWord)

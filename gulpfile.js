@@ -33,9 +33,24 @@ gulp.task('less', ['clean-css'], function() {
   return gulp.src([__src + '/less/*.less', './src/templates/**/*.less'])
     .pipe(less())
     .pipe(autoprefixer({
-      browsers: ['> 1%']
+      browsers: ['last 20000 versions'],
+      cascade: false
     }))
     .pipe(gulp.dest(__src + '/css/'))
+})
+
+gulp.task('autopre', function() {
+  var postcss = require('gulp-postcss');
+  var sourcemaps = require('gulp-sourcemaps');
+  var autoprefixer = require('autoprefixer');
+  gulp.src(['./src/css/**/*.css', '!./src/css/plugs/**/*.css'])
+    .pipe(sourcemaps.init())
+    .pipe(postcss([autoprefixer({
+      browsers: ['last 20000 version'],
+      remove: false //是否去掉不必要的前缀 默认：true
+    })]))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(__src + '/testCss'))
 })
 
 //Html替换css、js文件版本
@@ -82,7 +97,7 @@ gulp.task('clean-js', function(event) {
 gulp.task('ejs', function() {
   return gulp.src([__src + "/templates/**/*.ejs", "!/src/templates/components/*.ejs"])
     .pipe(ejs({}, {
-      root:"./src/templates"
+      root: "./src/templates"
     }, {
       ext: ".html"
     }))
@@ -140,7 +155,7 @@ gulp.task('concat-conponent-css', ['less'], function() {
     .pipe(gulp.dest('src/css'))
 })
 
-gulp.task('concat-conponent-js',['clean-js'], function() {
+gulp.task('concat-conponent-js', ['clean-js'], function() {
   return gulp.src(['./src/templates/components/**/*.js'])
     .pipe(concat('components.js'))
     .pipe(gulp.dest('src/js'))

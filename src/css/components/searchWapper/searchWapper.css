@@ -9,6 +9,8 @@ html {
   margin: 2rem 0;
   background-color: #40679C;
   padding: 1rem 0.5rem;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
   border-radius: 0.5rem;
 }
 .search_wapper .querycontrols {

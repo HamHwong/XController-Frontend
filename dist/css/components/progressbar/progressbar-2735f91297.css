@@ -2,6 +2,9 @@
   counter-reset: go;
   margin: 0 auto;
 }
+#progressbar .operationtime {
+  display: block;
+}
 #progressbar:after {
   clear: both;
 }
@@ -12,12 +15,15 @@
   color: #000;
   line-height: 4rem;
   width: 30%;
+  list-style-type: none;
+  list-style-position: outside;
   /*z-index: 1029;*/
 }
 #progressbar li a {
   display: block;
   width: 100%;
   text-align: center;
+  line-height: 2rem;
 }
 #progressbar li::before {
   counter-increment: go;
@@ -27,6 +33,8 @@
   font-size: 2rem;
   width: 4rem;
   height: 4rem;
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
   border-radius: 2rem;
   margin: 0 auto;
   background-color: #d4d4d4;
@@ -36,8 +44,12 @@
 #progressbar li:after {
   position: relative;
   height: 0.2rem;
+  width: -webkit-calc(96%);
+  width: -moz-calc(96%);
   width: calc(96%);
   top: -6rem;
+  left: -webkit-calc(52%);
+  left: -moz-calc(52%);
   left: calc(52%);
   content: "";
   display: block;

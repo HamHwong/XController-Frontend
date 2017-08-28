@@ -10,10 +10,13 @@ html {
   content: '';
 }
 .operation-menu {
+  min-height: 4rem;
   float: left;
   width: 100%;
   background-color: #40679C;
   padding: 0.5rem 0.3rem;
+  -webkit-border-radius: 0 1rem 0 0;
+  -moz-border-radius: 0 1rem 0 0;
   border-radius: 0 1rem 0 0;
 }
 .operation-menu button {
@@ -30,7 +33,7 @@ html {
 }
 .tab-content table td button {
   float: left;
-  width: 100%;
+  font-size: 10px;
 }
 .tab-content tr.info_card_row td {
   border: 0;
@@ -42,7 +45,11 @@ html {
 }
 .tab-content tr.info_card_row td .card {
   margin: 0 0 0.2rem;
+  -webkit-border-radius: 0 0 0.3rem 0.3rem;
+  -moz-border-radius: 0 0 0.3rem 0.3rem;
   border-radius: 0 0 0.3rem 0.3rem;
+  -webkit-box-shadow: 0 0.5rem 1rem #888888;
+  -moz-box-shadow: 0 0.5rem 1rem #888888;
   box-shadow: 0 0.5rem 1rem #888888;
   border: 1px solid #4A8BC2;
 }
@@ -51,7 +58,6 @@ html {
   color: #fff;
 }
 .tab-content tr.info_card_row td .card .card_body {
-  font-size: 0.8rem;
   margin: 1rem;
 }
 .tab-content tr.info_card_row td .card .card_body .card_data_row {
@@ -82,43 +88,79 @@ html {
   .info_card_row.closeRow {
     overflow: hidden;
     -webkit-animation: closeHeight 1s forwards;
-            animation: closeHeight 1s forwards;
+    -moz-animation: closeHeight 1s forwards;
+    -o-animation: closeHeight 1s forwards;
+    animation: closeHeight 1s forwards;
   }
   .info_card_row.openRow {
     overflow: hidden;
     -webkit-animation: extendHeight 1s forwards;
-            animation: extendHeight 1s forwards;
+    -moz-animation: extendHeight 1s forwards;
+    -o-animation: extendHeight 1s forwards;
+    animation: extendHeight 1s forwards;
   }
-  @-webkit-keyframes extendHeight {
-    from {
-      height: 0;
-    }
-    to {
-      height: 20rem;
-    }
+}
+@-webkit-keyframes extendHeight {
+  from {
+    height: 0;
   }
-  @keyframes extendHeight {
-    from {
-      height: 0;
-    }
-    to {
-      height: 20rem;
-    }
+  to {
+    height: 20rem;
   }
-  @-webkit-keyframes closeHeight {
-    from {
-      height: 20rem;
-    }
-    to {
-      height: 0;
-    }
+}
+@-moz-keyframes extendHeight {
+  from {
+    height: 0;
   }
-  @keyframes closeHeight {
-    from {
-      height: 20rem;
-    }
-    to {
-      height: 0;
-    }
+  to {
+    height: 20rem;
+  }
+}
+@-o-keyframes extendHeight {
+  from {
+    height: 0;
+  }
+  to {
+    height: 20rem;
+  }
+}
+@keyframes extendHeight {
+  from {
+    height: 0;
+  }
+  to {
+    height: 20rem;
+  }
+}
+@-webkit-keyframes closeHeight {
+  from {
+    height: 20rem;
+  }
+  to {
+    height: 0;
+  }
+}
+@-moz-keyframes closeHeight {
+  from {
+    height: 20rem;
+  }
+  to {
+    height: 0;
+  }
+}
+@-o-keyframes closeHeight {
+  from {
+    height: 20rem;
+  }
+  to {
+    height: 0;
+  }
+}
+@keyframes closeHeight {
+  from {
+    height: 20rem;
+  }
+  to {
+    height: 0;
   }
 }

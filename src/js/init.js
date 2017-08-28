@@ -13,27 +13,16 @@ var icheck_init = function() {
 var popover_init = function() {
   $("[data-toggle='popover']").popover(); //悬浮框
 }
-/**
- * @description Bootstrap tab初始化
- */
-var tab_init = function() {
-  $('#myTab a:first').tab('show'); //切换栏
-  $('#myTab a').click(function(e) {
-    e.preventDefault()
-    $(this).tab('show')
-  })
-}
-/**
- * @description Table初始化
- */
-var table_init = function() {
-  var $finishedTable = $('#finished table')
-  var $unfinishedTable = $('#unfinished table')
-  hideColunmInMobile($finishedTable)
-  hideColunmInMobile($unfinishedTable)
-  addAllRowsCards($finishedTable)
-  addAllRowsCards($unfinishedTable)
-}
+
+// /**
+//  * @description Table初始化
+//  */
+// var table_init = function() {
+//   var $finishedTable = $('#finished')
+//   var $unfinishedTable = $('#unfinished')
+//   var t = new table()
+//   t.load('./test/table.json').to($finishedTable)
+// }
 /**
  * @description Bootstrap datatimepicker初始化
  */
@@ -85,6 +74,9 @@ var init = {
     },
     sideBtn: function() {
       sideBtn_init()
+    },
+    hyperlink:function(){
+      hyperlink_init()
     }
   }
 }

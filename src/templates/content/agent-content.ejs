@@ -1,64 +1,13 @@
-  <%-include('../components/searchWapper/agent-searchWapper')%>
-  <div class="tabs">
+<%-include('../components/searchWapper/agent-searchWapper')%>
 
-  </div>
   <div class="operation-menu">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAgent">添加代理商</button>
   </div>
 
-  <div class="tab-content">
-    <div class="tab-pane active" id="finished">
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="agent-table-container">
       <table class="table table-bordered table-hover">
-        <tr>
-          <th style="width:80px;" key="key">序列</th>
-          <th key="key">姓名</th>
-          <th key="prop">手机号</th>
-          <th key="prop">账号</th>
-          <th key="prop">密码</th>
-          <th key="prop">邮箱</th>
-          <th key="prop">代理商</th>
-          <th key="prop">区域</th>
-          <th key="prop">创建时间</th>
-          <th key="operation">操作</th>
-        </tr>
-        <tr>
-          <td>1123456</td>
-          <td>李军</td>
-          <td>18622114455</td>
-          <td>EliteSource001</td>
-          <td>EliteSource@2017</td>
-          <td>371725458@qq.com</td>
-          <td>百度</td>
-          <td>华东地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">编辑</button>&nbsp;<button type="button" name="button" class="btn btn-danger">删除</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>李四</td>
-          <td>18211447788</td>
-          <td>EliteSource002</td>
-          <td>EliteSource@2017</td>
-          <td>lisi2017@outlook.com</td>
-          <td>谷歌</td>
-          <td>华南地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>王五</td>
-          <td>13144557896</td>
-          <td>EliteSource003</td>
-          <td>EliteSource@2017</td>
-          <td>wangwu000@email.com</td>
-          <td>百度</td>
-          <td>华中地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <!-- hack TODO:改成模板 -->
-        <%-include('../components/TableCard/cardRow')%>
+        <%-include('/components/table/cardRow')%>
       </table>
     </div>
     <nav style="text-align: center">
@@ -74,4 +23,5 @@
     </nav>
   </div>
 
-<%-include('../components/modal/modal',{type:"addAgent"})%>
+  <%-include('/components/modal/modal',{type:"agentAdd"})%>
+  <%-include('/components/table/table.init.ejs',{container:"#agent-table-container",url:"./test/agent-table-data.json"})%>

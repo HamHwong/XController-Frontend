@@ -16,7 +16,7 @@ var serverConfig = {
   host: '127.0.0.1',
   port: '8888',
   root: 'dist',
-  homepage: 'home.html',
+  homepage: 'login.html',
 }
 
 var Path = function() {

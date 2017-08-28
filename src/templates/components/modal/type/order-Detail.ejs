@@ -1,0 +1,43 @@
+<div class="modal fade" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">OrderDetail</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix">
+            <%-include('/components/progressbar/progressbar')%>
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="8" disabled>
+              备注填写
+              备注填写
+              备注填写
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-infopart Approval">
+          <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

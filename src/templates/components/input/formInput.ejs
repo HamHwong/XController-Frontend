@@ -7,12 +7,18 @@
   Options:
 %>
 <div class="form-group">
-  <label class="col-sm-2 control-label" for="<%-locals.name%>"><%-locals.name%>：</label>
+  <label class="col-sm-2 control-label"
+  <%if(locals.id){%>
+  for="<%-locals.id%>"
+  <%}%>
+  ><%-locals.name%>：</label>
   <div class="col-sm-8">
     <input type="<%-locals.type%>"
     class="form-control"
-    name="<%-locals.name%>"
-    id="<%-locals.name%>"
+    <%if(locals.id){%>
+    name="<%-locals.id%>"
+    id="<%-locals.id%>"
+    <%}%>
     <%if(locals.placeholder){%>
       placeholder="<%-locals.placeholder%>"
     <%}%>

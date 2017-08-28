@@ -42,9 +42,9 @@
   <div class="steps clearfix">
     <!-- progressbar -->
 <ul id="progressbar" class="clearfix">
-  <li class="active"><a href="#">提出申请</a></li>
-  <li class="active"><a href="#">直线经理</a></li>
-  <li><a href="#">BU经理</a></li>
+  <li class="active"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="active"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
 </ul>
 
   </div>
@@ -60,60 +60,12 @@
   </div>
 
   <div class="operation-menu">
-    <button class="button button-middle button-plain button-border button-box" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i></button>
+    <button class="button button-middle button-plain button-border button-box" data-toggle="modal" data-target="#addRecord"><i class="fa fa-plus"></i></button>
   </div>
-  <div class="tab-content">
+  <div class="table-content tab-content">
     <div class="tab-pane active" id="finished">
-      <table class="table table-bordered table-hover">
-        <tr>
-          <th key="key">序列</th>
-          <th key="key">姓名</th>
-          <th key="prop">手机号</th>
-          <th key="prop">账号</th>
-          <th key="prop">密码</th>
-          <th key="prop">邮箱</th>
-          <th key="prop">代理商</th>
-          <th key="prop">区域</th>
-          <th key="prop">创建时间</th>
-          <th key="operation">操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>李军</td>
-          <td>18622114455</td>
-          <td>EliteSource001</td>
-          <td>EliteSource@2017</td>
-          <td>371725458@qq.com</td>
-          <td>百度</td>
-          <td>华东地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">编辑</button>&nbsp;<button type="button" name="button" class="btn btn-danger">删除</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>李四</td>
-          <td>18211447788</td>
-          <td>EliteSource002</td>
-          <td>EliteSource@2017</td>
-          <td>lisi2017@outlook.com</td>
-          <td>谷歌</td>
-          <td>华南地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>王五</td>
-          <td>13144557896</td>
-          <td>EliteSource003</td>
-          <td>EliteSource@2017</td>
-          <td>wangwu000@email.com</td>
-          <td>百度</td>
-          <td>华中地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr class="info_card_row hide">
+        <table class="table table-bordered table-hover">
+<tr class="info_card_row hide">
   <td colspan="1">
     <div class="card col-xs-12 row">
       <div class="card_head row">
@@ -121,31 +73,10 @@
       </div>
       <div class="card_body">
         <div class="row card_data_row">
-          <div class="col-xs-2 card_data_title">
+          <div class="col-xs-4 card_data_title">
             PropName:
           </div>
-          <div class="col-xs-10 card_data">
-          </div>
-        </div>
-        <div class="row card_data_row">
-          <div class="col-xs-2 card_data_title">
-            PropName:
-          </div>
-          <div class="col-xs-10">
-          </div>
-        </div>
-        <div class="row card_data_row">
-          <div class="col-xs-2 card_data_title">
-            PropName:
-          </div>
-          <div class="col-xs-10">
-          </div>
-        </div>
-        <div class="row card_data_row">
-          <div class="col-xs-2 card_data_title">
-            PropName:
-          </div>
-          <div class="col-xs-10">
+          <div class="col-xs-8 card_data">
           </div>
         </div>
       </div>
@@ -157,48 +88,36 @@
     </div>
   </td>
 </tr>
+</table>
 
-      </table>
     </div>
     <div class="tab-pane" id="unfinished">
       <table class="table table-bordered table-hover">
-        <tr>
-          <th key="key">序列</th>
-          <th key="key">姓名</th>
-          <th key="prop">手机号</th>
-          <th key="prop">账号</th>
-          <th key="prop">密码</th>
-          <th key="prop">邮箱</th>
-          <th key="prop">代理商</th>
-          <th key="prop">区域</th>
-          <th key="prop">创建时间</th>
-          <th key="operation">操作</th>
-        </tr>
-        <tr>
-          <td>1</td>
-          <td>李军</td>
-          <td>18622114455</td>
-          <td>EliteSource001</td>
-          <td>EliteSource@2017</td>
-          <td>371725458@qq.com</td>
-          <td>百度</td>
-          <td>华东地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>李四</td>
-          <td>18211447788</td>
-          <td>EliteSource002</td>
-          <td>EliteSource@2017</td>
-          <td>lisi2017@outlook.com</td>
-          <td>谷歌</td>
-          <td>华南地区</td>
-          <td>2017-04-23 23:00:00</td>
-          <td><button type="button" name="button" class="btn btn-info">EDIT</button>&nbsp;<button type="button" name="button" class="btn btn-danger">DELETE</button></td>
-        </tr>
-      </table>
+<tr class="info_card_row hide">
+  <td colspan="1">
+    <div class="card col-xs-12 row">
+      <div class="card_head row">
+        header
+      </div>
+      <div class="card_body">
+        <div class="row card_data_row">
+          <div class="col-xs-4 card_data_title">
+            PropName:
+          </div>
+          <div class="col-xs-8 card_data">
+          </div>
+        </div>
+      </div>
+      <div class="card_foot row">
+        <div class="date">
+          data:yyyy-mm-dd
+        </div>
+      </div>
+    </div>
+  </td>
+</tr>
+</table>
+
     </div>
     <nav style="text-align: center">
       <ul class="pagination">
@@ -212,6 +131,7 @@
       </ul>
     </nav>
   </div>
+
 
 <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -273,16 +193,3 @@
 
 
 
-  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
-  <link rel="stylesheet" href="./css/content-5cf7ec3df5.css">
-  <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-  <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
-  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
-  <script type="text/javascript" src="./js/content-c406fd083b.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
-  <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
-  <script type="text/javascript" src="./js/init-de5a894021.js"></script>
-  $(document).ready(function() { initPageByName("content") })
-  
