@@ -28,7 +28,7 @@
           </ul>
           <div class="comment">
             <span>备注：</span>
-            <textarea name="comment" rows="8" disabled>
+            <textarea name="comment" rows="4" disabled>
               备注填写
               备注填写
               备注填写
@@ -36,6 +36,13 @@
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
+          function (path, includeData) {
+        var d = utils.shallowCopy({}, data);
+        if (includeData) {
+          d = utils.shallowCopy(d, includeData);
+        }
+        return includeFile(path, opts)(d);
+      }
         </div>
       </div>
       <div class="modal-footer">

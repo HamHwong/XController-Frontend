@@ -1,3 +1,4 @@
+"use strict";
 /**
  * 修改模板
  * @param  {JQuery.mod} mod 传入模板
@@ -36,113 +37,157 @@ var modifyMod = function(mod, Obj) {
   }
 }
 
-var table = function(hasButton) {
-  this.table = null;
-  this.responseJson = null;
-  this.tableJson = null;
-  this.hasButton = hasButton;
-  this.tableHeader = null;
-  this.load = function(url) {
-    this.fetch(url)
-    // this.parse(this.responseJson)
+var table = function(url, options) {
+  var url = this.checkUrl(url) ? url : ""
+  var options = this.checkObj(options) ? options : new Object()
+  var opts = {
+    hasButton: typeof(options.hasButton) !== "undefined" ? options.hasButton : "false",
+  }
+
+  this.opts = opts
+  this.url = url
+  this.urlTimestamp = null;
+  this.table = null
+  this.responseJson = null
+  this.tableJson = null
+  this.hasButton = opts.hasButton
+  this.tableHeader = null
+}
+
+table.prototype.checkObj = function(obj) {
+  if (typeof obj === "object") {
+    return true
+  } else {
+    // throw "the params is not a object."
+    return false
+  }
+}
+table.prototype.checkUrl = function(url) {
+  if (typeof url === "string" && url.length > 0) {
+    return true
+  } else {
+    throw "the params is not a url."
+  }
+}
+
+table.prototype.load = function(url) {
+  //若参数带url，更新url
+  if (!(url === undefined || "" === url)) {
+    this.url = url
+  }
+  //第一次load 或者 大于60s没更新，就去获取一波
+  if (this.urlTimestamp == null || this.timeDiff() > 60) {
+    this.fetch(this.url)
     this.addInfoCard()
-    return this
+    this.urlTimestamp = new Date()
   }
-  this.fetch = function(url) {
-    var tableJsonResponse = $.ajax({
-      url: url,
-      async: false
+  return this
+}
+table.prototype.timeDiff = function() {
+  return (new Date().getTime() - this.urlTimestamp.getTime()) / 1000
+}
+table.prototype.fetch = function(url) {
+  var tableJsonResponse = $.ajax({
+    url: url,
+    async: false
+  })
+  console.log(tableJsonResponse.responseText);
+  this.responseJson = JSON.parse(tableJsonResponse.responseText)
+  this.table = this.parse(this.responseJson)
+  return this.table
+}
+/**
+ * 将JsonArr转成table
+ * @param  {[type]} jsonArrs [description]
+ * @return {[type]}          [description]
+ */
+table.prototype.parse = function(jsonArrs) {
+  var hasHeader = jsonArrs.hasHeader
+  var data = jsonArrs.data
+  var keyArr = jsonArrs.keyArr
+  var table = $('<table class="table table-bordered table-hover"></table>')
+  var tbody = $("<tbody></tbody>")
+  if (hasHeader) {
+    var hr = data.reverse().pop()
+    tbody.append(this.jsonToRow(hr, true, keyArr)) //jsonToRow将json对象中的data数据转成hr对象
+    data.reverse()
+  }
+  for (var i = 0; i < data.length; i++) {
+    tbody.append(this.jsonToRow(data[i], false))
+  }
+  table.append(tbody)
+  return table
+}
+table.prototype.to = function($tableContainer) {
+  $tableContainer = $($tableContainer)
+  $tableContainer.empty()
+  $tableContainer.append(this.table)
+  return this
+}
+table.prototype.getTable = function() {
+  return this.table
+}
+//bindModal放在这里逻辑上有问题
+table.prototype.bindModal = function() {
+  $(this.table).find('tr td:nth-child(2)').on('click', function(e) {
+    var t = new table("./test/order-Detail.json", {
+      hasButton: false
     })
-    this.responseJson = JSON.parse(tableJsonResponse.responseText)
-    this.table = this.parse(this.responseJson)
-    return this.table
-  }
-  /**
-   * 将JsonArr转成table
-   * @param  {[type]} jsonArrs [description]
-   * @return {[type]}          [description]
-   */
-  this.parse = function(jsonArrs) {
-    var hasHeader = jsonArrs.hasHeader
-    var data = jsonArrs.data
-    var keyArr = jsonArrs.keyArr
-    var table = $('<table class="table table-bordered table-hover"></table>')
-    var tbody = $("<tbody></tbody>")
-    if (hasHeader) {
-      var hr = data.reverse().pop()
-      tbody.append(this.jsonToRow(hr, true, keyArr))//jsonToRow将json对象中的data数据转成hr对象
-      data.reverse()
+    var steps = $("#orderDetail").find(".steps")
+    var baseInfos = $("#orderDetail").find(".baseInfomation")
+    var comment = $("#orderDetail").find(".comment")
+    //此处需要一个api来获取绑定数据的json数据
+    t.load().to(".goodsInfomation")
+    // console.log(t.responseJson);
+    var j = t.responseJson
+    var currStep = j.steps
+    var infos = j.baseInfos
+    var steplis = steps.find('li')
+    steplis.removeClass("active")
+    for (var c = 0; c < currStep; c++) {
+      console.log(steplis[c]);
+      $(steplis[c]).addClass("active")
     }
-    for (var i = 0; i < data.length; i++) {
-      tbody.append(this.jsonToRow(data[i], false))
-    }
-    table.append(tbody)
-    return table
-  }
-  this.addInfoCard = function() {
-    this.table.find('tr:not(".info_card_row")').children('*').addClass('hidden-xs')
-    $table = this.table
-    var card = new table_card()
-    var arr = card.tableToJsonArr($table, true) //TODO 逻辑有问题，之后再改！
-    for (var i in arr) {
-      var mod = $($(".info_card_row").clone()[0]) //模板不变
-      modifyMod(mod, arr[i])
-      mod.find(".card_head").siblings('div').hide()
-      $table.find("tbody").append(mod)
-    }
-    $table.find(".card_head").on('click', function() {
-      $(this).siblings('div').toggle(100)
-    })
-  }
-  this.to = function($tableContainer) {
-    $tableContainer = $($tableContainer)
-    $tableContainer.empty()
-    $tableContainer.append(this.table)
-    return this
-  }
-  this.jsonToRow = function(jsonArr, isHeader, keyArr) {
-    var row = $("<tr></tr>")
-    for (var i = 0; i < jsonArr.length; i++) {
-      if (isHeader) {
-        var th = $("<th></th>")
-        if (keyArr) {
-          th.attr("key", keyArr[i])
-        }
-        row.append(th.html(jsonArr[i]))
-      } else {
-        var td = $("<td></td>")
-        row.append(td.html(jsonArr[i]))
+    $("#orderDetail").modal()
+  })
+}
+table.prototype.jsonToRow = function(jsonArr, isHeader, keyArr) {
+  var row = $("<tr></tr>")
+  for (var i = 0; i < jsonArr.length; i++) {
+    if (isHeader) {
+      var th = $("<th></th>")
+      if (keyArr) {
+        th.attr("key", keyArr[i])
       }
+      row.append(th.html(jsonArr[i]))
+    } else {
+      var td = $("<td></td>")
+      row.append(td.html(jsonArr[i]))
     }
-    if(hasButton){
+  }
+  if (this.opts.hasButton) {
     if (isHeader) {
       row.append($("<th key='operation'>操作</th>"))
     } else {
       row.append($("<td><button type=\"button\" name=\"button\" class=\"btn btn-info\">EDIT</button>&nbsp;<button type=\"button\" name=\"button\" class=\"btn btn-danger\">DELETE</button></td>"))
-    }}
-    return row
+    }
   }
-  this.bindModal = function(){
-    $(this.table).find('tr td:nth-child(2)').on('click',function(){
-      var t = new table()
-
-      var steps = $("#orderDetail").find(".steps")
-      var baseInfos = $("#orderDetail").find(".baseInfomation")
-      var comment = $("#orderDetail").find(".comment")
-
-      t.load("./test/order-Detail.json").to(".goodsInfomation")
-      console.log(t.responseJson);
-      var j = t.responseJson
-
-      var currStep =j.steps
-      var infos = j.baseInfos
-
-      steps.find('li').removeClass("avtice")
-
-      $("#orderDetail").modal()
-    })
+  return row
+}
+table.prototype.addInfoCard = function() {
+  this.table.find('tr:not(".info_card_row")').children('*').addClass('hidden-xs')
+  $table = this.table
+  var card = new table_card()
+  var arr = card.tableToJsonArr($table, true) //TODO 逻辑有问题，之后再改！
+  for (var i in arr) {
+    var mod = $($(".info_card_row").clone()[0]) //模板不变
+    modifyMod(mod, arr[i])
+    mod.find(".card_head").siblings('div').hide()
+    $table.find("tbody").append(mod)
   }
-  return this.table
+  $table.find(".card_head").on('click', function() {
+    $(this).siblings('div').toggle()
+  })
 }
 var table_card = function() {
   /**

@@ -7,7 +7,7 @@
   <input type="text" name="username" id="username" placeholder="type your username" />
 </div>
 
-
+  
 
 <div class="JumpInput" style="animation-delay:0.2s">
   
@@ -15,14 +15,28 @@
 </div>
 
 
-
+    
 <div class="JumpButton" style="animation-delay:0.30000000000000004s">
   <button type="button" name="button">Submit</button>
 </div>
 
-
-<link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
-<link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
-<link rel="stylesheet" type="text/css" href="./css/components-7ce44781b1.css" />
-<script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
-<script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+      <div class="" id="dmEvent">
+        NoMoving
+      </div>
+      <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+      <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+      <link rel="stylesheet" type="text/css" href="./css/components-7ce44781b1.css" />
+      <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+      <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+              if (window.DeviceMotionEvent) {
+                  window.addEventListener('devicemotion', function(eventData) {
+                    document.getElementById("dmEvent").innerHTML=(eventData.accelerationIncludingGravity.x);
+                    // console.log(eventData.accelerationIncludingGravity);
+                  }, false);
+                } else {
+                  document.getElementById("dmEvent").innerHTML = "Not supported on your device."
+                }
+              })
+      </script>

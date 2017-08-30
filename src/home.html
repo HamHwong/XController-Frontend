@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>HomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -181,7 +182,7 @@
           </ul>
           <div class="comment">
             <span>备注：</span>
-            <textarea name="comment" rows="8" disabled>
+            <textarea name="comment" rows="4" disabled>
               备注填写
               备注填写
               备注填写
@@ -189,6 +190,13 @@
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
+          function (path, includeData) {
+        var d = utils.shallowCopy({}, data);
+        if (includeData) {
+          d = utils.shallowCopy(d, includeData);
+        }
+        return includeFile(path, opts)(d);
+      }
         </div>
       </div>
       <div class="modal-footer">
@@ -209,10 +217,17 @@
    */
   var table_init = function() {
     var $tablecontainer = $("#finished")
-    var t = new table(true)
+    var t = new table("./test/order-table-data.json",{hasButton:true})
     t.load("./test/order-table-data.json").to($tablecontainer)
+    console.log(t.getTable());
     t.bindModal()
   }
+  // var table_init = function() {
+  //   var $tablecontainer = $("#finished")
+  //   var t = new table(true)
+  //   t.load("./test/order-table-data.json").to($tablecontainer)
+  //   t.bindModal()
+  // }
 </script>
 
 <table class="table table-bordered table-hover">
@@ -283,21 +298,12 @@
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/content.css">
     <link rel="stylesheet" href="./css/components.css">
-    <!--  -->
     <link rel="stylesheet" href="./css/plugs/buttons.css">
     <link rel="stylesheet" href="./css/plugs/blue.css">
     <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
     <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
-    <!--  -->
-<!--[if !IE]> -->
+
     <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-<!-- <![endif]-->
-<!--[if lte IE 8]>
-<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
-<![endif]-->
-<!--[if gt IE 8]>
-<script type="text/javascript" src="./js/plugs/jquery.js"></script>
-<![endif]-->
     <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
     <script type="text/javascript" src="./js/sidenav.js"></script>
     <script type="text/javascript" src="./js/content.js"></script>
@@ -307,12 +313,6 @@
     <script type="text/javascript" src="./js/init.js"></script>
     <script type="text/javascript" src="./js/components.js"></script>
 
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
 
     <script type="text/javascript">
       $(document).ready(function() {

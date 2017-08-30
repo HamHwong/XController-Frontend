@@ -153,7 +153,7 @@
           </ul>
           <div class="comment">
             <span>备注：</span>
-            <textarea name="comment" rows="8" disabled>
+            <textarea name="comment" rows="4" disabled>
               备注填写
               备注填写
               备注填写
@@ -161,6 +161,13 @@
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
+          function (path, includeData) {
+        var d = utils.shallowCopy({}, data);
+        if (includeData) {
+          d = utils.shallowCopy(d, includeData);
+        }
+        return includeFile(path, opts)(d);
+      }
         </div>
       </div>
       <div class="modal-footer">
@@ -181,10 +188,17 @@
    */
   var table_init = function() {
     var $tablecontainer = $("#finished")
-    var t = new table(true)
+    var t = new table("./test/order-table-data.json",{hasButton:true})
     t.load("./test/order-table-data.json").to($tablecontainer)
+    console.log(t.getTable());
     t.bindModal()
   }
+  // var table_init = function() {
+  //   var $tablecontainer = $("#finished")
+  //   var t = new table(true)
+  //   t.load("./test/order-table-data.json").to($tablecontainer)
+  //   t.bindModal()
+  // }
 </script>
 
 <table class="table table-bordered table-hover">

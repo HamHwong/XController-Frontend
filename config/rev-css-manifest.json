@@ -11,7 +11,7 @@
   "components/title/title.css": "components/title/title-dfa26ca21b.css",
   "content.css": "content-808854b96e.css",
   "header.css": "header-60181c7349.css",
-  "login.css": "login-59534f2b87.css",
+  "login.css": "login-2f9f7ce42e.css",
   "main.css": "main-06bc76d4ef.css",
   "plugs/blue.css": "plugs/blue-f6afd81cde.css",
   "plugs/bootstrap-theme.css": "plugs/bootstrap-theme-b9b46bcc4d.css",
@@ -21,6 +21,7 @@
   "plugs/buttons.css": "plugs/buttons-b4b26cbdf1.css",
   "plugs/datetimepicker.css": "plugs/datetimepicker-797a04f9f5.css",
   "plugs/font-awesome.min.css": "plugs/font-awesome-feda974a77.min.css",
+  "plugs/slideunlock.css": "plugs/slideunlock-dcf9b5ccef.css",
   "sidenav.css": "sidenav-0c78f9afb2.css",
   "style.css": "style-bea307c18b.css"
 }

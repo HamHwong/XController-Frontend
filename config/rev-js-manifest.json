@@ -1,5 +1,5 @@
 {
-  "components.js": "components-02e006cbbe.js",
+  "components.js": "components-550b21f3ce.js",
   "content.js": "content-935260d211.js",
   "ie.js": "ie-d41d8cd98f.js",
   "init.js": "init-7f9445c6e7.js",
@@ -10,6 +10,7 @@
   "plugs/icheck.js": "plugs/icheck-14d0d9d9ca.js",
   "plugs/jquery.js": "plugs/jquery-09dd64a64b.js",
   "plugs/npm.js": "plugs/npm-ccb7f3909e.js",
+  "plugs/slideunlock.min.js": "plugs/slideunlock-386e151aa1.min.js",
   "plugs/xss.js": "plugs/xss-3b1b5a0af8.js",
   "plugs/xss.min.js": "plugs/xss-17b6986036.min.js",
   "sidenav.js": "sidenav-085cf65d24.js"

@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8">
   <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
   <div class="container-fluid" id="login-wapper">
     <div class="bg row">
       <div class="greet">
-        EliteSource
+        Brochure<br/>Management
       </div>
     </div>
     <div class="login-box col-center-block">
@@ -22,7 +23,13 @@
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
             <input type="password" class="form-control" placeholder="输入您的密码">
           </div>
-
+          <div id="slide-wrapper">
+            <input type="hidden" value="" id="lockable" />
+            <div id="slider">
+              <span id="label"><span id="label-shadow"></span></span>
+              <span id="lableTip">Slide to unlock!</span>
+            </div>
+          </div>
           <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
             <input type="checkbox" name="" value="">
             <span class="">记住密码</span>
@@ -30,8 +37,8 @@
               <span><a href="#">忘记密码？</a></span>
             </div>
           </div>
-          <div class="btn-group">
-            <button type="button" name="button" class="btn btn-primary">登陆</button>
+          <div class="btn-group btn-block">
+            <button type="button" name="button" class="btn btn-block btn-primary">登陆</button>
           </div>
       </div>
 
@@ -46,28 +53,26 @@
 </html>
 
 <!-- CSS -->
-<link href="/SiteFiles/css/main.css" rel="stylesheet">
 
 <link rel="stylesheet" href="./css/plugs/buttons.css">
 <link rel="stylesheet" href="./css/login.css">
 <link rel="stylesheet" href="./css/components.css">
-
-<!--[if !IE]> -->
+<link rel="stylesheet" href="./css/plugs/bootstrap.css">
+<link rel="stylesheet" href="./css/plugs/slideunlock.css">
 <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-<!-- <![endif]-->
-<!--[if lte IE 8]>
-<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
-<![endif]-->
-<!--[if gt IE 8]>
-<script type="text/javascript" src="./js/plugs/jquery.js"></script>
-<![endif]-->
-
+<script type="text/javascript" src="./js/plugs/slideunlock.min.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-<!-- Bootstrap -->
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
-<script src="/SiteFiles/js/modernizr.js"></script>
+<script type="text/javascript">
+  $(function() {
+    var slider = new SliderUnlock("#slider", {
+      labelTip:"滑动验证",
+      successLabelTip:"验证成功"
+    }, function() {
+      alert('验证成功');
+    }, function() {});
+    slider.init();
+  })
+</script>
