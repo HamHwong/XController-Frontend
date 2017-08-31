@@ -8,9 +8,9 @@
 </head>
 
 <body>
-    <div id="right_wapper">
-      <header id="header_wapper">
-          <div class="page-header row">
+  <div id="right_wapper">
+    <header id="header_wapper">
+        <div class="page-header row">
     <div class="header_logo col-md-4 col-sm-4 ">
       <span class="logo text-info h1"><small>Econtroller Tools</small></span>
     </div>
@@ -25,9 +25,45 @@
     </div>
   </div>
 
-      </header>
-      <div id="content_wapper" class="container-fluid">
-        
+      <div id="sideNav_wapper" class="nav-show">
+  <span class="logo"><small>Econtroller</small></span>
+  <div class="sideavatar">
+    <div class="avatar">
+      <img src="./img/avatar.jpg" alt="">
+    </div>
+    <div class="greet clearfix">
+      <span>Hi,User</span>
+    </div>
+    <br/>
+    <div class="logout">
+      <span><a href="#">Logout</a></span>
+    </div>
+  </div>
+  <nav class="navbar navbar-default navbar-fixed-top sideNav" id="sidebar-wrapper">
+    <ul class="nav sidebar-nav section-group">
+      <li class="section"><a href="#myOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
+      <li class="section "><a href="#orderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
+      <li class="section "><a href="#goodsAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
+      <li class="section "><a href="#userAdmin"><span class="glyphicon glyphicon-yen"></span>用户管理</a></li>
+      <li class="section "><a href="#Admin"><span class="glyphicon glyphicon-yen"></span>后台管理</a></li>
+      <li class="section dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>后台管理<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li class="section subsection "><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
+          <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
+          <li class="section subsection"><a href="#"><span class="glyphicon glyphicon-yen"></span>subsection</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div class="sideBtn text-center">
+    <span class="glyphicon sideBtnIcon-open"></span>
+  </div>
+</div>
+
+    </header>
+    <div id="content_wapper" class="container-fluid">
+      
 
 <div class="contentTitle">
 <h3>主页</h3>
@@ -257,71 +293,40 @@
 </table>
 
 
-      </div>
     </div>
-    <div id="left_wapper">
-      <div id="sideNav_wapper" class="nav-show">
-        <span class="logo"><small>Econtroller</small></span>
-<div class="sideavatar">
-  <div class="avatar">
-    <img src="./img/avatar.jpg" alt="">
   </div>
-  <div class="greet clearfix">
-    <span>Hi,User</span>
+  <div id="left_wapper">
+
   </div>
-  <br/>
-  <div class="logout">
-    <span><a href="#">Logout</a></span>
-  </div>
-</div>
-<nav class="navbar navbar-default navbar-fixed-top sideNav" id="sidebar-wrapper">
-  <ul class="nav sidebar-nav section-group">
-    <li class="section"><a href="#myOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
-    <li class="section "><a href="#orderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
-    <li class="section "><a href="#goodsAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
-    <li class="section "><a href="#userAdmin"><span class="glyphicon glyphicon-yen"></span>用户管理</a></li>
-    <li class="section "><a href="#Admin"><span class="glyphicon glyphicon-yen"></span>后台管理</a></li>
-    
-    
-  </ul>
-</nav>
-<div class="sideBtn text-center">
-  <span class="glyphicon sideBtnIcon-open"></span>
-</div>
 
-      </div>
-    </div>
+  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+  <link rel="stylesheet" href="./css/header-60181c7349.css">
+  <link rel="stylesheet" href="./css/main-f25ec50b37.css">
+  <link rel="stylesheet" href="./css/content-808854b96e.css">
+  <link rel="stylesheet" href="./css/components-5f8c86af05.css">
+  <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
+  <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
 
-    <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
-    <link rel="stylesheet" href="./css/sidenav-0c78f9afb2.css">
-    <link rel="stylesheet" href="./css/header-60181c7349.css">
-    <link rel="stylesheet" href="./css/main-06bc76d4ef.css">
-    <link rel="stylesheet" href="./css/content-808854b96e.css">
-    <link rel="stylesheet" href="./css/components-7ce44781b1.css">
-    <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-    <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
-    <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
-    <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
-
-    <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
-    <script type="text/javascript" src="./js/sidenav-085cf65d24.js"></script>
-    <script type="text/javascript" src="./js/content-935260d211.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
-    <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
-    <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
-    <script type="text/javascript" src="./js/init-7f9445c6e7.js"></script>
-    <script type="text/javascript" src="./js/components-550b21f3ce.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+  <script type="text/javascript" src="./js/content-935260d211.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
+  <script type="text/javascript" src="./js/init-7f9445c6e7.js"></script>
+  <script type="text/javascript" src="./js/components-4a903fbce4.js"></script>
 
 
-    <script type="text/javascript">
-      $(document).ready(function() {
-        for (var i in init) {
-          for (var j in init[i])
-            init[i][j]()
-        }
-      })
-    </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      for (var i in init) {
+        for (var j in init[i])
+          init[i][j]()
+      }
+    })
+  </script>
 
 </body>
 

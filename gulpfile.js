@@ -82,7 +82,7 @@ gulp.task('revCss', ['concat-conponent-css'], function() {
     .pipe(gulp.dest('config'));
 });
 gulp.task('clean-css', function(event) {
-  return gulp.src(['dist/css/**/*.css'])
+  return gulp.src(['src/css/components/**/*.css','dist/css/**/*.css'])
     .pipe(clean({
       force: true
     }));
@@ -108,7 +108,6 @@ gulp.task('watch', function() {
   gulp.watch([
     __src + '/less/**/*.less',
     __src + '/templates/**/*.less',
-    // __src + '/js/**/*.js',
     './config/*Config.*',
     __src + '/templates/**/*.ejs',
     __src + '/templates/**/*.js',
@@ -143,7 +142,7 @@ gulp.task('concat-css', function() {
 })
 
 gulp.task('concat-conponent-css', ['less'], function() {
-  return gulp.src(['./src/css/components/**/*.css'])
+  return gulp.src(['src/css/components/**/*.css','!src/css/components/**/*.bak.css'])
     .pipe(concat('components.css'))
     .pipe(cssmin({
       advanced: true, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]

@@ -1,8 +1,11 @@
-@import "../../config/StyleConfig.less"; //配置颜色
+@import "../../../../config/StyleConfig.less"; //配置颜色
+
 #sideNav_wapper {
   float: left;
+  width: 100%;
   .sideNav {
     float: left;
+
     background-color: @home-sideNav-bg-color;
 
     li,
@@ -15,7 +18,6 @@
   .sidebar-nav {
     .section {
       float: left;
-      width: 100%;
 
       a:active,
       a:hover,
@@ -80,10 +82,8 @@
     }
   }
 }
-
 @media (min-width: 768px) {
   #sideNav_wapper {
-    // height: 100%;
     .logo {
       display: none;
     }
@@ -95,8 +95,8 @@
     .sideNav {
       display: block;
       padding-top: 2rem;
-      width: @home-sideNav-width;
-      height: 100%;
+      width: 100%;
+      // height: 100%;
     }
 
     .sideNav.nav_collapse {
@@ -169,7 +169,6 @@
     animation: open-sideBtn @home-sideNav-timer forwards;
   }
 }
-
 @media (max-width: 768px) {
   #sideNav_wapper {
     .logo {
@@ -311,6 +310,7 @@
   }
 
   .sideBtn {
+    display: none;
     top: 0;
     font-size: 2rem;
     right: 0;

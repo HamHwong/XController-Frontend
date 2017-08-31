@@ -12,26 +12,25 @@ html {
   width: 100%;
 
   .bg {
-    background: #779AEB;
-    background: linear-gradient(to bottom,#779AEB,#0F57A8);
-    @media(min-width:768px) {
-      height: 28rem;
-    }
-    @media (max-width:768px) {
-      height: 20rem;
-    }
+    color: #fff;
+    background: #141e8c;
+    background: linear-gradient(to bottom,#141e8c 60%,#101975 100%);
+    text-align: center;
+    height: 28rem;
+    .logo {
+      background: url('/img/zeiss.svg') no-repeat;
+      // background-size: 100% auto;
+      width: 10%;
+      min-width:10rem;
 
-    .greet {
-      color: #fff;
-      width: 100%;
-      text-align: center;
-
-      // padding-top: 8rem;
+      margin: 0 auto;
+      margin-top: 10rem;
       animation: popOut 0.5s forwards;
       @media(min-width:768px) {
-        font-size: 7rem;
+        font-size: 3rem;
         line-height: 5rem;
-        padding-top: 9rem;
+        width:16rem;
+        height:3.868rem ;
         @keyframes popOut {
           0% {
             padding-top: 15rem;
@@ -53,7 +52,8 @@ html {
       @media (max-width:768px) {
         font-size: 4rem;
         line-height: 3rem;
-        padding-top: 4rem;
+        width:10rem;
+        height:2.418rem ;
         @keyframes popOut {
           0% {
             padding-top: 10rem;
@@ -73,6 +73,11 @@ html {
         }
       }
     }
+
+    .logo::before {
+      content: "";
+       display: block;
+    }
   }
 
   .login-box {
@@ -86,6 +91,7 @@ html {
       max-width: 35rem;
     }
     @media (max-width:768px) {
+      top: -12rem;
     }
   }
 
@@ -98,12 +104,11 @@ html {
 
   .loginInputGroup {
     overflow: hidden;
-    padding: 3rem 0rem;
+    padding: 3rem 0;
     width: 80%;
 
     .input-group {
       padding-bottom: 2rem;
     }
-
   }
 }

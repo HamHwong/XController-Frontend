@@ -1,0 +1,325 @@
+@import "../../../../config/StyleConfig.less"; //配置颜色
+#sideNav_wapper {
+  float: left;
+  .sideNav {
+    float: left;
+    background-color: @home-sideNav-bg-color;
+
+    li,
+    ul {
+      list-style: none;
+      float: left;
+    }
+  }
+
+  .sidebar-nav {
+    .section {
+      float: left;
+      a:active,
+      a:hover,
+      a:link,
+      a:visited {
+        color: @home-sideNav-section-color;
+      }
+
+      a:hover,
+      a:visited {
+        background-color: @home-sideNav-section-hover-color;
+      }
+
+      .dropdown-menu {
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        width: 100%;
+      }
+
+      .open a {
+        color: #000;
+      }
+
+      .glyphicon {
+        padding-right: 1rem;
+      }
+    }
+
+    .section.subsection {
+      a {
+        padding: 1rem;
+      }
+
+      a:active,
+      a:hover,
+      a:link,
+      a:visited {
+        color: @home-sideNav-subsection-color;
+      }
+    }
+
+    .caret {
+      position: absolute;
+      right: 1rem;
+      top: 1.5rem;
+    }
+  }
+
+  .sideBtn {
+    position: fixed;
+    display: block;
+    background-color: @home-sideNav-btn-bg-color;
+
+    .glyphicon {
+      color: @home-sideNav-btn-color;
+      display: block;
+      top: 35%;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  #sideNav_wapper {
+    // height: 100%;
+    .logo {
+      display: none;
+    }
+
+    .sideavatar {
+      display: none;
+    }
+
+    .sideNav {
+      display: block;
+      padding-top: 2rem;
+      width: @home-sideNav-width;
+      height: 100%;
+    }
+
+    .sideNav.nav_collapse {
+      animation: close-sideBar @home-sideNav-timer forwards;
+    }
+
+    .sideNav.nav_open {
+      animation: open-sideBar @home-sideNav-timer forwards;
+    }
+    @keyframes close-sideBar {
+      from {
+        left: 0;
+      }
+
+      to {
+        left: 0 - @home-sideNav-width;
+      }
+    }
+    @keyframes open-sideBar {
+      from {
+        left: 0 - @home-sideNav-width;
+      }
+
+      to {
+        left: 0;
+      }
+    }
+    @keyframes close-sideBtn {
+      from {
+        left: @home-sideNav-width;
+      }
+
+      to {
+        left: 0;
+      }
+    }
+    @keyframes open-sideBtn {
+      from {
+        left: 0;
+      }
+
+      to {
+        left: @home-sideNav-width;
+      }
+    }
+  }
+
+  .sideBtn {
+    top: 30rem;
+    font-size: 1.6rem;
+    left: @home-sideNav-width;
+    border-radius: 0 0.6rem 0.6rem 0;
+    height: 5rem;
+    z-index: 1032;
+
+    .sideBtnIcon-open::before {
+      content: '\e251';
+    }
+
+    .sideBtnIcon-close::before {
+      content: '\e250';
+    }
+  }
+
+  .sideBtn.nav_collapse {
+    animation: close-sideBtn @home-sideNav-timer forwards;
+  }
+
+  .sideBtn.nav_open {
+    animation: open-sideBtn @home-sideNav-timer forwards;
+  }
+}
+
+@media (max-width: 768px) {
+  #sideNav_wapper {
+    .logo {
+      position: fixed;
+      display: block;
+      z-index: 1031;
+      width: 100%;
+      min-width: 24rem;
+      top: 1rem;
+      color: #FFF;
+      font-size: 2rem;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      width: 14rem;
+      // margin: 0 auto;
+      margin-left: 1rem;
+      float: left;
+      height: 2.2rem;
+      content: "";
+      display: block;
+      background: url('../img/logo-white.png') no-repeat;
+      background-size: auto 100%;
+    }
+
+    .sideavatar {
+      color: #fff;
+      position: fixed;
+      top: 0.5rem;
+      right: @mobile-home-topNav-height+1rem;
+      z-index: 1032;
+
+      .avatar {
+        position: relative;
+        text-align: center;
+        float: left;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 4rem;
+        overflow: hidden;
+
+        img {
+          position: absolute;
+          left: -50%;
+          right: -50%;
+          height: 100%;
+          vertical-align: middle;
+          margin: 0 auto;
+          flex: auto;
+        }
+      }
+
+      .greet,
+      .logout {
+        float: left;
+        padding-left: 1rem;
+      }
+
+      .logout a {
+        color: #FFF;
+      }
+    }
+    @media (min-width: 400px) and (max-width: 500px) {
+      .greet,
+      .logout {
+        display: none;
+      }
+    }
+    @media (min-width: 320px) and (max-width: 400px) {
+      .sideavatar {
+        display: none;
+      }
+    }
+    @media (max-width: 320px) {
+      .logo small,
+      .sideavatar {
+        display: none;
+      }
+    }
+
+    .sideNav {
+      display: inline-block;
+      padding-top: @mobile-home-topNav-height;
+      overflow: hidden;
+      animation: open-sideBar 0.1s forwards;
+
+      li,
+      ul {
+        width: 100%;
+      }
+    }
+
+    .sideNav.nav_collapse {
+      animation: close-sideBar 0.1s forwards;
+    }
+
+    .sideNav.collased {
+      animation: close-sideBar 0.1s forwards;
+    }
+    @keyframes close-sideBar {
+      from {
+        height: auto;
+      }
+
+      to {
+        height: @mobile-home-topNav-height;
+      }
+    }
+    @keyframes open-sideBar {
+      from {
+        height: @mobile-home-topNav-height;
+      }
+
+      to {
+        height: auto;
+      }
+    }
+    @keyframes close-sideBtn {
+      from {
+        left: @home-sideNav-width;
+      }
+
+      to {
+        left: 0;
+      }
+    }
+    @keyframes open-sideBtn {
+      from {
+        left: 0;
+      }
+
+      to {
+        left: @home-sideNav-width;
+      }
+    }
+  }
+
+  .sideBtn {
+    top: 0;
+    font-size: 2rem;
+    right: 0;
+    height: @mobile-home-topNav-height;
+    width: @mobile-home-topNav-height;
+    z-index: 1032;
+  }
+
+  .sideBtnIcon-open::before {
+    content: '\e011';
+  }
+
+  .sideBtnIcon-close::before {
+    content: '\e236';
+  }
+}

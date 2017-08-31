@@ -7,6 +7,7 @@ html {
 }
 #sideNav_wapper {
   float: left;
+  width: 100%;
 }
 #sideNav_wapper .sideNav {
   float: left;
@@ -19,7 +20,6 @@ html {
 }
 #sideNav_wapper .sidebar-nav .section {
   float: left;
-  width: 100%;
 }
 #sideNav_wapper .sidebar-nav .section a:active,
 #sideNav_wapper .sidebar-nav .section a:hover,
@@ -84,8 +84,7 @@ html {
   #sideNav_wapper .sideNav {
     display: block;
     padding-top: 2rem;
-    width: 20rem;
-    height: 100%;
+    width: 100%;
   }
   #sideNav_wapper .sideNav.nav_collapse {
     -webkit-animation: close-sideBar 0.5s forwards;
@@ -474,6 +473,7 @@ html {
     }
   }
   .sideBtn {
+    display: none;
     top: 0;
     font-size: 2rem;
     right: 0;

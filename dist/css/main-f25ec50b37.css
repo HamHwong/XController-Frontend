@@ -11,9 +11,6 @@ html {
   #header_wapper {
     display: block;
   }
-  #right_wapper {
-    margin-left: 20rem;
-  }
   #right_wapper.extend {
     -webkit-animation: extend 0.5s forwards;
     -moz-animation: extend 0.5s forwards;
@@ -97,9 +94,6 @@ html {
   }
 }
 @media (max-width: 768px) {
-  #header_wapper {
-    display: none;
-  }
   #right_wapper {
     margin-top: 5rem;
   }
