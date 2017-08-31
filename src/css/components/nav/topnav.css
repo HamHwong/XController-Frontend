@@ -8,13 +8,10 @@ html {
 #sideNav_wapper {
   float: left;
   width: 100%;
+  background-color: #7D8892;
 }
-#sideNav_wapper .sideNav {
-  float: left;
-  background-color: #40679C;
-}
-#sideNav_wapper .sideNav li,
-#sideNav_wapper .sideNav ul {
+#sideNav_wapper li,
+#sideNav_wapper ul {
   list-style: none;
   float: left;
 }
@@ -29,7 +26,7 @@ html {
 }
 #sideNav_wapper .sidebar-nav .section a:hover,
 #sideNav_wapper .sidebar-nav .section a:visited {
-  background-color: #31578B;
+  background-color: #374655;
 }
 #sideNav_wapper .sidebar-nav .section .dropdown-menu {
   -webkit-border-radius: 0;
@@ -41,14 +38,22 @@ html {
   box-shadow: none;
   margin: 0;
   padding: 0;
-  position: relative;
   width: 100%;
+}
+@media (max-width: 768px) {
+  #sideNav_wapper .sidebar-nav .section .dropdown-menu {
+    position: relative;
+  }
 }
 #sideNav_wapper .sidebar-nav .section .open a {
   color: #000;
 }
 #sideNav_wapper .sidebar-nav .section .glyphicon {
   padding-right: 1rem;
+}
+#sideNav_wapper .sidebar-nav .section.subsection {
+  width: 100%;
+  background-color: #7D8892;
 }
 #sideNav_wapper .sidebar-nav .section.subsection a {
   padding: 1rem;
@@ -57,11 +62,10 @@ html {
 #sideNav_wapper .sidebar-nav .section.subsection a:hover,
 #sideNav_wapper .sidebar-nav .section.subsection a:link,
 #sideNav_wapper .sidebar-nav .section.subsection a:visited {
-  color: #000;
+  color: #fff;
 }
 #sideNav_wapper .sidebar-nav .caret {
   position: absolute;
-  right: 1rem;
   top: 1.5rem;
 }
 #sideNav_wapper .sideBtn {
@@ -75,187 +79,30 @@ html {
   top: 35%;
 }
 @media (min-width: 768px) {
-  #sideNav_wapper .logo {
-    display: none;
-  }
+  #sideNav_wapper .logo,
   #sideNav_wapper .sideavatar {
     display: none;
   }
   #sideNav_wapper .sideNav {
     display: block;
-    padding-top: 2rem;
     width: 100%;
   }
-  #sideNav_wapper .sideNav.nav_collapse {
-    -webkit-animation: close-sideBar 0.5s forwards;
-    -moz-animation: close-sideBar 0.5s forwards;
-    -o-animation: close-sideBar 0.5s forwards;
-    animation: close-sideBar 0.5s forwards;
-  }
-  #sideNav_wapper .sideNav.nav_open {
-    -webkit-animation: open-sideBar 0.5s forwards;
-    -moz-animation: open-sideBar 0.5s forwards;
-    -o-animation: open-sideBar 0.5s forwards;
-    animation: open-sideBar 0.5s forwards;
-  }
-  @-webkit-keyframes close-sideBar {
-    from {
-      left: 0;
-    }
-    to {
-      left: -20rem;
-    }
-  }
-  @-moz-keyframes close-sideBar {
-    from {
-      left: 0;
-    }
-    to {
-      left: -20rem;
-    }
-  }
-  @-o-keyframes close-sideBar {
-    from {
-      left: 0;
-    }
-    to {
-      left: -20rem;
-    }
-  }
-  @keyframes close-sideBar {
-    from {
-      left: 0;
-    }
-    to {
-      left: -20rem;
-    }
-  }
-  @-webkit-keyframes open-sideBar {
-    from {
-      left: -20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-moz-keyframes open-sideBar {
-    from {
-      left: -20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-o-keyframes open-sideBar {
-    from {
-      left: -20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @keyframes open-sideBar {
-    from {
-      left: -20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-webkit-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-moz-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-o-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-webkit-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @-moz-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @-o-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  .sideBtn {
-    top: 30rem;
-    font-size: 1.6rem;
-    left: 20rem;
-    -webkit-border-radius: 0 0.6rem 0.6rem 0;
-    -moz-border-radius: 0 0.6rem 0.6rem 0;
-    border-radius: 0 0.6rem 0.6rem 0;
-    height: 5rem;
-    z-index: 1032;
-  }
-  .sideBtn .sideBtnIcon-open::before {
-    content: '\e251';
-  }
-  .sideBtn .sideBtnIcon-close::before {
-    content: '\e250';
-  }
-  .sideBtn.nav_collapse {
-    -webkit-animation: close-sideBtn 0.5s forwards;
-    -moz-animation: close-sideBtn 0.5s forwards;
-    -o-animation: close-sideBtn 0.5s forwards;
-    animation: close-sideBtn 0.5s forwards;
-  }
-  .sideBtn.nav_open {
-    -webkit-animation: open-sideBtn 0.5s forwards;
-    -moz-animation: open-sideBtn 0.5s forwards;
-    -o-animation: open-sideBtn 0.5s forwards;
-    animation: open-sideBtn 0.5s forwards;
+  #sideNav_wapper .sideBtn {
+    display: none;
   }
 }
+#sideNav_wapper ::after {
+  clear: both;
+}
 @media (max-width: 768px) {
+  #sideNav_wapper {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    z-index: 1030;
+    border: none;
+  }
   #sideNav_wapper .logo {
     position: fixed;
     display: block;
@@ -320,13 +167,10 @@ html {
     color: #FFF;
   }
   #sideNav_wapper .sideNav {
-    display: inline-block;
+    width: 100%;
+    border-width: 0;
     padding-top: 5rem;
     overflow: hidden;
-    -webkit-animation: open-sideBar 0.1s forwards;
-    -moz-animation: open-sideBar 0.1s forwards;
-    -o-animation: open-sideBar 0.1s forwards;
-    animation: open-sideBar 0.1s forwards;
   }
   #sideNav_wapper .sideNav li,
   #sideNav_wapper .sideNav ul {
@@ -343,6 +187,20 @@ html {
     -moz-animation: close-sideBar 0.1s forwards;
     -o-animation: close-sideBar 0.1s forwards;
     animation: close-sideBar 0.1s forwards;
+  }
+  #sideNav_wapper .sideBtn {
+    top: 0;
+    font-size: 2rem;
+    right: 0;
+    height: 5rem;
+    width: 5rem;
+    z-index: 1032;
+  }
+  #sideNav_wapper .sideBtnIcon-open::before {
+    content: '\e011';
+  }
+  #sideNav_wapper .sideBtnIcon-close::before {
+    content: '\e236';
   }
   @-webkit-keyframes close-sideBar {
     from {
@@ -407,85 +265,6 @@ html {
     to {
       height: auto;
     }
-  }
-  @-webkit-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-moz-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-o-keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @keyframes close-sideBtn {
-    from {
-      left: 20rem;
-    }
-    to {
-      left: 0;
-    }
-  }
-  @-webkit-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @-moz-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @-o-keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  @keyframes open-sideBtn {
-    from {
-      left: 0;
-    }
-    to {
-      left: 20rem;
-    }
-  }
-  .sideBtn {
-    display: none;
-    top: 0;
-    font-size: 2rem;
-    right: 0;
-    height: 5rem;
-    width: 5rem;
-    z-index: 1032;
-  }
-  .sideBtnIcon-open::before {
-    content: '\e011';
-  }
-  .sideBtnIcon-close::before {
-    content: '\e236';
   }
 }
 @media (max-width: 768px) and (min-width: 400px) and (max-width: 500px) {

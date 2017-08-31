@@ -3,6 +3,7 @@
 @media (min-width: 768px) {
   #header_wapper {
   display: block;
+  clear: both;
   }
 
   #right_wapper {
@@ -10,36 +11,10 @@
     // margin-left: 20rem;
   }
 
-  #right_wapper.extend {
-    animation: extend @home-sideNav-timer forwards;
-  }
-
-  #right_wapper.shrunk {
-    animation: shrunk @home-sideNav-timer forwards;
-  }
-
   #content_wapper {
     background-color: @home-content-background-color;
     padding: 2rem;
     height: 100%;
-  }
-  @keyframes extend {
-    from {
-      margin-left: @home-sideNav-width;
-    }
-
-    to {
-      margin-left: 0;
-    }
-  }
-  @keyframes shrunk {
-    from {
-      margin-left: 0;
-    }
-
-    to {
-      margin-left: @home-sideNav-width;
-    }
   }
 }
 @media (max-width: 768px) {
@@ -49,14 +24,6 @@
 
   #right_wapper {
     margin-top: @mobile-home-topNav-height;
-  }
-
-  #right_wapper.extend {
-    animation: extend @home-sideNav-timer forwards;
-  }
-
-  #right_wapper.shrunk {
-    animation: shrunk @home-sideNav-timer forwards;
   }
 
   #content_wapper {

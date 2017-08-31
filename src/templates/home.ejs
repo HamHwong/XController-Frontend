@@ -9,16 +9,13 @@
 
 <body>
   <div id="right_wapper">
-    <header id="header_wapper">
-      <%-include("/header")%>
+    <header id="header_wapper" class="clearfix">
+      <%-include("/components/header/header")%>
       <%-include("/components/nav/topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
       <%-include("/content/order-content")%>
     </div>
-  </div>
-  <div id="left_wapper">
-
   </div>
 
   <link rel="stylesheet" href="./css/plugs/bootstrap.css">

@@ -105,7 +105,7 @@ table.prototype.parse = function(jsonArrs) {
   var hasHeader = jsonArrs.hasHeader
   var data = jsonArrs.data
   var keyArr = jsonArrs.keyArr
-  var table = $('<table class="table table-bordered table-hover"></table>')
+  var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
   if (hasHeader) {
     var hr = data.reverse().pop()

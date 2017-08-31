@@ -1,5 +1,4 @@
 #progressbar {
-  counter-reset: go;
   margin: 0 auto;
 
   .operationtime {
@@ -31,8 +30,7 @@
 }
 
 #progressbar li::before {
-  counter-increment: go;
-  content: counter(go);
+  content: "asas";
   display: block;
   text-align: center;
   font-size: 2rem;
@@ -42,7 +40,7 @@
   margin: 0 auto;
   background-color: #d4d4d4;
   position: relative;
-  /*z-index: 1030;*/
+  z-index: 2;
 }
 
 #progressbar li:after {
@@ -54,7 +52,7 @@
   content: "";
   display: block;
   background-color: #d4d4d4;
-  /*z-index: 10;*/
+  z-index: 1;
 }
 
 #progressbar li:last-child::after {
