@@ -16,7 +16,7 @@
   list-style: none;
   color: #000;
   line-height: 4rem;
-  width: 30%;
+  width: 25%; //需要根据不同步骤来修改宽度
   list-style-type: none;
   list-style-position: outside;
   /*z-index: 1029;*/
@@ -30,7 +30,7 @@
 }
 
 #progressbar li::before {
-  content: "asas";
+  content: "";
   display: block;
   text-align: center;
   font-size: 2rem;
@@ -43,7 +43,7 @@
   z-index: 2;
 }
 
-#progressbar li:after {
+#progressbar li::after {
   position: relative;
   height: 0.2rem;
   width: calc(100% - 4rem);
@@ -63,11 +63,38 @@
   margin-left: 0;
 }
 
+#progressbar li.complated::before {
+  content:"\e013";
+  background-color: #506687;
+}
+
+#progressbar li.infomation::before {
+  content: "\e101";
+  background-color: #506687;
+}
+
+#progressbar li.validating::before {
+  content: "\e085";
+  background-color: #c4cf25;
+}
+
+#progressbar li.viewed::before {
+  content: "\e105";
+  background-color: #506687;
+}
+
+#progressbar li.reject::before {
+  content: '\e014';
+  background-color: #de4747;
+}
+
+#progressbar li.notstart::before {
+}
+
 #progressbar li.active::before {
-  background-color: #36908d;
   color: #FFF;
 }
 
 #progressbar li.active::after {
-  background-color: #36908d;
+  // background-color: #36908d;
 }

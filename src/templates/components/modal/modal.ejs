@@ -1,9 +1,14 @@
 <%if(locals.type=="agentAdd"){%>
 <%-include("./type/agent-Add&Edit")%>
+<%}else if(locals.type=="supplierAdd"){%>
+  <%-include("./type/supplier-Add&Edit")%>
 <%}else if(locals.type=="orderDetail"){%>
   <%-include("./type/order-Detail")%>
+<%}else if(locals.type=="goodsAdd"){%>
+  <%-include("./type/goods-Add&Edit")%>
+<%}else if(locals.type=="delete"){%>
+  <%-include("./type/delete")%>
 <%}else{%>
-
 <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

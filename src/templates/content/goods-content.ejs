@@ -1,0 +1,27 @@
+<%-include('../components/searchWapper/goods-searchWapper')%>
+
+  <div class="operation-menu">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addGoods">添加物品</button>
+  </div>
+
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="goods-table-container">
+      <table class="table table-bordered table-hover">
+        <%-include('/components/table/cardRow')%>
+      </table>
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <%-include('/components/modal/modal',{type:"goodsAdd"})%>
+  <%-include('/components/table/table.init.ejs',{container:"#goods-table-container",url:"./test/goods-table-data.json",hasButton:false})%>

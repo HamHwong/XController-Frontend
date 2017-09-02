@@ -4,27 +4,33 @@
   margin: 0;
   border-bottom: 0;
   padding: 10px;
-
   @media (min-width: 768px) {}
   @media (max-width: 768px) {
-    margin: 0 ;
+    margin: 0;
   }
-  @media(max-width: 400px){
+  @media(max-width: 400px) {
     display: block;
   }
-  @media(min-width: 400px) and (max-width: 768px){
+  @media(min-width: 400px) and (max-width: 768px) {
     display: none;
   }
 
   .header_logo {
+    position: relative;
+
     .logo:before {
       @media (min-width: 768px) {
-        display: inline-block;
-        width: 4rem;
-        height: 4rem;
+        float: left;
+        display: block;
+        width: 5rem;
+        height: 5rem;
         content: '';
         background: url('../img/zeiss-logo.svg') no-repeat;
       }
+    }
+
+    .system_name {
+      vertical-align: bottom;
     }
     @media (max-width: 768px) {
       display: none;

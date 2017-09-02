@@ -35,15 +35,26 @@ html {
   float: left;
   font-size: 10px;
 }
-.tab-content tr.info_card_row td {
+/***
+取消bootstrap的样式
+***/
+.table > tbody > tr.info_card_row > td,
+.table > tbody > tr.info_card_row > th,
+.table > tfoot > tr.info_card_row > td,
+.table > tfoot > tr.info_card_row > th,
+.table > thead > tr.info_card_row > td,
+.table > thead > tr.info_card_row > th {
+  padding: 0;
+}
+tr.info_card_row td {
   border: 0;
   padding: 0;
   margin: 0;
 }
-.tab-content tr.info_card_row td button {
+tr.info_card_row td button {
   float: left;
 }
-.tab-content tr.info_card_row td .card {
+tr.info_card_row td .card {
   margin: 0 0 0.2rem;
   -webkit-border-radius: 0 0 0.3rem 0.3rem;
   -moz-border-radius: 0 0 0.3rem 0.3rem;
@@ -53,24 +64,24 @@ html {
   box-shadow: 0 0.5rem 1rem #888888;
   border: 1px solid #4A8BC2;
 }
-.tab-content tr.info_card_row td .card .card_head {
+tr.info_card_row td .card .card_head {
   padding: 0.4rem;
   color: #fff;
 }
-.tab-content tr.info_card_row td .card .card_body {
+tr.info_card_row td .card .card_body {
   margin: 1rem;
 }
-.tab-content tr.info_card_row td .card .card_body .card_data_row {
+tr.info_card_row td .card .card_body .card_data_row {
   border-bottom: 0.1rem solid #e5e5e5;
 }
-.tab-content tr.info_card_row td .card .card_body .card_data_title {
+tr.info_card_row td .card .card_body .card_data_title {
   font-weight: bolder;
 }
-.tab-content tr.info_card_row td .card .card_foot {
+tr.info_card_row td .card .card_foot {
   border-top: 0.1rem solid #e5e5e5;
   margin: 1rem;
 }
-.tab-content tr.info_card_row td .card .card_foot .date {
+tr.info_card_row td .card .card_foot .date {
   float: right;
 }
 .selection-group::after {

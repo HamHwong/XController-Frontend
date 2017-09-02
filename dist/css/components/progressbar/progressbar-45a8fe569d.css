@@ -13,7 +13,7 @@
   list-style: none;
   color: #000;
   line-height: 4rem;
-  width: 30%;
+  width: 25%;
   list-style-type: none;
   list-style-position: outside;
   /*z-index: 1029;*/
@@ -25,7 +25,7 @@
   line-height: 2rem;
 }
 #progressbar li::before {
-  content: "asas";
+  content: "";
   display: block;
   text-align: center;
   font-size: 2rem;
@@ -39,7 +39,7 @@
   position: relative;
   z-index: 2;
 }
-#progressbar li:after {
+#progressbar li::after {
   position: relative;
   height: 0.2rem;
   width: -webkit-calc(96%);
@@ -60,10 +60,26 @@
 #progressbar li:first-child {
   margin-left: 0;
 }
-#progressbar li.active::before {
-  background-color: #36908d;
-  color: #FFF;
+#progressbar li.complated::before {
+  content: "\e013";
+  background-color: #506687;
 }
-#progressbar li.active::after {
-  background-color: #36908d;
+#progressbar li.infomation::before {
+  content: "\e101";
+  background-color: #506687;
+}
+#progressbar li.validating::before {
+  content: "\e085";
+  background-color: #c4cf25;
+}
+#progressbar li.viewed::before {
+  content: "\e105";
+  background-color: #506687;
+}
+#progressbar li.reject::before {
+  content: '\e014';
+  background-color: #de4747;
+}
+#progressbar li.active::before {
+  color: #FFF;
 }

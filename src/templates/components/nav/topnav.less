@@ -1,9 +1,13 @@
 @import "../../../../config/StyleConfig.less"; //配置颜色
 
-#sideNav_wapper {
+#topNav_wapper {
+  color: #337ab7;
   float: left;
   width: 100%;
-  background-color: @home-sideNav-bg-color;
+  background: linear-gradient(to top,#E7EEF5 0%,#F5F9FD 60%);
+  @media (max-width: 768px) {
+    background: linear-gradient(to top,#C2CFDD 0%,#F5F9FD 60%);
+  }
 
   li,
   ul {
@@ -12,35 +16,41 @@
   }
 
   .sidebar-nav {
+    @media (max-width: 768px) {
+      border-top: 1px solid #cddbeb;
+      background: linear-gradient(to top,#C2CFDD 0%,#F5F9FD 30%);
+    }
+
     .section {
       float: left;
 
       a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: @home-sideNav-section-color;
+      a:link {
+        color: #337ab7;
+      }
+
+      a:hover {
+        color: #ff0500;
       }
 
       a:hover,
       a:visited {
-        background-color: @home-sideNav-section-hover-color;
+        background: linear-gradient(to top,#C2CFDD,#fff);
+        margin: -1px;
+        border: 1px solid #DCE4E9;
       }
 
       .dropdown-menu {
+        background: linear-gradient(to top,#F6F9FB,#E9F2F6);
         border-radius: 0;
         border: none;
         box-shadow: none;
         margin: 0;
         padding: 0;
+        width: 100% !important;
         @media (max-width: 768px) {
           position: relative;
         }
-        width: 100%;
-      }
-
-      .open a {
-        color: #000;
       }
 
       .glyphicon {
@@ -50,17 +60,14 @@
 
     .section.subsection {
       width: 100%;
-      background-color: #7D8892;
 
       a {
+        color: #337ab7;
         padding: 1rem;
       }
 
-      a:active,
-      a:hover,
-      a:link,
-      a:visited {
-        color: #fff;
+      a:hover {
+        color: #ff0500;
       }
     }
 
@@ -73,7 +80,7 @@
   .sideBtn {
     position: fixed;
     display: block;
-    background-color: @home-sideNav-btn-bg-color;
+    background-color: #7D8892;
 
     .glyphicon {
       color: @home-sideNav-btn-color;
@@ -87,7 +94,7 @@
       display: none;
     }
 
-    .sideNav {
+    .topNav {
       display: block;
       width: 100%;
     }
@@ -97,11 +104,12 @@
     }
   }
 }
-#sideNav_wapper ::after{
+
+#topNav_wapper::after {
   clear: both;
 }
 @media (max-width: 768px) {
-  #sideNav_wapper {
+  #topNav_wapper {
     position: fixed;
     right: 0;
     left: 0;
@@ -116,21 +124,20 @@
       width: 100%;
       min-width: 24rem;
       top: 1rem;
-      color: #FFF;
       font-size: 2rem;
       overflow: hidden;
     }
 
     .logo::before {
-      width: 14rem;
+      width: 3.5rem;
+      height: 3.5rem;
       // margin: 0 auto;
       margin-left: 1rem;
       float: left;
-      height: 2.2rem;
       content: "";
       display: block;
-      background: url('../img/logo-white.png') no-repeat;
-      background-size: auto 100%;
+      background: url('../img/zeiss-logo.svg') no-repeat;
+      // background-size: auto 100%;
     }
     @media (min-width: 400px) and (max-width: 500px) {
       .greet,
@@ -151,7 +158,7 @@
     }
 
     .sideavatar {
-      color: #fff;
+      // color: #fff;``
       position: fixed;
       top: 0.5rem;
       right: @mobile-home-topNav-height+1rem;
@@ -184,30 +191,25 @@
         float: left;
         padding-left: 1rem;
       }
-
-      .logout a {
-        color: #FFF;
-      }
     }
 
-    .sideNav {
+    .topNav {
       width: 100%;
       border-width: 0;
       padding-top: @mobile-home-topNav-height;
       overflow: hidden;
       // animation: open-sideBar 0.1s forwards;
-
       li,
       ul {
         width: 100%;
       }
     }
 
-    .sideNav.nav_collapse {
+    .topNav.nav_collapse {
       animation: close-sideBar 0.1s forwards;
     }
 
-    .sideNav.collased {
+    .topNav.collased {
       animation: close-sideBar 0.1s forwards;
     }
 

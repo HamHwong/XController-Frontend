@@ -4,9 +4,9 @@
    */
   var table_init = function() {
     var $tablecontainer = $("<%=locals.container%>")
-    var t = new table("<%=locals.url%>",{hasButton:true})
+    var t = new table("<%=locals.url%>",<% if(locals.hasButton){%>{hasButton:<%=locals.hasButton%>}<%}%>)
     t.load("<%=locals.url%>").to($tablecontainer)
-    console.log(t.getTable());
+    // console.log(t.getTable());
     t.bindModal()
   }
   // var table_init = function() {

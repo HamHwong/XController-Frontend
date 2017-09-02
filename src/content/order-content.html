@@ -1,7 +1,7 @@
 
 
 <div class="contentTitle">
-<h3>主页</h3>
+<h3>订单管理</h3>
 </div>
 
   <div class="search_wapper ">
@@ -44,9 +44,9 @@
     <ul class="nav nav-tabs" id="myTab">
       
       
-        <li><a href=#finished>已完成</a></li>
+        <li><a href=#todolist>待办事项</a></li>
       
-        <li><a href=#unfinished>未完成</a></li>
+        <li><a href=#finished>已完成</a></li>
       
     </ul>
   </div>
@@ -54,59 +54,59 @@
   <div class="operation-menu">
   </div>
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="finished">
+    <div class="tab-pane active" id="todolist">
         <table class="table table-bordered table-hover">
-<tr class="info_card_row hide">
-  <td colspan="1">
-    <div class="card col-xs-12 row">
-      <div class="card_head row">
-        header
-      </div>
-      <div class="card_body">
-        <div class="row card_data_row">
-          <div class="col-xs-4 card_data_title">
-            PropName:
+  <tr class="info_card_row hide">
+    <td colspan="1">
+      <div class="card col-xs-12 row">
+        <div class="card_head row">
+          header
+        </div>
+        <div class="card_body">
+          <div class="row card_data_row">
+            <div class="col-xs-4 card_data_title">
+              PropName:
+            </div>
+            <div class="col-xs-8 card_data">
+            </div>
           </div>
-          <div class="col-xs-8 card_data">
+        </div>
+        <div class="card_foot row">
+          <div class="date">
+            data:yyyy-mm-dd
           </div>
         </div>
       </div>
-      <div class="card_foot row">
-        <div class="date">
-          data:yyyy-mm-dd
-        </div>
-      </div>
-    </div>
-  </td>
-</tr>
+    </td>
+  </tr>
 </table>
 
     </div>
-    <div class="tab-pane" id="unfinished">
+    <div class="tab-pane" id="finished">
       <table class="table table-bordered table-hover">
-<tr class="info_card_row hide">
-  <td colspan="1">
-    <div class="card col-xs-12 row">
-      <div class="card_head row">
-        header
-      </div>
-      <div class="card_body">
-        <div class="row card_data_row">
-          <div class="col-xs-4 card_data_title">
-            PropName:
+  <tr class="info_card_row hide">
+    <td colspan="1">
+      <div class="card col-xs-12 row">
+        <div class="card_head row">
+          header
+        </div>
+        <div class="card_body">
+          <div class="row card_data_row">
+            <div class="col-xs-4 card_data_title">
+              PropName:
+            </div>
+            <div class="col-xs-8 card_data">
+            </div>
           </div>
-          <div class="col-xs-8 card_data">
+        </div>
+        <div class="card_foot row">
+          <div class="date">
+            data:yyyy-mm-dd
           </div>
         </div>
       </div>
-      <div class="card_foot row">
-        <div class="date">
-          data:yyyy-mm-dd
-        </div>
-      </div>
-    </div>
-  </td>
-</tr>
+    </td>
+  </tr>
 </table>
 
     </div>
@@ -136,9 +136,10 @@
           <div class="steps clearfix">
             <!-- progressbar -->
 <ul id="progressbar" class="clearfix">
-  <li><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon infomation"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon complated"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon validating"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon reject"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
 </ul>
 
           </div>
@@ -187,14 +188,14 @@
    * @description Table初始化
    */
   var table_init = function() {
-    var $tablecontainer = $("#finished")
+    var $tablecontainer = $("#todolist")
     var t = new table("./test/order-table-data.json",{hasButton:true})
     t.load("./test/order-table-data.json").to($tablecontainer)
-    console.log(t.getTable());
+    // console.log(t.getTable());
     t.bindModal()
   }
   // var table_init = function() {
-  //   var $tablecontainer = $("#finished")
+  //   var $tablecontainer = $("#todolist")
   //   var t = new table(true)
   //   t.load("./test/order-table-data.json").to($tablecontainer)
   //   t.bindModal()
@@ -202,28 +203,54 @@
 </script>
 
 <table class="table table-bordered table-hover">
-<tr class="info_card_row hide">
-  <td colspan="1">
-    <div class="card col-xs-12 row">
-      <div class="card_head row">
-        header
-      </div>
-      <div class="card_body">
-        <div class="row card_data_row">
-          <div class="col-xs-4 card_data_title">
-            PropName:
+  <tr class="info_card_row hide">
+    <td colspan="1">
+      <div class="card col-xs-12 row">
+        <div class="card_head row">
+          header
+        </div>
+        <div class="card_body">
+          <div class="row card_data_row">
+            <div class="col-xs-4 card_data_title">
+              PropName:
+            </div>
+            <div class="col-xs-8 card_data">
+            </div>
           </div>
-          <div class="col-xs-8 card_data">
+        </div>
+        <div class="card_foot row">
+          <div class="date">
+            data:yyyy-mm-dd
           </div>
         </div>
       </div>
-      <div class="card_foot row">
-        <div class="date">
-          data:yyyy-mm-dd
-        </div>
+    </td>
+  </tr>
+</table>
+
+
+  <!-- 信息删除确认 -->
+<div class="modal fade" id="delBtn">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <a onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
       </div>
     </div>
-  </td>
-</tr>
-</table>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 

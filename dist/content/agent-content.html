@@ -52,29 +52,29 @@
     <div class="tab-pane active" id="agent-table-container">
       <table class="table table-bordered table-hover">
         <table class="table table-bordered table-hover">
-<tr class="info_card_row hide">
-  <td colspan="1">
-    <div class="card col-xs-12 row">
-      <div class="card_head row">
-        header
-      </div>
-      <div class="card_body">
-        <div class="row card_data_row">
-          <div class="col-xs-4 card_data_title">
-            PropName:
+  <tr class="info_card_row hide">
+    <td colspan="1">
+      <div class="card col-xs-12 row">
+        <div class="card_head row">
+          header
+        </div>
+        <div class="card_body">
+          <div class="row card_data_row">
+            <div class="col-xs-4 card_data_title">
+              PropName:
+            </div>
+            <div class="col-xs-8 card_data">
+            </div>
           </div>
-          <div class="col-xs-8 card_data">
+        </div>
+        <div class="card_foot row">
+          <div class="date">
+            data:yyyy-mm-dd
           </div>
         </div>
       </div>
-      <div class="card_foot row">
-        <div class="date">
-          data:yyyy-mm-dd
-        </div>
-      </div>
-    </div>
-  </td>
-</tr>
+    </td>
+  </tr>
 </table>
 
       </table>
@@ -125,7 +125,7 @@
     
     />
   </div>
-  <i class="col-sm-2 input-info">asasa</i>
+  <i class="col-sm-2 input-info"></i>
 </div>
 
             
@@ -150,7 +150,7 @@
     
     />
   </div>
-  <i class="col-sm-2 input-info">asasa</i>
+  <i class="col-sm-2 input-info"></i>
 </div>
 
               
@@ -175,7 +175,7 @@
     
     />
   </div>
-  <i class="col-sm-2 input-info">asasa</i>
+  <i class="col-sm-2 input-info"></i>
 </div>
 
                 
@@ -200,7 +200,7 @@
     
     />
   </div>
-  <i class="col-sm-2 input-info">asasa</i>
+  <i class="col-sm-2 input-info"></i>
 </div>
 
                   
@@ -225,7 +225,7 @@
     
     />
   </div>
-  <i class="col-sm-2 input-info">asasa</i>
+  <i class="col-sm-2 input-info"></i>
 </div>
 
         </form>
@@ -235,9 +235,7 @@
         <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal -->
 </div>
 
 
@@ -248,9 +246,9 @@
    */
   var table_init = function() {
     var $tablecontainer = $("#agent-table-container")
-    var t = new table("./test/agent-table-data.json",{hasButton:true})
+    var t = new table("./test/agent-table-data.json",)
     t.load("./test/agent-table-data.json").to($tablecontainer)
-    console.log(t.getTable());
+    // console.log(t.getTable());
     t.bindModal()
   }
   // var table_init = function() {

@@ -1,0 +1,31 @@
+<%-include('/components/searchWapper/myorder-searchWapper')%>
+
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",finished:"已完成",reject:"拒绝"}})%>
+  <div class="operation-menu">
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="applying">
+        <%-include('/components/table/cardRow')%>
+    </div>
+    <div class="tab-pane" id="finished">
+      <%-include('/components/table/cardRow')%>
+    </div>
+    <div class="tab-pane" id="reject">
+      <%-include('/components/table/cardRow')%>
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+<%-include('/components/modal/modal',{type:"orderDetail"})%>
+<%-include('/components/table/table.init.ejs',{container:"#applying",url:"./test/order-table-data.json",hasButton:false})%>
+<%-include('/components/table/cardRow')%>
+<%-include('/components/modal/modal',{type:"delete"})%>

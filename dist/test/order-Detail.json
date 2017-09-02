@@ -1,5 +1,6 @@
 {
-  "steps": "1",
+  "tablename": "orderDetail",
+  "steps": "4",
   "baseInfos": {
     "提交人": "Admin",
     "手机号": "13888888888",
@@ -8,6 +9,9 @@
     "代理商": "Ham",
     "备注": "ContentContentContentContentContentContent"
   },
+  "hasHeader": true,
+  "keyArr":
+    ["prop", "key", "key", "prop", "prop", "prop", "prop", "prop", "prop"],
   "data": [
     ["申请种类", "申请数量", "收货人", "收货人电话", "交付时间", "收货地址"],
     ["种类1", "10000", "李建峰", "18211114859", "2017-08-13 10:00:00", "浙江省宁波市某某区宁波路政府楼15号303"],

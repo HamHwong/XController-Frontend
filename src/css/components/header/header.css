@@ -12,7 +12,7 @@ html {
 }
 @media (max-width: 768px) {
   .page-header {
-    margin: 0 ;
+    margin: 0;
   }
 }
 @media (max-width: 400px) {
@@ -25,14 +25,21 @@ html {
     display: none;
   }
 }
+.page-header .header_logo {
+  position: relative;
+}
 @media (min-width: 768px) {
   .page-header .header_logo .logo:before {
-    display: inline-block;
-    width: 4rem;
-    height: 4rem;
+    float: left;
+    display: block;
+    width: 5rem;
+    height: 5rem;
     content: '';
     background: url('../img/zeiss-logo.svg') no-repeat;
   }
+}
+.page-header .header_logo .system_name {
+  vertical-align: bottom;
 }
 @media (max-width: 768px) {
   .page-header .header_logo {
