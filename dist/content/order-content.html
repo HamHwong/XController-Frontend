@@ -190,8 +190,7 @@
   var table_init = function() {
     var $tablecontainer = $("#todolist")
     var t = new table("./test/order-table-data.json",{hasButton:true})
-    t.load("./test/order-table-data.json").to($tablecontainer)
-    // console.log(t.getTable());
+    t.load().to($tablecontainer)
     t.bindModal()
   }
   // var table_init = function() {

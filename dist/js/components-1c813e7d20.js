@@ -9,7 +9,6 @@ var tab_init = function() {
   })
 }
 
-
 /**
  * @description 从字典数组中查询到
  * @param  {String} keys 输入的关键字字符串
@@ -256,7 +255,7 @@ table.prototype.addInfoCard = function() {
   var card = new table_card()
   var arr = card.tableToJsonArr($table, true) //TODO 逻辑有问题，之后再改！
   // var arr = this.table.data
-  var model =$( $(".info_card_row")[0] ) //BUG
+  var model = $($(".info_card_row")[0]) //BUG
   for (var i in arr) {
     console.log(i);
     var mod = $(model.clone()) //模板不变
@@ -282,7 +281,9 @@ table.prototype.bindModal = function() {
   var t = new table("./test/order-Detail.json", {
     hasButton: false
   })
-  $(this.table).find('tr td:nth-child(2)').on('click',{t:t}, function(e) {
+  $(this.table).find('tr td:nth-child(2)').on('click', {
+    t: t
+  }, function(e) {
     $(".goodsInfomation").empty()
     var steps = $("#orderDetail").find(".steps")
     var baseInfos = $("#orderDetail").find(".baseInfomation")
@@ -314,7 +315,7 @@ table.prototype.jsonToRow = function(cellArr, isHeader, keyArr) {
     if (isHeader) {
       var th = $("<th></th>")
       if (keyArr) {
-        th.attr("key", keyArr[i])
+        th.attr("key", keyArr[i]) //HACK 之后改结构直接获取不用写到table row上
       }
       row.append(th.html(cellArr[i]))
     } else {
@@ -327,16 +328,15 @@ table.prototype.jsonToRow = function(cellArr, isHeader, keyArr) {
       row.append($("<th key='operation'>操作</th>"))
     } else {
       var td = $("<td></td>")
-      var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\">EDIT</button>")
-      var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\">DELETE</button>")
-      editBtn.on('click', function() {
-        $("#addBtn").modal()
-        console.log($(this).parent().parent());
-      })
-      delBtn.on('click', function() {
-        $("#delBtn").modal()
-      })
-
+      var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit("+1+")\">EDIT</button>")
+      var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del("+1+")\">DELETE</button>")
+      // editBtn.on('click', function() {
+      //   $("#addBtn").modal()
+      //   console.log($(this).parent().parent());
+      // })
+      // delBtn.on('click', function() {
+      //   $("#delBtn").modal()
+      // })
       td.append(editBtn).append(delBtn)
       row.append(td)
     }

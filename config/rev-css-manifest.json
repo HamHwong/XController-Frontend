@@ -1,11 +1,9 @@
 {
   "basePage.css": "basePage-6459acd4a2.css",
   "browserConfig.css": "browserConfig-ef0cf108bc.css",
-  "components.css": "components-c04691a484.css",
+  "components.css": "components-14a37b2954.css",
   "components/contentTabs/tabSwitcher.css": "components/contentTabs/tabSwitcher-937c34aa6b.css",
   "components/header/header.css": "components/header/header-eaf125b351.css",
-  "components/input/JumpButton.css": "components/input/JumpButton-c44ad75547.css",
-  "components/input/JumpInput.css": "components/input/JumpInput-c134d29c24.css",
   "components/input/forminput.css": "components/input/forminput-711507c410.css",
   "components/modal/modal.css": "components/modal/modal-bf35e15205.css",
   "components/nav/sidenav.bak.css": "components/nav/sidenav-eb1873761d.bak.css",

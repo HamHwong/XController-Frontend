@@ -161,8 +161,7 @@
   var table_init = function() {
     var $tablecontainer = $("#goods-table-container")
     var t = new table("./test/goods-table-data.json",)
-    t.load("./test/goods-table-data.json").to($tablecontainer)
-    // console.log(t.getTable());
+    t.load().to($tablecontainer)
     t.bindModal()
   }
   // var table_init = function() {

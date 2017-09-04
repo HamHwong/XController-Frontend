@@ -118,6 +118,7 @@
   </div>
 
   <div class="operation-menu">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#purchaseRequisition">添加物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="applying">
@@ -217,7 +218,7 @@
     </nav>
   </div>
 
-  <div class="modal fade" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade bs-example-modal-lg" id="purchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -226,50 +227,43 @@
       </div>
 
       <div class="modal-body">
-        <div class="modal-infopart orderStatus">
-          <div class="steps clearfix">
-            <!-- progressbar -->
-<ul id="progressbar" class="clearfix">
-  <li class="glyphicon infomation"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon complated"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon validating"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon reject"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-</ul>
-
-          </div>
-        </div>
-        <div class="modal-infopart baseInfomation">
-          <ul>
-            <li>提交人：admin</li>
-            <li>提交人：admin</li>
-            <li>提交人：admin</li>
-            <li>提交人：admin</li>
-            <li>提交人：admin</li>
-          </ul>
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="comment" rows="4" disabled>
+        <form class="form-inline" action="index.html" method="post">
+          <div class="modal-infopart baseInfomation">
+            <ul>
+              <div class="input-group">
+                <label for="submitter">提交人:</label>
+                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+              </div>
+              <div class="input-group">
+                <label for="submitter">提交人:</label>
+                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+              </div>
+              <div class="input-group">
+                <label for="submitter">提交人:</label>
+                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+              </div>
+              <div class="input-group">
+                <label for="submitter">提交人:</label>
+                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+              </div>
+            </ul>
+            <div class="comment">
+              <span>备注：</span>
+              <textarea name="comment" rows="4">
               备注填写
               备注填写
               备注填写
             </textarea>
+            </div>
           </div>
-        </div>
-        <div class="modal-infopart goodsInfomation">
-          function (path, includeData) {
-        var d = utils.shallowCopy({}, data);
-        if (includeData) {
-          d = utils.shallowCopy(d, includeData);
-        }
-        return includeFile(path, opts)(d);
-      }
-        </div>
+          <div class="modal-infopart goodsInfomation">
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <div class="modal-infopart Approval">
           <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
         </div>
-
       </div>
     </div>
   </div>
@@ -284,8 +278,7 @@
   var table_init = function() {
     var $tablecontainer = $("#applying")
     var t = new table("./test/order-table-data.json",)
-    t.load("./test/order-table-data.json").to($tablecontainer)
-    // console.log(t.getTable());
+    t.load().to($tablecontainer)
     t.bindModal()
   }
   // var table_init = function() {
@@ -356,7 +349,7 @@
   <link rel="stylesheet" href="./css/header-d41d8cd98f.css">
   <link rel="stylesheet" href="./css/main-6d528e18a0.css">
   <link rel="stylesheet" href="./css/content-7c5fe864a5.css">
-  <link rel="stylesheet" href="./css/components-c04691a484.css">
+  <link rel="stylesheet" href="./css/components-14a37b2954.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
   <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
@@ -369,7 +362,7 @@
   <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
   <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
   <script type="text/javascript" src="./js/init-7f9445c6e7.js"></script>
-  <script type="text/javascript" src="./js/components-a71ad7a48b.js"></script>
+  <script type="text/javascript" src="./js/components-1c813e7d20.js"></script>
 
 
   <script type="text/javascript">

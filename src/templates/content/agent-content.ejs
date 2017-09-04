@@ -24,4 +24,5 @@
   </div>
 
   <%-include('/components/modal/modal',{type:"agentAdd"})%>
-  <%-include('/components/table/table.init.ejs',{container:"#agent-table-container",url:"./test/agent-table-data.json"})%>
+    <%-include('/components/table/table.init.ejs',{container:"#agent-table-container",url:"./test/agent-table-data.json"})%>
+      <%-include('/components/modal/modal',{type:"delete"})%>

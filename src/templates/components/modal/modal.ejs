@@ -8,6 +8,8 @@
   <%-include("./type/goods-Add&Edit")%>
 <%}else if(locals.type=="delete"){%>
   <%-include("./type/delete")%>
+<%}else if(locals.type=="purchaseRequisition"){%>
+  <%-include("./type/purchaseRequisition")%>
 <%}else{%>
 <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
