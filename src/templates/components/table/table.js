@@ -386,7 +386,7 @@ var table_card = function () {
                 ${headertext}
               </div>
               <div class="card_body">
-                ${rows.toString()}
+                ${rows.join("")}
               </div>
               <div class="card_foot row">
                 <div class="date">
