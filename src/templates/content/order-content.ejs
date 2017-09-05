@@ -5,10 +5,8 @@
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="todolist">
-        <%-include('/components/table/cardRow')%>
     </div>
     <div class="tab-pane" id="finished">
-      <%-include('/components/table/cardRow')%>
     </div>
     <nav style="text-align: center">
       <ul class="pagination">
@@ -24,5 +22,4 @@
   </div>
 <%-include('/components/modal/modal',{type:"orderDetail"})%>
 <%-include('/components/table/table.init.ejs',{container:"#todolist",url:"./test/order-table-data.json",hasButton:true})%>
-<%-include('/components/table/cardRow')%>
 <%-include('/components/modal/modal',{type:"delete"})%>

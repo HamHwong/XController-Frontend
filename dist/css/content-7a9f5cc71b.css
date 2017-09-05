@@ -28,7 +28,6 @@ html {
   float: left;
 }
 .tab-content table {
-  table-layout: fixed;
   word-wrap: break-word;
 }
 .tab-content table td button {
