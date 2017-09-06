@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>HomePage</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
 </head>
 
 <body>
@@ -32,16 +32,16 @@
     <ul class="nav sidebar-nav section-group">
       <li class="section"><a href="#myOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
       <li class="section "><a href="#orderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
-      <li class="section "><a href="#goodsAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
+      <li class="section "><a href="#BrochureAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
       
-      <li class="section dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>用户管理<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li class="section subsection "><a href="#agent"><span class="glyphicon glyphicon-yen"></span>代理商管理</a></li>
-          <li class="section subsection"><a href="#supplier"><span class="glyphicon glyphicon-yen"></span>供应商管理</a></li>
-        </ul>
-      </li>
-      <li class="section "><a href="#Admin"><span class="glyphicon glyphicon-yen"></span>后台管理</a></li>
+        <li class="section dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>用户管理<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="section subsection "><a href="#Dealer"><span class="glyphicon glyphicon-yen"></span>代理商管理</a></li>
+            <li class="section subsection"><a href="#Supplier"><span class="glyphicon glyphicon-yen"></span>供应商管理</a></li>
+          </ul>
+        </li>
+        <li class="section "><a href="#Admin"><span class="glyphicon glyphicon-yen"></span>后台管理</a></li>
 
     </ul>
     <div class="sideavatar">
@@ -65,43 +65,24 @@
 
     </header>
     <div id="content_wapper" class="container-fluid">
-      
-
-<div class="contentTitle">
+      <div class="contentTitle">
 <h3>我的订单</h3>
 </div>
 
-<div class="search_wapper ">
-  <form class="form-inline" role="form">
-    <div class="querycontrols clearfix">
-      <div class="col-sm-12 col-md-5">
-        <div class="form-group">
-          <label class="form-label" for="goodsNo">订单号：</label>
-          <input type="text" name="goodsNo" id="goodsNo" value="" class="form-control" placeholder="物品编号" />
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="goodsName">物品名称：</label>
-          <input type="text" name="goodsName" id="goodsName" value="" class="form-control" placeholder="物品名称" />
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-5">
-        <label class="control-label" for="">申请时间：</label>
-        <div class="form-group">
-          <input size="14" type="text" value="2012-06-15" class="form_datetime form-control">
-        </div>
-        <span>~</span>
-        <div class="form-group">
-          <input size="14" type="text" value="2012-06-15" class="form_datetime form-control">
-        </div>
+  <div class="search_wapper ">
+    <form class="form" role="form">
+      <div class="querycontrols clearfix">
+        <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4">
+          <div class="search_box_warp col-md-8 col-xs-8 ">
+              <input type="text" name="" id="search_box" value="" class="search_box form-control col-md-11" placeholder="在这里输入关键字" autocomplete="off" >
+<ul class="dropdown-menu keyhint"></ul>
 
+          </div>
+          <button type="submit" class="btn btn-success col-md-4  col-xs-4 ">Query</button>
+        </div>
       </div>
-      <div class="col-sm-12 col-md-2">
-        <button type="button" name="button" class="btn btn-default">查询</button>
-        <button type="button" name="button" class="btn btn-default">重置</button>
-      </div>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
 
 
   <div class="tabs">
@@ -236,24 +217,24 @@
     </div>
   </div>
 
-  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+  <link rel="stylesheet" href="./css/plugs/bootstrap-794f8177af.css">
   <link rel="stylesheet" href="./css/header-d41d8cd98f.css">
   <link rel="stylesheet" href="./css/main-6d528e18a0.css">
-  <link rel="stylesheet" href="./css/content-7a9f5cc71b.css">
-  <link rel="stylesheet" href="./css/components-14a37b2954.css">
+  <link rel="stylesheet" href="./css/content-1a1b7ef292.css">
+  <link rel="stylesheet" href="./css/components-34caec7732.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-  <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
-  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
+  <link rel="stylesheet" href="./css/plugs/blue-37562e0163.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome-ed05bfd415.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker-06b21e3033.css">
 
-  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
-  <script type="text/javascript" src="./js/content-935260d211.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
-  <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
-  <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
-  <script type="text/javascript" src="./js/init-7f9445c6e7.js"></script>
-  <script type="text/javascript" src="./js/components-57e966de76.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-a5a8ab0a7c.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-24276f268f.js"></script>
+  <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-25e39b7ef8.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck-ad6e7401d1.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-a5e9c378ab.js"></script>
+  <script type="text/javascript" src="./js/init-b788b57638.js"></script>
+  <script type="text/javascript" src="./js/components-4a817141c5.js"></script>
 
 
   <script type="text/javascript">

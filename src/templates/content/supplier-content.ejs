@@ -1,11 +1,14 @@
-<%-include('../components/searchWapper/supplier-searchWapper')%>
+<div class="contentTitle">
+  <h3>供应商</h3>
+</div>
+<%-include('/components/searchWapper/searchWapper')%>
 
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAgent">添加代理商</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
   </div>
 
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="supplier-table-container">
+    <div class="tab-pane active" id="Supplier-table-container">
       <table class="table table-bordered table-hover">
       </table>
     </div>
@@ -23,4 +26,4 @@
   </div>
 
   <%-include('/components/modal/modal',{type:"supplierAdd"})%>
-  <%-include('/components/table/table.init.ejs',{container:"#supplier-table-container",url:"./test/supplier-table-data.json",hasButton:false})%>
+    <%-include('/components/table/table.init.ejs',{container:"#Supplier-table-container",url:"./test/Supplier-table-data.json",hasButton:false})%>

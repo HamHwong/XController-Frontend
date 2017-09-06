@@ -1,11 +1,14 @@
-<%-include('../components/searchWapper/agent-searchWapper')%>
+<div class="contentTitle">
+<h3>代理商</h3>
+</div>
+<%-include('/components/searchWapper/searchWapper')%>
 
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAgent">添加代理商</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddDealer">添加代理商</button>
   </div>
 
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="agent-table-container">
+    <div class="tab-pane active" id="Dealer-table-container">
       <table class="table table-bordered table-hover">
       </table>
     </div>
@@ -22,6 +25,6 @@
     </nav>
   </div>
 
-  <%-include('/components/modal/modal',{type:"agentAdd"})%>
-    <%-include('/components/table/table.init.ejs',{container:"#agent-table-container",url:"./test/agent-table-data.json"})%>
+  <%-include('/components/modal/modal',{type:"DealerAdd"})%>
+    <%-include('/components/table/table.init.ejs',{container:"#Dealer-table-container",url:"./test/Dealer-table-data.json"})%>
       <%-include('/components/modal/modal',{type:"delete"})%>
