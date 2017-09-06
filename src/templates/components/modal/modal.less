@@ -18,12 +18,15 @@
   }
 
   textarea {
-    border: 0;
-    background-color: transparent;
     width: 100%;
     box-sizing: border-box;
     resize: none;
     color: #666464;
+  }
+
+  textarea:not('.editable') {
+    border: 0;
+    background-color: transparent;
   }
 }
 

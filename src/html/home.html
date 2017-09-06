@@ -1,4 +1,71 @@
-<div class="contentTitle">
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>HomePage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
+</head>
+
+<body>
+  <div id="right_wapper">
+    <header id="header_wapper" class="clearfix">
+      <div class="page-header row">
+  <div class="header_logo col-md-4 col-sm-4 ">
+    <span class="logo text-info h1"></span>
+    <span class="system_name">Brochure<br/>Management</span>
+  </div>
+  <div class="header_userInfo col-md-4 col-sm-4 col-md-offset-4 col-sm-offset-4">
+    <div class="avatar">
+      <a href="#"><img class="img-responsive" src="img/avatar.jpg" alt="" height="60px" width="60px" title="Popover title" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" data-content="左侧的 Popover 中的一些内容" ></a>
+    </div>
+    <div class="information">
+      <span class="account">Hello, Mr.User</span><br>
+      <span class="profile"><a href="#">Profile</a> <a href="#">Log Out</a></span>
+    </div>
+  </div>
+</div>
+
+      <div id="topNav_wapper" class="nav-show">
+  <span class="logo"><small>Brochure Management</small></span>
+  <nav class="topNav" id="sidebar-wrapper">
+    <ul class="nav sidebar-nav section-group">
+      <li class="section"><a href="#myOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
+      <li class="section "><a href="#orderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
+      <li class="section "><a href="#BrochureAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
+      
+        <li class="section dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>用户管理<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="section subsection "><a href="#Dealer"><span class="glyphicon glyphicon-yen"></span>代理商管理</a></li>
+            <li class="section subsection"><a href="#Supplier"><span class="glyphicon glyphicon-yen"></span>供应商管理</a></li>
+          </ul>
+        </li>
+        <li class="section "><a href="#Admin"><span class="glyphicon glyphicon-yen"></span>后台管理</a></li>
+
+    </ul>
+    <div class="sideavatar">
+      <div class="avatar">
+        <img src="./img/avatar.jpg" alt="">
+      </div>
+      <div class="greet clearfix">
+        <span>Hi,User</span>
+      </div>
+      <br/>
+      <div class="logout">
+        <span><a href="#">Logout</a></span>
+      </div>
+    </div>
+    <div class="sideBtn text-center">
+      <span class="glyphicon sideBtnIcon-open"></span>
+    </div>
+  </nav>
+
+</div>
+
+    </header>
+    <div id="content_wapper" class="container-fluid">
+      <div class="contentTitle">
 <h3>我的订单</h3>
 </div>
 
@@ -158,3 +225,39 @@
 
 
 
+
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="./css/plugs/bootstrap.css">
+  <link rel="stylesheet" href="./css/header.css">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/content.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/plugs/buttons.css">
+  <link rel="stylesheet" href="./css/plugs/blue.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
+
+  <script type="text/javascript" src="./js/plugs/jquery.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+  <script type="text/javascript" src="./js/content.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss.js"></script>
+  <script type="text/javascript" src="./js/init.js"></script>
+  <script type="text/javascript" src="./js/components.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      for (var i in init) {
+        for (var j in init[i])
+          init[i][j]()
+      }
+    })
+  </script>
+
+</body>
+
+</html>

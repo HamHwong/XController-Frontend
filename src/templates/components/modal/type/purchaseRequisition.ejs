@@ -9,40 +9,52 @@
       <div class="modal-body">
         <form class="form-inline" action="index.html" method="post">
           <div class="modal-infopart baseInfomation">
-            <ul>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-            </ul>
-            <div class="comment">
+            <div class="input-group">
+              <label for="submitter">提交人:</label>
+              <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+            </div>
+            <div class="input-group">
+              <label for="submitter">手机号:</label>
+              <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+            </div>
+            <div class="form-group input-group">
+              <label for="name">区域:</label>
+              <select class="form-control">
+                      <option value="-1" selected>请选择地区</option>
+                      <option>华东地区</option>
+                      <option>华北地区</option>
+                      <option>华中地区</option>
+                      <option>西南地区</option>
+                </select>
+            </div>
+            <div class="input-group">
+              <label for="submitter">邮箱:</label>
+              <input name="submitter" id="submitter" placeholder="请输入邮箱" class="form-control" />
+            </div>
+            <div class="input-group">
+              <label for="submitter">代理商:</label>
+              <input name="submitter" id="submitter" placeholder="请输入代理商" class="form-control" />
+            </div>
+            <div class="form-group input-group">
+              <label for="name">用途:</label>
+              <select name="PurposeFK" id="PurposeFK" class="form-control">
+                <option value="-1" selected>请选择用途</option>
+                <option>一般销售用途</option>
+              </select>
+            </div>
+            <div class="Comments editable">
               <span>备注：</span>
-              <textarea name="comment" rows="4">
-              备注填写
-              备注填写
-              备注填写
-            </textarea>
+              <textarea name="Comments" rows="4"></textarea>
             </div>
           </div>
           <div class="modal-infopart goodsInfomation">
+            <button type="button" name="addPR"></button>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <div class="modal-infopart Approval">
-          <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
+        <div class="modal-infopart">
+          <button type="submit" class="btn btn-primary col-xs-5 col-xs-offset-1">审核通过</button><button type="submit" class="btn btn-danger col-xs-5">拒绝通过</button>
         </div>
       </div>
     </div>

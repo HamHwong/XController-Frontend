@@ -99,7 +99,7 @@
   </div>
 
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#purchaseRequisition">添加物品</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#purchaseRequisition">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="applying">
@@ -132,40 +132,52 @@
       <div class="modal-body">
         <form class="form-inline" action="index.html" method="post">
           <div class="modal-infopart baseInfomation">
-            <ul>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-              <div class="input-group">
-                <label for="submitter">提交人:</label>
-                <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-              </div>
-            </ul>
-            <div class="comment">
+            <div class="input-group">
+              <label for="submitter">提交人:</label>
+              <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+            </div>
+            <div class="input-group">
+              <label for="submitter">手机号:</label>
+              <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
+            </div>
+            <div class="form-group input-group">
+              <label for="name">区域:</label>
+              <select class="form-control">
+                      <option value="-1" selected>请选择地区</option>
+                      <option>华东地区</option>
+                      <option>华北地区</option>
+                      <option>华中地区</option>
+                      <option>西南地区</option>
+                </select>
+            </div>
+            <div class="input-group">
+              <label for="submitter">邮箱:</label>
+              <input name="submitter" id="submitter" placeholder="请输入邮箱" class="form-control" />
+            </div>
+            <div class="input-group">
+              <label for="submitter">代理商:</label>
+              <input name="submitter" id="submitter" placeholder="请输入代理商" class="form-control" />
+            </div>
+            <div class="form-group input-group">
+              <label for="name">用途:</label>
+              <select name="PurposeFK" id="PurposeFK" class="form-control">
+                <option value="-1" selected>请选择用途</option>
+                <option>一般销售用途</option>
+              </select>
+            </div>
+            <div class="Comments editable">
               <span>备注：</span>
-              <textarea name="comment" rows="4">
-              备注填写
-              备注填写
-              备注填写
-            </textarea>
+              <textarea name="Comments" rows="4"></textarea>
             </div>
           </div>
           <div class="modal-infopart goodsInfomation">
+            <button type="button" name="addPR"></button>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <div class="modal-infopart Approval">
-          <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
+        <div class="modal-infopart">
+          <button type="submit" class="btn btn-primary col-xs-5 col-xs-offset-1">审核通过</button><button type="submit" class="btn btn-danger col-xs-5">拒绝通过</button>
         </div>
       </div>
     </div>
@@ -217,22 +229,22 @@
     </div>
   </div>
 
-  <link rel="stylesheet" href="./css/plugs/bootstrap-794f8177af.css">
-  <link rel="stylesheet" href="./css/header-d41d8cd98f.css">
-  <link rel="stylesheet" href="./css/main-6d528e18a0.css">
+  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+  <link rel="stylesheet" href="./css/header.css">
+  <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
   <link rel="stylesheet" href="./css/content-1a1b7ef292.css">
-  <link rel="stylesheet" href="./css/components-34caec7732.css">
+  <link rel="stylesheet" href="./css/components-ae7a00a10c.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-  <link rel="stylesheet" href="./css/plugs/blue-37562e0163.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome-ed05bfd415.min.css">
-  <link rel="stylesheet" href="./css/plugs/datetimepicker-06b21e3033.css">
+  <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
 
-  <script type="text/javascript" src="./js/plugs/jquery-a5a8ab0a7c.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-24276f268f.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
   <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-25e39b7ef8.js"></script>
-  <script type="text/javascript" src="./js/plugs/icheck-ad6e7401d1.js"></script>
-  <script type="text/javascript" src="./js/plugs/xss-a5e9c378ab.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
   <script type="text/javascript" src="./js/init-b788b57638.js"></script>
   <script type="text/javascript" src="./js/components-4a817141c5.js"></script>
 

@@ -27,7 +27,7 @@ gulp.task('webserver', function() {
     root: config.server.root,
     liveload: true,
   })
-});
+})
 
 gulp.task('less', ['clean-css'], function() {
   return gulp.src([__src + '/less/*.less', './src/templates/**/*.less'])
@@ -55,10 +55,10 @@ gulp.task('autopre', function() {
 
 //Html替换css、js文件版本
 gulp.task('revHtml', ['ejs', 'revCss', 'revJs'], function() {
-  return gulp.src([config.path.config + '/*.json', 'src/**/*.html'])
+  return gulp.src([config.path.config + '/*.json', 'src/html/**/*.html'])
     .pipe(revCollector())
-    .pipe(gulp.dest('dist'));
-});
+    .pipe(gulp.dest('dist'))
+})
 
 var jsSrc = config.path.js
 var cssSrc = config.path.css
@@ -70,19 +70,19 @@ gulp.task('revJs', ['concat-conponent-js'], function() {
     .pipe(rev.manifest({
       path: 'rev-js-manifest.json'
     }))
-    .pipe(gulp.dest('config'));
-});
+    .pipe(gulp.dest('config'))
+})
 gulp.task('revCss', ['concat-conponent-css'], function() {
-  return gulp.src([cssSrc + "/**/*.css", '!src/templates/components/**/*.css'])
+  return gulp.src([cssSrc + "/**/*.css", '!src/css/components/**/*.css'])
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/css"))
     .pipe(rev.manifest({
       path: 'rev-css-manifest.json'
     }))
-    .pipe(gulp.dest('config'));
-});
+    .pipe(gulp.dest('config'))
+})
 gulp.task('clean-css', function(event) {
-  return gulp.src(['src/css/components/**/*.css','dist/css/**/*.css'])
+  return gulp.src(['src/css/components/**/*.css','src/css/*.css','dist/css/**/*.css'])
     .pipe(clean({
       force: true
     }));
@@ -93,15 +93,21 @@ gulp.task('clean-js', function(event) {
       force: true
     }));
 })
+gulp.task('clean-html', function(event) {
+  return gulp.src(['dist/**/*.html'])
+    .pipe(clean({
+      force: true
+    }));
+})
 
-gulp.task('ejs', function() {
-  return gulp.src([__src + "/templates/**/*.ejs", "!/src/templates/components/*.ejs"])
+gulp.task('ejs',['clean-html'], function() {
+  return gulp.src([__src + "/templates/**/*.ejs", "!/src/templates/components/**/*.ejs"])
     .pipe(ejs({}, {
       root: "./src/templates"
     }, {
       ext: ".html"
     }))
-    .pipe(gulp.dest("./src/"))
+    .pipe(gulp.dest("./src/html/"))
 });
 
 gulp.task('watch', function() {

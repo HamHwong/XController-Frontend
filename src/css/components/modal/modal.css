@@ -14,14 +14,16 @@
   float: left;
 }
 .modal-infopart.baseInfomation textarea {
-  border: 0;
-  background-color: transparent;
   width: 100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   resize: none;
   color: #666464;
+}
+.modal-infopart.baseInfomation textarea:not('.editable') {
+  border: 0;
+  background-color: transparent;
 }
 .modal-infopart::before {
   text-align: left;
