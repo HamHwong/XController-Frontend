@@ -19,14 +19,14 @@
     <div class="avatar">
       <a href="#"><img class="img-responsive" src="img/avatar.jpg" alt="" height="60px" width="60px" title="Popover title" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" data-content="左侧的 Popover 中的一些内容" ></a>
     </div>
-    <div class="information">
+    <div class="information clearfix text-center">
       <span class="account">Hello, Mr.User</span><br>
-      <span class="profile"><a href="#">Profile</a> <a href="#">Log Out</a></span>
+      <span class="profile"><a href="#">Profile</a> <a href="./login.html">Log Out</a></span>
     </div>
   </div>
 </div>
 
-      <div id="topNav_wapper" class="nav-show">
+        <div id="topNav_wapper" class="nav-show">
   <span class="logo"><small>Brochure Management</small></span>
   <nav class="topNav" id="sidebar-wrapper">
     <ul class="nav sidebar-nav section-group">
@@ -53,7 +53,7 @@
       </div>
       <br/>
       <div class="logout">
-        <span><a href="#">Logout</a></span>
+        <span><a href="./login.html">Logout</a></span>
       </div>
     </div>
     <div class="sideBtn text-center">
@@ -186,6 +186,76 @@
 
 
 
+
+  <div class="modal fade" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">OrderDetail</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix">
+            <!-- progressbar -->
+<ul id="progressbar" class="clearfix">
+  <li class="glyphicon infomation"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon complated"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon validating"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+  <li class="glyphicon reject"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
+</ul>
+
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+            <li>提交人：admin</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="4" disabled>
+              备注填写
+              备注填写
+              备注填写
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+          function (path, includeData) {
+        var d = utils.shallowCopy({}, data);
+        if (includeData) {
+          d = utils.shallowCopy(d, includeData);
+        }
+        return includeFile(path, opts)(d);
+      }
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-infopart Approval">
+          <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+    <script>
+      var approve = function() {
+        $("#approve").modal()
+      }
+      var reject = function() {
+        $("#reject").modal()
+      }
+    </script>
+
+
+
 <script type="text/javascript">
     /**
    * @description Table初始化
@@ -200,8 +270,7 @@
 </script>
 
 
-  <!-- 信息删除确认 -->
-<div class="modal fade" id="delBtn">
+  <div class="modal fade" id="delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -213,15 +282,12 @@
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
+        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <a onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 
 
@@ -230,7 +296,6 @@
   </div>
 
   <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-  <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/content.css">
   <link rel="stylesheet" href="./css/components.css">
@@ -241,12 +306,13 @@
 
   <script type="text/javascript" src="./js/plugs/jquery.js"></script>
   <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-  <script type="text/javascript" src="./js/content.js"></script>
   <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
   <script type="text/javascript" src="./js/plugs/icheck.js"></script>
   <script type="text/javascript" src="./js/plugs/xss.js"></script>
+
   <script type="text/javascript" src="./js/init.js"></script>
   <script type="text/javascript" src="./js/components.js"></script>
+  <script type="text/javascript" src="./js/content.js"></script>
 
 
   <script type="text/javascript">
@@ -256,6 +322,16 @@
           init[i][j]()
       }
     })
+
+    var del = function(rid) {
+      $("#delete")
+        .modal()
+    }
+    var edit = function(rid) {
+      $("#purchaseRequisition")
+        .modal()
+    }
+
   </script>
 
 </body>

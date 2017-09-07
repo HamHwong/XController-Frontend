@@ -18,10 +18,10 @@
       <div class="form-group loginInputGroup col-center-block">
         <form class="form-inline" role="form">
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
-            <input type="text" class="form-control" placeholder="输入您的用户名">
+            <input type="text" class="form-control" id="userid" name="userid" placeholder="输入您的用户名">
           </div>
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
-            <input type="password" class="form-control" placeholder="输入您的密码">
+            <input type="password" class="form-control" id="password" name="password" placeholder="输入您的密码">
           </div>
           <div id="slide-wrapper">
             <input type="hidden" value="" id="lockable" />
@@ -61,6 +61,10 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="text/javascript">
+
+  var e = elem => document.querySelector(elem)
+  var log = (e) => console.log.bind(console)(e)
+
   $(function() {
     var slider = new SliderUnlock("#slider", {
       labelTip: "滑动验证",
@@ -73,6 +77,19 @@
   })
 
   function login() {
-    window.location.href = "/home.html"
+    switch (e('#userid').value) {
+      case 'admin':
+        window.location.href = "/home.html"
+        break
+      case 'dealer':
+        window.location.href = "/dealer-home.html"
+        break
+      case 'supplier':
+        window.location.href = "/supplier-home.html"
+        break
+      default:
+        return
+    }
+
   }
 </script>

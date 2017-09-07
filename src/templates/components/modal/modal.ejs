@@ -8,6 +8,10 @@
   <%-include("./type/Brochure-Add&Edit")%>
 <%}else if(locals.type=="delete"){%>
   <%-include("./type/delete")%>
+<%}else if(locals.type=="approve"){%>
+  <%-include("./type/approve")%>
+<%}else if(locals.type=="reject"){%>
+  <%-include("./type/reject")%>
 <%}else if(locals.type=="purchaseRequisition"){%>
   <%-include("./type/purchaseRequisition")%>
 <%}else{%>

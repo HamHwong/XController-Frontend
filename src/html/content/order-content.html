@@ -99,13 +99,22 @@
       </div>
       <div class="modal-footer">
         <div class="modal-infopart Approval">
-          <button type="submit" class="btn btn-primary col-md-5">审核通过</button><button type="submit" class="btn btn-danger col-md-5">拒绝通过</button>
+          <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
         </div>
-
       </div>
     </div>
   </div>
 </div>
+
+  
+    <script>
+      var approve = function() {
+        $("#approve").modal()
+      }
+      var reject = function() {
+        $("#reject").modal()
+      }
+    </script>
 
 
 
@@ -123,8 +132,7 @@
 </script>
 
 
-  <!-- 信息删除确认 -->
-<div class="modal fade" id="delBtn">
+  <div class="modal fade" id="delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -136,15 +144,12 @@
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
+        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <a onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
       </div>
     </div>
-    <!-- /.modal-content -->
   </div>
-  <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 
 

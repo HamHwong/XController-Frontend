@@ -11,7 +11,7 @@
   <div id="right_wapper">
     <header id="header_wapper" class="clearfix">
       <%-include("/components/header/header")%>
-        <%-include("/components/nav/topNav")%>
+        <%-include("/components/nav/supplier-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
       <%-include("/content/myorder-content")%>
@@ -37,7 +37,6 @@
   <script type="text/javascript" src="./js/components.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
 
-
   <script type="text/javascript">
     $(document).ready(function() {
       for (var i in init) {
@@ -46,22 +45,6 @@
       }
     })
 
-    var del = function(rid) {
-      $("#delete")
-        .modal()
-    }
-    var edit = function(rid) {
-      $("#purchaseRequisition")
-        .modal()
-    }
-
-    $(document).ready(function() {
-      // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
-      $(document).on('show.bs.modal', '.modal', function(event) {
-        var zIndex = 1040 + (10 * $('.modal:visible').length);
-        $(this).css('z-index', zIndex);
-      });
-    });
   </script>
 
 </body>
