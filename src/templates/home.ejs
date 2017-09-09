@@ -10,8 +10,8 @@
 <body>
   <div id="right_wapper">
     <header id="header_wapper" class="clearfix">
-      <%-include("/components/header/header")%>
-        <%-include("/components/nav/topNav")%>
+      <%-include("/components/header/admin-header")%>
+        <%-include("/components/nav/admin-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
       <%-include("/content/myorder-content")%>
@@ -54,13 +54,17 @@
       $("#purchaseRequisition")
         .modal()
     }
-
-    $(document).ready(function() {
-      // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
-      $(document).on('show.bs.modal', '.modal', function(event) {
-        var zIndex = 1040 + (10 * $('.modal:visible').length);
-        $(this).css('z-index', zIndex);
-      });
+    //多模态HACK
+    var couter = 0;
+    $(document).on('hidden.bs.modal', '.modal', function(e) {
+      $(this).css("overflow-x", "auto")
+      $(this).css("overflow-y", "auto")
+      $(this).css("z-index", 1050)
+      couter--
+    });
+    $(document).on('show.bs.modal', '.modal', function(e) {
+      $(this).css("z-index", 1050 + couter)
+      couter++
     });
   </script>
 

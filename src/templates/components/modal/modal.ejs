@@ -6,6 +6,10 @@
   <%-include("./type/order-Detail")%>
 <%}else if(locals.type=="BrochureAdd"){%>
   <%-include("./type/Brochure-Add&Edit")%>
+<%}else if(locals.type=="Brochure-Detail"){%>
+  <%-include("./type/Brochure-Detail")%>
+<%}else if(locals.type=="orderDetail-admin"){%>
+  <%-include("./type/order-Detail-admin")%>
 <%}else if(locals.type=="delete"){%>
   <%-include("./type/delete")%>
 <%}else if(locals.type=="approve"){%>

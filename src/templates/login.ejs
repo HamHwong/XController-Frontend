@@ -15,8 +15,8 @@
       <div class="system-name">Brochure&nbspManagement</div>
     </div>
     <div class="login-box col-center-block">
-      <div class="form-group loginInputGroup col-center-block">
-        <form class="form-inline" role="form">
+      <form class="form-inline" role="form" method="post" onsubmit="return login()">
+        <div class="form-group loginInputGroup col-center-block">
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
             <input type="text" class="form-control" id="userid" name="userid" placeholder="输入您的用户名">
           </div>
@@ -33,10 +33,9 @@
           <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
           </div>
           <div class="btn-group btn-block">
-            <button type="button" name="button" class="btn btn-block btn-primary" onclick="login()">登陆</button>
+            <button type="submit" name="button" class="btn btn-block btn-primary">登陆</button>
           </div>
-      </div>
-
+        </div>
       </form>
     </div>
 
@@ -61,7 +60,6 @@
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="text/javascript">
-
   var e = elem => document.querySelector(elem)
   var log = (e) => console.log.bind(console)(e)
 
@@ -70,16 +68,16 @@
       labelTip: "滑动验证",
       successLabelTip: "验证成功"
     }, function() {
-      // alert('验证成功');
       login()
     }, function() {});
     slider.init();
   })
 
   function login() {
+
     switch (e('#userid').value) {
       case 'admin':
-        window.location.href = "/home.html"
+        window.location.href = "/admin-home.html"
         break
       case 'dealer':
         window.location.href = "/dealer-home.html"
@@ -87,9 +85,7 @@
       case 'supplier':
         window.location.href = "/supplier-home.html"
         break
-      default:
-        return
     }
-
+    return false
   }
 </script>

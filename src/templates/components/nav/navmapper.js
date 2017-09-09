@@ -1,7 +1,12 @@
+// window.currentPos = "myOrder"
+
 var contentmapper = {
   myOrder: "myorder-content.html",
+  myOrderDealer: "myorder-content-dealer.html",
+  myOrderSupplier: "myorder-content-supplier.html",
   orderAdmin: "order-content.html",
-  BrochureAdmin: "Brochure-content.html",
+  Brochure: "Brochure-content.html",
+  BrochureAdmin: "Brochure-content-admin.html",
   Dealer: "Dealer-content.html",
   Supplier: "Supplier-content.html",
   Admin: ""
@@ -10,13 +15,10 @@ var contentmapper = {
 var hyperlink_init = function () {
   $(".nav .section a")
     .on('click', function () {
-      // console.log(this.attr("href"));
-      // var key = window.location.hash
-      // var file = contentmapper[key.substring(1)]
-      var file = contentmapper[$(this)
+      var position = $(this)
         .attr("href")
-        .substring(1)]
-      //
+        .substring(1)
+      var file = contentmapper[position]
       if ("" == file || undefined == file) return
       $.ajax({
         url: "./content/" + file,
@@ -24,9 +26,11 @@ var hyperlink_init = function () {
         success: function (Obj) {
           $("#content_wapper")
             .empty()
-          console.log(Obj);
           $("#content_wapper")
             .append(Obj.trim())
+
+          window.currentPos = position//HACK Button
+
           initPageByName("content")
           sideclose()
         }

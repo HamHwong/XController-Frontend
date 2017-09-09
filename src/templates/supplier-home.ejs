@@ -10,11 +10,11 @@
 <body>
   <div id="right_wapper">
     <header id="header_wapper" class="clearfix">
-      <%-include("/components/header/header")%>
+      <%-include("/components/header/header-supplier")%>
         <%-include("/components/nav/supplier-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
-      <%-include("/content/myorder-content")%>
+      <%-include("/content/myorder-content-supplier")%>
     </div>
   </div>
 
@@ -44,7 +44,16 @@
           init[i][j]()
       }
     })
-
+        //多模态HACK
+    var couter = 0;
+    $(document).on('hidden.bs.modal','.modal',function(e){
+        $(this).css("z-index", 1050)
+        couter--
+    });
+    $(document).on('show.bs.modal','.modal',function(e){
+        $(this).css("z-index", 1050+couter)
+        couter++
+    });
   </script>
 
 </body>

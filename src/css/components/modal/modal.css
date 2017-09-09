@@ -1,13 +1,30 @@
+/*HACK 解决多模态关闭之后滚轴不动的问题 */
+.modal {
+  overflow: auto !important;
+}
+@media (min-width: 768px) {
+  .lg-modal > .modal-dialog {
+    width: 80%;
+  }
+}
 .modal-infopart {
+  position: relative;
   clear: both;
 }
-.modal-infopart.baseInfomation ul {
+.modal-infopart .addBtn {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+}
+.modal-infopart.baseInfomation ul,
+.modal-infopart.baseInfomation div.comment {
   width: 100%;
   display: block;
   padding: 1rem;
   float: left;
 }
-.modal-infopart.baseInfomation ul li {
+.modal-infopart.baseInfomation ul li,
+.modal-infopart.baseInfomation div.comment li {
   list-style: none;
   display: block;
   width: 50%;
@@ -21,7 +38,7 @@
   resize: none;
   color: #666464;
 }
-.modal-infopart.baseInfomation textarea:not('.editable') {
+.modal-infopart.baseInfomation textarea[disabled] {
   border: 0;
   background-color: transparent;
 }

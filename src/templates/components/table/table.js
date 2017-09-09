@@ -1,19 +1,13 @@
 "use strict";
 
-var table = function (url, options) {
+var table = function(url, options) {
   var url = this.checkUrl(url) ? url : ""
-  var options = this.checkObj(options) ? options : new Object()
-  var opts = {
-    hasButton: typeof (options.hasButton) !== "undefined" ? options.hasButton : "false",
-  }
-
-  this.opts = opts
   this.url = url
   this.urlTimestamp = null
   this.tableHTML = null
   this.keyArr = []
   this.responseJson = null
-  this.hasButton = opts.hasButton
+  this.hasButton = false
   this.hasHeader = false
   this.Header = null
   this.container = null
@@ -21,15 +15,7 @@ var table = function (url, options) {
   this.data = {}
 }
 
-table.prototype.checkObj = function (obj) {
-  if (typeof obj === "object") {
-    return true
-  } else {
-    // throw "the params is not a object."
-    return false
-  }
-}
-table.prototype.checkUrl = function (url) {
+table.prototype.checkUrl = function(url) {
   if (typeof url === "string" && url.length > 0) {
     return true
   } else {
@@ -37,14 +23,13 @@ table.prototype.checkUrl = function (url) {
   }
 }
 
-table.prototype.load = function (url) {
+table.prototype.load = function(url) {
   //若参数带url，更新url
   if (!(url === undefined || "" === url)) {
     this.url = url
   }
   //第一次load 或者 大于60s没更新，就去获取一波
   if (this.urlTimestamp == null || this.timeDiff() > 60) {
-    console.log("update");
     this.fetch(this.url)
       .init()
       .addInfoCard()
@@ -52,11 +37,11 @@ table.prototype.load = function (url) {
   }
   return this
 }
-table.prototype.timeDiff = function () {
+table.prototype.timeDiff = function() {
   return (new Date()
     .getTime() - this.urlTimestamp.getTime()) / 1000
 }
-table.prototype.fetch = function (url) {
+table.prototype.fetch = function(url) {
   var tableJsonResponse = $.ajax({
     url: url,
     async: false
@@ -65,8 +50,10 @@ table.prototype.fetch = function (url) {
   this.responseJson = JSON.parse(tableJsonResponse.responseText)
   return this
 }
-table.prototype.init = function () {
+table.prototype.init = function() {
   this.hasHeader = this.responseJson.hasHeader
+  this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
+  console.log("hasButton", this.hasButton);
   this.keyArr = this.responseJson.keyArr
   this.PrimaryKeyIndex = this.keyArr.indexOf('id')
   var data = this.responseJson.data
@@ -74,44 +61,50 @@ table.prototype.init = function () {
   var tbody = $("<tbody></tbody>")
   //若有header，初始化header
   if (this.hasHeader) {
-    var hr = data.reverse()
-      .pop()
+    var hr = data.reverse().pop()
     this.Header = hr
-    tbody.append(this.jsonToRow(hr, true, this.keyArr)) //jsonToRow将json对象中的data数据转成hr对象
+    if (this.hasButton) {
+      this.Header.push("操作")
+      this.keyArr.push("operation")
+    }
+    var headRow = new table_row(this.Header, true, this)
+    this.data["header"] = headRow
+    tbody.append(headRow.HTMLObj) //jsonToHTMLRow将json对象中的data数据转成hr对象
     data.reverse()
+    c = this.data
   }
   //将data装载成table row
   for (var i = 0; i < data.length; i++) {
-    var row = this.jsonToRow(data[i])
+    // var row = this.jsonToHTMLRow(data[i])
+    var row = new table_row(data[i], false, this)
+    //PrimaryKeyValue 该行的主键值
     var PrimaryKeyValue = data[i][this.PrimaryKeyIndex]
-    this.data[PrimaryKeyValue] = {
-      "HTMLObj": row,
-      "JSONObj": data[i]
-    } //将主键和row绑定在一起形成键值对
-    tbody.append(row)
+    this.data[PrimaryKeyValue] = row
+    tbody.append(row.HTMLObj)
   }
   table.append(tbody)
   this.tableHTML = table
   return this
 }
-table.prototype.addInfoCard = function () {
+table.prototype.addInfoCard = function() {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
   this.tableHTML.find('tr')
     .children('*')
     .addClass('hidden-xs')
   $table = this.tableHTML
   var trs = $table.find("tr")
+  var colorArr = ["#6b85a4","#86909e","#b3b2cd"]
   for (var i = 0; i < trs.length; i++) {
     if (this.hasHeader && i == 0)
       continue
-    var cardinfo = this.rowAddCard(trs[i])
-    var mod = $(new table_card()
-      .build(cardinfo))
+    var cardinfo = this.rowAddCard(trs[i],colorArr[i%colorArr.length]) //包装成r对象
+    var mod = $(this
+      .buildCard(cardinfo)) //build成card
     mod.find(".card_head")
       .siblings('div')
       .hide()
     mod.find(".card_head")
-      .on('click', function () {
+      .on('click', function() {
         $(this)
           .siblings('div')
           .toggle()
@@ -120,7 +113,7 @@ table.prototype.addInfoCard = function () {
       .after(mod)
   }
 }
-table.prototype.to = function ($tableContainer) {
+table.prototype.to = function($tableContainer) {
   $tableContainer = $($tableContainer)
   this.container = $tableContainer
   $tableContainer.empty()
@@ -128,16 +121,14 @@ table.prototype.to = function ($tableContainer) {
   return this
 }
 //bindModal放在这里逻辑上有问题
-table.prototype.bindModal = function () {
-  var t = new table("./test/order-Detail.json", {
-    hasButton: false
-  })
+table.prototype.bindModal = function() {
+  var t = new table("./test/order-Detail.json")
   $(this.tableHTML)
     .find('tr td:nth-child(2)')
     .on('click', {
       t: t
-    }, function (e) {
-      $(".goodsInfomation")
+    }, function(e) {
+      $("#orderDetail .goodsInfomation")
         .empty()
       var steps = $("#orderDetail")
         .find(".steps")
@@ -147,7 +138,7 @@ table.prototype.bindModal = function () {
         .find(".comment")
       //此处需要一个api来获取绑定数据的json数据
       t.load()
-        .to(".goodsInfomation")
+        .to("#orderDetail .goodsInfomation")
       // console.log(t.responseJson);
       var j = t.responseJson
       var currStep = j.steps
@@ -163,58 +154,24 @@ table.prototype.bindModal = function () {
         .modal()
     })
 }
-/**
- * @param  {JsonArr}  cellArr  数据数组，数据信息
- * @param  {Boolean} isHeader 是否为标题行
- * @param  {strArr}  keyArr   'prop','key','operation'
- * @return {JQueryTableRow}   Table的row
- */
-table.prototype.jsonToRow = function (cellArr, isHeader, keyArr) {
-  var row = $("<tr></tr>")
-  var id = null;
-  for (var i = 0; i < cellArr.length; i++) {
-    if (isHeader) {
-      var th = $("<th></th>")
-      row.append(th.html(cellArr[i]))
-    } else {
-      var td = $("<td></td>")
-      row.append(td.html(cellArr[i]))
-    }
-  }
-  if (this.hasButton) {
-    if (isHeader) {
-      row.append($("<th key='operation'>操作</th>"))
-    } else {
-      var td = $("<td></td>")
-      var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
-        .html() //HACK
-      var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit(" + PrimaryKeyValue + ")\">EDIT</button>")
-      var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del(" + PrimaryKeyValue + ")\">DELETE</button>")
-      td.append(editBtn)
-        .append(delBtn)
-      row.append(td)
-    }
-  }
-  return row
-}
-table.prototype.rowAddCard = function (row, color) {
+table.prototype.rowAddCard = function(row, color) {
   row = $(row)
-  var color = color ? color : "#4A8BC2"
+  var color = color ? color : "#6b85a4"
   var headers = {}
   var props = {}
   var publishDate = null
   for (var i in this.keyArr) {
     var tds = row.children("td") // 该行所有的tds
-    props[this.Header[i]] = filterXSS($(tds[i])
-      .html())
+    props[this.Header[i]] = $(tds[i])
+      .html() //展示没有必要XSS,控制写入时就行
     //遍历keyArr,找到key对应的数据，填入
     if ("key" == this.keyArr[i] || "id" == this.keyArr[i]) {
-      headers[this.Header[i]] = filterXSS($(tds[i])
-        .html())
+      headers[this.Header[i]] = $(tds[i])
+        .html()
     }
     if ("publishDate" == this.keyArr[i]) {
-      publishDate = filterXSS($(tds[i])
-        .html())
+      publishDate = $(tds[i])
+        .html()
     }
   }
   var r = {
@@ -225,65 +182,63 @@ table.prototype.rowAddCard = function (row, color) {
   }
   return r
 }
+table.prototype.buildCard = function(Obj) {
+  var header = Obj.Header
+  var props = Obj.Props
+  var date = Obj.Date
+  var bgcolor = Obj.Bgcolor
+  var headertext = ""
+  for (var headertitle in header) {
+    var headertextcontent = props[headertitle]
+    if (headertextcontent.length > 20)
+      headertextcontent = headertextcontent.substring(0, 20) + "..."
+    headertext += headertitle + ":" + headertextcontent
+    headertext += ",<br>"
+  }
+  headertext = headertext.substring(0, headertext.lastIndexOf(","))
 
-var table_card = function () {
-  this.build = function (Obj) {
-    var header = Obj.Header
-    var props = Obj.Props
-    var date = Obj.Date
-    var bgcolor = Obj.Bgcolor
-    var headertext = ""
-    for (var headertitle in header) {
-      var headertextcontent = props[headertitle]
-      if (headertextcontent.length > 20)
-        headertextcontent = headertextcontent.substring(0, 20) + "..."
-      headertext += headertitle + ":" + headertextcontent
-      headertext += ",<br>"
-    }
-    headertext = headertext.substring(0, headertext.lastIndexOf(","))
-
-    var row = function (propName, value) {
-      var propName = propName
-      var value = value
-      var m =
-        `
-        <div class="row card_data_row">
-          <div class="col-xs-4 card_data_title">
-          ${propName}:
-          </div>
-          <div class="col-xs-8 card_data">
-          ${value}
-          </div>
+  var row = function(propName, value) {
+    var propName = propName
+    var value = value
+    var m =
+      `
+      <div class="row card_data_row">
+        <div class="col-xs-4 card_data_title">
+        ${propName}:
         </div>
-        `
-      return m
-    }
-    var rows = []
-    for (var key in props) {
-      var k = key
-      var v = props[key]
-      var r = row(k, v)
-      rows.push(r)
-    }
-    var template =
-      `<tr class="info_card_row">
-          <td colspan="1">
-            <div class="card col-xs-12 row" style="border-color:${bgcolor}">
-              <div class="card_head row" style="background-color:${bgcolor}">
-                ${headertext}
-              </div>
-              <div class="card_body">
-                ${rows.join("")}
-              </div>
-              <div class="card_foot row">
-                <div class="date">
-                  data:yyyy-mm-dd
-                </div>
+        <div class="col-xs-8 card_data">
+        ${value}
+        </div>
+      </div>
+      `
+    return m
+  }
+  var rows = []
+  for (var key in props) {
+    var k = key
+    var v = props[key]
+    var r = row(k, v)
+    rows.push(r)
+  }
+
+  var template =
+    `<tr class="info_card_row">
+        <td colspan="1">
+          <div class="card col-xs-12 row" style="border-color:${bgcolor}">
+            <div class="card_head row" style="background-color:${bgcolor}">
+              ${headertext}
+            </div>
+            <div class="card_body">
+              ${rows.join("")}
+            </div>
+            <div class="card_foot row">
+              <div class="date">
+                data:yyyy-mm-dd
               </div>
             </div>
-          </td>
-        </tr>`
+          </div>
+        </td>
+      </tr>`
 
-    return template
-  }
+  return template
 }

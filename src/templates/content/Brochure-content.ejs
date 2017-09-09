@@ -24,4 +24,5 @@
     </nav>
   </div>
 
-  <%-include('/components/table/table.init.ejs',{container:"#Brochure-table-container",url:"./test/Brochure-table-data.json",hasButton:false})%>
+  <%-include('/components/table/table.init.ejs',{container:"#Brochure-table-container",url:"./test/admin/Brochure-table-data.json"})%>
+  <%-include('/components/modal/modal',{type:"Brochure-Detail"})%>

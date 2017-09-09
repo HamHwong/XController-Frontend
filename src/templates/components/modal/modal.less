@@ -1,9 +1,24 @@
+/*HACK 解决多模态关闭之后滚轴不动的问题 */
+.modal { overflow: auto !important; }
+
+.lg-modal>.modal-dialog{
+    @media(min-width: 768px){
+      width:80%;
+    }
+}
+
 .modal-infopart {
+  position: relative;
   clear: both;
+  .addBtn {
+    position: absolute;
+    right: 1rem;
+    top:0.5rem;
+  }
 }
 
 .modal-infopart.baseInfomation {
-  ul {
+  ul,div.comment {
     width: 100%;
     display: block;
     padding: 1rem;
@@ -24,7 +39,7 @@
     color: #666464;
   }
 
-  textarea:not('.editable') {
+  textarea[disabled]{
     border: 0;
     background-color: transparent;
   }
