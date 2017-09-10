@@ -1,0 +1,29 @@
+<div class="contentTitle">
+  <h3>物品出入库</h3>
+</div>
+
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddBrochure">添加物品</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Brochure-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
+  </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+
+<%-include('/components/table/table.init.ejs',{container:"#Brochure-table-container",url:"./test/supplier/BrochureInventory-table-data.json"})%>
+  <%-include('/components/modal/modal',{type:"Brochure-Detail"})%>
+  <%-include('/components/modal/modal',{type:"BrochureAdd"})%>

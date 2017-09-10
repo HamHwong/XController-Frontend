@@ -4,13 +4,13 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.keyArr = ParentTable.keyArr
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
-  this.HTMLObj = this.init(data, this.keyArr, this.hasButton, this.isHeader)
   this.JSONObj = data
+  this.HTMLObj = this.init(this.JSONObj, this.keyArr, this.hasButton, this.isHeader)
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
 table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
-  var row = $("<tr></tr>")
+  var row = isHeader?$("<tr id='header'></tr>"):$("<tr></tr>")
   var id = null;
   for (var i = 0; i < data.length; i++) {
     if (isHeader) {
@@ -23,7 +23,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   }
   if (hasButton && !isHeader) {
     //如果是header行，则不用加button
-    var td = $("<td></td>")
+    var td = $("<td class='operation'></td>")
     var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
       .html() //HACK
     var buttonPool = []
@@ -33,12 +33,16 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve(" + PrimaryKeyValue + ")\">通过</button>")
     var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject(" + PrimaryKeyValue + ")\">拒绝</button>")
     var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate(" + PrimaryKeyValue + ")\">物流更新</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished(" + PrimaryKeyValue + ")\">完成</button>")
+    var historydBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
 
     //HACK button
     switch (window.currentPos) {
       case "myOrder":
+      case "myOrderSupplier":
       case "myOrderDealer":
         buttonPool.push(expressBtn)
+        buttonPool.push(finishedBtn)
         break
       case "orderAdmin":
         buttonPool.push(approveBtn)
@@ -48,6 +52,9 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
         buttonPool.push(supplyBtn)
         buttonPool.push(editBtn)
         buttonPool.push(delBtn)
+        //HACK 需要为管理员单独列一个
+        buttonPool.push(historydBtn)
+
         break
       case "Dealer":
         buttonPool.push(editBtn)

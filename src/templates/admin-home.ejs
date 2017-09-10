@@ -10,7 +10,7 @@
 <body>
   <div id="right_wapper">
     <header id="header_wapper" class="clearfix">
-      <%-include("/components/header/admin-header")%>
+      <%-include("/components/header/header")%>
         <%-include("/components/nav/admin-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
@@ -36,7 +36,7 @@
   <script type="text/javascript" src="./js/init.js"></script>
   <script type="text/javascript" src="./js/components.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
-
+  <script type="text/javascript" src="./js/cookies.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
@@ -46,14 +46,7 @@
       }
     })
 
-    var del = function(rid) {
-      $("#delete")
-        .modal()
-    }
-    var edit = function(rid) {
-      $("#purchaseRequisition")
-        .modal()
-    }
+
     //多模态HACK
     var couter = 0;
     $(document).on('hidden.bs.modal','.modal',function(e){

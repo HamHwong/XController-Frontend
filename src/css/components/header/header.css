@@ -39,7 +39,8 @@ html {
   }
 }
 .page-header .header_logo .system_name {
-  vertical-align: bottom;
+  display: block;
+  float: left;
 }
 @media (max-width: 768px) {
   .page-header .header_logo {

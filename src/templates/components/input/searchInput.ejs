@@ -1,0 +1,22 @@
+<%#
+  ComponentsName:formInput
+  Description:Bootstrap form input
+  Author:Ham
+  Required:
+    :
+  Options:
+%>
+<div class="form-group">
+  <div class="">
+    <input type="<%-locals.type%>"
+    class="form-control"
+    <%if(locals.id){%>
+    name="<%-locals.id%>"
+    id="<%-locals.id%>"
+    <%}%>
+    <%if(locals.placeholder){%>
+      placeholder="<%-locals.placeholder%>"
+    <%}%>
+    />
+  </div>
+</div>

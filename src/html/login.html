@@ -55,6 +55,7 @@
 <link rel="stylesheet" href="./css/plugs/slideunlock.css">
 <script type="text/javascript" src="./js/plugs/jquery.js"></script>
 <script type="text/javascript" src="./js/plugs/slideunlock.min.js"></script>
+<script type="text/javascript" src="./js/cookies.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
@@ -78,12 +79,19 @@
     switch (e('#userid').value) {
       case 'admin':
         window.location.href = "/admin-home.html"
+        setCookie("auth","admin")
         break
       case 'dealer':
         window.location.href = "/dealer-home.html"
+        setCookie("auth","dealer")
         break
       case 'supplier':
         window.location.href = "/supplier-home.html"
+        setCookie("auth","supplier")
+        break
+      case 'sell':
+        window.location.href = "/supplier-home.html"
+        setCookie("auth","sell")
         break
     }
     return false

@@ -12,16 +12,16 @@
     <header id="header_wapper" class="clearfix">
       <div class="page-header row">
   <div class="header_logo col-md-4 col-sm-4 ">
-    <span class="logo text-info h1"></span>
-    <span class="system_name">Brochure<br/>Management</span>
+    <span class="logo text-info h1 clearfix"></span>
+    <span class="system_name">Brochure Management</span>
   </div>
   <div class="header_userInfo col-md-4 col-sm-4 col-md-offset-4 col-sm-offset-4">
     <div class="avatar">
       <a href="#"><img class="img-responsive" src="img/avatar.jpg" alt="" height="60px" width="60px" title="Popover title" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" data-content="左侧的 Popover 中的一些内容" ></a>
     </div>
     <div class="information clearfix text-center">
-      <span class="account">Hello,<span class="uname">supplier</span></span><br>
-      <span class="profile"><a href="#">Profile</a> <a href="./login.html">Log Out</a></span>
+      <span class="account">Hello,<span class="uname"></span></span><br>
+      <span class="profile"><a href="#">Profile</a> <a href="javascript:;" class="logout">Log Out</a></span>
     </div>
   </div>
 </div>
@@ -31,8 +31,7 @@
   <nav class="topNav" id="sidebar-wrapper">
     <ul class="nav sidebar-nav section-group">
       <li class="section"><a href="#myOrderSupplier"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
-      <li class="section "><a href="#orderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
-      <li class="section "><a href="#BrochureAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
+      <li class="section"><a href="#Inventory"><span class="glyphicon glyphicon-th-list"></span>入库管理</a></li>
     </ul>
     <div class="sideavatar">
       <div class="avatar">
@@ -63,180 +62,60 @@
   <h3>我的订单</h3>
 </div>
 
-  <div class="search_wapper ">
-    <form class="form" role="form">
-      <div class="querycontrols clearfix">
-        <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4">
-          <div class="search_box_warp col-md-8 col-xs-8 ">
-              <input type="text" name="" id="search_box" value="" class="search_box form-control col-md-11" placeholder="在这里输入关键字" autocomplete="off" >
-<ul class="dropdown-menu keyhint"></ul>
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab">
+    
+      
+        <li><a href=#applying>处理中</a></li>
+        
+        <li><a href=#finished>已完成</a></li>
+        
+  </ul>
 
-          </div>
-          <button type="submit" class="btn btn-primary col-md-4  col-xs-4 ">Query</button>
-        </div>
+  <div class="form-group pull-right  col-xs-3 col-sm-6 col-md-4">
+    <form class="" method="post">
+      <div class="col-md-8 col-sm-8 col-xs-12 ">
+        
+<div class="form-group">
+  <div class="">
+    <input type=""
+    class="form-control"
+    
+    
+      placeholder="在这里输入关键字"
+    
+    />
+  </div>
+</div>
+
       </div>
+      <button type="submit" class="btn btn-primary col-md-4  col-xs-4 hidden-xs ">Query</button>
     </form>
   </div>
 
+</div>
 
-    <div class="tabs">
-    <ul class="nav nav-tabs" id="myTab">
-      
-      
-        <li><a href=#applying>申请中</a></li>
-      
-        <li><a href=#finished>已完成</a></li>
-      
-        <li><a href=#reject>拒绝</a></li>
-      
-    </ul>
+  <div class="operation-menu">
   </div>
-
-    <div class="operation-menu">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#purchaseRequisition">申领物品</button>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="applying">
     </div>
-    <div class="table-content tab-content">
-      <div class="tab-pane active" id="applying">
-      </div>
-      <div class="tab-pane" id="finished">
-      </div>
-      <div class="tab-pane" id="reject">
-      </div>
-      <nav style="text-align: center">
-        <ul class="pagination">
-          <li><a href="#">&laquo;</a></li>
-          <li><a href="#">1</a></li>
-          <li><a href="#">2</a></li>
-          <li><a href="#">3</a></li>
-          <li><a href="#">4</a></li>
-          <li><a href="#">5</a></li>
-          <li><a href="#">&raquo;</a></li>
-        </ul>
-      </nav>
+    <div class="tab-pane" id="finished">
     </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
     
-  <div class="modal fade lg-modal" id="purchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">订单申请</h4>
-      </div>
-
-      <div class="modal-body">
-        <form class="form" action="index.html" method="post">
-          <div class="modal-infopart baseInfomation form-group">
-            <div class="form-group">
-              <label for="submitter">代理商:</label>
-              <input name="submitter" id="submitter" placeholder="请输入代理商" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label for="submitter">手机号:</label>
-              <input name="submitter" id="submitter" placeholder="请输入姓名" class="form-control" />
-            </div>
-            <div class="form-group">
-              <label for="name">用途:</label>
-              <select name="PurposeFK" id="PurposeFK" class="form-control">
-                <option value="-1" selected>请选择用途</option>
-                <option>一般销售用途</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="name">区域:</label>
-              <select class="form-control">
-                      <option value="-1" selected>请选择地区</option>
-                      <option>华东地区</option>
-                      <option>华北地区</option>
-                      <option>华中地区</option>
-                      <option>西南地区</option>
-                </select>
-            </div>
-            <div class="form-group">
-              <label for="submitter">邮箱:</label>
-              <input name="submitter" id="submitter" placeholder="请输入邮箱" class="form-control" />
-            </div>
-
-            <div class="Comments editable">
-              <span>备注：</span>
-              <textarea name="Comments" rows="4"></textarea>
-            </div>
-          </div>
-          <div class="modal-infopart goodsInfomation">
-            <button type="button" name="addPR" class="btn btn-primary addBtn" data-toggle="modal" data-target="#AddBrochureType"><span class="glyphicon glyphicon-plus"></span></button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <div class="modal-infopart">
-          <button type="submit" class="btn btn-primary col-xs-5 col-xs-offset-1">提交</button><button type="button" class="btn btn-danger col-xs-5" data-dismiss="modal" aria-hidden="true">取消</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="modal fade" id="AddBrochureType" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">添加物品</h4>
-      </div>
-
-      <div class="modal-body">
-        <form id="add_BrochureType" class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-sm-3 control-label">申请种类 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureType" id="BrochureType" placeholder="输入关键字" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">申请数量 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="申请数量" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">收货人 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="收货人" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">收货电话 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="收货电话" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">交付时间 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="交付时间" required />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">收货地址 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="收货地址" required />
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span></button>
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span></button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-      
-  <div class="modal fade lg-modal" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal fade lg-modal" id="ExpressrUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -245,19 +124,6 @@
       </div>
 
       <div class="modal-body">
-        <div class="modal-infopart orderStatus">
-          <div class="steps clearfix">
-            <!-- progressbar -->
-<ul id="progressbar" class="clearfix">
-  <li class="glyphicon complated"><a href="#">提出申请<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon complated"><a href="#">直线经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon validating"><a href="#">BU经理<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon reject"><a href="#">通知MM<span class="operationtime">2016.11.12  00:00</span></a></li>
-  <li class="glyphicon reject"><a href="#">结束<span class="operationtime">2016.11.12  00:00</span></a></li>
-</ul>
-
-          </div>
-        </div>
         <div class="modal-infopart baseInfomation">
           <ul>
             <li>提交人：admin</li>
@@ -274,10 +140,14 @@
         </div>
         <div class="modal-infopart goodsInfomation">
         </div>
+        <div class="modal-infopart expressUpdate">
+          <textarea name="name" rows="3" cols="80" placeholder="请在此输入最新订单信息"></textarea>
+        </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
-          <button type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">提交</button>
+          <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
         </div>
       </div>
     </div>
@@ -286,18 +156,36 @@
 
 
 
-        <script type="text/javascript">
+      <script type="text/javascript">
   /**
    * @description Table初始化
    */
   var table_init = function() {
     var $tablecontainer = $("#applying")
-    var t = new table("./test/order-table-data.json")
+    var t = new table("./test/supplier/order-table-data.json")
     t.load().to($tablecontainer)
     t.bindModal()
   }
 </script>
 
+        <script>
+          var CurrentTableList = {
+            "#applying": "./test/supplier/myorder-approving-table-data.json",
+            "#finished": "./test/supplier/myorder-success-table-data.json",
+          }
+          var table_init = function() {
+            for (var i in CurrentTableList) {
+              var $tablecontainer = $(i)
+              var t = new table(CurrentTableList[i])
+              t.load().to($tablecontainer)
+              t.bindModal()
+            }
+          }
+
+          var expressUpdate=function(){
+            $("#ExpressrUpdate").modal()
+          }
+        </script>
 
     </div>
   </div>
@@ -305,7 +193,7 @@
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
   <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
   <link rel="stylesheet" href="./css/content-1a1b7ef292.css">
-  <link rel="stylesheet" href="./css/components-10c776e7e1.css">
+  <link rel="stylesheet" href="./css/components-65b5c45704.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
   <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
@@ -317,10 +205,10 @@
   <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
   <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
 
-  <script type="text/javascript" src="./js/init-b788b57638.js"></script>
-  <script type="text/javascript" src="./js/components-c9fe028031.js"></script>
+  <script type="text/javascript" src="./js/init-a534b79e2a.js"></script>
+  <script type="text/javascript" src="./js/components-f21f915391.js"></script>
   <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
-
+  <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       for (var i in init) {

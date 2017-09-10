@@ -3,7 +3,7 @@
 
 .lg-modal>.modal-dialog{
     @media(min-width: 768px){
-      width:80%;
+      width:70%;
     }
 }
 
@@ -15,6 +15,13 @@
     right: 1rem;
     top:0.5rem;
   }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      resize: none;
+      color: #666464;
+    }
 }
 
 .modal-infopart.baseInfomation {
@@ -32,12 +39,6 @@
     }
   }
 
-  textarea {
-    width: 100%;
-    box-sizing: border-box;
-    resize: none;
-    color: #666464;
-  }
 
   textarea[disabled]{
     border: 0;
@@ -73,4 +74,7 @@
 
 .Approval::before {
   content: '审批'!important;
+}
+.expressUpdate::before {
+  content: '订单物流'!important;
 }

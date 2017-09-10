@@ -10,8 +10,8 @@
     <form class="form" role="form">
       <div class="querycontrols clearfix">
         <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4">
-          <div class="search_box_warp col-md-8 col-xs-8 ">
-              <%-include('/components/inputQuery/inputQuery')%>
+          <div class="col-md-8 col-xs-8 ">
+              <%-include('/components/input/searchInput',{name:"search_box",placeholder:"在这里输入关键字"})%>
           </div>
           <button type="submit" class="btn btn-primary col-md-4  col-xs-4 ">Query</button>
         </div>

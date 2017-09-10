@@ -1,7 +1,6 @@
 "use strict";
 
-var table = function(url, options) {
-  var url = this.checkUrl(url) ? url : ""
+var table = function(url) {
   this.url = url
   this.urlTimestamp = null
   this.tableHTML = null
@@ -14,15 +13,6 @@ var table = function(url, options) {
   this.PrimaryKeyIndex = null;
   this.data = {}
 }
-
-table.prototype.checkUrl = function(url) {
-  if (typeof url === "string" && url.length > 0) {
-    return true
-  } else {
-    throw "the params is not a url."
-  }
-}
-
 table.prototype.load = function(url) {
   //若参数带url，更新url
   if (!(url === undefined || "" === url)) {
@@ -53,14 +43,14 @@ table.prototype.fetch = function(url) {
 table.prototype.init = function() {
   this.hasHeader = this.responseJson.hasHeader
   this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
-  console.log("hasButton", this.hasButton);
+  // console.log("hasButton", this.hasButton);
   this.keyArr = this.responseJson.keyArr
   this.PrimaryKeyIndex = this.keyArr.indexOf('id')
   var data = this.responseJson.data
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
   //若有header，初始化header
-  if (this.hasHeader) {
+  if (this.hasHeader&&!this.Header) {
     var hr = data.reverse().pop()
     this.Header = hr
     if (this.hasButton) {
@@ -70,8 +60,8 @@ table.prototype.init = function() {
     var headRow = new table_row(this.Header, this, true)
     this.data["header"] = headRow
     tbody.append(headRow.HTMLObj) //jsonToHTMLRow将json对象中的data数据转成hr对象
+    
     data.reverse()
-    c = this.data
   }
   //将data装载成table row
   for (var i = 0; i < data.length; i++) {
@@ -97,7 +87,7 @@ table.prototype.to = function($tableContainer) {
 table.prototype.bindModal = function() {
   var t = new table("./test/order-Detail.json")
   $(this.tableHTML)
-    .find('tr td:nth-child(2)')
+    .find('tr:not(.info_card_row) td:not(.operation)')
     .on('click', {
       t: t
     }, function(e) {
@@ -153,4 +143,28 @@ table.prototype.addInfoCard = function() {
       .after(mod)
     i++
   }
+}
+table.prototype.new = function(tablename, header, keyArr) {
+  var Json = {
+    "tablename": "",
+    "hasHeader": true,
+    "hasButton": false,
+    "keyArr": [],
+    "data": []
+  }
+  Json["tablename"]  = tablename
+  Json["keyArr"] = keyArr
+  Json["data"].push(header)
+  this.Header= header
+  window.__newTable = this
+  this.responseJson = Json
+  return this
+}
+
+table.prototype.addRow = function(Obj) {
+  var rj =this.responseJson
+  rj["data"].push(Obj)
+  this.init().addInfoCard()
+  this.to(this.container)
+  this.responseJson = rj
 }

@@ -1,15 +1,17 @@
 .modal-infopart,.page-header .header_logo{position:relative}
 #progressbar li,#topNav_wapper li,#topNav_wapper ul{float:left;list-style:none}
 .nav.nav-tabs{border-bottom:none;margin-bottom:1px}
+.tabs>*{float:left}
+.tabs .form-group{margin-bottom:0;padding-left:0;padding-right:0}
 .page-header{margin:0;border-bottom:0;padding:10px}
 @media (max-width:400px){.page-header{display:block}
 }
 @media (min-width:400px) and (max-width:768px){.page-header{display:none}
 }
 @media (min-width:768px){.page-header .header_logo .logo:before{float:left;display:block;width:5rem;height:5rem;content:'';background:url(../img/zeiss-logo.svg) no-repeat}
-.lg-modal>.modal-dialog{width:80%}
+.lg-modal>.modal-dialog{width:70%}
 }
-.page-header .header_logo .system_name{vertical-align:bottom}
+.page-header .header_logo .system_name{display:block;float:left}
 @media (max-width:768px){.page-header{margin:0}
 .page-header .header_logo{display:none}
 }
@@ -23,15 +25,18 @@
 .modal{overflow:auto!important}
 .modal-infopart{clear:both}
 .modal-infopart .addBtn{position:absolute;right:1rem;top:.5rem}
+.modal-infopart textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
 .modal-infopart.baseInfomation div.comment,.modal-infopart.baseInfomation ul{width:100%;display:block;padding:1rem;float:left}
 .modal-infopart.baseInfomation div.comment li,.modal-infopart.baseInfomation ul li{list-style:none;display:block;width:50%;float:left}
-.modal-infopart.baseInfomation textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
 .modal-infopart.baseInfomation textarea[disabled]{border:0;background-color:transparent}
 .modal-infopart::before{text-align:left;content:'';display:block;width:100%;min-height:4rem;background-color:#e4e6eb;font-size:2rem;font-weight:700;color:#000;padding:.5rem 1rem;margin-bottom:1rem}
 .orderStatus::before{content:'订单状态'!important}
 .baseInfomation::before{content:'基础信息'!important}
 .goodsInfomation::before{content:'物品信息'!important}
 .Approval::before{content:'审批'!important}
+.expressUpdate::before{content:'订单物流'!important}
+*{padding:0;margin:0}
+html{font-size:10px}
 #topNav_wapper{color:#337ab7;float:left;width:100%;background:-webkit-gradient(linear,left bottom,left top,from(#E7EEF5),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:linear-gradient(to top,#E7EEF5 0,#F5F9FD 60%)}
 @media (max-width:768px){#topNav_wapper{background:-webkit-gradient(linear,left bottom,left top,from(#C2CFDD),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:linear-gradient(to top,#C2CFDD 0,#F5F9FD 60%)}
 #topNav_wapper .sidebar-nav{border-top:1px solid #cddbeb;background:-webkit-gradient(linear,left bottom,left top,from(#C2CFDD),color-stop(30%,#F5F9FD));background:-webkit-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:-moz-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:-o-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:linear-gradient(to top,#C2CFDD 0,#F5F9FD 30%)}
@@ -101,7 +106,7 @@ to{height:auto}
 #progressbar{margin:0 auto}
 #progressbar .operationtime{display:block}
 #progressbar:after{clear:both}
-#progressbar li{display:block;color:#000;line-height:4rem;width:20%}
+#progressbar li{display:block;color:#000;line-height:4rem;width:25%}
 #progressbar li a{display:block;width:100%;text-align:center;line-height:2rem}
 #progressbar li::before{content:"";display:block;text-align:center;font-size:2rem;width:4rem;height:4rem;-webkit-border-radius:2rem;-moz-border-radius:2rem;border-radius:2rem;margin:0 auto;background-color:#d4d4d4;position:relative;z-index:2}
 #progressbar li::after{position:relative;height:.2rem;width:-webkit-calc(96%);width:-moz-calc(96%);width:calc(96%);top:-6rem;left:-webkit-calc(52%);left:-moz-calc(52%);left:calc(52%);content:"";display:block;background-color:#d4d4d4;z-index:1}
@@ -113,10 +118,6 @@ to{height:auto}
 #progressbar li.viewed::before{content:"\e105";background-color:#506687}
 #progressbar li.reject::before{content:'\e014';background-color:#de4747}
 #progressbar li.active::before{color:#FFF}
-*{padding:0;margin:0}
-html{font-size:10px}
-.search_wapper{margin:2rem 0;background:-webkit-gradient(linear,left bottom,left top,from(#E7EEF5),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:linear-gradient(to top,#E7EEF5 0,#F5F9FD 60%);padding:1rem .5rem;-webkit-border-radius:.5rem;-moz-border-radius:.5rem;border-radius:.5rem}
-.search_wapper .querycontrols{color:#fff}
-.search_wapper .querycontrols .form-group{margin-bottom:auto}
+table .btn{margin-right:1rem}
 @media (min-width:768px){.contentTitle h3{margin-top:0}
 }

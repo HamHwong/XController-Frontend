@@ -6,6 +6,10 @@
   <%-include("./type/order-Detail")%>
 <%}else if(locals.type=="BrochureAdd"){%>
   <%-include("./type/Brochure-Add&Edit")%>
+<%}else if(locals.type=="Admin.BrochureAdmin.Add"){%>
+  <%-include("./type/Admin/Brochure-Add")%>
+<%}else if(locals.type=="Admin.BrochureAdmin.Edit"){%>
+  <%-include("./type/Admin/Brochure-Edit")%>
 <%}else if(locals.type=="Brochure-Detail"){%>
   <%-include("./type/Brochure-Detail")%>
 <%}else if(locals.type=="orderDetail-admin"){%>
@@ -18,6 +22,8 @@
   <%-include("./type/reject")%>
 <%}else if(locals.type=="purchaseRequisition"){%>
   <%-include("./type/purchaseRequisition")%>
+<%}else if(locals.type=="Supplier.Express.Update"){%>
+  <%-include("./type/Supplier/SupplierExpressUpdate")%>
 <%}else{%>
 <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">

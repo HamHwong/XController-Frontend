@@ -50,11 +50,32 @@ var sideBtn_init = function () {
       }
     })
 }
+
+var logout_init = function(){
+  $(".logout").on("click",function(){
+      delCookie("atuh")
+      window.location.href = "/login.html"
+  })
+}
+
+var name_init = function(){
+  var name = getCookie("auth")
+  if(name){
+    $(".uname").text(name)
+  }
+}
+
 var init = {
   home: {},
   header: {
     popover: function () {
       popover_init()
+    },
+    logout: function(){
+      logout_init()
+    },
+    name:function(){
+      name_init()
     }
   },
   content: {

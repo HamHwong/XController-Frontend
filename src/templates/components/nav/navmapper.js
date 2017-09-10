@@ -9,6 +9,7 @@ var contentmapper = {
   BrochureAdmin: "Brochure-content-admin.html",
   Dealer: "Dealer-content.html",
   Supplier: "Supplier-content.html",
+  Inventory:"Supplier-Inventory.html",
   Admin: ""
 }
 

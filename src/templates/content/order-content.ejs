@@ -5,15 +5,16 @@
 <div class="contentTitle">
 <h3>订单管理</h3>
 </div>
-<%-include('/components/searchWapper/searchWapper')%>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{todolist:"待办事项",finished:"已完成"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{todolist:"处理中",finished:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="todolist">
     </div>
     <div class="tab-pane" id="finished">
+    </div>
+    <div class="tab-pane" id="reject">
     </div>
     <nav style="text-align: center">
       <ul class="pagination">
