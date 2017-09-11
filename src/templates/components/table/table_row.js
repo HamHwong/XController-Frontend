@@ -1,7 +1,8 @@
-var table_row = function(data, ParentTable, isHeader, Headers) {
+var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
   this.keyArr = ParentTable.keyArr
+  this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
   this.JSONObj = data
@@ -9,8 +10,8 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
-table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
-  var row = isHeader?$("<tr id='header'></tr>"):$("<tr></tr>")
+table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
+  var row = isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
   for (var i = 0; i < data.length; i++) {
     if (isHeader) {
@@ -34,38 +35,44 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject(" + PrimaryKeyValue + ")\">拒绝</button>")
     var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate(" + PrimaryKeyValue + ")\">物流更新</button>")
     var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished(" + PrimaryKeyValue + ")\">完成</button>")
-    var historydBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
+    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy(" + PrimaryKeyValue + ")\">Copy</button>")
+    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft(" + PrimaryKeyValue + ")\">delate</button>")
 
     //HACK button
     switch (window.currentPos) {
-      case "myOrder":
-      case "myOrderSupplier":
-      case "myOrderDealer":
-        buttonPool.push(expressBtn)
-        buttonPool.push(finishedBtn)
-        break
-      case "orderAdmin":
-        buttonPool.push(approveBtn)
-        buttonPool.push(rejectBtn)
-        break
-      case "BrochureAdmin":
-        buttonPool.push(supplyBtn)
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        //HACK 需要为管理员单独列一个
-        buttonPool.push(historydBtn)
-
-        break
-      case "Dealer":
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        break
-      case "Supplier":
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        break
-      case "Admin":
-        break
+    case "myOrder":
+    case "myOrderSupplier":
+      buttonPool.push(expressBtn)
+      buttonPool.push(finishedBtn)
+      break
+    case "myOrderDealer":
+      buttonPool.push(copyBtn)
+      break
+    case "Dealer.Draft":
+      buttonPool.push(delateDraft)
+      break
+    case "orderAdmin":
+      buttonPool.push(approveBtn)
+      buttonPool.push(rejectBtn)
+      break
+    case "BrochureAdmin":
+      buttonPool.push(supplyBtn)
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      //HACK 需要为管理员单独列一个
+      buttonPool.push(historyBtn)
+      break
+    case "Dealer":
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      break
+    case "Supplier":
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      break
+    case "Admin":
+      break
     }
 
     for (var i = 0; i < buttonPool.length; i++) {
@@ -76,7 +83,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   }
   return row
 }
-table_row.prototype.rowAddCard = function(color) {
+table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj
   var color = color ? color : "#6b85a4"
   var headers = {}
@@ -105,7 +112,7 @@ table_row.prototype.rowAddCard = function(color) {
   this.CardJSONObj = r
   return r
 }
-table_row.prototype.buildCard = function() {
+table_row.prototype.buildCard = function () {
   var cardHeader = this.CardJSONObj.Header
   // var header = this.Header
   var props = this.CardJSONObj.Props
@@ -121,7 +128,7 @@ table_row.prototype.buildCard = function() {
   }
   headertext = headertext.substring(0, headertext.lastIndexOf(","))
 
-  var row = function(propName, value) {
+  var row = function (propName, value) {
     var propName = propName
     var value = value
     var m =
@@ -166,12 +173,12 @@ table_row.prototype.buildCard = function() {
   this.CardHTMLObj = $(template)
   return this.CardHTMLObj
 }
-table_row.prototype.remove = function() {
+table_row.prototype.remove = function () {
   this.HTMLObj.remove()
   this.JSONObj.remove()
   this.CardJSONObj.remove()
   this.CardHTMLObj.remove()
 }
-table_row.prototype.add = function(){
+table_row.prototype.add = function () {
 
 }

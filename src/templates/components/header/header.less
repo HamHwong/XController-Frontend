@@ -4,34 +4,30 @@
   margin: 0;
   border-bottom: 0;
   padding: 10px;
-  @media (min-width: 768px) {}
   @media (max-width: 768px) {
-    margin: 0;
-  }
-  @media(max-width: 400px) {
-    display: block;
-  }
-  @media(min-width: 400px) and (max-width: 768px) {
     display: none;
+    margin: 0;
   }
 
   .header_logo {
     position: relative;
-
+    .logo{
+      display: block;
+      float: left;
+    }
     .logo:before {
       @media (min-width: 768px) {
-        float: left;
-        display: block;
+        display: inline-block;
         width: 5rem;
         height: 5rem;
         content: '';
-        background: url('../img/zeiss-logo.svg') no-repeat;
+        background: url('../img/zeiss-logo.svg') 100% no-repeat;
       }
     }
-
     .system_name {
       display: block;
       float: left;
+      padding-left: 1rem;
     }
     @media (max-width: 768px) {
       display: none;
@@ -39,15 +35,11 @@
   }
 
   .header_userInfo {
-    .avatar {
-      float: left;
-    }
-
+    padding:1rem 2rem;
     .information {
       margin-left: 30%;
 
-      .account,
-      .profile {
+      .account {
         display: inline-block;
         float: left;
       }

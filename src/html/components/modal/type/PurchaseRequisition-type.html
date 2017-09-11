@@ -67,12 +67,24 @@
     for (var i = 0; i < a.length; i++) {
       arr.push($(a[i]).val())
     }
-    console.log(arr);
     if(window.__newTable){
       window.__newTable.addRow(arr)
     }
+    ClearInputs(a)
+  }
+  function ClearInputs(inputs){
+    var a = inputs
     for (var i = 0; i < a.length; i++) {
       $(a[i]).val("")
     }
+  }
+  function AddPR(){
+    AppendPR()
+    $("#AddBrochureType").modal('hide')
+  }
+  function Cancel(){
+    var a = $("#AddBrochureType input")
+    ClearInputs(a)
+    $("#AddBrochureType").modal('hide')
   }
 </script>

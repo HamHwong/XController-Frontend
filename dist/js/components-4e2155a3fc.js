@@ -129,7 +129,7 @@ var sideclose = function() {
 
 "use strict";
 
-var table = function(url) {
+var table = function (url) {
   this.url = url
   this.urlTimestamp = null
   this.tableHTML = null
@@ -142,7 +142,7 @@ var table = function(url) {
   this.PrimaryKeyIndex = null;
   this.data = {}
 }
-table.prototype.load = function(url) {
+table.prototype.load = function (url) {
   //若参数带url，更新url
   if (!(url === undefined || "" === url)) {
     this.url = url
@@ -156,11 +156,11 @@ table.prototype.load = function(url) {
   }
   return this
 }
-table.prototype.timeDiff = function() {
+table.prototype.timeDiff = function () {
   return (new Date()
     .getTime() - this.urlTimestamp.getTime()) / 1000
 }
-table.prototype.fetch = function(url) {
+table.prototype.fetch = function (url) {
   var tableJsonResponse = $.ajax({
     url: url,
     async: false
@@ -169,7 +169,7 @@ table.prototype.fetch = function(url) {
   this.responseJson = JSON.parse(tableJsonResponse.responseText)
   return this
 }
-table.prototype.init = function() {
+table.prototype.init = function () {
   this.hasHeader = this.responseJson.hasHeader
   this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
   // console.log("hasButton", this.hasButton);
@@ -179,8 +179,9 @@ table.prototype.init = function() {
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
   //若有header，初始化header
-  if (this.hasHeader&&!this.Header) {
-    var hr = data.reverse().pop()
+  if (this.hasHeader) {
+    var hr = data.reverse()
+      .pop()
     this.Header = hr
     if (this.hasButton) {
       this.Header.push("操作")
@@ -189,7 +190,7 @@ table.prototype.init = function() {
     var headRow = new table_row(this.Header, this, true)
     this.data["header"] = headRow
     tbody.append(headRow.HTMLObj) //jsonToHTMLRow将json对象中的data数据转成hr对象
-    
+
     data.reverse()
   }
   //将data装载成table row
@@ -205,7 +206,7 @@ table.prototype.init = function() {
   this.tableHTML = table
   return this
 }
-table.prototype.to = function($tableContainer) {
+table.prototype.to = function ($tableContainer) {
   $tableContainer = $($tableContainer)
   this.container = $tableContainer
   $tableContainer.empty()
@@ -213,13 +214,13 @@ table.prototype.to = function($tableContainer) {
   return this
 }
 //bindModal放在这里逻辑上有问题
-table.prototype.bindModal = function() {
+table.prototype.bindModal = function () {
   var t = new table("./test/order-Detail.json")
   $(this.tableHTML)
     .find('tr:not(.info_card_row) td:not(.operation)')
     .on('click', {
       t: t
-    }, function(e) {
+    }, function (e) {
       $("#orderDetail .goodsInfomation")
         .empty()
       var steps = $("#orderDetail")
@@ -238,7 +239,6 @@ table.prototype.bindModal = function() {
       var steplis = steps.find('li')
       steplis.removeClass("active")
       for (var c = 0; c < currStep; c++) {
-        // console.log(steplis[c]);
         $(steplis[c])
           .addClass("active")
       }
@@ -246,7 +246,7 @@ table.prototype.bindModal = function() {
         .modal()
     })
 }
-table.prototype.addInfoCard = function() {
+table.prototype.addInfoCard = function () {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
   this.tableHTML.find('tr')
     .children('*')
@@ -263,7 +263,7 @@ table.prototype.addInfoCard = function() {
       .siblings('div')
       .hide()
     mod.find(".card_head")
-      .on('click', function() {
+      .on('click', function () {
         $(this)
           .siblings('div')
           .toggle()
@@ -273,7 +273,7 @@ table.prototype.addInfoCard = function() {
     i++
   }
 }
-table.prototype.new = function(tablename, header, keyArr) {
+table.prototype.new = function (tablename, header, keyArr) {
   var Json = {
     "tablename": "",
     "hasHeader": true,
@@ -281,27 +281,33 @@ table.prototype.new = function(tablename, header, keyArr) {
     "keyArr": [],
     "data": []
   }
-  Json["tablename"]  = tablename
+  Json["tablename"] = tablename
   Json["keyArr"] = keyArr
-  Json["data"].push(header)
-  this.Header= header
+  // Json["data"].push(header)
+  this.Header = header
   window.__newTable = this
   this.responseJson = Json
   return this
 }
 
-table.prototype.addRow = function(Obj) {
-  var rj =this.responseJson
+table.prototype.addRow = function (Obj) {
+  var rj = this.responseJson
   rj["data"].push(Obj)
-  this.init().addInfoCard()
+
+  rj["data"].reverse()
+  rj["data"].push(this.Header)
+  rj["data"].reverse()
+  this.init()
+    .addInfoCard()
   this.to(this.container)
   this.responseJson = rj
 }
 
-var table_row = function(data, ParentTable, isHeader, Headers) {
+var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
   this.keyArr = ParentTable.keyArr
+  this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
   this.JSONObj = data
@@ -309,8 +315,8 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
-table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
-  var row = isHeader?$("<tr id='header'></tr>"):$("<tr></tr>")
+table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
+  var row = isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
   for (var i = 0; i < data.length; i++) {
     if (isHeader) {
@@ -334,38 +340,44 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject(" + PrimaryKeyValue + ")\">拒绝</button>")
     var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate(" + PrimaryKeyValue + ")\">物流更新</button>")
     var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished(" + PrimaryKeyValue + ")\">完成</button>")
-    var historydBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
+    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy(" + PrimaryKeyValue + ")\">Copy</button>")
+    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft(" + PrimaryKeyValue + ")\">delate</button>")
 
     //HACK button
     switch (window.currentPos) {
-      case "myOrder":
-      case "myOrderSupplier":
-      case "myOrderDealer":
-        buttonPool.push(expressBtn)
-        buttonPool.push(finishedBtn)
-        break
-      case "orderAdmin":
-        buttonPool.push(approveBtn)
-        buttonPool.push(rejectBtn)
-        break
-      case "BrochureAdmin":
-        buttonPool.push(supplyBtn)
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        //HACK 需要为管理员单独列一个
-        buttonPool.push(historydBtn)
-
-        break
-      case "Dealer":
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        break
-      case "Supplier":
-        buttonPool.push(editBtn)
-        buttonPool.push(delBtn)
-        break
-      case "Admin":
-        break
+    case "myOrder":
+    case "myOrderSupplier":
+      buttonPool.push(expressBtn)
+      buttonPool.push(finishedBtn)
+      break
+    case "myOrderDealer":
+      buttonPool.push(copyBtn)
+      break
+    case "Dealer.Draft":
+      buttonPool.push(delateDraft)
+      break
+    case "orderAdmin":
+      buttonPool.push(approveBtn)
+      buttonPool.push(rejectBtn)
+      break
+    case "BrochureAdmin":
+      buttonPool.push(supplyBtn)
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      //HACK 需要为管理员单独列一个
+      buttonPool.push(historyBtn)
+      break
+    case "Dealer":
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      break
+    case "Supplier":
+      buttonPool.push(editBtn)
+      buttonPool.push(delBtn)
+      break
+    case "Admin":
+      break
     }
 
     for (var i = 0; i < buttonPool.length; i++) {
@@ -376,7 +388,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   }
   return row
 }
-table_row.prototype.rowAddCard = function(color) {
+table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj
   var color = color ? color : "#6b85a4"
   var headers = {}
@@ -405,7 +417,7 @@ table_row.prototype.rowAddCard = function(color) {
   this.CardJSONObj = r
   return r
 }
-table_row.prototype.buildCard = function() {
+table_row.prototype.buildCard = function () {
   var cardHeader = this.CardJSONObj.Header
   // var header = this.Header
   var props = this.CardJSONObj.Props
@@ -421,7 +433,7 @@ table_row.prototype.buildCard = function() {
   }
   headertext = headertext.substring(0, headertext.lastIndexOf(","))
 
-  var row = function(propName, value) {
+  var row = function (propName, value) {
     var propName = propName
     var value = value
     var m =
@@ -466,13 +478,13 @@ table_row.prototype.buildCard = function() {
   this.CardHTMLObj = $(template)
   return this.CardHTMLObj
 }
-table_row.prototype.remove = function() {
+table_row.prototype.remove = function () {
   this.HTMLObj.remove()
   this.JSONObj.remove()
   this.CardJSONObj.remove()
   this.CardHTMLObj.remove()
 }
-table_row.prototype.add = function(){
+table_row.prototype.add = function () {
 
 }
 

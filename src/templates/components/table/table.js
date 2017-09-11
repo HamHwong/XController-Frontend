@@ -1,6 +1,6 @@
 "use strict";
 
-var table = function(url) {
+var table = function (url) {
   this.url = url
   this.urlTimestamp = null
   this.tableHTML = null
@@ -13,7 +13,7 @@ var table = function(url) {
   this.PrimaryKeyIndex = null;
   this.data = {}
 }
-table.prototype.load = function(url) {
+table.prototype.load = function (url) {
   //若参数带url，更新url
   if (!(url === undefined || "" === url)) {
     this.url = url
@@ -27,11 +27,11 @@ table.prototype.load = function(url) {
   }
   return this
 }
-table.prototype.timeDiff = function() {
+table.prototype.timeDiff = function () {
   return (new Date()
     .getTime() - this.urlTimestamp.getTime()) / 1000
 }
-table.prototype.fetch = function(url) {
+table.prototype.fetch = function (url) {
   var tableJsonResponse = $.ajax({
     url: url,
     async: false
@@ -40,7 +40,7 @@ table.prototype.fetch = function(url) {
   this.responseJson = JSON.parse(tableJsonResponse.responseText)
   return this
 }
-table.prototype.init = function() {
+table.prototype.init = function () {
   this.hasHeader = this.responseJson.hasHeader
   this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
   // console.log("hasButton", this.hasButton);
@@ -50,8 +50,9 @@ table.prototype.init = function() {
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
   //若有header，初始化header
-  if (this.hasHeader&&!this.Header) {
-    var hr = data.reverse().pop()
+  if (this.hasHeader) {
+    var hr = data.reverse()
+      .pop()
     this.Header = hr
     if (this.hasButton) {
       this.Header.push("操作")
@@ -60,7 +61,7 @@ table.prototype.init = function() {
     var headRow = new table_row(this.Header, this, true)
     this.data["header"] = headRow
     tbody.append(headRow.HTMLObj) //jsonToHTMLRow将json对象中的data数据转成hr对象
-    
+
     data.reverse()
   }
   //将data装载成table row
@@ -76,7 +77,7 @@ table.prototype.init = function() {
   this.tableHTML = table
   return this
 }
-table.prototype.to = function($tableContainer) {
+table.prototype.to = function ($tableContainer) {
   $tableContainer = $($tableContainer)
   this.container = $tableContainer
   $tableContainer.empty()
@@ -84,13 +85,13 @@ table.prototype.to = function($tableContainer) {
   return this
 }
 //bindModal放在这里逻辑上有问题
-table.prototype.bindModal = function() {
+table.prototype.bindModal = function () {
   var t = new table("./test/order-Detail.json")
   $(this.tableHTML)
     .find('tr:not(.info_card_row) td:not(.operation)')
     .on('click', {
       t: t
-    }, function(e) {
+    }, function (e) {
       $("#orderDetail .goodsInfomation")
         .empty()
       var steps = $("#orderDetail")
@@ -109,7 +110,6 @@ table.prototype.bindModal = function() {
       var steplis = steps.find('li')
       steplis.removeClass("active")
       for (var c = 0; c < currStep; c++) {
-        // console.log(steplis[c]);
         $(steplis[c])
           .addClass("active")
       }
@@ -117,7 +117,7 @@ table.prototype.bindModal = function() {
         .modal()
     })
 }
-table.prototype.addInfoCard = function() {
+table.prototype.addInfoCard = function () {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
   this.tableHTML.find('tr')
     .children('*')
@@ -134,7 +134,7 @@ table.prototype.addInfoCard = function() {
       .siblings('div')
       .hide()
     mod.find(".card_head")
-      .on('click', function() {
+      .on('click', function () {
         $(this)
           .siblings('div')
           .toggle()
@@ -144,7 +144,7 @@ table.prototype.addInfoCard = function() {
     i++
   }
 }
-table.prototype.new = function(tablename, header, keyArr) {
+table.prototype.new = function (tablename, header, keyArr) {
   var Json = {
     "tablename": "",
     "hasHeader": true,
@@ -152,19 +152,24 @@ table.prototype.new = function(tablename, header, keyArr) {
     "keyArr": [],
     "data": []
   }
-  Json["tablename"]  = tablename
+  Json["tablename"] = tablename
   Json["keyArr"] = keyArr
-  Json["data"].push(header)
-  this.Header= header
+  // Json["data"].push(header)
+  this.Header = header
   window.__newTable = this
   this.responseJson = Json
   return this
 }
 
-table.prototype.addRow = function(Obj) {
-  var rj =this.responseJson
+table.prototype.addRow = function (Obj) {
+  var rj = this.responseJson
   rj["data"].push(Obj)
-  this.init().addInfoCard()
+
+  rj["data"].reverse()
+  rj["data"].push(this.Header)
+  rj["data"].reverse()
+  this.init()
+    .addInfoCard()
   this.to(this.container)
   this.responseJson = rj
 }

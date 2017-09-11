@@ -6,7 +6,7 @@
   <h3>我的订单</h3>
 </div>
 
-  <%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
+  <%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
     <div class="operation-menu">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#purchaseRequisition">申领物品</button>
     </div>
@@ -16,6 +16,8 @@
       <div class="tab-pane" id="finished">
       </div>
       <div class="tab-pane" id="reject">
+      </div>
+      <div class="tab-pane" id="draft">
       </div>
       <nav style="text-align: center">
         <ul class="pagination">
@@ -45,5 +47,9 @@
               t.load().to($tablecontainer)
               t.bindModal()
             }
+          }
+
+          var copy = function(){
+
           }
         </script>
