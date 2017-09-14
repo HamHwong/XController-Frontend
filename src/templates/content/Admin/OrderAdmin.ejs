@@ -28,6 +28,6 @@
       </ul>
     </nav>
   </div>
-<%-include('/components/modal/modal',{type:"orderDetail-admin"})%>
+  <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+<%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
 <%-include('/components/table/table.init.ejs',{container:"#todolist",url:"./test/order-table-data.json"})%>
-<%-include('/components/modal/modal',{type:"delete"})%>

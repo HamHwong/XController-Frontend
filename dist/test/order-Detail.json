@@ -10,6 +10,8 @@
     "备注": "ContentContentContentContentContentContent"
   },
   "hasHeader": true,
+  "hasButton": true,
+  "buttonPool": ["expressView"],
   "keyArr": ["id", "prop", "key", "key", "prop", "prop", "prop"],
   "data": [
     ["序列", "申请种类", "申请数量", "收货人", "收货人电话", "交付时间", "收货地址"],

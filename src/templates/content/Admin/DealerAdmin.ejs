@@ -24,9 +24,10 @@
     </nav>
   </div>
 
-  <%-include('/components/modal/modal',{type:"DealerAdd"})%>
-    <%-include('/components/table/table.init.ejs',{container:"#Dealer-table-container",url:"./test/admin/Dealer-table-data.json"})%>
-      <%-include('/components/modal/modal',{type:"delete"})%>
+
+  <%-include('/components/table/table.init.ejs',{container:"#Dealer-table-container",url:"./test/admin/Dealer-table-data.json"})%>
+  <%-include('/components/modal/modal',{type:"Admin.DealerAdmin.Add"})%>
+  <%-include('/components/modal/modal',{type:"Common.Delete"})%>
 <script>
   window.role="dealer"
 </script>

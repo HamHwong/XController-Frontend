@@ -1,88 +1,12 @@
-<%if(locals.type=="DealerAdd"){%>
-<%-include("./type/Dealer-Add&Edit")%>
-<%}else if(locals.type=="SupplierAdd"){%>
-  <%-include("./type/Supplier-Add&Edit")%>
-<%}else if(locals.type=="orderDetail"){%>
-  <%-include("./type/order-Detail")%>
-<%}else if(locals.type=="Dealer.Order.Details"){%>
-  <%-include("./type/Dealer.Order.Details.ejs")%>
-<%}else if(locals.type=="BrochureAdd"){%>
-  <%-include("./type/Brochure-Add&Edit")%>
-<%}else if(locals.type=="Admin.BrochureAdmin.Add"){%>
-  <%-include("./type/Admin/Brochure-Add")%>
-<%}else if(locals.type=="Admin.BrochureAdmin.Edit"){%>
-  <%-include("./type/Admin/Brochure-Edit")%>
-<%}else if(locals.type=="Brochure-Detail"){%>
-  <%-include("./type/Brochure-Detail")%>
-<%}else if(locals.type=="orderDetail-admin"){%>
-  <%-include("./type/order-Detail-admin")%>
-<%}else if(locals.type=="delete"){%>
-  <%-include("./type/delete")%>
-<%}else if(locals.type=="approve"){%>
-  <%-include("./type/approve")%>
-<%}else if(locals.type=="reject"){%>
-  <%-include("./type/reject")%>
-<%}else if(locals.type=="purchaseRequisition"){%>
-  <%-include("./type/purchaseRequisition")%>
-<%}else if(locals.type=="Supplier.Express.Update"){%>
-  <%-include("./type/Supplier/SupplierExpressUpdate")%>
-<%}else{%>
-<div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Test Modal</h4>
-      </div>
-
-      <div class="modal-body">
-        <form class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-sm-2 control-label">User</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="data1">Password</label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" name="data1" value="">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="">Birthday</label>
-            <div class="col-sm-10">
-              <input size="14" type="text" value="2012-06-15" class="form_datetime form-control">
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-2 control-label" for="">简介</label>
-            <div class="col-sm-10">
-              <textarea class="form-control" rows="5" style="resize:none;"></textarea>
-            </div>
-          </div>
-          <div class="selection-group col-md-offset-2 col-lg-offset-2">
-            <label class="control-label" for="">CheckboxGroup</label>
-            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox1" value="option1"> 选项 1</label>
-            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox2" value="option2"> 选项 2</label>
-            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox3" value="option3"> 选项 3</label>
-            </br>
-            <label class="control-label" for="">RadioGroup</label>
-            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1</label>
-            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2</label>
-            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios5"  value="option3"> 选项 3</label>
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="submit" class="btn btn-primary">提交</button>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal -->
-</div>
-
-<%}%>
+<%
+if(""!==locals.type){
+  var documentsLevel = locals.type.split(".")
+  var path = "./type"
+  for(a of documentsLevel){
+    path += ("/"+a)
+  }
+  %>
+    <%-include(path)%>
+  <%
+}
+ %>

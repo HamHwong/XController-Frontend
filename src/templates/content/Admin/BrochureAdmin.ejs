@@ -25,10 +25,10 @@
 </div>
 
 <%-include('/components/table/table.init.ejs',{container:"#Brochure-table-container",url:"./test/admin/Brochure-table-data.json"})%>
-  <%-include('/components/modal/modal',{type:"Brochure-Detail"})%>
-    <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Add"})%>
-    <%-include('/components/modal/modal',{type:"delete"})%>
-    <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Edit"})%>
+<%-include('/components/modal/modal',{type:"Admin.Brochure.Detail"})%>
+<%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Add"})%>
+<%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Edit"})%>
+<%-include('/components/modal/modal',{type:"Common.Delete"})%>
       <script>
         var del = function(rid) {
           $("#delete")

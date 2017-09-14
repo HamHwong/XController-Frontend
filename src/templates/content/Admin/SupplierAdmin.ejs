@@ -24,7 +24,7 @@
     </nav>
   </div>
 
-  <%-include('/components/modal/modal',{type:"SupplierAdd"})%>
+  <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
   <%-include('/components/table/table.init.ejs',{container:"#Supplier-table-container",url:"./test/admin/Supplier-table-data.json"})%>
 <script>
   window.role="supplier"

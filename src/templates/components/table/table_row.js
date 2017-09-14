@@ -7,40 +7,45 @@ var table_row = function (data, ParentTable, isHeader, Headers) {
   this.PrimaryKeyValue = data[this.PrimaryKeyIndex]
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
+  this.data = data
   this.JSONObj = data
-  this.HTMLObj = this.init(this.JSONObj, this.keyArr, this.hasButton, this.isHeader)
+  this.HTMLObj = this.init()
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
 table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
-  var row = isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
+  var row = this.isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
-  for (var i = 0; i < data.length; i++) {
-    if (isHeader) {
+  for (var i = 0; i < this.data.length; i++) {
+    if (this.isHeader) {
       var th = $("<th></th>")
       row.append(th.html(this.Headers[i]))
     } else {
       var td = $("<td data-primaryKey='" + this.PrimaryKeyValue + "'></td>")
-      row.append(td.html(data[i]))
+      row.append(td.html(this.data[i]))
     }
   }
-  if (hasButton && !isHeader) {
+  if (this.hasButton && !this.isHeader) {
     //如果是header行，则不用加button
     var td = $("<td class='operation'></td>")
     // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
     //   .html() //HACK
-    var buttonPool = this.buttonPool
+    var buttonPool = []
     var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
     var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
     var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
     var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
     var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
-    var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
+    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
+    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressView('" + this.PrimaryKeyValue + "')\">物流查看</button>")
     var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
     var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
     var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
     var deleteDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
 
+    for (var i in this.buttonPool) {
+      buttonPool.push(eval(this.buttonPool[i]))
+    }
     //
     // //HACK button
     // switch (window.currentPos) {
@@ -76,15 +81,15 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
     //   break
     // case "Admin":
     //   break
-  }
+    // }
 
-  for (var i = 0; i < buttonPool.length; i++) {
-    td.append(buttonPool[i])
+    for (var i = 0; i < buttonPool.length; i++) {
+      td.append(buttonPool[i])
+    }
+    // HACK END
+    row.append(td)
   }
-  // HACK END
-  row.append(td)
-}
-return row
+  return row
 }
 table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj

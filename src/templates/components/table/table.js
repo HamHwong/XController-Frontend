@@ -44,6 +44,7 @@ table.prototype.fetch = function (url) {
   return this
 }
 table.prototype.init = function () {
+  console.log(this.responseJson);
   this.tableName = this.responseJson.tablename
   this.hasHeader = this.responseJson.hasHeader
   this.buttonPool = this.responseJson.buttonPool
