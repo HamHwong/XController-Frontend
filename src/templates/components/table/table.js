@@ -44,7 +44,6 @@ table.prototype.fetch = function (url) {
   return this
 }
 table.prototype.init = function () {
-  console.log(this.responseJson);
   this.tableName = this.responseJson.tablename
   this.hasHeader = this.responseJson.hasHeader
   this.buttonPool = this.responseJson.buttonPool
@@ -110,15 +109,6 @@ table.prototype.addInfoCard = function () {
     var table_row = this.data[k]
     table_row.rowAddCard(colorArr[i % colorArr.length]) //包装成r对象
     table_row.buildCard() //build成card
-    table_row.CardHTMLObj.find(".card_head")
-      .siblings('div')
-      .hide()
-    table_row.CardHTMLObj.find(".card_head")
-      .on('click', function () {
-        $(this)
-          .siblings('div')
-          .toggle()
-      })
     $(table_row.HTMLObj)
       .after(table_row.CardHTMLObj)
     i++
@@ -126,20 +116,17 @@ table.prototype.addInfoCard = function () {
   return this
 }
 table.prototype.new = function (Obj, header) {
-  var tablename = Obj.tablname ? Obj.tablename : ""
-  var hasHeader = Obj.hasHeader ? Obj.hasHeader : false
-  var hasButton = Obj.hasButton ? Obj.hasButton : false
-  var keyArr = Obj.keyArr ? Obj.keyArr : []
-  var Json = {
-    "tablename": tablename,
-    "hasHeader": hasHeader,
-    "hasButton": hasButton,
-    "keyArr": keyArr,
-    "data": []
-  }
-  if (hasHeader && header)
+  // var tablename = Obj.tablname ? Obj.tablename : ""
+  // var hasHeader = Obj.hasHeader ? Obj.hasHeader : false
+  // var hasButton = Obj.hasButton ? Obj.hasButton : false
+  // var keyArr = Obj.keyArr ? Obj.keyArr : []
+  // console.log(Obj);
+  Obj["data"]=Obj["data"]?Obj["data"]:[]
+  var Json = Obj
+  if (Obj.hasHeader && header)
     Json["data"].push(header)
   this.responseJson = Json
+  // this.data = Json["data"]
   this.init()
   return this
 }
@@ -150,11 +137,11 @@ table.prototype.addRow = function (rowJSONObj) {
   //PrimaryKeyValue 该行的主键值
   var PrimaryKeyValue = rowJSONObj[this.PrimaryKeyIndex]
   if (this.data[PrimaryKeyValue]) {
-    debugger
     throw "Error! This primary key is alreay occupied , If need update , please use update function"
   }
   this.data[PrimaryKeyValue] = row
   tbody.append(row.HTMLObj)
+  this.addInfoCard()
 }
 
 table.prototype.onCardLongPress = function (callback) {

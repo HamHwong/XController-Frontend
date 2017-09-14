@@ -1,0 +1,131 @@
+<script>
+  window.currentPos = "myOrder"
+</script>
+
+<div class="contentTitle">
+  <h3>我的订单</h3>
+</div>
+
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab">
+    
+      
+        <li><a href=#applying>处理中</a></li>
+        
+        <li><a href=#finished>已完成</a></li>
+        
+  </ul>
+
+  <div class="form-group pull-right  col-xs-3 col-sm-6 col-md-4">
+    <form class="" method="post">
+      <div class="col-md-8 col-sm-8 col-xs-12 ">
+        
+<div class="form-group">
+  <div class="">
+    <input type=""
+    class="form-control"
+    
+    
+      placeholder="在这里输入关键字"
+    
+    />
+  </div>
+</div>
+
+      </div>
+      <button type="submit" class="btn btn-primary col-md-4  col-xs-4 hidden-xs ">Query</button>
+    </form>
+  </div>
+
+</div>
+
+  <div class="operation-menu">
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="applying">
+    </div>
+    <div class="tab-pane" id="finished">
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+    
+  <div class="modal fade lg-modal" id="ExpressrUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>提交人：admin</li>
+            <li>代理商：dealer</li>
+            <li>区   域：华南地区</li>
+            <li>手机号：13883762902</li>
+            <li>邮   箱：admin@elitsrouce.net</li>
+            <li>用   途：一般销售用途</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="4" disabled>备注</textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+        </div>
+        <div class="modal-infopart expressUpdate">
+          <textarea name="name" rows="3" cols="80" placeholder="请在此输入最新订单信息"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="center-block">
+          <button type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">提交</button>
+          <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+      <script type="text/javascript">
+  /**
+   * @description Table初始化
+   */
+  var table_init = function() {
+    var $tablecontainer = $("#applying")
+    var t = new table("./test/supplier/order-table-data.json")
+    t.load().to($tablecontainer)
+  }
+</script>
+
+        <script>
+          var CurrentTableList = {
+            "#applying": "./test/supplier/myorder-approving-table-data.json",
+            "#finished": "./test/supplier/myorder-success-table-data.json",
+          }
+          var table_init = function() {
+            for (var i in CurrentTableList) {
+              var $tablecontainer = $(i)
+              var t = new table(CurrentTableList[i])
+              t.load().to($tablecontainer)
+              t.bindModal()
+            }
+          }
+
+          var expressUpdate=function(){
+            $("#ExpressrUpdate").modal()
+          }
+        </script>

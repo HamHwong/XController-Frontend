@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>HomePage -Marketing Materials Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
+</head>
+
+<body>
+  <div id="right_wapper">
+    <header id="header_wapper" class="clearfix">
+      <div class="page-header row">
+  <div class="header_logo col-md-10 col-md-9 col-sm-8 ">
+    <span class="logo text-info"></span>
+    <span class="system_name h4">Marketing Materials Management</span>
+  </div>
+  <div class="header_userInfo col-lg-2 col-md-3 col-sm-4 pull-right">
+    <div class="information clearfix text-center">
+      <span class="account">Hello,<span class="uname"></span></span>
+      <a href="javascript:;" class="logout">Log Out</a></span>
+    </div>
+  </div>
+</div>
+
+        <div id="topNav_wapper" class="nav-show">
+  <span class="logo"><small>Marketing Materials Management</small></span>
+  <nav class="topNav" id="sidebar-wrapper">
+    <ul class="nav sidebar-nav section-group">
+      <li class="section "><a href="#OrderAdmin"><span class="glyphicon glyphicon-list-alt"></span>订单管理</a></li>
+      <li class="section "><a href="#BrochureAdmin"><span class="glyphicon glyphicon glyphicon-download-alt"></span>物品管理</a></li>
+      
+
+      <li class="section "><a href="#DealerAdmin"><span class="glyphicon glyphicon-yen"></span>代理商管理</a></li>
+      <li class="section"><a href="#SupplierAdmin"><span class="glyphicon glyphicon-yen"></span>供应商管理</a></li>
+        <li class="section dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="glyphicon glyphicon-stats"></span>系统设置<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="section subsection "><a href="#Dictionary"><span class="glyphicon glyphicon-yen"></span>数据字典设置</a></li>
+            <li class="section subsection"><a href="#Workflow"><span class="glyphicon glyphicon-yen"></span>工作流设置</a></li>
+            <li class="section subsection"><a href="#SystemAdmin"><span class="glyphicon glyphicon-yen"></span>系统管理员</a></li>
+          </ul>
+        </li>
+        
+
+    </ul>
+    <div class="sideavatar">
+      <div class="greet clearfix">
+        <span>Hi,Admin</span>
+      </div>
+      <br/>
+      <div class="logout">
+        <span><a href="./login.html">Logout</a></span>
+      </div>
+    </div>
+    <div class="sideBtn text-center">
+      <span class="glyphicon sideBtnIcon-open"></span>
+    </div>
+  </nav>
+
+</div>
+
+    </header>
+    <div id="content_wapper" class="container-fluid">
+      <script>
+  window.currentPos="orderAdmin"
+</script>
+
+<div class="contentTitle">
+<h3>订单管理</h3>
+</div>
+
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab">
+    
+      
+        <li><a href=#applying>处理中</a></li>
+        
+        <li><a href=#finished>已完成</a></li>
+        
+        <li><a href=#reject>已拒绝</a></li>
+        
+  </ul>
+
+  <div class="form-group pull-right  col-xs-3 col-sm-6 col-md-4">
+    <form class="" method="post">
+      <div class="col-md-8 col-sm-8 col-xs-12 ">
+        
+<div class="form-group">
+  <div class="">
+    <input type=""
+    class="form-control"
+    
+    
+      placeholder="在这里输入关键字"
+    
+    />
+  </div>
+</div>
+
+      </div>
+      <button type="submit" class="btn btn-primary col-md-4  col-xs-4 hidden-xs ">Query</button>
+    </form>
+  </div>
+
+</div>
+
+  <div class="operation-menu">
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="applying">
+    </div>
+    <div class="tab-pane" id="finished">
+    </div>
+    <div class="tab-pane" id="reject">
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+    <div class="modal fade" id="delete">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+
+    <div class="modal fade lg-modal" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix">
+            <!-- progressbar -->
+<ul id="progressbar" class="clearfix">
+  <li class="glyphicon complated"><span>提出申请</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon complated"><span>直线经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon validating"><span>BU经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon reject"><span>通知MM</span><span class="operationtime">2016.11.12  00:00</span></li>
+</ul>
+
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>代理商：dealer</li>
+            <li>区   域：华南地区</li>
+            <li>手机号：13883762902</li>
+            <li>邮   箱：admin@elitsrouce.net</li>
+            <li>用   途：一般销售用途</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="4" disabled>备注</textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-infopart Approval">
+          <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+    <script>
+      var approve = function() {
+        $("#approve").modal()
+      }
+      var reject = function() {
+        $("#reject").modal()
+      }
+    </script>
+
+  
+
+<script type="text/javascript">
+  /**
+   * @description Table初始化
+   */
+  var table_init = function() {
+    var $tablecontainer = $("#applying")
+    var t = new table("./test/order-table-data.json")
+    t.load().to($tablecontainer)
+  }
+</script>
+
+
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+  <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
+  <link rel="stylesheet" href="./css/content-1a1b7ef292.css">
+  <link rel="stylesheet" href="./css/components-f2ed8f04f2.css">
+  <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
+  <link rel="stylesheet" href="./css/plugs/blue-f6afd81cde.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
+
+  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
+  <script type="text/javascript" src="./js/plugs/icheck-14d0d9d9ca.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
+
+  <script type="text/javascript" src="./js/init-a534b79e2a.js"></script>
+  <script type="text/javascript" src="./js/components-1e9732e455.js"></script>
+  <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
+  <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      for (var i in init) {
+        for (var j in init[i])
+          init[i][j]()
+      }
+    })
+  </script>
+
+</body>
+
+</html>

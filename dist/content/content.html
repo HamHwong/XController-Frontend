@@ -1,0 +1,153 @@
+<div class="contentTitle">
+<h3>主页</h3>
+</div>
+  
+  <div class="search_wapper ">
+    <form class="form" role="form">
+      <div class="querycontrols clearfix">
+        <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4">
+          <div class="col-md-8 col-xs-8 ">
+              
+<div class="form-group">
+  <div class="">
+    <input type=""
+    class="form-control"
+    
+    
+      placeholder="在这里输入关键字"
+    
+    />
+  </div>
+</div>
+
+          </div>
+          <button type="submit" class="btn btn-primary col-md-4  col-xs-4 ">Query</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="steps clearfix">
+    <!-- progressbar -->
+<ul id="progressbar" class="clearfix">
+  <li class="glyphicon complated"><span>提出申请</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon complated"><span>直线经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon validating"><span>BU经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon reject"><span>通知MM</span><span class="operationtime">2016.11.12  00:00</span></li>
+</ul>
+
+  </div>
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab">
+    
+      
+        <li><a href=#finished>已完成</a></li>
+        
+        <li><a href=#unfinished>未完成</a></li>
+        
+  </ul>
+
+  <div class="form-group pull-right  col-xs-3 col-sm-6 col-md-4">
+    <form class="" method="post">
+      <div class="col-md-8 col-sm-8 col-xs-12 ">
+        
+<div class="form-group">
+  <div class="">
+    <input type=""
+    class="form-control"
+    
+    
+      placeholder="在这里输入关键字"
+    
+    />
+  </div>
+</div>
+
+      </div>
+      <button type="submit" class="btn btn-primary col-md-4  col-xs-4 hidden-xs ">Query</button>
+    </form>
+  </div>
+
+</div>
+
+  <div class="operation-menu">
+    <button class="button button-middle button-plain button-border button-box" data-toggle="modal" data-target="#addRecord"><i class="fa fa-plus"></i></button>
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="finished">
+    </div>
+    <div class="tab-pane" id="unfinished">
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+
+<div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Test Modal</h4>
+      </div>
+
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">User</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="data1">Password</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" name="data1" value="">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="">Birthday</label>
+            <div class="col-sm-10">
+              <input size="14" type="text" value="2012-06-15" class="form_datetime form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="">简介</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="5" style="resize:none;"></textarea>
+            </div>
+          </div>
+          <div class="selection-group col-md-offset-2 col-lg-offset-2">
+            <label class="control-label" for="">CheckboxGroup</label>
+            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox1" value="option1"> 选项 1</label>
+            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox2" value="option2"> 选项 2</label>
+            <label class="checkbox-inline"><input type="checkbox" id="inlineCheckbox3" value="option3"> 选项 3</label>
+            </br>
+            <label class="control-label" for="">RadioGroup</label>
+            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1</label>
+            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2</label>
+            <label class="radio-inline"><input type="radio" name="optionsRadiosinline" id="optionsRadios5"  value="option3"> 选项 3</label>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">提交</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal -->
+</div>
+
+
+

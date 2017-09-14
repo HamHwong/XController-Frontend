@@ -75,6 +75,7 @@
     }
 
     function autoComplateInfoOfDealer() {
+      debugger
       if ("dealer" == getCookie("auth")) {
         $("#DemanderFK").val("dealer")
         $("#DemanderFK").attr("disabled", "true")
@@ -98,9 +99,9 @@
           "rowsperpage": 10,
           "hasHeader": true,
           "hasButton": true,
+          "buttonPool": ["copyBtn","deleteDraftBtn"],
           "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
         }
-
         draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"]).to($("#draft"))
         window.__draftTable = draftTable
       }
@@ -120,7 +121,6 @@
       for (var i = 0; i < b.length; i++) {
         $(b[i]).val("")
       }
-      // t.addRow()
       $("#purchaseRequisition").modal('hide')
     }
 

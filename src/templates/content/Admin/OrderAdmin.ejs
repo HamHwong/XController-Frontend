@@ -6,11 +6,11 @@
 <h3>订单管理</h3>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{todolist:"处理中",finished:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"处理中",finished:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
   </div>
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="todolist">
+    <div class="tab-pane active" id="applying">
     </div>
     <div class="tab-pane" id="finished">
     </div>
@@ -30,4 +30,4 @@
   </div>
   <%-include('/components/modal/modal',{type:"Common.Delete"})%>
 <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
-<%-include('/components/table/table.init.ejs',{container:"#todolist",url:"./test/order-table-data.json"})%>
+<%-include('/components/table/table.init.ejs',{container:"#applying",url:"./test/order-table-data.json"})%>

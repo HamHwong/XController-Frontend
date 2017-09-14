@@ -1,0 +1,12 @@
+.nav.nav-tabs {
+  border-bottom: none;
+  margin-bottom: 1px;
+}
+.tabs > * {
+  float: left;
+}
+.tabs .form-group {
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}

@@ -74,7 +74,7 @@
   <ul class="nav nav-tabs" id="myTab">
     
       
-        <li><a href=#todolist>处理中</a></li>
+        <li><a href=#applying>处理中</a></li>
         
         <li><a href=#finished>已完成</a></li>
         
@@ -108,7 +108,7 @@
   <div class="operation-menu">
   </div>
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="todolist">
+    <div class="tab-pane active" id="applying">
     </div>
     <div class="tab-pane" id="finished">
     </div>
@@ -212,7 +212,7 @@
    * @description Table初始化
    */
   var table_init = function() {
-    var $tablecontainer = $("#todolist")
+    var $tablecontainer = $("#applying")
     var t = new table("./test/order-table-data.json")
     t.load().to($tablecontainer)
   }

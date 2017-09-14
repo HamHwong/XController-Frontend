@@ -1,0 +1,59 @@
+<div class="contentTitle">
+<h3>物品管理</h3>
+</div>
+
+  <div class="operation-menu">
+  </div>
+
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="Brochure-table-container">
+      <table class="table table-bordered table-hover">
+      </table>
+    </div>
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <script type="text/javascript">
+  /**
+   * @description Table初始化
+   */
+  var table_init = function() {
+    var $tablecontainer = $("#Brochure-table-container")
+    var t = new table("./test/admin/Brochure-table-data.json")
+    t.load().to($tablecontainer)
+  }
+</script>
+
+  
+  <div class="modal fade" id="BrochureDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">出入库详情</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart goodsInfomation infomationTable">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-infopart Approval">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

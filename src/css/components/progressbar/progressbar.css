@@ -1,0 +1,86 @@
+#progressbar {
+  margin: 0 auto;
+}
+#progressbar .operationtime {
+  display: block;
+}
+#progressbar:after {
+  clear: both;
+}
+#progressbar li {
+  display: block;
+  float: left;
+  list-style: none;
+  color: #000;
+  line-height: 4rem;
+  width: 25%;
+  list-style-type: none;
+  list-style-position: outside;
+  /*z-index: 1029;*/
+}
+#progressbar li span {
+  font-size: 1.2rem;
+  display: block;
+  width: 100%;
+  text-align: center;
+  line-height: 2rem;
+}
+#progressbar li::before {
+  content: "";
+  display: block;
+  text-align: center;
+  font-size: 2rem;
+  width: 4rem;
+  height: 4rem;
+  -webkit-border-radius: 2rem;
+  -moz-border-radius: 2rem;
+  border-radius: 2rem;
+  margin: 0 auto;
+  background-color: #d4d4d4;
+  position: relative;
+  z-index: 2;
+}
+#progressbar li::after {
+  position: absolute;
+  height: 0.2rem;
+  width: -webkit-calc(96%);
+  width: -moz-calc(96%);
+  width: calc(96%);
+  top: 2rem;
+  left: -webkit-calc(52%);
+  left: -moz-calc(52%);
+  left: calc(52%);
+  content: "";
+  display: block;
+  background-color: #d4d4d4;
+  z-index: 1;
+}
+#progressbar li:last-child::after {
+  display: none;
+}
+#progressbar li:first-child {
+  margin-left: 0;
+}
+#progressbar li.complated::before {
+  content: "\e013";
+  background-color: #506687;
+}
+#progressbar li.infomation::before {
+  content: "\e101";
+  background-color: #506687;
+}
+#progressbar li.validating::before {
+  content: "\e085";
+  background-color: #c4cf25;
+}
+#progressbar li.viewed::before {
+  content: "\e105";
+  background-color: #506687;
+}
+#progressbar li.reject::before {
+  content: '\e014';
+  background-color: #de4747;
+}
+#progressbar li.active::before {
+  color: #FFF;
+}
