@@ -4,6 +4,8 @@
   <%-include("./type/Supplier-Add&Edit")%>
 <%}else if(locals.type=="orderDetail"){%>
   <%-include("./type/order-Detail")%>
+<%}else if(locals.type=="Dealer.Order.Details"){%>
+  <%-include("./type/Dealer.Order.Details.ejs")%>
 <%}else if(locals.type=="BrochureAdd"){%>
   <%-include("./type/Brochure-Add&Edit")%>
 <%}else if(locals.type=="Admin.BrochureAdmin.Add"){%>

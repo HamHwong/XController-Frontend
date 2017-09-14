@@ -24,15 +24,15 @@
   resize: none;
   color: #666464;
 }
-.modal-infopart.baseInfomation ul,
-.modal-infopart.baseInfomation div.comment {
+.modal-infopart.baseInfomation > ul,
+.modal-infopart.baseInfomation > div.comment {
   width: 100%;
   display: block;
   padding: 1rem;
   float: left;
 }
-.modal-infopart.baseInfomation ul li,
-.modal-infopart.baseInfomation div.comment li {
+.modal-infopart.baseInfomation > ul li,
+.modal-infopart.baseInfomation > div.comment li {
   list-style: none;
   display: block;
   width: 50%;

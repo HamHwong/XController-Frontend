@@ -18,7 +18,8 @@
   list-style-position: outside;
   /*z-index: 1029;*/
 }
-#progressbar li a {
+#progressbar li span {
+  font-size: 1.2rem;
   display: block;
   width: 100%;
   text-align: center;
@@ -40,12 +41,12 @@
   z-index: 2;
 }
 #progressbar li::after {
-  position: relative;
+  position: absolute;
   height: 0.2rem;
   width: -webkit-calc(96%);
   width: -moz-calc(96%);
   width: calc(96%);
-  top: -6rem;
+  top: 2rem;
   left: -webkit-calc(52%);
   left: -moz-calc(52%);
   left: calc(52%);

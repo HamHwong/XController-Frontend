@@ -22,7 +22,8 @@
   /*z-index: 1029;*/
 }
 
-#progressbar li a {
+#progressbar li span {
+  font-size: 1.2rem;
   display: block;
   width: 100%;
   text-align: center;
@@ -44,10 +45,10 @@
 }
 
 #progressbar li::after {
-  position: relative;
+  position: absolute;
   height: 0.2rem;
   width: calc(100% - 4rem);
-  top: -6rem;
+  top: 2rem;
   left: calc(50% + 2rem);
   content: "";
   display: block;

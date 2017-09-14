@@ -1,6 +1,6 @@
 {
-  "dealer":{
-    "area":"hddq",
-    "auth":"dealer"
+  "dealer": {
+    "auth": "dealer",
+    "area": "hddq"
   }
 }

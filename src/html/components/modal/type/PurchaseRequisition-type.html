@@ -42,7 +42,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">收货地址 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="BrochureQuantity" id="BrochureType" placeholder="收货地址" required />
+              <input type="text" class="form-control" name="Address" id="Address" placeholder="收货地址" required />
             </div>
           </div>
         </form>
@@ -67,8 +67,8 @@
     for (var i = 0; i < a.length; i++) {
       arr.push($(a[i]).val())
     }
-    if(window.__newTable){
-      window.__newTable.addRow(arr)
+    if(window.__purchaseRequisitionTable){
+      window.__purchaseRequisitionTable.addRow(arr)
     }
     ClearInputs(a)
   }

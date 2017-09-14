@@ -9,10 +9,10 @@
 
 <body>
   <div class="container-fluid" id="login-wapper">
+      <div class="system-name">Marketing Materials Management</div>
     <div class="bg row">
       <div class="logo">
       </div>
-      <div class="system-name">Marketing Materials Management</div>
     </div>
     <div class="login-box col-center-block">
       <form class="form-inline" role="form" method="post" onsubmit="return login()">
@@ -89,9 +89,9 @@
         window.location.href = "/supplier-home.html"
         setCookie("auth","supplier")
         break
-      case 'sell':
-        window.location.href = "/supplier-home.html"
-        setCookie("auth","sell")
+      case 'sales':
+        window.location.href = "/dealer-home.html"
+        setCookie("auth","sales")
         break
     }
     return false

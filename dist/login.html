@@ -9,10 +9,10 @@
 
 <body>
   <div class="container-fluid" id="login-wapper">
+      <div class="system-name">Marketing Materials Management</div>
     <div class="bg row">
       <div class="logo">
       </div>
-      <div class="system-name">Marketing Materials Management</div>
     </div>
     <div class="login-box col-center-block">
       <form class="form-inline" role="form" method="post" onsubmit="return login()">
@@ -49,8 +49,8 @@
 <!-- CSS -->
 
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-<link rel="stylesheet" href="./css/login-25f7793d1b.css">
-<link rel="stylesheet" href="./css/components-398101c3bd.css">
+<link rel="stylesheet" href="./css/login-a5a2c1d8e2.css">
+<link rel="stylesheet" href="./css/components-b3bedc2a48.css">
 <link rel="stylesheet" href="./css/plugs/bootstrap-794f8177af.css">
 <link rel="stylesheet" href="./css/plugs/slideunlock-dcf9b5ccef.css">
 <script type="text/javascript" src="./js/plugs/jquery-a5a8ab0a7c.js"></script>
@@ -89,9 +89,9 @@
         window.location.href = "/supplier-home.html"
         setCookie("auth","supplier")
         break
-      case 'sell':
-        window.location.href = "/supplier-home.html"
-        setCookie("auth","sell")
+      case 'sales':
+        window.location.href = "/dealer-home.html"
+        setCookie("auth","sales")
         break
     }
     return false

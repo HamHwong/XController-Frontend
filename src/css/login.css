@@ -9,6 +9,22 @@ html body {
   position: relative;
   width: 100%;
 }
+#login-wapper .system-name {
+  color: #fff;
+  right: 1rem;
+  top: 1rem;
+  position: absolute;
+}
+@media (min-width: 768px) {
+  #login-wapper .system-name {
+    font-size: 1.4rem;
+  }
+}
+@media (max-width: 768px) {
+  #login-wapper .system-name {
+    font-size: 1rem;
+  }
+}
 #login-wapper .bg {
   color: #fff;
   background: #141e8c;
@@ -38,62 +54,6 @@ html body {
     width: 16rem;
     height: 3.868rem ;
   }
-  @-webkit-keyframes popOut {
-    0% {
-      padding-top: 15rem;
-    }
-    70% {
-      padding-top: 5rem;
-    }
-    80% {
-      padding-top: 6rem;
-    }
-    100% {
-      padding-top: 5rem;
-    }
-  }
-  @-moz-keyframes popOut {
-    0% {
-      padding-top: 15rem;
-    }
-    70% {
-      padding-top: 5rem;
-    }
-    80% {
-      padding-top: 6rem;
-    }
-    100% {
-      padding-top: 5rem;
-    }
-  }
-  @-o-keyframes popOut {
-    0% {
-      padding-top: 15rem;
-    }
-    70% {
-      padding-top: 5rem;
-    }
-    80% {
-      padding-top: 6rem;
-    }
-    100% {
-      padding-top: 5rem;
-    }
-  }
-  @keyframes popOut {
-    0% {
-      padding-top: 15rem;
-    }
-    70% {
-      padding-top: 5rem;
-    }
-    80% {
-      padding-top: 6rem;
-    }
-    100% {
-      padding-top: 5rem;
-    }
-  }
 }
 @media (max-width: 768px) {
   #login-wapper .bg .logo {
@@ -101,62 +61,6 @@ html body {
     line-height: 3rem;
     width: 10rem;
     height: 2.418rem ;
-  }
-  @-webkit-keyframes popOut {
-    0% {
-      padding-top: 10rem;
-    }
-    70% {
-      padding-top: 3rem;
-    }
-    80% {
-      padding-top: 4rem;
-    }
-    100% {
-      padding-top: 3rem;
-    }
-  }
-  @-moz-keyframes popOut {
-    0% {
-      padding-top: 10rem;
-    }
-    70% {
-      padding-top: 3rem;
-    }
-    80% {
-      padding-top: 4rem;
-    }
-    100% {
-      padding-top: 3rem;
-    }
-  }
-  @-o-keyframes popOut {
-    0% {
-      padding-top: 10rem;
-    }
-    70% {
-      padding-top: 3rem;
-    }
-    80% {
-      padding-top: 4rem;
-    }
-    100% {
-      padding-top: 3rem;
-    }
-  }
-  @keyframes popOut {
-    0% {
-      padding-top: 10rem;
-    }
-    70% {
-      padding-top: 3rem;
-    }
-    80% {
-      padding-top: 4rem;
-    }
-    100% {
-      padding-top: 3rem;
-    }
   }
 }
 #login-wapper .bg .logo::before {

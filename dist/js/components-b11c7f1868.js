@@ -9,6 +9,49 @@ var tab_init = function() {
   })
 }
 
+var bindInputQuery = function ($input, url) {
+  $input = $($input)
+  $input
+    .on('keyup', function (e) {
+      e.preventDefault()
+      var keywordsdata = JSON.parse($.ajax({
+          url: url,
+          async: false
+        })
+        .responseText)
+      var droplist = $input
+        .siblings(".keyhint")
+      droplist.empty()
+      var data = queryKeyWords(this.value, keywordsdata)
+      for (var i in data) {
+        var li = $("<li></li>")
+        var a = $("<a href=\"#\" class='keywords'></a>")
+        a.html(data[i])
+        li.append(a)
+        droplist.append(li)
+      }
+      if (data.length > 0 && this.value != "") {
+        $input
+          .parent(".search_box_warp")
+          .addClass("open")
+        $(".keywords")
+          .on('click', function (e) {
+            $input
+              .val(this.innerText)
+            droplist.empty()
+            $input
+              .parent(".search_box_warp")
+              .removeClass("open")
+          })
+      } else {
+        $input
+          .parent(".search_box_warp")
+          .removeClass("open")
+      }
+    })
+
+}
+
 //===========================================================================================================================
 //搜索条
 //TODO-要有个sleep,函数执行太快
@@ -130,6 +173,7 @@ var sideclose = function() {
 "use strict";
 
 var table = function (url) {
+  this.tableName = ""
   this.url = url
   this.urlTimestamp = null
   this.tableHTML = null
@@ -152,6 +196,7 @@ table.prototype.load = function (url) {
     this.fetch(this.url)
       .init()
       .addInfoCard()
+      .bindEvents()
     this.urlTimestamp = new Date()
   }
   return this
@@ -170,6 +215,7 @@ table.prototype.fetch = function (url) {
   return this
 }
 table.prototype.init = function () {
+  this.tableName = this.responseJson.tablename
   this.hasHeader = this.responseJson.hasHeader
   this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
   // console.log("hasButton", this.hasButton);
@@ -178,32 +224,26 @@ table.prototype.init = function () {
   var data = this.responseJson.data
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
+  table.append(tbody)
+  this.tableHTML = table
   //若有header，初始化header
-  if (this.hasHeader) {
+  if (this.hasHeader && !this.Header) {
     var hr = data.reverse()
       .pop()
     this.Header = hr
     if (this.hasButton) {
-      this.Header.push("操作")
+      this.Header.push("Operation")
       this.keyArr.push("operation")
     }
     var headRow = new table_row(this.Header, this, true)
-    this.data["header"] = headRow
+    // this.data["header"] = headRow
     tbody.append(headRow.HTMLObj) //jsonToHTMLRow将json对象中的data数据转成hr对象
-
     data.reverse()
   }
   //将data装载成table row
   for (var i = 0; i < data.length; i++) {
-    // var row = this.jsonToHTMLRow(data[i])
-    var row = new table_row(data[i], this, false, this.Header)
-    //PrimaryKeyValue 该行的主键值
-    var PrimaryKeyValue = data[i][this.PrimaryKeyIndex]
-    this.data[PrimaryKeyValue] = row
-    tbody.append(row.HTMLObj)
+    this.addRow(data[i])
   }
-  table.append(tbody)
-  this.tableHTML = table
   return this
 }
 table.prototype.to = function ($tableContainer) {
@@ -214,37 +254,63 @@ table.prototype.to = function ($tableContainer) {
   return this
 }
 //bindModal放在这里逻辑上有问题
-table.prototype.bindModal = function () {
-  var t = new table("./test/order-Detail.json")
-  $(this.tableHTML)
-    .find('tr:not(.info_card_row) td:not(.operation)')
-    .on('click', {
-      t: t
-    }, function (e) {
-      $("#orderDetail .goodsInfomation")
-        .empty()
-      var steps = $("#orderDetail")
-        .find(".steps")
-      var baseInfos = $("#orderDetail")
-        .find(".baseInfomation")
-      var comment = $("#orderDetail")
-        .find(".comment")
-      //此处需要一个api来获取绑定数据的json数据
-      t.load()
-        .to("#orderDetail .goodsInfomation")
-      // console.log(t.responseJson);
-      var j = t.responseJson
-      var currStep = j.steps
-      var infos = j.baseInfos
-      var steplis = steps.find('li')
-      steplis.removeClass("active")
-      for (var c = 0; c < currStep; c++) {
-        $(steplis[c])
-          .addClass("active")
-      }
-      $("#orderDetail")
-        .modal()
+// table.prototype.bindModal = function () {
+//   var t = new table("./test/order-Detail.json")
+//   debugger
+//   $(this.tableHTML)
+//     .find('tr:not(.info_card_row) td:not(.operation)')
+//     .on('click', {
+//       t: t
+//     }, function (e) {
+//       $("#orderDetail .goodsInfomation")
+//         .empty()
+//       var steps = $("#orderDetail")
+//         .find(".steps")
+//       var baseInfos = $("#orderDetail")
+//         .find(".baseInfomation")
+//       var comment = $("#orderDetail")
+//         .find(".comment")
+//       //此处需要一个api来获取绑定数据的json数据
+//       t.load()
+//         .to("#orderDetail .goodsInfomation")
+//       // console.log(t.responseJson);
+//       var j = t.responseJson
+//       var currStep = j.steps
+//       var infos = j.baseInfos
+//       var steplis = steps.find('li')
+//       steplis.removeClass("active")
+//       for (var c = 0; c < currStep; c++) {
+//         $(steplis[c])
+//           .addClass("active")
+//       }
+//       $("#orderDetail")
+//         .modal()
+//     })
+// }
+
+table.prototype.bindEvents = function () {
+  var data = this.data
+  // for (var i in data) {
+  //   data[i].onCardLongPress(function () {
+  //     orderDetail(this.dataset.primarykey)
+  //   })
+  // }
+  // this.onCardLongPress(function (e) {
+  //   console.log("long press");
+  //   orderDetail(this.dataset.primarykey)
+  // })
+  // this.onClick(function (e) {})
+  //为每一行绑定事件
+
+  for (var i in data) {
+    data[i].onClick(function () {
+      orderDetail(this.dataset.primarykey)
     })
+    data[i].onCardLongPress(500, function () {
+      orderDetail(this.dataset.primarykey)
+    })
+  }
+
 }
 table.prototype.addInfoCard = function () {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
@@ -258,49 +324,63 @@ table.prototype.addInfoCard = function () {
       continue
     var table_row = this.data[k]
     table_row.rowAddCard(colorArr[i % colorArr.length]) //包装成r对象
-    var mod = $(table_row.buildCard()) //build成card
-    mod.find(".card_head")
+    table_row.buildCard() //build成card
+    table_row.CardHTMLObj.find(".card_head")
       .siblings('div')
       .hide()
-    mod.find(".card_head")
+    table_row.CardHTMLObj.find(".card_head")
       .on('click', function () {
         $(this)
           .siblings('div')
           .toggle()
       })
     $(table_row.HTMLObj)
-      .after(mod)
+      .after(table_row.CardHTMLObj)
     i++
   }
-}
-table.prototype.new = function (tablename, header, keyArr) {
-  var Json = {
-    "tablename": "",
-    "hasHeader": true,
-    "hasButton": false,
-    "keyArr": [],
-    "data": []
-  }
-  Json["tablename"] = tablename
-  Json["keyArr"] = keyArr
-  // Json["data"].push(header)
-  this.Header = header
-  window.__newTable = this
-  this.responseJson = Json
   return this
 }
-
-table.prototype.addRow = function (Obj) {
-  var rj = this.responseJson
-  rj["data"].push(Obj)
-
-  rj["data"].reverse()
-  rj["data"].push(this.Header)
-  rj["data"].reverse()
+table.prototype.new = function (Obj, header) {
+  var tablename = Obj.tablname ? Obj.tablename : ""
+  var hasHeader = Obj.hasHeader ? Obj.hasHeader : false
+  var hasButton = Obj.hasButton ? Obj.hasButton : false
+  var keyArr = Obj.keyArr ? Obj.keyArr : []
+  var Json = {
+    "tablename": tablename,
+    "hasHeader": hasHeader,
+    "hasButton": hasButton,
+    "keyArr": keyArr,
+    "data": []
+  }
+  if (hasHeader && header)
+    Json["data"].push(header)
+  this.responseJson = Json
   this.init()
-    .addInfoCard()
-  this.to(this.container)
-  this.responseJson = rj
+  return this
+}
+table.prototype.addRow = function (rowJSONObj) {
+  var tbody = $(this.tableHTML)
+    .find("tbody")
+  var row = new table_row(rowJSONObj, this, false, this.Header)
+  //PrimaryKeyValue 该行的主键值
+  var PrimaryKeyValue = rowJSONObj[this.PrimaryKeyIndex]
+  if (this.data[PrimaryKeyValue]) {
+    debugger
+    throw "Error! This primary key is alreay occupied , If need update , please use update function"
+  }
+  this.data[PrimaryKeyValue] = row
+  tbody.append(row.HTMLObj)
+}
+
+table.prototype.onCardLongPress = function (callback) {
+  for (var item in this.data) {
+    this.data[item].onCardLongPress(500, callback)
+  }
+}
+table.prototype.onClick = function (callback) {
+  for (var item in this.data) {
+    this.data[item].onClick(callback)
+  }
 }
 
 var table_row = function (data, ParentTable, isHeader, Headers) {
@@ -308,6 +388,7 @@ var table_row = function (data, ParentTable, isHeader, Headers) {
   this.hasButton = ParentTable.hasButton
   this.keyArr = ParentTable.keyArr
   this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
+  this.PrimaryKeyValue = data[this.PrimaryKeyIndex]
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
   this.JSONObj = data
@@ -323,26 +404,26 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
       var th = $("<th></th>")
       row.append(th.html(this.Headers[i]))
     } else {
-      var td = $("<td></td>")
+      var td = $("<td data-primaryKey='" + this.PrimaryKeyValue + "'></td>")
       row.append(td.html(data[i]))
     }
   }
   if (hasButton && !isHeader) {
     //如果是header行，则不用加button
     var td = $("<td class='operation'></td>")
-    var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
-      .html() //HACK
+    // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
+    //   .html() //HACK
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit(" + PrimaryKeyValue + ")\">编辑</button>")
-    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del(" + PrimaryKeyValue + ")\">删除</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply(" + PrimaryKeyValue + ")\">补充</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve(" + PrimaryKeyValue + ")\">通过</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject(" + PrimaryKeyValue + ")\">拒绝</button>")
-    var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate(" + PrimaryKeyValue + ")\">物流更新</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished(" + PrimaryKeyValue + ")\">完成</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
-    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy(" + PrimaryKeyValue + ")\">Copy</button>")
-    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft(" + PrimaryKeyValue + ")\">delate</button>")
+    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
+    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
+    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
+    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
+    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
+    var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
+    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
+    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
 
     //HACK button
     switch (window.currentPos) {
@@ -423,6 +504,7 @@ table_row.prototype.buildCard = function () {
   var props = this.CardJSONObj.Props
   var date = this.CardJSONObj.Date
   var bgcolor = this.CardJSONObj.Bgcolor
+  var primaryKey = this.PrimaryKeyValue
   var headertext = ""
   for (var headertitle in cardHeader) {
     var headertextcontent = props[headertitle]
@@ -458,7 +540,7 @@ table_row.prototype.buildCard = function () {
   }
 
   var template =
-    `<tr class="info_card_row">
+    `<tr class="info_card_row" data-primaryKey="${primaryKey}">
         <td colspan="1">
           <div class="card col-xs-12 row" style="border-color:${bgcolor}">
             <div class="card_head row" style="background-color:${bgcolor}">
@@ -487,51 +569,58 @@ table_row.prototype.remove = function () {
 table_row.prototype.add = function () {
 
 }
-
-var keywordsdata = JSON.parse($.ajax({
-  url: "./test/searchDictionary/BrochureType.json",
-  async: false
-}).responseText)
-$("#BrochureType").on('keyup', function(e) {
-  e.preventDefault()
-  var droplist = $(".keyhint")
-  droplist.empty()
-  var data = queryKeyWords(this.value, keywordsdata)
-  for (var i in data) {
-    var li = $("<li></li>")
-    var a = $("<a href=\"#\" class='keywords'></a>")
-    a.html(data[i])
-    li.append(a)
-    droplist.append(li)
-  }
-  if (data.length > 0 && this.value != "") {
-    $(".search_box_warp").addClass("open")
-    $(".keywords").on('click', function(e) {
-      $("#BrochureType").val(this.innerText)
-      droplist.empty()
-      $(".search_box_warp")
-        .removeClass("open")
+table_row.prototype.onCardLongPress = function (time, callback) {
+  console.log("longPress");
+  $(this.CardHTMLObj)
+    .find(".card_body")
+    .on({
+      touchstart: function (e) {
+        timeOutEvent = setTimeout(callback, time);
+      },
+      touchmove: function () {
+        clearTimeout(timeOutEvent);
+        timeOutEvent = 0;
+      },
+      touchend: function () {
+        clearTimeout(timeOutEvent);
+        return false;
+      }
     })
-  } else {
-    $(".search_box_warp")
-      .removeClass("open")
-  }
-})
-$('#EstimateTime').datetimepicker({
-  format: 'yyyy-mm-dd',
-  weekStart: 1,
-  startDate: '2017-01-01',
-  autoclose: true,
-  startView: 4,
-  minView: 2,
-  forceParse: false,
-  language: 'zh-CN'
-});
+}
+table_row.prototype.onClick = function (callback) {
+  console.log("click");
+  $(this.HTMLObj)
+    .find("td:not('.operation')")
+    .on("click", callback)
+}
+
+bindInputQuery("#dealerId", "./test/searchDictionary/DealerCollections.json")
+bindInputQuery("#BrochureType", "./test/searchDictionary/BrochureType.json")
+$('#EstimateTime')
+  .datetimepicker({
+    format: 'yyyy-mm-dd',
+    weekStart: 1,
+    startDate: '2017-01-01',
+    autoclose: true,
+    startView: 4,
+    minView: 2,
+    forceParse: false,
+    language: 'zh-CN'
+  });
 
 
-$("#addPR").on("click",function(){
-  if(!window.__newTable){
-    var t = new table()
-    t.new("AddPR",["编号","申请种类","申请数量","收货人","收货电话","交付时间","收货地址"],["id","key","prop","key","prop","prop","prop"]).to($("#InfomationAddArea"))
-  }
-})
+$("#addPR")
+  .on("click", function () {
+    if (!window.__purchaseRequisitionTable) {
+      var purchaseRequisitionTable = new table()
+      var t = {
+        "tablename": "AddPR",
+        "hasHeader": true,
+        "hasButton": false,
+        "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
+      }
+      purchaseRequisitionTable.new(t, ["编号", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址"])
+        .to($("#InfomationAddArea"))
+      window.__purchaseRequisitionTable = purchaseRequisitionTable
+    }
+  })

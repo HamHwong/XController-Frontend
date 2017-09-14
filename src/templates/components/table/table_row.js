@@ -3,6 +3,7 @@ var table_row = function (data, ParentTable, isHeader, Headers) {
   this.hasButton = ParentTable.hasButton
   this.keyArr = ParentTable.keyArr
   this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
+  this.PrimaryKeyValue = data[this.PrimaryKeyIndex]
   this.isHeader = isHeader
   this.Headers = this.isHeader ? data : Headers
   this.JSONObj = data
@@ -18,26 +19,26 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
       var th = $("<th></th>")
       row.append(th.html(this.Headers[i]))
     } else {
-      var td = $("<td></td>")
+      var td = $("<td data-primaryKey='" + this.PrimaryKeyValue + "'></td>")
       row.append(td.html(data[i]))
     }
   }
   if (hasButton && !isHeader) {
     //如果是header行，则不用加button
     var td = $("<td class='operation'></td>")
-    var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
-      .html() //HACK
+    // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
+    //   .html() //HACK
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit(" + PrimaryKeyValue + ")\">编辑</button>")
-    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del(" + PrimaryKeyValue + ")\">删除</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply(" + PrimaryKeyValue + ")\">补充</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve(" + PrimaryKeyValue + ")\">通过</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject(" + PrimaryKeyValue + ")\">拒绝</button>")
-    var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate(" + PrimaryKeyValue + ")\">物流更新</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished(" + PrimaryKeyValue + ")\">完成</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy(" + PrimaryKeyValue + ")\">历史</button>")
-    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy(" + PrimaryKeyValue + ")\">Copy</button>")
-    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft(" + PrimaryKeyValue + ")\">delate</button>")
+    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
+    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
+    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
+    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
+    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
+    var expressBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
+    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
+    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
 
     //HACK button
     switch (window.currentPos) {
@@ -118,6 +119,7 @@ table_row.prototype.buildCard = function () {
   var props = this.CardJSONObj.Props
   var date = this.CardJSONObj.Date
   var bgcolor = this.CardJSONObj.Bgcolor
+  var primaryKey = this.PrimaryKeyValue
   var headertext = ""
   for (var headertitle in cardHeader) {
     var headertextcontent = props[headertitle]
@@ -153,7 +155,7 @@ table_row.prototype.buildCard = function () {
   }
 
   var template =
-    `<tr class="info_card_row">
+    `<tr class="info_card_row" data-primaryKey="${primaryKey}">
         <td colspan="1">
           <div class="card col-xs-12 row" style="border-color:${bgcolor}">
             <div class="card_head row" style="background-color:${bgcolor}">
@@ -181,4 +183,28 @@ table_row.prototype.remove = function () {
 }
 table_row.prototype.add = function () {
 
+}
+table_row.prototype.onCardLongPress = function (time, callback) {
+  console.log("longPress");
+  $(this.CardHTMLObj)
+    .find(".card_body")
+    .on({
+      touchstart: function (e) {
+        timeOutEvent = setTimeout(callback, time);
+      },
+      touchmove: function () {
+        clearTimeout(timeOutEvent);
+        timeOutEvent = 0;
+      },
+      touchend: function () {
+        clearTimeout(timeOutEvent);
+        return false;
+      }
+    })
+}
+table_row.prototype.onClick = function (callback) {
+  console.log("click");
+  $(this.HTMLObj)
+    .find("td:not('.operation')")
+    .on("click", callback)
 }

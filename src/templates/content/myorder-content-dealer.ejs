@@ -32,7 +32,7 @@
       </nav>
     </div>
     <%-include('/components/modal/modal',{type:"purchaseRequisition"})%>
-      <%-include('/components/modal/modal',{type:"orderDetail"})%>
+      <%-include('/components/modal/modal',{type:"Dealer.Order.Details"})%>
 
         <script>
           var CurrentTableList = {
@@ -45,11 +45,13 @@
               var $tablecontainer = $(i)
               var t = new table(CurrentTableList[i])
               t.load().to($tablecontainer)
-              t.bindModal()
             }
           }
 
           var copy = function(){
 
+          }
+          var orderDetail = function(primaryKey){
+            $("#Details").modal()
           }
         </script>
