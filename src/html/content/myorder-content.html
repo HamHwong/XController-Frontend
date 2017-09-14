@@ -73,18 +73,12 @@
       </div>
 
       <div class="modal-body">
-        <form class="form" action="index.html" method="post">
+        <form class="form" method="post" id="PRForm">
           <div class="modal-infopart baseInfomation form-group">
             <input type="text" name="itemId" id="itemId" value="" hidden>
-            <div class="form-group col-md-4 search_box_warp">
-              <label for="dealerId">代理商:</label>
-              <input name="dealerId" id="dealerId" placeholder="请输入代理商" class="form-control" />
-              <ul class="dropdown-menu keyhint"></ul>
-            </div>
-
             <div class="form-group col-md-4">
               <label for="area">区域:</label>
-              <input type="text" name="area" id="area" value="Area" hidden>
+              <input type="text" name="area_input" id="area_input" value="" hidden>
               <select class="form-control" class="area" id="area">
                 <option value="-1" selected>请选择地区</option>
                 <option value="hddq">华东地区</option>
@@ -93,7 +87,11 @@
                 <option value="xndq">西南地区</option>
               </select>
             </div>
-
+            <div class="form-group col-md-4 search_box_warp">
+              <label for="DemanderFK">代理商:</label>
+              <input name="DemanderFK" id="DemanderFK" placeholder="请输入代理商" class="form-control" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
             <div class="form-group col-md-4">
               <label for="PurposeFK">用途:</label>
               <input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>
@@ -234,10 +232,11 @@
 
     function autoComplateInfoOfDealer() {
       if ("dealer" == getCookie("auth")) {
-        $("#dealerId").val("dealer")
-        $("#dealerId").attr("disabled", "true")
+        $("#DemanderFK").val("dealer")
+        $("#DemanderFK").attr("disabled", "true")
 
         $("#area").val(getPrototypies("dealer", "area"))
+        $("#area_input").val(getPrototypies("dealer", "area"))
         $("#area").attr("disabled", "true")
       }
     }
@@ -258,7 +257,7 @@
           "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
         }
 
-        draftTable.new(t, ["编号", "序號", "代理商", "用途", "区域", "保存時間", "保存人"]).to($("#draft"))
+        draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"]).to($("#draft"))
         window.__draftTable = draftTable
       }
       var arr = []
@@ -268,10 +267,7 @@
       for (var i = 0; i < inputs.length; i++) {
         arr.push($(inputs[i]).val())
       }
-
-      if (window.__draftTable) {
-        window.__draftTable.addRow(arr)
-      }
+      window.__draftTable.addRow(arr)
       var a = selects.not('[disabled]')
       var b = inputs.not('[disabled]')
       for (var j = 0; j < a.length; j++) {
@@ -284,6 +280,9 @@
       $("#purchaseRequisition").modal('hide')
     }
 
+    function Submit() {
+      $("#PRForm").submit()
+    }
   </script>
 
 

@@ -8,6 +8,7 @@ var table = function (url) {
   this.keyArr = []
   this.responseJson = null
   this.hasButton = false
+  this.buttonPool = []
   this.hasHeader = false
   this.Header = null
   this.container = null
@@ -45,7 +46,8 @@ table.prototype.fetch = function (url) {
 table.prototype.init = function () {
   this.tableName = this.responseJson.tablename
   this.hasHeader = this.responseJson.hasHeader
-  this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
+  this.buttonPool = this.responseJson.buttonPool
+  this.hasButton = this.responseJson.hasButton ? this.responseJson.buttonPool : false
   // console.log("hasButton", this.hasButton);
   this.keyArr = this.responseJson.keyArr
   this.PrimaryKeyIndex = this.keyArr.indexOf('id')
@@ -81,55 +83,9 @@ table.prototype.to = function ($tableContainer) {
   $tableContainer.append(this.tableHTML)
   return this
 }
-//bindModal放在这里逻辑上有问题
-// table.prototype.bindModal = function () {
-//   var t = new table("./test/order-Detail.json")
-//   debugger
-//   $(this.tableHTML)
-//     .find('tr:not(.info_card_row) td:not(.operation)')
-//     .on('click', {
-//       t: t
-//     }, function (e) {
-//       $("#orderDetail .goodsInfomation")
-//         .empty()
-//       var steps = $("#orderDetail")
-//         .find(".steps")
-//       var baseInfos = $("#orderDetail")
-//         .find(".baseInfomation")
-//       var comment = $("#orderDetail")
-//         .find(".comment")
-//       //此处需要一个api来获取绑定数据的json数据
-//       t.load()
-//         .to("#orderDetail .goodsInfomation")
-//       // console.log(t.responseJson);
-//       var j = t.responseJson
-//       var currStep = j.steps
-//       var infos = j.baseInfos
-//       var steplis = steps.find('li')
-//       steplis.removeClass("active")
-//       for (var c = 0; c < currStep; c++) {
-//         $(steplis[c])
-//           .addClass("active")
-//       }
-//       $("#orderDetail")
-//         .modal()
-//     })
-// }
 
 table.prototype.bindEvents = function () {
   var data = this.data
-  // for (var i in data) {
-  //   data[i].onCardLongPress(function () {
-  //     orderDetail(this.dataset.primarykey)
-  //   })
-  // }
-  // this.onCardLongPress(function (e) {
-  //   console.log("long press");
-  //   orderDetail(this.dataset.primarykey)
-  // })
-  // this.onClick(function (e) {})
-  //为每一行绑定事件
-
   for (var i in data) {
     data[i].onClick(function () {
       orderDetail(this.dataset.primarykey)

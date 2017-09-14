@@ -1,6 +1,7 @@
 var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
+  this.buttonPool = ParentTable.buttonPool
   this.keyArr = ParentTable.keyArr
   this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
   this.PrimaryKeyValue = data[this.PrimaryKeyIndex]
@@ -28,7 +29,7 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
     var td = $("<td class='operation'></td>")
     // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
     //   .html() //HACK
-    var buttonPool = []
+    var buttonPool = this.buttonPool
     var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
     var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
     var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
@@ -38,51 +39,52 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
     var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
     var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
     var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
-    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
+    var deleteDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
 
-    //HACK button
-    switch (window.currentPos) {
-    case "myOrder":
-    case "myOrderSupplier":
-      buttonPool.push(expressBtn)
-      buttonPool.push(finishedBtn)
-      break
-    case "myOrderDealer":
-      buttonPool.push(copyBtn)
-      break
-    case "Dealer.Draft":
-      buttonPool.push(delateDraft)
-      break
-    case "orderAdmin":
-      buttonPool.push(approveBtn)
-      buttonPool.push(rejectBtn)
-      break
-    case "BrochureAdmin":
-      buttonPool.push(supplyBtn)
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      //HACK 需要为管理员单独列一个
-      buttonPool.push(historyBtn)
-      break
-    case "Dealer":
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      break
-    case "Supplier":
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      break
-    case "Admin":
-      break
-    }
-
-    for (var i = 0; i < buttonPool.length; i++) {
-      td.append(buttonPool[i])
-    }
-    // HACK END
-    row.append(td)
+    //
+    // //HACK button
+    // switch (window.currentPos) {
+    // case "myOrder":
+    // case "myOrderSupplier":
+    //   buttonPool.push(expressBtn)
+    //   buttonPool.push(finishedBtn)
+    //   break
+    // case "myOrderDealer":
+    //   buttonPool.push(copyBtn)
+    //   break
+    // case "Dealer.Draft":
+    //   buttonPool.push(delateDraft)
+    //   break
+    // case "orderAdmin":
+    //   buttonPool.push(approveBtn)
+    //   buttonPool.push(rejectBtn)
+    //   break
+    // case "BrochureAdmin":
+    //   buttonPool.push(supplyBtn)
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   //HACK 需要为管理员单独列一个
+    //   buttonPool.push(historyBtn)
+    //   break
+    // case "Dealer":
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   break
+    // case "Supplier":
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   break
+    // case "Admin":
+    //   break
   }
-  return row
+
+  for (var i = 0; i < buttonPool.length; i++) {
+    td.append(buttonPool[i])
+  }
+  // HACK END
+  row.append(td)
+}
+return row
 }
 table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj

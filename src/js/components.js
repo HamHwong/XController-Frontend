@@ -9,49 +9,6 @@ var tab_init = function() {
   })
 }
 
-var bindInputQuery = function ($input, url) {
-  $input = $($input)
-  $input
-    .on('keyup', function (e) {
-      e.preventDefault()
-      var keywordsdata = JSON.parse($.ajax({
-          url: url,
-          async: false
-        })
-        .responseText)
-      var droplist = $input
-        .siblings(".keyhint")
-      droplist.empty()
-      var data = queryKeyWords(this.value, keywordsdata)
-      for (var i in data) {
-        var li = $("<li></li>")
-        var a = $("<a href=\"#\" class='keywords'></a>")
-        a.html(data[i])
-        li.append(a)
-        droplist.append(li)
-      }
-      if (data.length > 0 && this.value != "") {
-        $input
-          .parent(".search_box_warp")
-          .addClass("open")
-        $(".keywords")
-          .on('click', function (e) {
-            $input
-              .val(this.innerText)
-            droplist.empty()
-            $input
-              .parent(".search_box_warp")
-              .removeClass("open")
-          })
-      } else {
-        $input
-          .parent(".search_box_warp")
-          .removeClass("open")
-      }
-    })
-
-}
-
 //===========================================================================================================================
 //搜索条
 //TODO-要有个sleep,函数执行太快
@@ -116,20 +73,58 @@ var keywordsdata = [
 // $(".card>div:not('.card_head')").hide(100)
 //===========================================================================================================================
 
+var bindInputQuery = function ($input, url) {
+  $input = $($input)
+  $input
+    .on('keyup', function (e) {
+      e.preventDefault()
+      var keywordsdata = JSON.parse($.ajax({
+          url: url,
+          async: false
+        })
+        .responseText)
+      var droplist = $input
+        .siblings(".keyhint")
+      droplist.empty()
+      var data = queryKeyWords(this.value, keywordsdata)
+      for (var i in data) {
+        var li = $("<li></li>")
+        var a = $("<a href=\"#\" class='keywords'></a>")
+        a.html(data[i])
+        li.append(a)
+        droplist.append(li)
+      }
+      if (data.length > 0 && this.value != "") {
+        $input
+          .parent(".search_box_warp")
+          .addClass("open")
+        $(".keywords")
+          .on('click', function (e) {
+            $input
+              .val(this.innerText)
+            droplist.empty()
+            $input
+              .parent(".search_box_warp")
+              .removeClass("open")
+          })
+      } else {
+        $input
+          .parent(".search_box_warp")
+          .removeClass("open")
+      }
+    })
+
+}
 
 // window.currentPos = "myOrder"
 
 var contentmapper = {
-  myOrder: "myorder-content.html",
-  myOrderDealer: "myorder-content-dealer.html",
-  myOrderSupplier: "myorder-content-supplier.html",
-  orderAdmin: "order-content.html",
-  Brochure: "Brochure-content.html",
-  BrochureAdmin: "Brochure-content-admin.html",
-  Dealer: "Dealer-content.html",
-  Supplier: "Supplier-content.html",
-  Inventory:"Supplier-Inventory.html",
-  Admin: ""
+  MyOrder: "MyOrder.html",
+  OrderAdmin: "OrderAdmin.html",
+  BrochureAdmin: "BrochureAdmin.html",
+  DealerAdmin: "DealerAdmin.html",
+  SupplierAdmin: "SupplierAdmin.html",
+  Inventory: "Inventory.html",
 }
 
 var hyperlink_init = function () {
@@ -141,7 +136,7 @@ var hyperlink_init = function () {
       var file = contentmapper[position]
       if ("" == file || undefined == file) return
       $.ajax({
-        url: "./content/" + file,
+        url: "./content/" + getCookie("auth") + "/" + file,
         async: false,
         success: function (Obj) {
           $("#content_wapper")
@@ -149,7 +144,7 @@ var hyperlink_init = function () {
           $("#content_wapper")
             .append(Obj.trim())
 
-          window.currentPos = position//HACK Button
+          window.currentPos = getCookie("auth") + "." + position //HACK Button
 
           initPageByName("content")
           sideclose()
@@ -170,6 +165,21 @@ var sideclose = function() {
   $('.sideBtn .glyphicon').removeClass().addClass('glyphicon').addClass('sideBtnIcon-close')
 }
 
+//多模态HACK
+var couter = 0;
+$(document)
+  .on('hidden.bs.modal', '.modal', function (e) {
+    $(this)
+      .css("z-index", 1050)
+    couter--
+  });
+$(document)
+  .on('show.bs.modal', '.modal', function (e) {
+    $(this)
+      .css("z-index", 1050 + couter)
+    couter++
+  });
+
 "use strict";
 
 var table = function (url) {
@@ -180,6 +190,7 @@ var table = function (url) {
   this.keyArr = []
   this.responseJson = null
   this.hasButton = false
+  this.buttonPool = []
   this.hasHeader = false
   this.Header = null
   this.container = null
@@ -217,7 +228,8 @@ table.prototype.fetch = function (url) {
 table.prototype.init = function () {
   this.tableName = this.responseJson.tablename
   this.hasHeader = this.responseJson.hasHeader
-  this.hasButton = this.responseJson.hasButton ? this.responseJson.hasButton : false
+  this.buttonPool = this.responseJson.buttonPool
+  this.hasButton = this.responseJson.hasButton ? this.responseJson.buttonPool : false
   // console.log("hasButton", this.hasButton);
   this.keyArr = this.responseJson.keyArr
   this.PrimaryKeyIndex = this.keyArr.indexOf('id')
@@ -253,55 +265,9 @@ table.prototype.to = function ($tableContainer) {
   $tableContainer.append(this.tableHTML)
   return this
 }
-//bindModal放在这里逻辑上有问题
-// table.prototype.bindModal = function () {
-//   var t = new table("./test/order-Detail.json")
-//   debugger
-//   $(this.tableHTML)
-//     .find('tr:not(.info_card_row) td:not(.operation)')
-//     .on('click', {
-//       t: t
-//     }, function (e) {
-//       $("#orderDetail .goodsInfomation")
-//         .empty()
-//       var steps = $("#orderDetail")
-//         .find(".steps")
-//       var baseInfos = $("#orderDetail")
-//         .find(".baseInfomation")
-//       var comment = $("#orderDetail")
-//         .find(".comment")
-//       //此处需要一个api来获取绑定数据的json数据
-//       t.load()
-//         .to("#orderDetail .goodsInfomation")
-//       // console.log(t.responseJson);
-//       var j = t.responseJson
-//       var currStep = j.steps
-//       var infos = j.baseInfos
-//       var steplis = steps.find('li')
-//       steplis.removeClass("active")
-//       for (var c = 0; c < currStep; c++) {
-//         $(steplis[c])
-//           .addClass("active")
-//       }
-//       $("#orderDetail")
-//         .modal()
-//     })
-// }
 
 table.prototype.bindEvents = function () {
   var data = this.data
-  // for (var i in data) {
-  //   data[i].onCardLongPress(function () {
-  //     orderDetail(this.dataset.primarykey)
-  //   })
-  // }
-  // this.onCardLongPress(function (e) {
-  //   console.log("long press");
-  //   orderDetail(this.dataset.primarykey)
-  // })
-  // this.onClick(function (e) {})
-  //为每一行绑定事件
-
   for (var i in data) {
     data[i].onClick(function () {
       orderDetail(this.dataset.primarykey)
@@ -386,6 +352,7 @@ table.prototype.onClick = function (callback) {
 var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
+  this.buttonPool = ParentTable.buttonPool
   this.keyArr = ParentTable.keyArr
   this.PrimaryKeyIndex = ParentTable.PrimaryKeyIndex
   this.PrimaryKeyValue = data[this.PrimaryKeyIndex]
@@ -413,7 +380,7 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
     var td = $("<td class='operation'></td>")
     // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
     //   .html() //HACK
-    var buttonPool = []
+    var buttonPool = this.buttonPool
     var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
     var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
     var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
@@ -423,51 +390,52 @@ table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
     var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
     var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
     var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
-    var delateDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"delateDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
+    var deleteDraft = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">delate</button>")
 
-    //HACK button
-    switch (window.currentPos) {
-    case "myOrder":
-    case "myOrderSupplier":
-      buttonPool.push(expressBtn)
-      buttonPool.push(finishedBtn)
-      break
-    case "myOrderDealer":
-      buttonPool.push(copyBtn)
-      break
-    case "Dealer.Draft":
-      buttonPool.push(delateDraft)
-      break
-    case "orderAdmin":
-      buttonPool.push(approveBtn)
-      buttonPool.push(rejectBtn)
-      break
-    case "BrochureAdmin":
-      buttonPool.push(supplyBtn)
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      //HACK 需要为管理员单独列一个
-      buttonPool.push(historyBtn)
-      break
-    case "Dealer":
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      break
-    case "Supplier":
-      buttonPool.push(editBtn)
-      buttonPool.push(delBtn)
-      break
-    case "Admin":
-      break
-    }
-
-    for (var i = 0; i < buttonPool.length; i++) {
-      td.append(buttonPool[i])
-    }
-    // HACK END
-    row.append(td)
+    //
+    // //HACK button
+    // switch (window.currentPos) {
+    // case "myOrder":
+    // case "myOrderSupplier":
+    //   buttonPool.push(expressBtn)
+    //   buttonPool.push(finishedBtn)
+    //   break
+    // case "myOrderDealer":
+    //   buttonPool.push(copyBtn)
+    //   break
+    // case "Dealer.Draft":
+    //   buttonPool.push(delateDraft)
+    //   break
+    // case "orderAdmin":
+    //   buttonPool.push(approveBtn)
+    //   buttonPool.push(rejectBtn)
+    //   break
+    // case "BrochureAdmin":
+    //   buttonPool.push(supplyBtn)
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   //HACK 需要为管理员单独列一个
+    //   buttonPool.push(historyBtn)
+    //   break
+    // case "Dealer":
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   break
+    // case "Supplier":
+    //   buttonPool.push(editBtn)
+    //   buttonPool.push(delBtn)
+    //   break
+    // case "Admin":
+    //   break
   }
-  return row
+
+  for (var i = 0; i < buttonPool.length; i++) {
+    td.append(buttonPool[i])
+  }
+  // HACK END
+  row.append(td)
+}
+return row
 }
 table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj
@@ -623,4 +591,14 @@ $("#addPR")
         .to($("#InfomationAddArea"))
       window.__purchaseRequisitionTable = purchaseRequisitionTable
     }
+  })
+
+$("#purchaseRequisition")
+  .find("form")
+  .on("submit", function (e) {
+    console.log(e);
+  })
+$("#purchaseRequisition")
+  .on("hidden.bs.modal", function () {
+
   })

@@ -1,16 +1,12 @@
 // window.currentPos = "myOrder"
 
 var contentmapper = {
-  myOrder: "myorder-content.html",
-  myOrderDealer: "myorder-content-dealer.html",
-  myOrderSupplier: "myorder-content-supplier.html",
-  orderAdmin: "order-content.html",
-  Brochure: "Brochure-content.html",
-  BrochureAdmin: "Brochure-content-admin.html",
-  Dealer: "Dealer-content.html",
-  Supplier: "Supplier-content.html",
-  Inventory:"Supplier-Inventory.html",
-  Admin: ""
+  MyOrder: "MyOrder.html",
+  OrderAdmin: "OrderAdmin.html",
+  BrochureAdmin: "BrochureAdmin.html",
+  DealerAdmin: "DealerAdmin.html",
+  SupplierAdmin: "SupplierAdmin.html",
+  Inventory: "Inventory.html",
 }
 
 var hyperlink_init = function () {
@@ -22,7 +18,7 @@ var hyperlink_init = function () {
       var file = contentmapper[position]
       if ("" == file || undefined == file) return
       $.ajax({
-        url: "./content/" + file,
+        url: "./content/" + getCookie("auth") + "/" + file,
         async: false,
         success: function (Obj) {
           $("#content_wapper")
@@ -30,7 +26,7 @@ var hyperlink_init = function () {
           $("#content_wapper")
             .append(Obj.trim())
 
-          window.currentPos = position//HACK Button
+          window.currentPos = getCookie("auth") + "." + position //HACK Button
 
           initPageByName("content")
           sideclose()

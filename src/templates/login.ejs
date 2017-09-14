@@ -78,20 +78,24 @@
 
     switch (e('#userid').value) {
       case 'admin':
+      case 'Admin':
         window.location.href = "/admin-home.html"
-        setCookie("auth","admin")
+        setCookie("auth","Admin")
         break
       case 'dealer':
+      case 'Dealer':
         window.location.href = "/dealer-home.html"
-        setCookie("auth","dealer")
+        setCookie("auth","Dealer")
         break
       case 'supplier':
+      case 'Supplier':
         window.location.href = "/supplier-home.html"
-        setCookie("auth","supplier")
+        setCookie("auth","Supplier")
         break
       case 'sales':
+      case 'Sales':
         window.location.href = "/dealer-home.html"
-        setCookie("auth","sales")
+        setCookie("auth","Sales")
         break
     }
     return false

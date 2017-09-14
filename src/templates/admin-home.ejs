@@ -14,7 +14,7 @@
         <%-include("/components/nav/admin-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
-      <%-include("/content/order-content")%>
+      <%-include("/content/Admin/orderAdmin")%>
     </div>
   </div>
 
@@ -45,19 +45,6 @@
           init[i][j]()
       }
     })
-
-
-    //多模态HACK
-    var couter = 0;
-    $(document).on('hidden.bs.modal','.modal',function(e){
-        $(this).css("z-index", 1050)
-        couter--
-        $("#orderDetail .goodsInfomation").empty()
-    });
-    $(document).on('show.bs.modal','.modal',function(e){
-        $(this).css("z-index", 1050+couter)
-        couter++
-    });
   </script>
 
 </body>

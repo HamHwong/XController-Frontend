@@ -14,7 +14,7 @@
         <%-include("/components/nav/dealer-topNav")%>
     </header>
     <div id="content_wapper" class="container-fluid">
-      <%-include("/content/myorder-content-dealer")%>
+      <%-include("/content/Dealer/MyOrder")%>
     </div>
   </div>
 
@@ -45,17 +45,6 @@
           init[i][j]()
       }
     })
-    //多模态HACK
-    var couter = 0;
-    $(document).on('hidden.bs.modal', '.modal', function(e) {
-      $(this).css("z-index", 1050)
-      couter--
-    });
-    $(document).on('show.bs.modal', '.modal', function(e) {
-      autoComplateInfoOfDealer()
-      $(this).css("z-index", 1050 + couter)
-      couter++
-    });
   </script>
 
 </body>
