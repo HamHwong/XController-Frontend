@@ -82,8 +82,8 @@
             <input type="text" name="itemId" id="itemId" value="" hidden>
             <div class="form-group col-md-4">
               <label for="area">区域:</label>
-              <input type="text" name="area_input" id="area_input" value="" hidden>
-              <select class="form-control" class="area" id="area">
+              <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
+              <select class="form-control" name="area" id="area">
                 <option value="-1" selected>请选择地区</option>
                 <option value="hddq">华东地区</option>
                 <option value="hbdq">华北地区</option>
@@ -98,12 +98,12 @@
             </div>
             <div class="form-group col-md-4">
               <label for="PurposeFK">用途:</label>
-              <input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>
+              <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
               <select name="PurposeFK" id="PurposeFK" class="form-control">
                 <option value="-1" selected>请选择用途</option>
-                <option value="">一般销售用途</option>
-                <option value="">区域会议</option>
-                <option value="">全国性会议</option>
+                <option value="forSales">一般销售用途</option>
+                <option value="partMeeting">区域会议</option>
+                <option value="nationalMeeting">全国性会议</option>
               </select>
             </div>
             <input type="text" name="saveTime" id="saveTime" value="" hidden>
@@ -189,105 +189,68 @@
   </div>
 </div>
 
-
 <script>
-  var row_counter = 0
-  function AppendPR() {
-    var arr = []
-    arr.push(++row_counter)
-    var a = $("#AddBrochureType input")
-    for (var i = 0; i < a.length; i++) {
-      arr.push($(a[i]).val())
+
+function Draft() {
+  // console.log("Draft");
+  $("#itemId")
+    .val(new Date()
+      .getDay() + "-" + (getCookie("auth") + "-" + new Date()
+        .getSeconds()))
+  $("#saveTime")
+    .val(new Date())
+  $("#saver")
+    .val(getCookie("auth"))
+
+  if (!window.__draftTable) {
+    var draftTable = new table()
+    var t = {
+      "tablename": "Draft",
+      "rowsperpage": 10,
+      "hasHeader": true,
+      "hasButton": true,
+      "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
+      "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
     }
-    if(window.__purchaseRequisitionTable){
-      window.__purchaseRequisitionTable.addRow(arr)
-    }
-    ClearInputs(a)
+    draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
+      .to($("#draft"))
+    window.__draftTable = draftTable
   }
-  function ClearInputs(inputs){
-    var a = inputs
-    for (var i = 0; i < a.length; i++) {
-      $(a[i]).val("")
-    }
+  $("#area")
+    .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
+  var formArr = $("#purchaseRequisition form")
+    .serializeArray()
+  $("#area")
+    .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
+  var set = {}
+  for (var record of formArr) {
+    var key = record["name"]
+    var value = record["value"]
+    set[key] = value
   }
-  function AddPR(){
-    AppendPR()
-    $("#AddBrochureType").modal('hide')
-  }
-  function Cancel(){
-    var a = $("#AddBrochureType input")
-    ClearInputs(a)
-    $("#AddBrochureType").modal('hide')
-  }
+
+  var arr = []
+  arr.push(++row_counter) //编号
+  arr.push(set["itemId"]) //序号
+  arr.push(set["DemanderFK"]) //代理商
+  arr.push(set["PurposeFK"]) //用途
+  arr.push(set["area"]) //区域
+  arr.push(set["saveTime"]) //保存时间
+  arr.push(set["saver"]) //保存人
+
+  window.__draftTable.addRow(arr)
+  ClearInputs("#purchaseRequisition")
+  ClearSelecton("#purchaseRequisition")
+  ClearTextArea("#purchaseRequisition")
+  $("#purchaseRequisition")
+    .modal('hide')
+}
+
+function Submit() {
+  $("#PRForm")
+    .submit()
+}
 </script>
-
-
-  <script>
-    function getPrototypies(uid, pname) {
-      var c = $.ajax({
-        url: './test/userInfo.json', // api统一接口不同参数获取用户信息
-        type: "GET",
-        async: false
-      })
-      var j = JSON.parse(c.responseText)
-      var r = j[uid][pname]
-      return r
-    }
-
-    function autoComplateInfoOfDealer() {
-      debugger
-      if ("dealer" == getCookie("auth")) {
-        $("#DemanderFK").val("dealer")
-        $("#DemanderFK").attr("disabled", "true")
-
-        $("#area").val(getPrototypies("dealer", "area"))
-        $("#area_input").val(getPrototypies("dealer", "area"))
-        $("#area").attr("disabled", "true")
-      }
-    }
-    var row_counter = 0
-
-    function Draft() {
-      // console.log("Draft");
-      $("#itemId").val(new Date().getDay() + "-" + (getCookie("auth") + "-" + new Date().getSeconds()))
-      $("#saveTime").val(new Date())
-      $("#saver").val(getCookie("auth"))
-      if (!window.__draftTable) {
-        var draftTable = new table()
-        var t = {
-          "tablename": "Draft",
-          "rowsperpage": 10,
-          "hasHeader": true,
-          "hasButton": true,
-          "buttonPool": ["copyBtn","deleteDraftBtn"],
-          "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
-        }
-        draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"]).to($("#draft"))
-        window.__draftTable = draftTable
-      }
-      var arr = []
-      arr.push(++row_counter)
-      var selects = $("#purchaseRequisition select")
-      var inputs = $("#purchaseRequisition input")
-      for (var i = 0; i < inputs.length; i++) {
-        arr.push($(inputs[i]).val())
-      }
-      window.__draftTable.addRow(arr)
-      var a = selects.not('[disabled]')
-      var b = inputs.not('[disabled]')
-      for (var j = 0; j < a.length; j++) {
-        $(a[i]).val("-1")
-      }
-      for (var i = 0; i < b.length; i++) {
-        $(b[i]).val("")
-      }
-      $("#purchaseRequisition").modal('hide')
-    }
-
-    function Submit() {
-      $("#PRForm").submit()
-    }
-  </script>
 
   
 
@@ -354,11 +317,22 @@
               t.load().to($tablecontainer)
             }
           }
+          var orderDetail = function(primaryKey){
+            $("#Details").modal()
+          }
 
           var copy = function(){
 
           }
-          var orderDetail = function(primaryKey){
-            $("#Details").modal()
+          var edit = function(){
+
           }
+          var submit = function(){
+
+          }
+          var deleteDraftBtn = function(){
+            
+          }
+
+
         </script>

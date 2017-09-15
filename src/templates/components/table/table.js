@@ -121,7 +121,7 @@ table.prototype.new = function (Obj, header) {
   // var hasButton = Obj.hasButton ? Obj.hasButton : false
   // var keyArr = Obj.keyArr ? Obj.keyArr : []
   // console.log(Obj);
-  Obj["data"]=Obj["data"]?Obj["data"]:[]
+  Obj["data"] = Obj["data"] ? Obj["data"] : []
   var Json = Obj
   if (Obj.hasHeader && header)
     Json["data"].push(header)
@@ -152,5 +152,12 @@ table.prototype.onCardLongPress = function (callback) {
 table.prototype.onClick = function (callback) {
   for (var item in this.data) {
     this.data[item].onClick(callback)
+  }
+}
+table.prototype.remove = function () {
+  for (var i in this.data) {
+    this.data[i].remove()
+    // console.log(this.data[i]);
+    // console.log(i);
   }
 }

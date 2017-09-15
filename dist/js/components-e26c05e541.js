@@ -52,6 +52,21 @@ var bindInputQuery = function ($input, url) {
 
 }
 
+//多模态HACK
+var couter = 0;
+$(document)
+  .on('hidden.bs.modal', '.modal', function (e) {
+    $(this)
+      .css("z-index", 1050)
+    couter--
+  });
+$(document)
+  .on('show.bs.modal', '.modal', function (e) {
+    $(this)
+      .css("z-index", 1050 + couter)
+    couter++
+  });
+
 //===========================================================================================================================
 //搜索条
 //TODO-要有个sleep,函数执行太快
@@ -115,21 +130,6 @@ var keywordsdata = [
 //===========================================================================================================================
 // $(".card>div:not('.card_head')").hide(100)
 //===========================================================================================================================
-
-//多模态HACK
-var couter = 0;
-$(document)
-  .on('hidden.bs.modal', '.modal', function (e) {
-    $(this)
-      .css("z-index", 1050)
-    couter--
-  });
-$(document)
-  .on('show.bs.modal', '.modal', function (e) {
-    $(this)
-      .css("z-index", 1050 + couter)
-    couter++
-  });
 
 // window.currentPos = "myOrder"
 
@@ -303,7 +303,7 @@ table.prototype.new = function (Obj, header) {
   // var hasButton = Obj.hasButton ? Obj.hasButton : false
   // var keyArr = Obj.keyArr ? Obj.keyArr : []
   // console.log(Obj);
-  Obj["data"]=Obj["data"]?Obj["data"]:[]
+  Obj["data"] = Obj["data"] ? Obj["data"] : []
   var Json = Obj
   if (Obj.hasHeader && header)
     Json["data"].push(header)
@@ -336,8 +336,15 @@ table.prototype.onClick = function (callback) {
     this.data[item].onClick(callback)
   }
 }
+table.prototype.remove = function () {
+  for (var i in this.data) {
+    this.data[i].remove()
+    // console.log(this.data[i]);
+    // console.log(i);
+  }
+}
 
-var table_row = function(data, ParentTable, isHeader, Headers) {
+var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
   this.buttonPool = ParentTable.buttonPool
@@ -352,7 +359,7 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
-table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
+table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
   var row = this.isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
   for (var i = 0; i < this.data.length; i++) {
@@ -370,15 +377,16 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
     //   .html() //HACK
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
-    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
-    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
-    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressView('" + this.PrimaryKeyValue + "')\">物流查看</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
+    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
+    var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">Submit</button>")
+    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">Delete</button>")
+    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">Supply</button>")
+    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">Approve</button>")
+    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">Reject</button>")
+    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">ExpressUpdate</button>")
+    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressView('" + this.PrimaryKeyValue + "')\">ExpressView</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">Finish</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">History</button>")
     var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
     var deleteDraftBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">Delate</button>")
 
@@ -430,7 +438,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   }
   return row
 }
-table_row.prototype.rowAddCard = function(color) {
+table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj
   var color = color ? color : "#6b85a4"
   var headers = {}
@@ -459,7 +467,7 @@ table_row.prototype.rowAddCard = function(color) {
   this.CardJSONObj = r
   return r
 }
-table_row.prototype.buildCard = function() {
+table_row.prototype.buildCard = function () {
   var cardHeader = this.CardJSONObj.Header
   // var header = this.Header
   var props = this.CardJSONObj.Props
@@ -476,7 +484,7 @@ table_row.prototype.buildCard = function() {
   }
   headertext = headertext.substring(0, headertext.lastIndexOf(","))
 
-  var row = function(propName, value) {
+  var row = function (propName, value) {
     var propName = propName
     var value = value
     var m =
@@ -523,48 +531,77 @@ table_row.prototype.buildCard = function() {
     .siblings('div')
     .hide()
   this.CardHTMLObj.find(".card_head")
-    .on('click', function() {
+    .on('click', function () {
       $(this)
         .siblings('div')
         .toggle()
     })
   return this.CardHTMLObj
 }
-table_row.prototype.remove = function() {
+table_row.prototype.remove = function () {
   this.HTMLObj.remove()
-  this.JSONObj.remove()
-  this.CardJSONObj.remove()
+  this.JSONObj = ""
   this.CardHTMLObj.remove()
+  this.CardJSONObj = ""
 }
-table_row.prototype.add = function() {
+table_row.prototype.add = function () {
 
 }
-table_row.prototype.onCardLongPress = function(time, callback) {
+table_row.prototype.onCardLongPress = function (time, callback) {
   console.log("longPress");
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
-      touchstart: function(e) {
+      touchstart: function (e) {
         timeOutEvent = setTimeout(callback, time);
       },
-      touchmove: function() {
+      touchmove: function () {
         clearTimeout(timeOutEvent);
         timeOutEvent = 0;
       },
-      touchend: function() {
+      touchend: function () {
         clearTimeout(timeOutEvent);
         return false;
       }
     })
 }
-table_row.prototype.onClick = function(callback) {
+table_row.prototype.onClick = function (callback) {
   console.log("click");
   $(this.HTMLObj)
     .find("td:not('.operation')")
     .on("click", callback)
 }
 
-bindInputQuery("#dealerId", "./test/searchDictionary/DealerCollections.json")
+function ClearInputs(form) {
+  form = $(form)
+  var inputs = form.find("input")
+  var a = inputs
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("")
+  }
+}
+
+function ClearTextArea(form) {
+  form = $(form)
+  var textarea = form.find("textarea")
+  var a = textarea
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("")
+  }
+}
+
+function ClearSelecton(form) {
+  form = $(form)
+  var selection = form.find("select")
+  var a = selection
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("-1")
+  }
+}
+
 bindInputQuery("#BrochureType", "./test/searchDictionary/BrochureType.json")
 $('#EstimateTime')
   .datetimepicker({
@@ -586,7 +623,8 @@ $("#addPR")
       var t = {
         "tablename": "AddPR",
         "hasHeader": true,
-        "hasButton": false,
+        "hasButton": true,
+        "buttonPool": ["delBtn"],
         "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
       }
       purchaseRequisitionTable.new(t, ["编号", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址"])
@@ -595,12 +633,103 @@ $("#addPR")
     }
   })
 
-$("#purchaseRequisition")
-  .find("form")
-  .on("submit", function (e) {
-    console.log(e);
-  })
-$("#purchaseRequisition")
+
+var row_counter = 0
+
+function AppendPR() {
+  if (isAllPRTypeFormFieldEmpty())
+    return
+  var arr = []
+  arr.push(++row_counter)
+  var a = $("#AddBrochureType input")
+  for (var i = 0; i < a.length; i++) {
+    arr.push($(a[i])
+      .val())
+  }
+  if (window.__purchaseRequisitionTable) {
+    window.__purchaseRequisitionTable.addRow(arr)
+  }
+  ClearInputs(a)
+}
+
+//检测，如果所有input都为空，则直接关闭不保存
+function isAllPRTypeFormFieldEmpty() {
+  var a = $("#AddBrochureType input")
+  var isAllEmpty = true
+  for (var i = 0; i < a.length; i++) {
+    isAllEmpty = isAllEmpty && ($(a[i])
+      .val()
+      .length == 0)
+  }
+  return isAllEmpty
+}
+
+function AddPR() {
+  AppendPR()
+  $("#AddBrochureType")
+    .modal('hide')
+}
+
+
+$("#AddBrochureType")
   .on("hidden.bs.modal", function () {
+    ClearInputs("#AddBrochureType")
 
   })
+
+function Cancel() {
+  $("#AddBrochureType")
+    .modal('hide')
+}
+
+//
+$("#purchaseRequisition")
+  .on("hidden.bs.modal", function () {
+    if (window.__purchaseRequisitionTable) {
+      window.__purchaseRequisitionTable.remove()
+      ClearInputs("#purchaseRequisition")
+      window.__purchaseRequisitionTable = null
+    }
+  })
+$("#purchaseRequisition")
+  .on("shown.bs.modal", function () {
+    autoComplateInfoOfDealer()
+  })
+//绑定input搜索栏数据源
+bindInputQuery("#dealerId", "./test/searchDictionary/DealerCollections.json")
+//获取用户信息
+function getPrototypies(uid, pname) {
+  var c = $.ajax({
+    url: './test/userInfo.json', // api统一接口不同参数获取用户信息
+    type: "GET",
+    async: false
+  })
+  var j = JSON.parse(c.responseText)
+  var r = j[uid][pname]
+  return r
+}
+//检测若是aealer，则将需求方设为本人
+function autoComplateInfoOfDealer() {
+  if ("dealer" == (getCookie("auth")
+      .toLowerCase())) {
+    $("#DemanderFK")
+      .val("dealer")
+    $("#DemanderFK")
+      .attr("readonly", "readonly")
+    $("#area")
+      .val(getPrototypies("dealer", "area"))
+    $("#area")
+      .attr("disabled", "true")
+  }
+}
+
+function autoComplateInfo(infoSet, form) {
+  var tableSet = $.ajax({
+      url: "/test/dealer/MyOrder/Copy/OrderInfo.json",
+      type: "GET",
+      async: false
+    })
+    .responseJson
+  ta = tableSet
+}
+var row_counter = 0

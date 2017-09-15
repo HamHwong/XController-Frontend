@@ -1,14 +1,10 @@
-.modal-infopart,.page-header .header_logo{position:relative}
 #progressbar li,#topNav_wapper li,#topNav_wapper ul{float:left;list-style:none}
-.input-info::before{content:''}
-.input-info.success::before{content:'\e084'}
-.input-info.fail::before{content:'\e083'}
 .page-header{margin:0;border-bottom:0;padding:10px}
 @media (max-width:768px){.page-header{display:none;margin:0}
 }
+.page-header .header_logo{position:relative}
 .page-header .header_logo .logo{display:block;float:left}
 @media (min-width:768px){.page-header .header_logo .logo:before{display:inline-block;width:5rem;height:5rem;content:'';background:url(../img/zeiss-logo.svg) 100% no-repeat}
-.lg-modal>.modal-dialog{width:70%}
 }
 .page-header .header_logo .system_name{display:block;float:left;padding-left:1rem}
 @media (max-width:768px){.page-header .header_logo{display:none}
@@ -17,22 +13,6 @@
 .page-header .header_userInfo .information{margin-left:30%}
 .page-header .header_userInfo .information .account{display:inline-block;float:left}
 .page-header.row{margin-left:0;margin-right:0}
-.nav.nav-tabs{border-bottom:none;margin-bottom:1px}
-.tabs>*{float:left}
-.tabs .form-group{margin-bottom:0;padding-left:0;padding-right:0}
-.modal{overflow:auto!important}
-.modal-infopart{clear:both}
-.modal-infopart .addBtn{position:absolute;right:1rem;top:.5rem}
-.modal-infopart textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
-.modal-infopart.baseInfomation>div.comment,.modal-infopart.baseInfomation>ul{width:100%;display:block;padding:1rem;float:left}
-.modal-infopart.baseInfomation>div.comment li,.modal-infopart.baseInfomation>ul li{list-style:none;display:block;width:50%;float:left}
-.modal-infopart.baseInfomation textarea[disabled]{border:0;background-color:transparent}
-.modal-infopart::before{text-align:left;content:'';display:block;width:100%;min-height:4rem;background-color:#e4e6eb;font-size:2rem;font-weight:700;color:#000;padding:.5rem 1rem;margin-bottom:1rem}
-.orderStatus::before{content:'订单状态'!important}
-.baseInfomation::before{content:'基础信息'!important}
-.goodsInfomation::before{content:'物品信息'!important}
-.Approval::before{content:'审批'!important}
-.expressUpdate::before{content:'订单物流'!important}
 *{padding:0;margin:0}
 html{font-size:10px}
 #topNav_wapper{color:#337ab7;float:left;width:100%;background:-webkit-gradient(linear,left bottom,left top,from(#E7EEF5),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:linear-gradient(to top,#E7EEF5 0,#F5F9FD 60%)}
@@ -55,7 +35,6 @@ html{font-size:10px}
 @media (min-width:768px){#topNav_wapper .logo,#topNav_wapper .sideavatar{display:none}
 #topNav_wapper .topNav{display:block;width:100%}
 #topNav_wapper .sideBtn{display:none}
-.contentTitle h3{margin-top:0}
 }
 #topNav_wapper::after{clear:both}
 @media (max-width:768px){#topNav_wapper{position:fixed;right:0;left:0;top:0;z-index:1030;border:none}
@@ -98,7 +77,28 @@ to{height:auto}
 }
 @media (max-width:768px) and (min-width:320px) and (max-width:360px){#topNav_wapper .sideavatar{display:none}
 }
+.nav.nav-tabs{border-bottom:none;margin-bottom:1px}
+.tabs>*{float:left}
+.tabs .form-group{margin-bottom:0;padding-left:0;padding-right:0}
+.modal{overflow:auto!important}
+@media (min-width:768px){.lg-modal>.modal-dialog{width:70%}
+}
+.modal-infopart{position:relative;clear:both}
+.modal-infopart .addBtn{position:absolute;right:1rem;top:.5rem}
+.modal-infopart textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
+.modal-infopart.baseInfomation>div.comment,.modal-infopart.baseInfomation>ul{width:100%;display:block;padding:1rem;float:left}
+.modal-infopart.baseInfomation>div.comment li,.modal-infopart.baseInfomation>ul li{list-style:none;display:block;width:50%;float:left}
+.modal-infopart.baseInfomation textarea[disabled]{border:0;background-color:transparent}
+.modal-infopart::before{text-align:left;content:'';display:block;width:100%;min-height:4rem;background-color:#e4e6eb;font-size:2rem;font-weight:700;color:#000;padding:.5rem 1rem;margin-bottom:1rem}
+.orderStatus::before{content:'订单状态'!important}
+.baseInfomation::before{content:'基础信息'!important}
+.goodsInfomation::before{content:'物品信息'!important}
+.Approval::before{content:'审批'!important}
+.expressUpdate::before{content:'订单物流'!important}
 table .btn{margin-right:1rem}
+.input-info::before{content:''}
+.input-info.success::before{content:'\e084'}
+.input-info.fail::before{content:'\e083'}
 #progressbar{margin:0 auto}
 #progressbar .operationtime{display:block}
 #progressbar:after{clear:both}
@@ -114,3 +114,5 @@ table .btn{margin-right:1rem}
 #progressbar li.viewed::before{content:"\e105";background-color:#506687}
 #progressbar li.reject::before{content:'\e014';background-color:#de4747}
 #progressbar li.active::before{color:#FFF}
+@media (min-width:768px){.contentTitle h3{margin-top:0}
+}

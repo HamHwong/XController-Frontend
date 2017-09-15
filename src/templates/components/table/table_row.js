@@ -1,4 +1,4 @@
-var table_row = function(data, ParentTable, isHeader, Headers) {
+var table_row = function (data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
   this.buttonPool = ParentTable.buttonPool
@@ -13,7 +13,7 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
-table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
+table_row.prototype.init = function (data, keyArr, hasButton, isHeader) {
   var row = this.isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
   for (var i = 0; i < this.data.length; i++) {
@@ -31,15 +31,16 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     // var PrimaryKeyValue = $(row.find("td")[this.PrimaryKeyIndex])
     //   .html() //HACK
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
-    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">删除</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">补充</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
-    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">物流更新</button>")
-    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressView('" + this.PrimaryKeyValue + "')\">物流查看</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">完成</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">历史</button>")
+    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
+    var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">Submit</button>")
+    var delBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"del('" + this.PrimaryKeyValue + "')\">Delete</button>")
+    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">Supply</button>")
+    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">Approve</button>")
+    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">Reject</button>")
+    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressUpdate('" + this.PrimaryKeyValue + "')\">ExpressUpdate</button>")
+    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"expressView('" + this.PrimaryKeyValue + "')\">ExpressView</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary del\" onclick=\"finished('" + this.PrimaryKeyValue + "')\">Finish</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success del\" onclick=\"histroy('" + this.PrimaryKeyValue + "')\">History</button>")
     var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info del\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
     var deleteDraftBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">Delate</button>")
 
@@ -91,7 +92,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   }
   return row
 }
-table_row.prototype.rowAddCard = function(color) {
+table_row.prototype.rowAddCard = function (color) {
   row = this.HTMLObj
   var color = color ? color : "#6b85a4"
   var headers = {}
@@ -120,7 +121,7 @@ table_row.prototype.rowAddCard = function(color) {
   this.CardJSONObj = r
   return r
 }
-table_row.prototype.buildCard = function() {
+table_row.prototype.buildCard = function () {
   var cardHeader = this.CardJSONObj.Header
   // var header = this.Header
   var props = this.CardJSONObj.Props
@@ -137,7 +138,7 @@ table_row.prototype.buildCard = function() {
   }
   headertext = headertext.substring(0, headertext.lastIndexOf(","))
 
-  var row = function(propName, value) {
+  var row = function (propName, value) {
     var propName = propName
     var value = value
     var m =
@@ -184,41 +185,41 @@ table_row.prototype.buildCard = function() {
     .siblings('div')
     .hide()
   this.CardHTMLObj.find(".card_head")
-    .on('click', function() {
+    .on('click', function () {
       $(this)
         .siblings('div')
         .toggle()
     })
   return this.CardHTMLObj
 }
-table_row.prototype.remove = function() {
+table_row.prototype.remove = function () {
   this.HTMLObj.remove()
-  this.JSONObj.remove()
-  this.CardJSONObj.remove()
+  this.JSONObj = ""
   this.CardHTMLObj.remove()
+  this.CardJSONObj = ""
 }
-table_row.prototype.add = function() {
+table_row.prototype.add = function () {
 
 }
-table_row.prototype.onCardLongPress = function(time, callback) {
+table_row.prototype.onCardLongPress = function (time, callback) {
   console.log("longPress");
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
-      touchstart: function(e) {
+      touchstart: function (e) {
         timeOutEvent = setTimeout(callback, time);
       },
-      touchmove: function() {
+      touchmove: function () {
         clearTimeout(timeOutEvent);
         timeOutEvent = 0;
       },
-      touchend: function() {
+      touchend: function () {
         clearTimeout(timeOutEvent);
         return false;
       }
     })
 }
-table_row.prototype.onClick = function(callback) {
+table_row.prototype.onClick = function (callback) {
   console.log("click");
   $(this.HTMLObj)
     .find("td:not('.operation')")

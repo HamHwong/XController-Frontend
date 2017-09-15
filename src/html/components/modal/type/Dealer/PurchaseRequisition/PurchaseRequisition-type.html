@@ -56,35 +56,3 @@
     </div>
   </div>
 </div>
-
-
-<script>
-  var row_counter = 0
-  function AppendPR() {
-    var arr = []
-    arr.push(++row_counter)
-    var a = $("#AddBrochureType input")
-    for (var i = 0; i < a.length; i++) {
-      arr.push($(a[i]).val())
-    }
-    if(window.__purchaseRequisitionTable){
-      window.__purchaseRequisitionTable.addRow(arr)
-    }
-    ClearInputs(a)
-  }
-  function ClearInputs(inputs){
-    var a = inputs
-    for (var i = 0; i < a.length; i++) {
-      $(a[i]).val("")
-    }
-  }
-  function AddPR(){
-    AppendPR()
-    $("#AddBrochureType").modal('hide')
-  }
-  function Cancel(){
-    var a = $("#AddBrochureType input")
-    ClearInputs(a)
-    $("#AddBrochureType").modal('hide')
-  }
-</script>
