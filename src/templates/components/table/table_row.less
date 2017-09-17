@@ -1,0 +1,63 @@
+/***
+取消bootstrap的样式
+***/
+.table > tbody > tr.info_card_row > td,
+.table > tbody > tr.info_card_row > th,
+.table > tfoot > tr.info_card_row > td,
+.table > tfoot > tr.info_card_row > th,
+.table > thead > tr.info_card_row > td,
+.table > thead > tr.info_card_row > th {
+  padding: 0;
+}
+@media (min-width:768px) {
+  .info_card_row {
+    display: none;
+  }
+}
+
+tr.info_card_row {
+  td {
+    border: 0;
+    padding: 0;
+    margin: 0;
+
+    button {
+      float: left;
+    }
+
+    .card {
+      margin: 0 0 0.2rem;
+      // padding:1rem;
+      border-radius: 0 0 0.3rem 0.3rem;
+      box-shadow: 0 0.5rem 1rem #888888;
+      border: 1px solid #4A8BC2;
+
+      .card_head {
+        padding: 0.4rem;
+        // background-color: #4A8BC2;
+        color: #fff;
+      }
+
+      .card_body {
+        margin: 1rem;
+
+        .card_data_row {
+          border-bottom: 0.1rem solid #e5e5e5;
+        }
+
+        .card_data_title {
+          font-weight: bolder;
+        }
+      }
+
+      .card_foot {
+        border-top: 0.1rem solid #e5e5e5;
+        margin: 1rem;
+
+        .date {
+          float: right;
+        }
+      }
+    }
+  }
+}

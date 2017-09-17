@@ -1,0 +1,67 @@
+<div class="modal fade lg-modal" id="ExpressDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">物品信息</h4>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="modal-infopart goodsInfomation">
+        </div>
+        <div class="modal-infopart">
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="4" disabled>备注</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="center-block">
+          <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="ExpressUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">更新物流信息</h4>
+      </div>
+
+      <div class="modal-body">
+          <textarea name="expressStatus" rows="5" disabled>
+            快递：申通快递
+            快递单号：092813099034
+            发件人：Admin
+          </textarea>
+          <form id="update_Express" class="form-horizontal" role="form">
+            <div class="form-group">
+              <label class="col-sm-3 control-label">更新信息 ：</label>
+              <div class="col-sm-8">
+                <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
+                
+              </div>
+            </div>
+          </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="Update()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var update = function(PrimaryKey){
+    $("#ExpressUpdate").modal()
+    console.log("primaryKey",PrimaryKey);
+  }
+</script>

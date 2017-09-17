@@ -1,9 +1,11 @@
-<script>
-  window.currentPos="orderAdmin"
-</script>
-
-<div class="contentTitle">
-<h3>订单管理</h3>
+<div class="contentTitle clearfix">
+  <h3>订单管理</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"处理中",finished:"已完成",reject:"已拒绝"}})%>
@@ -28,6 +30,22 @@
       </ul>
     </nav>
   </div>
+  <script>
+    var CurrentTableList = {
+      "#applying": "./test/admin/OrderAdmin/order-admin-table-data.json",
+      "#finished": "./test/admin/OrderAdmin/rejected-table-data.json",
+      "#reject": "./test/admin/OrderAdmin/success-table-data.json"
+    }
+  </script>
   <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-<%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
-<%-include('/components/table/table.init.ejs',{container:"#applying",url:"./test/order-table-data.json"})%>
+    <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
+    <script>
+      var del = function(rid) {
+        $("#delete")
+          .modal()
+      }
+      var edit = function(rid) {
+        $("#EditBrochure")
+          .modal()
+      }
+    </script>

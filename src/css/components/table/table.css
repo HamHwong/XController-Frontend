@@ -1,3 +1,13 @@
-table .btn {
+table {
+  word-wrap: break-word;
+}
+table td .btn {
+  margin: 0.4rem;
+  float: left;
+  font-size: 10px;
   margin-right: 1rem;
+  min-width: 6rem;
+}
+table td.operation {
+  max-width: 15rem;
 }

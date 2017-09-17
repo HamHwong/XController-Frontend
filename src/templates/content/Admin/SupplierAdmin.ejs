@@ -1,5 +1,11 @@
-<div class="contentTitle">
+<div class="contentTitle clearfix">
   <h3>供应商</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
   <div class="operation-menu">
@@ -23,9 +29,20 @@
       </ul>
     </nav>
   </div>
-
-  <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
-  <%-include('/components/table/table.init.ejs',{container:"#Supplier-table-container",url:"./test/admin/Supplier-table-data.json"})%>
 <script>
-  window.role="supplier"
+var CurrentTableList = {
+  "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
+}
 </script>
+  <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
+      <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+      <script>
+        var del = function(rid) {
+          $("#delete")
+            .modal()
+        }
+        var edit = function(rid) {
+          $("#EditBrochure")
+            .modal()
+        }
+      </script>

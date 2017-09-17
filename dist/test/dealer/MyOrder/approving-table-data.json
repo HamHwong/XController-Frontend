@@ -1,6 +1,7 @@
 {
   "tablename": "order",
   "hasHeader": true,
+  "hasDetail":true,
   "hasButton": false,
   "keyArr": ["prop", "id", "key", "prop", "prop", "prop"],
   "data": [

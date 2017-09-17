@@ -1,12 +1,10 @@
 <%
 if(locals.type && ""!==locals.type){
-  console.log(typeof locals.type);
   var documentsLevel = locals.type.split(".")
   var path = "./type"
   for(a of documentsLevel){
     path += ("/"+a)
   }
-  console.log(path);
   %>
     <%-include(path)%>
   <%

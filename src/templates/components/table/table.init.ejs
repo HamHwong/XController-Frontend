@@ -2,9 +2,12 @@
   /**
    * @description Table初始化
    */
-  var table_init = function() {
-    var $tablecontainer = $("<%=locals.container%>")
-    var t = new table("<%=locals.url%>")
-    t.load().to($tablecontainer)
-  }
+
+   var table_init = function(tableList) {
+     for (var i in CurrentTableList) {
+       var $tablecontainer = $(i)
+       var t = new table(CurrentTableList[i])
+       t.load().to($tablecontainer)
+     }
+   }
 </script>

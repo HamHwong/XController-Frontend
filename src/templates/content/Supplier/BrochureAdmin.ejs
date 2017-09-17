@@ -1,27 +1,36 @@
-<div class="contentTitle">
-<h3>物品管理</h3>
+<div class="contentTitle clearfix">
+  <h3>物品管理</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
-  <div class="operation-menu">
-  </div>
+<div class="operation-menu">
+</div>
 
-  <div class="table-content tab-content">
-    <div class="tab-pane active" id="Brochure-table-container">
-      <table class="table table-bordered table-hover">
-      </table>
-    </div>
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Brochure-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
   </div>
-
-  <%-include('/components/table/table.init.ejs',{container:"#Brochure-table-container",url:"./test/admin/Brochure-table-data.json"})%>
-  <%-include('/components/modal/modal',{type:"Supplier.Inventory.Detail"})%>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+<script>
+  var CurrentTableList = {
+    "#Brochure-table-container": "./test/admin/Brochure-table-data.json"
+  }
+</script>
+<%-include('/components/modal/modal',{type:"Supplier.Inventory.Detail"})%>

@@ -121,6 +121,11 @@ html {
     display: none;
   }
 }
+@media (max-width: 500px) {
+  #topNav_wapper .logo small {
+    font-size: 0.7rem;
+  }
+}
 #topNav_wapper::after {
   clear: both;
 }
@@ -142,6 +147,9 @@ html {
     top: 1rem;
     font-size: 2rem;
     overflow: hidden;
+  }
+  #topNav_wapper .logo small {
+    margin-left: 0.3rem;
   }
   #topNav_wapper .logo::before {
     width: 3.5rem;
@@ -264,13 +272,13 @@ html {
     }
   }
 }
-@media (max-width: 768px) and (max-width: 360px) {
+@media (max-width: 768px) and (max-width: 400px) {
   #topNav_wapper .greet,
   #topNav_wapper .logout {
     display: none;
   }
 }
-@media (max-width: 768px) and (min-width: 320px) and (max-width: 360px) {
+@media (max-width: 768px) and (min-width: 320px) and (max-width: 400px) {
   #topNav_wapper .sideavatar {
     display: none;
   }

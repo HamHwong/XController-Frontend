@@ -1,0 +1,88 @@
+<div class="modal fade" id="PruchaseItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加物品</h4>
+      </div>
+
+      <div class="modal-body">
+        <form id="PruchaseItem_form" class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">申请种类 ：</label>
+            <div class="col-sm-8 search_box_warp">
+              <input type="text" class="form-control" name="BrochureName" id="BrochureName" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">申请数量 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="Quantity" id="Quantity" placeholder="申请数量" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货人 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="Consignee" id="Consignee" placeholder="收货人" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货电话 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="ContactNumber" id="ContactNumber" placeholder="收货电话" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">交付时间 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control input-append date" name="DeliveryDate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货地址 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="DeliveryAddress" id="DeliveryAddress" placeholder="收货地址" required />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="AppendPR()"><span class="glyphicon glyphicon-plus"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AddPR()"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+//确认
+function AddPR() {
+  AppendPR()
+  $("#PruchaseItem")
+    .modal('hide')
+}
+//添加
+function AppendPR() {
+  if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
+    return
+  var arr = []
+  arr.push(++row_counter)
+  var set = formToSet("#PruchaseItem_form")
+  var order = ["BrochureName", "Quantity", "Consignee", "ContactNumber", "DeliveryDate", "DeliveryAddress"]
+  for (var i of order) {
+    arr.push(set[i])
+  }
+  if (window.__PurchaseRequisitionTable) {
+    window.__PurchaseRequisitionTable.addRow(arr)
+  }
+  ClearInputs("#PruchaseItem_form")
+}
+//取消
+function Cancel() {
+  $("#PruchaseItem")
+    .modal('hide')
+}
+
+</script>

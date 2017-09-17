@@ -1,4 +1,4 @@
-<div class="modal fade lg-modal" id="purchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -7,7 +7,7 @@
       </div>
 
       <div class="modal-body">
-        <form class="form" method="post" id="PRForm">
+        <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group">
             <input type="text" name="itemId" id="itemId" value="" hidden>
             <div class="form-group col-md-4">
@@ -38,16 +38,15 @@
             </div>
             <input type="text" name="saveTime" id="saveTime" value="" hidden>
             <input type="text" name="saver" id="saver" value="" hidden>
-            <div class="Comments editable col-md-12" id="Comments">
+            <div class="Comments editable col-md-12">
               <span>备注：</span>
-              <textarea name="Comments" rows="4"></textarea>
+              <textarea name="Comments" rows="4" id="Comments"></textarea>
             </div>
 
           </div>
           <div class="modal-infopart goodsInfomation">
-            <button type="button" name="addPR" id="addPR" class="btn btn-primary addBtn" data-toggle="modal" data-target="#AddBrochureType"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" id="addPRItem" class="btn btn-primary addBtn" data-toggle="modal" data-target="#PruchaseItem" ><span class="glyphicon glyphicon-plus"></span></button>
             <div id="InfomationAddArea">
-
             </div>
           </div>
         </form>
@@ -60,66 +59,64 @@
     </div>
   </div>
 </div>
-<%-include('./PurchaseRequisition-type')%>
-<script>
+<%-include('./PurchaseItem')%>
+  <script>
+    //存为草稿（本地）
+    function Draft() {
+      $("#itemId")
+        .val(new Date()
+          .getDay() + "-" + (getCookie("auth") + "-" + new Date()
+            .getSeconds()))
+      $("#saveTime")
+        .val(new Date())
+      $("#saver")
+        .val(getCookie("auth"))
 
-function Draft() {
-  // console.log("Draft");
-  $("#itemId")
-    .val(new Date()
-      .getDay() + "-" + (getCookie("auth") + "-" + new Date()
-        .getSeconds()))
-  $("#saveTime")
-    .val(new Date())
-  $("#saver")
-    .val(getCookie("auth"))
+      if (!window.__draftTable) {
+        var draftTable = new table()
+        var t = {
+          "tablename": "Draft",
+          "rowsperpage": 10,
+          "hasHeader": true,
+          "hasButton": true,
+          "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
+          "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
+        }
+        draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
+          .to($("#draft"))
+        window.__draftTable = draftTable
+      }
+      $("#area")
+        .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
+      var formArr = $("#PurchaseRequisition_form")
+        .serializeArray()
+      $("#area")
+        .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
+      var set = {}
+      for (var record of formArr) {
+        var key = record["name"]
+        var value = record["value"]
+        set[key] = value
+      }
 
-  if (!window.__draftTable) {
-    var draftTable = new table()
-    var t = {
-      "tablename": "Draft",
-      "rowsperpage": 10,
-      "hasHeader": true,
-      "hasButton": true,
-      "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
-      "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
+      var arr = []
+      arr.push(++row_counter) //编号
+      var order = ["itemId", "DemanderFK", "PurposeFK", "area", "saveTime", "saver"]
+      for (var i of order) {
+        arr.push(set[i])
+      }
+      window.__draftTable.addRow(arr)
+      ClearInputs("#PurchaseRequisition")
+      ClearSelecton("#PurchaseRequisition")
+      ClearTextArea("#PurchaseRequisition")
+      $("#PurchaseRequisition")
+        .modal('hide')
     }
-    draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
-      .to($("#draft"))
-    window.__draftTable = draftTable
-  }
-  $("#area")
-    .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
-  var formArr = $("#purchaseRequisition form")
-    .serializeArray()
-  $("#area")
-    .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
-  var set = {}
-  for (var record of formArr) {
-    var key = record["name"]
-    var value = record["value"]
-    set[key] = value
-  }
+    //确认
+    function Submit() {
+      $("#PurchaseRequisition_form")
+        .submit()
+    }
 
-  var arr = []
-  arr.push(++row_counter) //编号
-  arr.push(set["itemId"]) //序号
-  arr.push(set["DemanderFK"]) //代理商
-  arr.push(set["PurposeFK"]) //用途
-  arr.push(set["area"]) //区域
-  arr.push(set["saveTime"]) //保存时间
-  arr.push(set["saver"]) //保存人
 
-  window.__draftTable.addRow(arr)
-  ClearInputs("#purchaseRequisition")
-  ClearSelecton("#purchaseRequisition")
-  ClearTextArea("#purchaseRequisition")
-  $("#purchaseRequisition")
-    .modal('hide')
-}
-
-function Submit() {
-  $("#PRForm")
-    .submit()
-}
-</script>
+  </script>

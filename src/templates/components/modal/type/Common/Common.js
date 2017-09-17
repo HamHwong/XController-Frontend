@@ -27,3 +27,26 @@ function ClearSelecton(form) {
       .val("-1")
   }
 }
+
+
+function formToSet(form) {
+  form = $(form)
+  var formArr = form
+    .serializeArray()
+
+  var set = {}
+  for (var record of formArr) {
+    var key = record["name"]
+    var value = record["value"]
+    set[key] = value
+  }
+  return set
+}
+
+function autoComplateInfo(infoSet, form) {
+  form = $(form)
+  var set = formToSet(form)
+  for (var i in set) {
+    form.find("#"+i).val(infoSet[i])
+  }
+}

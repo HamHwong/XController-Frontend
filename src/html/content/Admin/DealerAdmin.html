@@ -1,42 +1,40 @@
-<div class="contentTitle">
-<h3>代理商</h3>
+<div class="contentTitle clearfix">
+  <h3>代理商</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
-  <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddDealer">添加代理商</button>
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddDealer">添加代理商</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Dealer-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
   </div>
-
-  <div class="table-content tab-content">
-    <div class="tab-pane active" id="Dealer-table-container">
-      <table class="table table-bordered table-hover">
-      </table>
-    </div>
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
-  </div>
-
-
-  <script type="text/javascript">
-  /**
-   * @description Table初始化
-   */
-  var table_init = function() {
-    var $tablecontainer = $("#Dealer-table-container")
-    var t = new table("./test/admin/Dealer-table-data.json")
-    t.load().to($tablecontainer)
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+<script>
+  var CurrentTableList = {
+    "#Dealer-table-container": "./test/admin/Dealer-table-data.json"
   }
 </script>
 
-  
     <div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -206,6 +204,13 @@
 
   
 
-<script>
-  window.role="dealer"
-</script>
+  <script>
+    var del = function(rid) {
+      $("#delete")
+        .modal()
+    }
+    var edit = function(rid) {
+      $("#EditBrochure")
+        .modal()
+    }
+  </script>

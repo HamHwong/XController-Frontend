@@ -6,54 +6,39 @@
         <h4 class="modal-title" id="myModalLabel">添加物品</h4>
       </div>
 
-      <div class="modal-body">
-        <form id="add_Brochure" class="form-horizontal" role="form">
-          
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="BrochureName"
-  
-  >物品名称：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="BrochureName"
-    id="BrochureName"
-    
-    
-      placeholder="请输入物品名称"
-    
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-            
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="Quantity"
-  
-  >物品数量：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="Quantity"
-    id="Quantity"
-    
-    
-      placeholder="请输入物品数量"
-    
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
+      <div class="modal-body clearfix">
+        <form id="add_Brochure" class="form" role="form">
+          <div class="form-group col-md-4">
+            <label for="BrochureName">物品名称:</label>
+            <input name="BrochureName" id="BrochureName" placeholder="请输入物品名称" class="form-control" />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="PONumber">PONumber:</label>
+            <input name="PONumber" id="PONumber" placeholder="请输入PONumber" class="form-control" />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="Quantity">物品数量:</label>
+            <input name="Quantity" id="Quantity" placeholder="请输入物品数量" class="form-control" />
+          </div>
+          <div class="form-group col-md-6 search_box_wapper">
+            <label for="SupplierName">供应商 :</label>
+            <input name="SupplierName" id="SupplierName" placeholder="供应商名称" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="PurposeFK">用途:</label>
+            <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
+            <select name="PurposeFK" id="PurposeFK" class="form-control">
+                <option value="-1" selected>请选择用途</option>
+                <option value="forSales">一般销售用途</option>
+                <option value="partMeeting">区域会议</option>
+                <option value="nationalMeeting">全国性会议</option>
+              </select>
+          </div>
+          <div class="Comments editable col-md-12" id="Description">
+            <span>备注：</span>
+            <textarea name="Description" rows="4"></textarea>
+          </div>
         </form>
       </div>
 

@@ -8,13 +8,6 @@ var icheck_init = function () {
       radioClass: 'iradio_flat-blue'
     });
 }
-/**
- * @description Bootstrap popover初始化
- */
-var popover_init = function () {
-  $("[data-toggle='popover']")
-    .popover(); //悬浮框
-}
 
 // /**
 //  * @description Table初始化
@@ -68,9 +61,6 @@ var name_init = function(){
 var init = {
   home: {},
   header: {
-    popover: function () {
-      popover_init()
-    },
     logout: function(){
       logout_init()
     },
@@ -83,7 +73,7 @@ var init = {
       tab_init()
     },
     table: function () {
-      table_init()
+      table_init(CurrentTableList)
     },
     icheck: function () {
       icheck_init()

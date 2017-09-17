@@ -1,9 +1,11 @@
-<script>
-  window.currentPos="orderAdmin"
-</script>
-
-<div class="contentTitle">
-<h3>订单管理</h3>
+<div class="contentTitle clearfix">
+  <h3>订单管理</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
 <div class="tabs">
@@ -17,28 +19,6 @@
         <li><a href=#reject>已拒绝</a></li>
         
   </ul>
-
-  <div class="form-group pull-right  col-xs-3 col-sm-6 col-md-4">
-    <form class="" method="post">
-      <div class="col-md-8 col-sm-8 col-xs-12 ">
-        
-<div class="form-group">
-  <div class="">
-    <input type=""
-    class="form-control"
-    
-    
-      placeholder="在这里输入关键字"
-    
-    />
-  </div>
-</div>
-
-      </div>
-      <button type="submit" class="btn btn-primary col-md-4  col-xs-4 hidden-xs ">Query</button>
-    </form>
-  </div>
-
 </div>
 
   <div class="operation-menu">
@@ -62,6 +42,13 @@
       </ul>
     </nav>
   </div>
+  <script>
+    var CurrentTableList = {
+      "#applying": "./test/admin/OrderAdmin/order-admin-table-data.json",
+      "#finished": "./test/admin/OrderAdmin/rejected-table-data.json",
+      "#reject": "./test/admin/OrderAdmin/success-table-data.json"
+    }
+  </script>
   
     <div class="modal fade" id="delete">
   <div class="modal-dialog">
@@ -84,8 +71,8 @@
 
   
 
-
-    <div class="modal fade lg-modal" id="orderDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+    <div class="modal fade lg-modal" id="Details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -143,14 +130,13 @@
 
   
 
-<script type="text/javascript">
-  /**
-   * @description Table初始化
-   */
-  var table_init = function() {
-    var $tablecontainer = $("#applying")
-    var t = new table("./test/order-table-data.json")
-    t.load().to($tablecontainer)
-  }
-</script>
-
+    <script>
+      var del = function(rid) {
+        $("#delete")
+          .modal()
+      }
+      var edit = function(rid) {
+        $("#EditBrochure")
+          .modal()
+      }
+    </script>

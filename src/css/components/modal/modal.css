@@ -7,6 +7,18 @@
     width: 70%;
   }
 }
+.modal-body textarea {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  resize: none;
+  color: #666464;
+}
+.modal-body textarea[disabled] {
+  border: 0;
+  background-color: transparent;
+}
 .modal-infopart {
   position: relative;
   clear: both;
@@ -15,14 +27,6 @@
   position: absolute;
   right: 1rem;
   top: 0.5rem;
-}
-.modal-infopart textarea {
-  width: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  resize: none;
-  color: #666464;
 }
 .modal-infopart.baseInfomation > ul,
 .modal-infopart.baseInfomation > div.comment {
@@ -37,10 +41,6 @@
   display: block;
   width: 50%;
   float: left;
-}
-.modal-infopart.baseInfomation textarea[disabled] {
-  border: 0;
-  background-color: transparent;
 }
 .modal-infopart::before {
   text-align: left;
@@ -66,7 +66,4 @@
 }
 .Approval::before {
   content: '审批' !important;
-}
-.expressUpdate::before {
-  content: '订单物流' !important;
 }

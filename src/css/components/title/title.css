@@ -1,5 +1,13 @@
+.contentTitle h3 {
+  float: left;
+}
 @media (min-width: 768px) {
   .contentTitle h3 {
     margin-top: 0;
+    margin-bottom: 0;
   }
+}
+.contentTitle:after {
+  clear: both;
+  content: "";
 }

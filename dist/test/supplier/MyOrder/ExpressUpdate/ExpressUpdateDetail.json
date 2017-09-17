@@ -1,0 +1,29 @@
+{
+  "name": "orderDetail",
+  "steps": "4",
+  "baseInfos": {
+    "提交人": "Admin",
+    "手机号": "13888888888",
+    "邮箱": "admin@elitesource.net",
+    "区域": "ShangHai",
+    "代理商": "Ham",
+    "备注": "ContentContentContentContentContentContent"
+  },
+  "hasHeader": true,
+  "hasButton": true,
+  "hasDetail":false,
+  "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+  "buttonPool": ["updateBtn"],
+  "data": [
+    ["序列", "物品名字", "物品数量", "PurchaseItemID(不显示)", "交付时间"],
+    [1, "Itema", "12", "000001", "2017-04-23 23:00:00"],
+    [2, "Itema", "12", "000003", "2017-04-23 23:00:00"],
+    [3, "Itema", "12", "000004", "2017-04-23 23:00:00"],
+    [4, "Itema", "12", "000005", "2017-04-23 23:00:00"],
+    [5, "Itema", "12", "000007", "2017-04-23 23:00:00"],
+    [6, "Itema", "12", "000008", "2017-04-23 23:00:00"],
+    [7, "Itema", "12", "000012", "2017-04-23 23:00:00"],
+    [8, "Itema", "12", "000013", "2017-04-23 23:00:00"],
+    [9, "Itema", "12", "000015", "2017-04-23 23:00:00"]
+  ]
+}

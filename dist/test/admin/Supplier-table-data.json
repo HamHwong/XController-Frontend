@@ -2,6 +2,7 @@
   "tablename": "supplier",
   "hasHeader": true,
   "hasButton":true,
+  "buttonPool": ["editBtn","delBtn"],
   "keyArr": ["id", "key", "prop", "prop", "prop"],
   "data": [
     ["序列", "名称", "手机号", "账号", "密码" ],

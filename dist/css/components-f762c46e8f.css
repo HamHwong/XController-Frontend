@@ -1,8 +1,10 @@
-#progressbar li,#topNav_wapper li,#topNav_wapper ul{float:left;list-style:none}
+.modal-infopart,.page-header .header_logo{position:relative}
+.nav.nav-tabs{border-bottom:none;margin-bottom:1px}
+.tabs>*{float:left}
+.tabs .form-group{margin-bottom:0;padding-left:0;padding-right:0}
 .page-header{margin:0;border-bottom:0;padding:10px}
 @media (max-width:768px){.page-header{display:none;margin:0}
 }
-.page-header .header_logo{position:relative}
 .page-header .header_logo .logo{display:block;float:left}
 @media (min-width:768px){.page-header .header_logo .logo:before{display:inline-block;width:5rem;height:5rem;content:'';background:url(../img/zeiss-logo.svg) 100% no-repeat}
 }
@@ -13,9 +15,45 @@
 .page-header .header_userInfo .information{margin-left:30%}
 .page-header .header_userInfo .information .account{display:inline-block;float:left}
 .page-header.row{margin-left:0;margin-right:0}
+.operation-menu::before{clear:both;content:''}
+.operation-menu{min-height:4rem;float:left;width:100%;background:-webkit-gradient(linear,left bottom,left top,from(#E7EEF5),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:linear-gradient(to top,#E7EEF5 0,#F5F9FD 60%);padding:.5rem .3rem;-webkit-border-radius:0 1rem 0 0;-moz-border-radius:0 1rem 0 0;border-radius:0 1rem 0 0}
+.operation-menu button{float:right;margin-left:.5rem}
+.modal{overflow:auto!important}
+@media (min-width:768px){.lg-modal>.modal-dialog{width:70%}
+}
+.modal-body textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
+.modal-body textarea[disabled]{border:0;background-color:transparent}
+.modal-infopart{clear:both}
+.modal-infopart .addBtn{position:absolute;right:1rem;top:.5rem}
+.modal-infopart.baseInfomation>div.comment,.modal-infopart.baseInfomation>ul{width:100%;display:block;padding:1rem;float:left}
+.modal-infopart.baseInfomation>div.comment li,.modal-infopart.baseInfomation>ul li{list-style:none;display:block;width:50%;float:left}
+.modal-infopart::before{text-align:left;content:'';display:block;width:100%;min-height:4rem;background-color:#e4e6eb;font-size:2rem;font-weight:700;color:#000;padding:.5rem 1rem;margin-bottom:1rem}
+.orderStatus::before{content:'订单状态'!important}
+.baseInfomation::before{content:'基础信息'!important}
+.goodsInfomation::before{content:'物品信息'!important}
+.Approval::before{content:'审批'!important}
+.input-info::before{content:''}
+.input-info.success::before{content:'\e084'}
+.input-info.fail::before{content:'\e083'}
+#progressbar{margin:0 auto}
+#progressbar .operationtime{display:block}
+#progressbar:after{clear:both}
+#progressbar li{display:block;float:left;list-style:none;color:#000;line-height:4rem;width:25%}
+#progressbar li span{font-size:1.2rem;display:block;width:100%;text-align:center;line-height:2rem}
+#progressbar li::before{content:"";display:block;text-align:center;font-size:2rem;width:4rem;height:4rem;-webkit-border-radius:2rem;-moz-border-radius:2rem;border-radius:2rem;margin:0 auto;background-color:#d4d4d4;position:relative;z-index:2}
+#progressbar li::after{position:absolute;height:.2rem;width:-webkit-calc(96%);width:-moz-calc(96%);width:calc(96%);top:2rem;left:-webkit-calc(52%);left:-moz-calc(52%);left:calc(52%);content:"";display:block;background-color:#d4d4d4;z-index:1}
+#progressbar li:last-child::after{display:none}
+#progressbar li:first-child{margin-left:0}
+#progressbar li.complated::before{content:"\e013";background-color:#506687}
+#progressbar li.infomation::before{content:"\e101";background-color:#506687}
+#progressbar li.validating::before{content:"\e085";background-color:#c4cf25}
+#progressbar li.viewed::before{content:"\e105";background-color:#506687}
+#progressbar li.reject::before{content:'\e014';background-color:#de4747}
+#progressbar li.active::before{color:#FFF}
 *{padding:0;margin:0}
 html{font-size:10px}
 #topNav_wapper{color:#337ab7;float:left;width:100%;background:-webkit-gradient(linear,left bottom,left top,from(#E7EEF5),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#E7EEF5 0,#F5F9FD 60%);background:linear-gradient(to top,#E7EEF5 0,#F5F9FD 60%)}
+#topNav_wapper li,#topNav_wapper ul{list-style:none;float:left}
 @media (max-width:768px){#topNav_wapper{background:-webkit-gradient(linear,left bottom,left top,from(#C2CFDD),color-stop(60%,#F5F9FD));background:-webkit-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:-moz-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:-o-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 60%);background:linear-gradient(to top,#C2CFDD 0,#F5F9FD 60%)}
 #topNav_wapper .sidebar-nav{border-top:1px solid #cddbeb;background:-webkit-gradient(linear,left bottom,left top,from(#C2CFDD),color-stop(30%,#F5F9FD));background:-webkit-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:-moz-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:-o-linear-gradient(bottom,#C2CFDD 0,#F5F9FD 30%);background:linear-gradient(to top,#C2CFDD 0,#F5F9FD 30%)}
 #topNav_wapper .sidebar-nav .section .dropdown-menu{position:relative}
@@ -36,9 +74,12 @@ html{font-size:10px}
 #topNav_wapper .topNav{display:block;width:100%}
 #topNav_wapper .sideBtn{display:none}
 }
+@media (max-width:500px){#topNav_wapper .logo small{font-size:.7rem}
+}
 #topNav_wapper::after{clear:both}
 @media (max-width:768px){#topNav_wapper{position:fixed;right:0;left:0;top:0;z-index:1030;border:none}
 #topNav_wapper .logo{position:fixed;display:block;z-index:1031;width:100%;min-width:24rem;top:1rem;font-size:2rem;overflow:hidden}
+#topNav_wapper .logo small{margin-left:.3rem}
 #topNav_wapper .logo::before{width:3.5rem;height:3.5rem;margin-left:1rem;float:left;content:"";display:block;background:url(../img/zeiss-logo.svg) no-repeat}
 #topNav_wapper .sideavatar{position:fixed;top:.5rem;right:6rem;z-index:1032}
 #topNav_wapper .sideavatar .greet,#topNav_wapper .sideavatar .logout{float:left;padding-left:1rem}
@@ -73,46 +114,25 @@ to{height:auto}
 to{height:auto}
 }
 }
-@media (max-width:768px) and (max-width:360px){#topNav_wapper .greet,#topNav_wapper .logout{display:none}
+@media (max-width:768px) and (max-width:400px){#topNav_wapper .greet,#topNav_wapper .logout{display:none}
 }
-@media (max-width:768px) and (min-width:320px) and (max-width:360px){#topNav_wapper .sideavatar{display:none}
+@media (max-width:768px) and (min-width:320px) and (max-width:400px){#topNav_wapper .sideavatar{display:none}
 }
-.nav.nav-tabs{border-bottom:none;margin-bottom:1px}
-.tabs>*{float:left}
-.tabs .form-group{margin-bottom:0;padding-left:0;padding-right:0}
-.modal{overflow:auto!important}
-@media (min-width:768px){.lg-modal>.modal-dialog{width:70%}
+table{word-wrap:break-word}
+table td .btn{margin:.4rem;float:left;font-size:10px;margin-right:1rem;min-width:6rem}
+table td.operation{max-width:15rem}
+.table>tbody>tr.info_card_row>td,.table>tbody>tr.info_card_row>th,.table>tfoot>tr.info_card_row>td,.table>tfoot>tr.info_card_row>th,.table>thead>tr.info_card_row>td,.table>thead>tr.info_card_row>th{padding:0}
+tr.info_card_row td{border:0;padding:0;margin:0}
+tr.info_card_row td button{float:left}
+tr.info_card_row td .card{margin:0 0 .2rem;-webkit-border-radius:0 0 .3rem .3rem;-moz-border-radius:0 0 .3rem .3rem;border-radius:0 0 .3rem .3rem;-webkit-box-shadow:0 .5rem 1rem #888;-moz-box-shadow:0 .5rem 1rem #888;box-shadow:0 .5rem 1rem #888;border:1px solid #4A8BC2}
+tr.info_card_row td .card .card_head{padding:.4rem;color:#fff}
+tr.info_card_row td .card .card_body{margin:1rem}
+tr.info_card_row td .card .card_body .card_data_row{border-bottom:.1rem solid #e5e5e5}
+tr.info_card_row td .card .card_body .card_data_title{font-weight:bolder}
+tr.info_card_row td .card .card_foot{border-top:.1rem solid #e5e5e5;margin:1rem}
+tr.info_card_row td .card .card_foot .date{float:right}
+.contentTitle h3{float:left}
+@media (min-width:768px){.info_card_row{display:none}
+.contentTitle h3{margin-top:0;margin-bottom:0}
 }
-.modal-infopart{position:relative;clear:both}
-.modal-infopart .addBtn{position:absolute;right:1rem;top:.5rem}
-.modal-infopart textarea{width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;resize:none;color:#666464}
-.modal-infopart.baseInfomation>div.comment,.modal-infopart.baseInfomation>ul{width:100%;display:block;padding:1rem;float:left}
-.modal-infopart.baseInfomation>div.comment li,.modal-infopart.baseInfomation>ul li{list-style:none;display:block;width:50%;float:left}
-.modal-infopart.baseInfomation textarea[disabled]{border:0;background-color:transparent}
-.modal-infopart::before{text-align:left;content:'';display:block;width:100%;min-height:4rem;background-color:#e4e6eb;font-size:2rem;font-weight:700;color:#000;padding:.5rem 1rem;margin-bottom:1rem}
-.orderStatus::before{content:'订单状态'!important}
-.baseInfomation::before{content:'基础信息'!important}
-.goodsInfomation::before{content:'物品信息'!important}
-.Approval::before{content:'审批'!important}
-.expressUpdate::before{content:'订单物流'!important}
-table .btn{margin-right:1rem}
-.input-info::before{content:''}
-.input-info.success::before{content:'\e084'}
-.input-info.fail::before{content:'\e083'}
-#progressbar{margin:0 auto}
-#progressbar .operationtime{display:block}
-#progressbar:after{clear:both}
-#progressbar li{display:block;color:#000;line-height:4rem;width:25%}
-#progressbar li span{font-size:1.2rem;display:block;width:100%;text-align:center;line-height:2rem}
-#progressbar li::before{content:"";display:block;text-align:center;font-size:2rem;width:4rem;height:4rem;-webkit-border-radius:2rem;-moz-border-radius:2rem;border-radius:2rem;margin:0 auto;background-color:#d4d4d4;position:relative;z-index:2}
-#progressbar li::after{position:absolute;height:.2rem;width:-webkit-calc(96%);width:-moz-calc(96%);width:calc(96%);top:2rem;left:-webkit-calc(52%);left:-moz-calc(52%);left:calc(52%);content:"";display:block;background-color:#d4d4d4;z-index:1}
-#progressbar li:last-child::after{display:none}
-#progressbar li:first-child{margin-left:0}
-#progressbar li.complated::before{content:"\e013";background-color:#506687}
-#progressbar li.infomation::before{content:"\e101";background-color:#506687}
-#progressbar li.validating::before{content:"\e085";background-color:#c4cf25}
-#progressbar li.viewed::before{content:"\e105";background-color:#506687}
-#progressbar li.reject::before{content:'\e014';background-color:#de4747}
-#progressbar li.active::before{color:#FFF}
-@media (min-width:768px){.contentTitle h3{margin-top:0}
-}
+.contentTitle:after{clear:both;content:""}

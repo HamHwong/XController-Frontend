@@ -1,5 +1,11 @@
-<div class="contentTitle">
+<div class="contentTitle clearfix">
   <h3>供应商</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
 </div>
 
   <div class="operation-menu">
@@ -23,7 +29,11 @@
       </ul>
     </nav>
   </div>
-
+<script>
+var CurrentTableList = {
+  "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
+}
+</script>
   
     <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -147,17 +157,35 @@
 
   
 
-  <script type="text/javascript">
-  /**
-   * @description Table初始化
-   */
-  var table_init = function() {
-    var $tablecontainer = $("#Supplier-table-container")
-    var t = new table("./test/admin/Supplier-table-data.json")
-    t.load().to($tablecontainer)
-  }
-</script>
+      
+    <div class="modal fade" id="delete">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-<script>
-  window.role="supplier"
-</script>
+  
+
+      <script>
+        var del = function(rid) {
+          $("#delete")
+            .modal()
+        }
+        var edit = function(rid) {
+          $("#EditBrochure")
+            .modal()
+        }
+      </script>

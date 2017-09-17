@@ -1,0 +1,22 @@
+.operation-menu::before {
+  clear: both;
+  content: '';
+}
+.operation-menu {
+  min-height: 4rem;
+  float: left;
+  width: 100%;
+  background: -webkit-gradient(linear, left bottom, left top, from(#E7EEF5), color-stop(60%, #F5F9FD));
+  background: -webkit-linear-gradient(bottom, #E7EEF5 0%, #F5F9FD 60%);
+  background: -moz-linear-gradient(bottom, #E7EEF5 0%, #F5F9FD 60%);
+  background: -o-linear-gradient(bottom, #E7EEF5 0%, #F5F9FD 60%);
+  background: linear-gradient(to top, #E7EEF5 0%, #F5F9FD 60%);
+  padding: 0.5rem 0.3rem;
+  -webkit-border-radius: 0 1rem 0 0;
+  -moz-border-radius: 0 1rem 0 0;
+  border-radius: 0 1rem 0 0;
+}
+.operation-menu button {
+  float: right;
+  margin-left: 0.5rem;
+}

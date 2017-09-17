@@ -2,6 +2,7 @@
   "tablename": "agent",
   "hasHeader": true,
   "hasButton": true,
+  "buttonPool": ["editBtn","delBtn"],
   "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "key", "prop"],
   "data": [
     ["序列", "代理商名称",  "区域", "代理产品", "手机号","邮箱", "账号", "密码"],
