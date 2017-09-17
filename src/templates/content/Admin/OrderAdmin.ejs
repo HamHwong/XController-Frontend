@@ -9,8 +9,9 @@
 </div>
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"处理中",finished:"已完成",reject:"已拒绝"}})%>
-  <div class="operation-menu">
-  </div>
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+</div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="applying">
     </div>
@@ -37,6 +38,7 @@
       "#reject": "./test/admin/OrderAdmin/success-table-data.json"
     }
   </script>
+  <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
   <%-include('/components/modal/modal',{type:"Common.Delete"})%>
     <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
     <script>

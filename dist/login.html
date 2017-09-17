@@ -9,20 +9,29 @@
 
 <body>
   <div class="container-fluid" id="login-wapper">
-      <div class="system-name">Marketing Materials Management</div>
+    <div class="system-name">Marketing Materials Management</div>
     <div class="bg row">
       <div class="logo">
       </div>
     </div>
     <div class="login-box col-center-block">
-      <form class="form-inline" role="form" method="post" onsubmit="return login()">
+      <form class="form-inline" role="form" id="login_form">
         <div class="form-group loginInputGroup col-center-block">
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
-            <input type="text" class="form-control" id="userid" name="userid" placeholder="输入您的用户名">
+            <input type="text" class="form-control" id="username" name="username" placeholder="输入您的用户名">
           </div>
           <div class="input-group input-group-md col-lg-12 col-md-12 col-xs-12 col-sm-12">
             <input type="password" class="form-control" id="password" name="password" placeholder="输入您的密码">
           </div>
+
+          <div class="form-group">
+            <select class="role" id="role" name="">
+              <option value="dealer">Dealer</option>
+              <option value="supplier">Supplier</option>
+              <option value="admin">Zeiss</option>
+            </select>
+          </div>
+
           <div id="slide-wrapper">
             <input type="hidden" value="" id="lockable" />
             <div id="slider">
@@ -33,7 +42,7 @@
           <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
           </div>
           <div class="btn-group btn-block">
-            <button type="submit" name="button" class="btn btn-block btn-primary">登陆</button>
+            <button type="button" name="button" class="btn btn-block btn-primary" onclick="login()">登陆</button>
           </div>
         </div>
       </form>
@@ -50,7 +59,7 @@
 
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/login-a5a2c1d8e2.css">
-<link rel="stylesheet" href="./css/components-f762c46e8f.css">
+<link rel="stylesheet" href="./css/components-584f46160c.css">
 <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/plugs/slideunlock-dcf9b5ccef.css">
 <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
@@ -73,31 +82,68 @@
     }, function() {});
     slider.init();
   })
+  function formToSet(form) {
+    form = $(form)
+    var formArr = form
+      .serializeArray()
 
+    var set = {}
+    for (var record of formArr) {
+      var key = record["name"]
+      var value = record["value"]
+      set[key] = value
+    }
+    return set
+  }
   function login() {
-
-    switch (e('#userid').value) {
+    var root = "/ZEISS"
+    var set = formToSet("#login_form")
+    var url = root+window.logUrl + "?username=" + set["username"] + "&password=" + set["password"]
+    url = url.trim()
+    console.log(url);
+    var isUser = $.ajax({
+      "url": url,
+      "contentType": "application/json; charset=utf-8",
+      "type": "PUT",
+      "dataType": "json",
+      "async":false
+    }).responseText
+    console.log(isUser);
+    if (!isUser)
+      return false
+    switch (window.role) {
       case 'admin':
       case 'Admin':
-        window.location.href = "/admin-home.html"
-        setCookie("auth","Admin")
+        window.location.href = "./admin-home.html"
+        setCookie("auth", "Admin")
         break
       case 'dealer':
       case 'Dealer':
-        window.location.href = "/dealer-home.html"
-        setCookie("auth","Dealer")
+        window.location.href = "./dealer-home.html"
+        setCookie("auth", "Dealer")
         break
       case 'supplier':
       case 'Supplier':
-        window.location.href = "/supplier-home.html"
-        setCookie("auth","Supplier")
+        window.location.href = "./supplier-home.html"
+        setCookie("auth", "Supplier")
         break
       case 'sales':
       case 'Sales':
-        window.location.href = "/dealer-home.html"
-        setCookie("auth","Sales")
+        window.location.href = "./dealer-home.html"
+        setCookie("auth", "Sales")
         break
     }
     return false
   }
+
+  $("#role").on('change', function(e) {
+    var map = {
+      "supplier": "/api/supplier/login",
+      "dealer": "/api/dealer/login",
+      "admin": "/api/systemuser/login"
+    }
+    var root = ""
+    window.role = e.target.value
+    window.logUrl = root + map[window.role]
+  })
 </script>
