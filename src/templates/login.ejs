@@ -24,8 +24,8 @@
             <input type="password" class="form-control" id="password" name="password" placeholder="输入您的密码">
           </div>
 
-          <div class="form-group">
-            <select class="role" id="role" name="">
+          <div class="input-group col-lg-12 col-md-12 col-xs-12 col-sm-12">
+            <select class="role form-control" id="role" name="">
               <option value="dealer">Dealer</option>
               <option value="supplier">Supplier</option>
               <option value="admin">Zeiss</option>
@@ -135,15 +135,18 @@
     }
     return false
   }
-
   $("#role").on('change', function(e) {
+    init_role()
+  })
+  var init_role = function(){
+    var root = ""
     var map = {
       "supplier": "/api/supplier/login",
       "dealer": "/api/dealer/login",
       "admin": "/api/systemuser/login"
     }
-    var root = ""
-    window.role = e.target.value
+    window.role = $("#role").val()
     window.logUrl = root + map[window.role]
-  })
+  }
+  init_role()
 </script>
