@@ -1,8 +1,9 @@
 {
+  "apiMethod.js": "apiMethod-8521c96921.js",
   "components.js": "components-d14160d38a.js",
   "content.js": "content-6c0f26ee85.js",
   "cookies.js": "cookies-44d00dc1d8.js",
-  "init.js": "init-6eb66b6ddc.js",
+  "init.js": "init-939905d7d8.js",
   "plugs/bootstrap-datetimepicker.js": "plugs/bootstrap-datetimepicker-9ae21e5aa6.js",
   "plugs/bootstrap-datetimepicker.min.js": "plugs/bootstrap-datetimepicker-133134d91c.min.js",
   "plugs/bootstrap.js": "plugs/bootstrap-fb81549ee2.js",

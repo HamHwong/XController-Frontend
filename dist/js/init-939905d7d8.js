@@ -47,7 +47,7 @@ var sideBtn_init = function () {
 var logout_init = function(){
   $(".logout").on("click",function(){
       delCookie("atuh")
-      window.location.href = "/login.html"
+      window.location.href = "./login.html"
   })
 }
 

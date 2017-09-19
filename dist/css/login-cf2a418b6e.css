@@ -37,7 +37,7 @@ html body {
   height: 28rem;
 }
 #login-wapper .bg .logo {
-  background: url('/img/zeiss.svg') no-repeat;
+  background: url('img/zeiss.svg') no-repeat;
   width: 10%;
   min-width: 10rem;
   margin: 0 auto;
