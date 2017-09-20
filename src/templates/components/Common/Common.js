@@ -45,8 +45,19 @@ function formToSet(form) {
 
 function autoComplateInfo(infoSet, form) {
   form = $(form)
-  var set = formToSet(form)
-  for (var i in set) {
-    form.find("#"+i).val(infoSet[i])
+  // debugger
+  // var set = formToSet(form)
+  for (var i in infoSet) {
+    form.find("#" + i).val(infoSet[i])
   }
 }
+
+function generateUUID() {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+  return uuid;
+};

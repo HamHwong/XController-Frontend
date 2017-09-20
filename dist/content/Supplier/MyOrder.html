@@ -95,9 +95,7 @@
 
       <div class="modal-body">
           <textarea name="expressStatus" rows="5" disabled>
-            快递：申通快递
-            快递单号：092813099034
-            发件人：Admin
+            订单详情：订单详情
           </textarea>
           <form id="update_Express" class="form-horizontal" role="form">
             <div class="form-group">
@@ -161,9 +159,16 @@
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
-       var t = new table(CurrentTableList[i])
-       t.load().to($tablecontainer)
+       var t = new table()
+       t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
      }
    }
+  //  var table_init = function(tableList) {
+  //    for (var i in CurrentTableList) {
+  //      var $tablecontainer = $(i)
+  //      var t = new table(CurrentTableList[i])
+  //      t.load().to($tablecontainer)
+  //    }
+  //  }
 </script>
 

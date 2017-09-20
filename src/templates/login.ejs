@@ -24,8 +24,8 @@
             <input type="password" class="form-control" id="password" name="password" placeholder="输入您的密码">
           </div>
 
-          <div class="form-group">
-            <select class="role" id="role" name="">
+          <div class="input-group col-lg-12 col-md-12 col-xs-12 col-sm-12">
+            <select class="role form-control" id="role" name="">
               <option value="dealer">Dealer</option>
               <option value="supplier">Supplier</option>
               <option value="admin">Zeiss</option>
@@ -65,7 +65,7 @@
 <script type="text/javascript" src="./js/plugs/jquery.js"></script>
 <script type="text/javascript" src="./js/plugs/slideunlock.min.js"></script>
 <script type="text/javascript" src="./js/cookies.js"></script>
-<script type="text/javascript" src="./js/apiMethod.js"></script>
+<script type="text/javascript" src="./js/apimethod.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
@@ -97,7 +97,7 @@
     return set
   }
   function login() {
-    var root = "/ZEISS"
+    var root = ""
     var set = formToSet("#login_form")
     var url = root+window.logUrl + "?username=" + set["username"] + "&password=" + set["password"]
     url = url.trim()
@@ -110,7 +110,7 @@
       "async":false
     }).responseText
     console.log(isUser);
-    if (!isUser)
+    if (!eval(isUser))
       return false
     switch (window.role) {
       case 'admin':
@@ -136,15 +136,18 @@
     }
     return false
   }
-
   $("#role").on('change', function(e) {
+    init_role()
+  })
+  var init_role = function(){
+    var root = ""
     var map = {
       "supplier": "/api/supplier/login",
       "dealer": "/api/dealer/login",
       "admin": "/api/systemuser/login"
     }
-    var root = ""
-    window.role = e.target.value
+    window.role = $("#role").val()
     window.logUrl = root + map[window.role]
-  })
+  }
+  init_role()
 </script>

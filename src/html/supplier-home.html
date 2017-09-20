@@ -5,6 +5,11 @@
   <meta charset="utf-8">
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
+  <script type="text/javascript" src="./js/plugs/jquery.js"></script>
+    <script type="text/javascript" src="./js/apimethod.js"></script>
+    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
+  <script type="text/javascript" src="./js/components.js"></script>
 </head>
 
 <body>
@@ -145,9 +150,7 @@
 
       <div class="modal-body">
           <textarea name="expressStatus" rows="5" disabled>
-            快递：申通快递
-            快递单号：092813099034
-            发件人：Admin
+            订单详情：订单详情
           </textarea>
           <form id="update_Express" class="form-horizontal" role="form">
             <div class="form-group">
@@ -211,10 +214,17 @@
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
-       var t = new table(CurrentTableList[i])
-       t.load().to($tablecontainer)
+       var t = new table()
+       t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
      }
    }
+  //  var table_init = function(tableList) {
+  //    for (var i in CurrentTableList) {
+  //      var $tablecontainer = $(i)
+  //      var t = new table(CurrentTableList[i])
+  //      t.load().to($tablecontainer)
+  //    }
+  //  }
 </script>
 
 
@@ -230,9 +240,6 @@
   <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
   <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
 
-  <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
   <script type="text/javascript" src="./js/plugs/icheck.js"></script>
   <script type="text/javascript" src="./js/plugs/xss.js"></script>
 
@@ -240,6 +247,7 @@
   <script type="text/javascript" src="./js/components.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
   <script type="text/javascript" src="./js/cookies.js"></script>
+  <script type="text/javascript" src="./js/apimethod.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       for (var i in init) {

@@ -8,33 +8,33 @@
   </div>
 </div>
 
-  <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
-  </div>
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
+</div>
 
-  <div class="table-content tab-content">
-    <div class="tab-pane active" id="Supplier-table-container">
-      <table class="table table-bordered table-hover">
-      </table>
-    </div>
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Supplier-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
   </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
 <script>
-var CurrentTableList = {
-  "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
-}
+  var CurrentTableList = {
+    // "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
+  }
 </script>
-  
+
     <div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -49,15 +49,15 @@ var CurrentTableList = {
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="name"
+  for="_suppliername"
   
   >姓名：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="name"
-    id="name"
+    name="_suppliername"
+    id="_suppliername"
     
     
       placeholder="请输入姓名"
@@ -74,15 +74,15 @@ var CurrentTableList = {
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="phone"
+  for="_phonenumber"
   
   >手机号：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="phone"
-    id="phone"
+    name="_phonenumber"
+    id="_phonenumber"
     
     
       placeholder="请输入手机号"
@@ -99,15 +99,15 @@ var CurrentTableList = {
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="user"
+  for="_accountname"
   
   >账号：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="user"
-    id="user"
+    name="_accountname"
+    id="_accountname"
     
     
       placeholder="请输入账号"
@@ -124,15 +124,15 @@ var CurrentTableList = {
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="password"
+  for="_password"
   
   >密码：</label>
   <div class="col-sm-8">
     <input type="password"
     class="form-control"
     
-    name="password"
-    id="password"
+    name="_password"
+    id="_password"
     
     
       placeholder="请输入密码"
@@ -149,15 +149,27 @@ var CurrentTableList = {
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+function addDealer() {
+  var data = formToSet("#add_Supplier")
+  var dealerId = POST("/api/supplier/new", data)
+  if(dealerId){
+    $("#addSupplier").modal("hide")
+    ClearInputs("#add_Supplier")
+    ClearSelecton("#add_Supplier")
+    ClearTextArea("#add_Supplier")
+  }
+}
+</script>
 
   
 
-      
+  
     <div class="modal fade" id="delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -179,13 +191,29 @@ var CurrentTableList = {
 
   
 
-      <script>
-        var del = function(rid) {
-          $("#delete")
-            .modal()
+
+    <script>
+      var supplierAdmin = function() {
+        var templateOpts = {
+          "tablename": "agent",
+          "hasHeader": true,
+          "hasButton": true,
+          "buttonPool": ["editBtn", "delBtn"],
+          "keyArr": ["id", "key", "prop", "prop", "prop"],
+          "data": [
+            ["序列", "名称", "手机号", "账号", "密码"],
+          ]
         }
-        var edit = function(rid) {
-          $("#EditBrochure")
-            .modal()
-        }
-      </script>
+        var dataOrder = ["_id", "_suppliername", "_phonenumber", "_accountname", "_password"]
+        new table().loadFromTemplateJson("/api/supplier/top(100)", templateOpts, dataOrder).to("#Supplier-table-container")
+      }
+      supplierAdmin()
+      var del = function(rid) {
+        $("#delete")
+          .modal()
+      }
+      var edit = function(rid) {
+        $("#EditBrochure")
+          .modal()
+      }
+    </script>

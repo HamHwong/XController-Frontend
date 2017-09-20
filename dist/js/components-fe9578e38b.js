@@ -1,3 +1,92 @@
+function Adapter(data, orderArray) {
+  //HACK 将后台数据转化到前台table结构 -- 最好之后统一数据结构！
+  //orderArray 数组来表示展现的顺序和变量
+  if (!orderArray) {
+    orderArray = []
+    for (var i in data[0]) {
+      orderArray.push(i)
+    }
+  }
+  var result = []
+  for (var i = 0; i < data.length; i++) {
+    var row = []
+    for (var j = 0; j < orderArray.length; j++) {
+      row.push(data[i][orderArray[j]])
+    }
+    result.push(row)
+  }
+  return result
+}
+
+function Mapper(dataSet) {
+  //HACK GET方式获得单个数据的response结构不一样，需要修改结构
+  //HACK 全小写，前面加下划线
+}
+
+function ClearInputs(form) {
+  form = $(form)
+  var inputs = form.find("input")
+  var a = inputs
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("")
+  }
+}
+
+function ClearTextArea(form) {
+  form = $(form)
+  var textarea = form.find("textarea")
+  var a = textarea
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("")
+  }
+}
+
+function ClearSelecton(form) {
+  form = $(form)
+  var selection = form.find("select")
+  var a = selection
+  for (var i = 0; i < a.length; i++) {
+    $(a[i])
+      .val("-1")
+  }
+}
+
+
+function formToSet(form) {
+  form = $(form)
+  var formArr = form
+    .serializeArray()
+
+  var set = {}
+  for (var record of formArr) {
+    var key = record["name"]
+    var value = record["value"]
+    set[key] = value
+  }
+  return set
+}
+
+function autoComplateInfo(infoSet, form) {
+  form = $(form)
+  // debugger
+  // var set = formToSet(form)
+  for (var i in infoSet) {
+    form.find("#" + i).val(infoSet[i])
+  }
+}
+
+function generateUUID() {
+  var d = new Date().getTime();
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+  return uuid;
+};
+
 /**
  * @description Bootstrap tab初始化
  */
@@ -195,6 +284,7 @@ var table = function(url) {
   this.container = null
   this.PrimaryKeyIndex = null
   this.data = {}
+  this.isUpdated = false
 }
 table.prototype.load = function(url) {
   //若参数带url，更新url
@@ -202,7 +292,7 @@ table.prototype.load = function(url) {
     this.url = url
   }
   //第一次load 或者 大于60s没更新，就去获取一波
-  if (this.urlTimestamp == null || this.timeDiff() > 60) {
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
     this.fetch(this.url)
       .init()
       .bindEvents()
@@ -210,6 +300,42 @@ table.prototype.load = function(url) {
   }
   return this
 }
+
+table.prototype.loadFromTemplateJson = function(url, templateOpts, dataOrder) {
+  //若参数带url，更新url
+  if (!(url === undefined || "" === url)) {
+    this.url = url
+  }
+
+  var template = {
+    "tablename": "order",
+    "hasHeader": true,
+    "hasDetail": true,
+    "hasButton": false,
+    "keyArr": [""],
+    "data": [
+      [""]
+    ]
+  }
+  template["tablename"] = templateOpts["tablename"] ? templateOpts["tablename"] : "table"
+  template["hasHeader"] = templateOpts["hasHeader"] ? templateOpts["hasHeader"] : false
+  template["hasDetail"] = templateOpts["hasDetail"] ? templateOpts["hasDetail"] : false
+  template["hasButton"] = templateOpts["hasButton"] ? templateOpts["hasButton"] : false
+  template["buttonPool"] = templateOpts["buttonPool"] ? templateOpts["buttonPool"] :[]
+  template["keyArr"] = templateOpts["keyArr"] ? templateOpts["keyArr"] : ["id", "key", "prop", "prop", "prop", "prop"]
+  template["data"] = templateOpts["data"] ? templateOpts["data"] : []
+  //第一次load 或者 大于60s没更新，就去获取一波
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
+    var data = Adapter(GET(url), dataOrder)
+    template["data"]= template["data"].concat(data)
+    this.responseJson = template
+    this.init()
+      .bindEvents()
+    this.urlTimestamp = new Date()
+  }
+  return this
+}
+
 table.prototype.timeDiff = function() {
   return (new Date()
     .getTime() - this.urlTimestamp.getTime()) / 1000
@@ -217,6 +343,8 @@ table.prototype.timeDiff = function() {
 table.prototype.fetch = function(url) {
   var tableJsonResponse = $.ajax({
     url: url,
+    type:"GET",
+    cache:false,
     async: false
   })
   // console.log(tableJsonResponse.responseText);
@@ -280,7 +408,7 @@ table.prototype.bindEvents = function() {
 }
 table.prototype.addInfoCard = function() {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
-  this.tableHTML.find('tr')
+  this.tableHTML.find('tr:not(.info_card_row)')
     .children('*')
     .addClass('hidden-xs')
   var colorArr = ["#6b85a4", "#86909e", "#b3b2cd"]
@@ -321,6 +449,7 @@ table.prototype.addRow = function(rowJSONObj) {
   this.data[PrimaryKeyValue] = row
   tbody.append(row.HTMLObj)
   this.addInfoCard()
+  this.isUpdated = true
 }
 
 table.prototype.onCardLongPress = function(callback) {
@@ -337,6 +466,14 @@ table.prototype.remove = function() {
   for (var i in this.data) {
     this.data[i].remove()
   }
+}
+// table.prototype.update = function() {
+//   this.load().to(this.container)
+//   this.isUpdated = false
+// }
+table.prototype.update = function() {
+  this.loadFromTemplateJson().to(this.container)
+  this.isUpdated = false
 }
 
 var table_row = function(data, ParentTable, isHeader, Headers) {
@@ -537,61 +674,8 @@ table_row.prototype.onClick = function(callback) {
     .on("click", callback)
 }
 
-function ClearInputs(form) {
-  form = $(form)
-  var inputs = form.find("input")
-  var a = inputs
-  for (var i = 0; i < a.length; i++) {
-    $(a[i])
-      .val("")
-  }
-}
-
-function ClearTextArea(form) {
-  form = $(form)
-  var textarea = form.find("textarea")
-  var a = textarea
-  for (var i = 0; i < a.length; i++) {
-    $(a[i])
-      .val("")
-  }
-}
-
-function ClearSelecton(form) {
-  form = $(form)
-  var selection = form.find("select")
-  var a = selection
-  for (var i = 0; i < a.length; i++) {
-    $(a[i])
-      .val("-1")
-  }
-}
-
-
-function formToSet(form) {
-  form = $(form)
-  var formArr = form
-    .serializeArray()
-
-  var set = {}
-  for (var record of formArr) {
-    var key = record["name"]
-    var value = record["value"]
-    set[key] = value
-  }
-  return set
-}
-
-function autoComplateInfo(infoSet, form) {
-  form = $(form)
-  var set = formToSet(form)
-  for (var i in set) {
-    form.find("#"+i).val(infoSet[i])
-  }
-}
-
 //绑定input搜索栏数据源
-bindInputQuery("#SupplierName", "./test/searchDictionary/SupplierCollections.json")
+bindInputQuery("#_supplierfk", "./test/searchDictionary/SupplierCollections.json")
 
 //绑定输入查询数据
 bindInputQuery("#BrochureName", "./test/searchDictionary/BrochureName.json")
@@ -636,16 +720,20 @@ $("#PruchaseItem")
 bindInputQuery("#DemanderFK", "./test/searchDictionary/DealerCollections.json")
 
 $("#PurchaseRequisition")
-  .on("hidden.bs.modal", function () {
-    if (window.__PurchaseRequisitionTable) {
-      window.__PurchaseRequisitionTable.remove()
-      ClearInputs("#PurchaseRequisition")
-      window.__PurchaseRequisitionTable = null
+  .on("hidden.bs.modal", function() {
+    ClearInputs("#PurchaseRequisition")
+    ClearSelecton("#PurchaseRequisition")
+    ClearTextArea("#PurchaseRequisition")
+    if (window.__PurchaseRequisitionItem_table) {
+      window.__PurchaseRequisitionItem_table.remove()
+      window.__PurchaseRequisitionItem_table = null
+      window.__PurchaseRequisition_tempID = null
     }
   })
-$("#PurchaseRequisition").on("shown.bs.modal", function () {
-    autoComplateInfoOfDealer()
-  })
+$("#PurchaseRequisition").on("shown.bs.modal", function() {
+  window.__PurchaseRequisition_tempID = generateUUID()
+  autoComplateInfoOfDealer()
+})
 
 //获取用户信息
 function getPrototypies(uid, pname) {
@@ -674,22 +762,24 @@ function autoComplateInfoOfDealer() {
 }
 
 $("#addPRItem").on("click", function() {
-    //如果没有请购单，则new一个
-    if (!window.__PurchaseRequisitionTable) {
-      var PurchaseRequisitionTable = new table()
-      var t = {
-        "tablename": "AddPR",
-        "hasHeader": true,
-        "hasButton": true,
-        "buttonPool": ["delBtn"],
-        "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
-      }
-      var header = ["编号", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址"]
-      PurchaseRequisitionTable.new(t, header)
-        .to($("#InfomationAddArea"))
-      window.__PurchaseRequisitionTable = PurchaseRequisitionTable
+  //如果没有请购单，则new一个
+  if (!window.__PurchaseRequisitionItem_table) {
+    var PurchaseRequisitionItemTable = new table()
+    var t = {
+      "tablename": "AddPR",
+      "hasHeader": true,
+      "hasButton": true,
+      "buttonPool": ["delBtn"],
+      "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
     }
-  })
+    var header = ["编号", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址"]
+    window.__PurchaseRequisitionItem_table = PurchaseRequisitionItemTable
+    window.__PurchaseRequisitionItem_table.new(t, header)
+      .to($("#InfomationAddArea"))
+    window.__PurchaseRequisitionItem_Unsave_set = {}
+    window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []
+  }
+})
 var row_counter = 0
 
 var fetchNewestExpressStatus = function(primaryKey) {

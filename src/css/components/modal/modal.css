@@ -5,6 +5,7 @@
 @media (min-width: 768px) {
   .lg-modal > .modal-dialog {
     width: 70%;
+    min-width: 768px;
   }
 }
 .modal-body textarea {

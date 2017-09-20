@@ -12,15 +12,15 @@
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="name"
+  for="_suppliername"
   
   >姓名：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="name"
-    id="name"
+    name="_suppliername"
+    id="_suppliername"
     
     
       placeholder="请输入姓名"
@@ -37,15 +37,15 @@
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="phone"
+  for="_phonenumber"
   
   >手机号：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="phone"
-    id="phone"
+    name="_phonenumber"
+    id="_phonenumber"
     
     
       placeholder="请输入手机号"
@@ -62,15 +62,15 @@
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="user"
+  for="_accountname"
   
   >账号：</label>
   <div class="col-sm-8">
     <input type="text"
     class="form-control"
     
-    name="user"
-    id="user"
+    name="_accountname"
+    id="_accountname"
     
     
       placeholder="请输入账号"
@@ -87,15 +87,15 @@
 <div class="form-group">
   <label class="col-sm-2 control-label"
   
-  for="password"
+  for="_password"
   
   >密码：</label>
   <div class="col-sm-8">
     <input type="password"
     class="form-control"
     
-    name="password"
-    id="password"
+    name="_password"
+    id="_password"
     
     
       placeholder="请输入密码"
@@ -112,8 +112,20 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+function addDealer() {
+  var data = formToSet("#add_Supplier")
+  var dealerId = POST("/api/supplier/new", data)
+  if(dealerId){
+    $("#addSupplier").modal("hide")
+    ClearInputs("#add_Supplier")
+    ClearSelecton("#add_Supplier")
+    ClearTextArea("#add_Supplier")
+  }
+}
+</script>

@@ -8,12 +8,12 @@
   </div>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"处理中",finished:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
 <div class="operation-menu">
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
 </div>
   <div class="table-content tab-content">
-    <div class="tab-pane active" id="applying">
+    <div class="tab-pane" id="applying">
     </div>
     <div class="tab-pane" id="finished">
     </div>
@@ -33,15 +33,31 @@
   </div>
   <script>
     var CurrentTableList = {
-      "#applying": "./test/admin/OrderAdmin/order-admin-table-data.json",
-      "#finished": "./test/admin/OrderAdmin/rejected-table-data.json",
-      "#reject": "./test/admin/OrderAdmin/success-table-data.json"
+      // "#applying": "./test/admin/OrderAdmin/order-admin-table-data.json",
+      // "#finished": "./test/admin/OrderAdmin/rejected-table-data.json",
+      // "#reject": "./test/admin/OrderAdmin/success-table-data.json"
     }
   </script>
   <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
   <%-include('/components/modal/modal',{type:"Common.Delete"})%>
     <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
     <script>
+    var orderAdmin = function() {
+      var templateOpts = {
+        "tablename": "order",
+        "hasHeader": true,
+        "hasDetail":true,
+        "hasButton": false,
+        "keyArr":
+          ["prop", "id", "key", "prop", "prop", "prop"],
+        "data": [
+          ["序列", "订单号", "用途", "提交人", "申请时间", "当前审批人"],
+        ]
+      }
+      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+      new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+    }
+    orderAdmin()
       var del = function(rid) {
         $("#delete")
           .modal()
@@ -49,5 +65,11 @@
       var edit = function(rid) {
         $("#EditBrochure")
           .modal()
+      }
+      var Detail = function(primaryKey) {
+        console.log("primaryKey", primaryKey);
+        var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
+        t.load().to("#Details .goodsInfomation")
+        $("#Details").modal()
       }
     </script>

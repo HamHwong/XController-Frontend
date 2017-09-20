@@ -29,11 +29,6 @@
     </ul>
   </nav>
 </div>
-<script>
-  var CurrentTableList = {
-    "#Dealer-table-container": "./test/admin/Dealer-table-data.json"
-  }
-</script>
 
     <div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -41,6 +36,77 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">添加代理商</h4>
+      </div>
+
+      <div class="modal-body">
+        <form id="add_Dealer" class="form-horizontal" role="form">
+
+          <div class="form-group col-md-12">
+            <label for="_dealername">姓名:</label>
+            <input name="_dealername" id="_dealername" placeholder="请输入姓名" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_phonenumber">手机号:</label>
+            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_accountname">账号:</label>
+            <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_password">密码:</label>
+            <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="DemanderFK">邮箱:</label>
+            <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="_dealerregion">区域:</label>
+            <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
+            <select class="form-control" name="_dealerregion" id="_dealerregion">
+                <option value="-1" selected>请选择地区</option>
+                <option value="hddq">华东地区</option>
+                <option value="hbdq">华北地区</option>
+                <option value="hzdq">华中地区</option>
+                <option value="xndq">西南地区</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function addDealer() {
+  var data = formToSet("#add_Dealer")
+  var dealerId = POST("/api/dealer/new", data)
+  if(dealerId){
+    $("#AddDealer").modal("hide")
+    ClearInputs("#add_Dealer")
+    ClearSelecton("#add_Dealer")
+    ClearTextArea("#add_Dealer")
+  }
+}
+</script>
+
+  
+
+  
+    <div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">修改代理商</h4>
       </div>
 
       <div class="modal-body">
@@ -182,7 +248,7 @@
 
   
 
-  
+    
     <div class="modal fade" id="delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -204,13 +270,31 @@
 
   
 
-  <script>
-    var del = function(rid) {
-      $("#delete")
-        .modal()
-    }
-    var edit = function(rid) {
-      $("#EditBrochure")
-        .modal()
-    }
-  </script>
+      <script>
+        var dealerAdmin = function() {
+          var templateOpts = {
+            "tablename": "agent",
+            "hasHeader": true,
+            "hasButton": true,
+            "buttonPool": ["editBtn", "delBtn"],
+            "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "key", "prop"],
+            "data": [
+              ["序列", "代理商名称", "区域", "代理产品", "手机号", "邮箱", "账号", "密码"],
+            ]
+          }
+          var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
+          new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts, dataOrder).to("#Dealer-table-container")
+        }
+        dealerAdmin()
+        // var CurrentTableList = {
+        //   "#Dealer-table-container": "./test/admin/Dealer-table-data.json"
+        // }
+        var del = function(rid) {
+          $("#delete")
+            .modal()
+        }
+        var edit = function(rid) {
+          $("#EditBrochure")
+            .modal()
+        }
+      </script>

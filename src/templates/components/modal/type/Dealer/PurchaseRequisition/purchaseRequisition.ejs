@@ -23,29 +23,29 @@
             </div>
             <div class="form-group col-md-4 search_box_warp">
               <label for="DemanderFK">代理商:</label>
-              <input name="DemanderFK" id="DemanderFK" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <input name="_demanderfk" id="DemanderFK" placeholder="请输入代理商" class="form-control" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
             <div class="form-group col-md-4">
               <label for="PurposeFK">用途:</label>
               <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-              <select name="PurposeFK" id="PurposeFK" class="form-control">
-                <option value="-1" selected>请选择用途</option>
-                <option value="forSales">一般销售用途</option>
-                <option value="partMeeting">区域会议</option>
-                <option value="nationalMeeting">全国性会议</option>
+              <select name="_purposefk" id="PurposeFK" class="form-control">
+                <option value="0" selected>请选择用途</option>
+                <option value="1">一般销售用途</option>
+                <option value="2">区域会议</option>
+                <option value="3">全国性会议</option>
               </select>
             </div>
-            <input type="text" name="saveTime" id="saveTime" value="" hidden>
-            <input type="text" name="saver" id="saver" value="" hidden>
-            <div class="Comments editable col-md-12">
-              <span>备注：</span>
-              <textarea name="Comments" rows="4" id="Comments"></textarea>
-            </div>
+            <%# <input type="text" name="_prcreated" id="saveTime" value="" hidden>%>
+              <input type="text" name="_requestorfk" id="saver" value="" hidden>
+              <div class="Comments editable col-md-12">
+                <span>备注：</span>
+                <textarea name="_comments" rows="4" id="Comments"></textarea>
+              </div>
 
           </div>
           <div class="modal-infopart goodsInfomation">
-            <button type="button" id="addPRItem" class="btn btn-primary addBtn" data-toggle="modal" data-target="#PruchaseItem" ><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" id="addPRItem" class="btn btn-primary addBtn" data-toggle="modal" data-target="#PruchaseItem"><span class="glyphicon glyphicon-plus"></span></button>
             <div id="InfomationAddArea">
             </div>
           </div>
@@ -53,7 +53,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1" onclick="Draft()">Draft</button>
-        <button type="submit" class="btn btn-primary col-xs-3 col-md-3">提交</button>
+        <button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="submitPR()">提交</button>
         <button type="button" class="btn btn-danger col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">取消</button>
       </div>
     </div>
@@ -64,14 +64,11 @@
     //存为草稿（本地）
     function Draft() {
       $("#itemId")
-        .val(new Date()
-          .getDay() + "-" + (getCookie("auth") + "-" + new Date()
-            .getSeconds()))
-      $("#saveTime")
-        .val(new Date())
+        .val(window.__PurchaseRequisition_tempID)
+      // $("#saveTime")
+      //   .val(new Date())
       $("#saver")
         .val(getCookie("auth"))
-
       if (!window.__draftTable) {
         var draftTable = new table()
         var t = {
@@ -85,7 +82,9 @@
         draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
           .to($("#draft"))
         window.__draftTable = draftTable
+        window.__draft_set = {}
       }
+
       $("#area")
         .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
       var formArr = $("#PurchaseRequisition_form")
@@ -98,6 +97,7 @@
         var value = record["value"]
         set[key] = value
       }
+      //此即为function formToArr
 
       var arr = []
       arr.push(++row_counter) //编号
@@ -106,6 +106,11 @@
         arr.push(set[i])
       }
       window.__draftTable.addRow(arr)
+      var itemsArray = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] ? window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] : null
+      window.__draft_set[window.__PurchaseRequisition_tempID] = {
+        "PR": set,
+        "PRItemsArray": itemsArray
+      }
       ClearInputs("#PurchaseRequisition")
       ClearSelecton("#PurchaseRequisition")
       ClearTextArea("#PurchaseRequisition")
@@ -113,10 +118,30 @@
         .modal('hide')
     }
     //确认
-    function Submit() {
-      $("#PurchaseRequisition_form")
-        .submit()
+    function submitPR() {
+      $("#itemId")
+        .val(window.__PurchaseRequisition_tempID)
+      $("#saver")
+        .val(getCookie("auth"))
+      var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      if (items.length <= 0) {
+        throw "请购单item数量不能为0"
+      }
+      var data = formToSet("#PurchaseRequisition_form")
+      data["_prnumber"] = window.__PurchaseRequisition_tempID
+      data["_prcreated"] = new Date()
+      var PRid = POST("/api/purchaserequisition/new", data)
+      console.log("PRid", PRid)
+      for (var i = 0; i < items.length; i++) {
+        items[i]["_purchaserequisitionfk"] = PRid
+        console.log(items[i])
+        var itemID = POST("/api/purchaseitem/new", items[i])
+        console.log(itemID);
+      }
+      if (PRid) {
+        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+        $("#PurchaseRequisition").modal("hide")
+      }
+      applyingTable()//更新
     }
-
-
   </script>

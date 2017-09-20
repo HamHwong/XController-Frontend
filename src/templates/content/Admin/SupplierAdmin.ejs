@@ -8,41 +8,57 @@
   </div>
 </div>
 
-  <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
-  </div>
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
+</div>
 
-  <div class="table-content tab-content">
-    <div class="tab-pane active" id="Supplier-table-container">
-      <table class="table table-bordered table-hover">
-      </table>
-    </div>
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Supplier-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
   </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
 <script>
-var CurrentTableList = {
-  "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
-}
+  var CurrentTableList = {
+    // "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
+  }
 </script>
-  <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
-      <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-      <script>
-        var del = function(rid) {
-          $("#delete")
-            .modal()
+<%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
+  <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+
+    <script>
+      var supplierAdmin = function() {
+        var templateOpts = {
+          "tablename": "agent",
+          "hasHeader": true,
+          "hasButton": true,
+          "buttonPool": ["editBtn", "delBtn"],
+          "keyArr": ["id", "key", "prop", "prop", "prop"],
+          "data": [
+            ["序列", "名称", "手机号", "账号", "密码"],
+          ]
         }
-        var edit = function(rid) {
-          $("#EditBrochure")
-            .modal()
-        }
-      </script>
+        var dataOrder = ["_id", "_suppliername", "_phonenumber", "_accountname", "_password"]
+        new table().loadFromTemplateJson("/api/supplier/top(100)", templateOpts, dataOrder).to("#Supplier-table-container")
+      }
+      supplierAdmin()
+      var del = function(rid) {
+        $("#delete")
+          .modal()
+      }
+      var edit = function(rid) {
+        $("#EditBrochure")
+          .modal()
+      }
+    </script>

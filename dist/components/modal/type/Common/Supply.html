@@ -8,35 +8,35 @@
 
       <div class="modal-body">
         <form id="Supply" class="form-horizontal" role="form">
-          
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="goodsname"
-  
-  >补充数量：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="goodsname"
-    id="goodsname"
-    
-    
-      placeholder="请输入补充数量"
-    
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
+            <div class="form-group">
+              <label class="col-sm-4 control-label" for="quantitySupply">补充数量：</label>
+              <div class="col-sm-8">
+                <input type="" class="form-control" name="quantitySupply" id="quantitySupply" placeholder="请输入补充数量" />
+              </div>
+            </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="quantitySupply()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+  function quantitySupply() {
+    var beforeQuantity = window.targrt_brochure["Quantity"]
+    window.targrt_brochure["Quantity"] = parseInt($("#quantitySupply").val()) + parseInt(beforeQuantity)
+    console.log(window.targrt_brochure);
+    for(var i in window.targrt_brochure){
+      window.targrt_brochure["_"+i.toLowerCase()] = window.targrt_brochure[i]
+    }
+    PUT('/api/brochure/' + window.targrt_brochure["ID"] + '/update', window.targrt_brochure)
+    window.targrt_brochure = null
+    $("#supply").modal('hide')
+    ClearInputs("#Supply")
+    ClearSelecton("#Supply")
+    ClearTextArea("#Supply")
+    BrochureAdmin()
+  }
+</script>

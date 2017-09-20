@@ -15,6 +15,7 @@ var table = function(url) {
   this.container = null
   this.PrimaryKeyIndex = null
   this.data = {}
+  this.isUpdated = false
 }
 table.prototype.load = function(url) {
   //若参数带url，更新url
@@ -22,7 +23,7 @@ table.prototype.load = function(url) {
     this.url = url
   }
   //第一次load 或者 大于60s没更新，就去获取一波
-  if (this.urlTimestamp == null || this.timeDiff() > 60) {
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
     this.fetch(this.url)
       .init()
       .bindEvents()
@@ -30,6 +31,42 @@ table.prototype.load = function(url) {
   }
   return this
 }
+
+table.prototype.loadFromTemplateJson = function(url, templateOpts, dataOrder) {
+  //若参数带url，更新url
+  if (!(url === undefined || "" === url)) {
+    this.url = url
+  }
+
+  var template = {
+    "tablename": "order",
+    "hasHeader": true,
+    "hasDetail": true,
+    "hasButton": false,
+    "keyArr": [""],
+    "data": [
+      [""]
+    ]
+  }
+  template["tablename"] = templateOpts["tablename"] ? templateOpts["tablename"] : "table"
+  template["hasHeader"] = templateOpts["hasHeader"] ? templateOpts["hasHeader"] : false
+  template["hasDetail"] = templateOpts["hasDetail"] ? templateOpts["hasDetail"] : false
+  template["hasButton"] = templateOpts["hasButton"] ? templateOpts["hasButton"] : false
+  template["buttonPool"] = templateOpts["buttonPool"] ? templateOpts["buttonPool"] :[]
+  template["keyArr"] = templateOpts["keyArr"] ? templateOpts["keyArr"] : ["id", "key", "prop", "prop", "prop", "prop"]
+  template["data"] = templateOpts["data"] ? templateOpts["data"] : []
+  //第一次load 或者 大于60s没更新，就去获取一波
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
+    var data = Adapter(GET(url), dataOrder)
+    template["data"]= template["data"].concat(data)
+    this.responseJson = template
+    this.init()
+      .bindEvents()
+    this.urlTimestamp = new Date()
+  }
+  return this
+}
+
 table.prototype.timeDiff = function() {
   return (new Date()
     .getTime() - this.urlTimestamp.getTime()) / 1000
@@ -37,6 +74,8 @@ table.prototype.timeDiff = function() {
 table.prototype.fetch = function(url) {
   var tableJsonResponse = $.ajax({
     url: url,
+    type:"GET",
+    cache:false,
     async: false
   })
   // console.log(tableJsonResponse.responseText);
@@ -100,7 +139,7 @@ table.prototype.bindEvents = function() {
 }
 table.prototype.addInfoCard = function() {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏
-  this.tableHTML.find('tr')
+  this.tableHTML.find('tr:not(.info_card_row)')
     .children('*')
     .addClass('hidden-xs')
   var colorArr = ["#6b85a4", "#86909e", "#b3b2cd"]
@@ -141,6 +180,7 @@ table.prototype.addRow = function(rowJSONObj) {
   this.data[PrimaryKeyValue] = row
   tbody.append(row.HTMLObj)
   this.addInfoCard()
+  this.isUpdated = true
 }
 
 table.prototype.onCardLongPress = function(callback) {
@@ -157,4 +197,12 @@ table.prototype.remove = function() {
   for (var i in this.data) {
     this.data[i].remove()
   }
+}
+// table.prototype.update = function() {
+//   this.load().to(this.container)
+//   this.isUpdated = false
+// }
+table.prototype.update = function() {
+  this.loadFromTemplateJson().to(this.container)
+  this.isUpdated = false
 }

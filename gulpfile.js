@@ -53,6 +53,13 @@ gulp.task('autopre', function() {
     .pipe(gulp.dest(__src + '/testCss'))
 })
 
+// //Html替换css、js文件版本
+// gulp.task('revHtml', ['ejs', 'revCss', 'revJs'], function() {
+//   gulp.src([config.path.config + '/*.json', 'src/html/**/*.html'])
+//     .pipe(revCollector())
+//     .pipe(gulp.dest('dist'))
+//   return gulp.start('mergeToServer')
+// })
 //Html替换css、js文件版本
 gulp.task('revHtml', ['ejs', 'revCss', 'revJs'], function() {
   return gulp.src([config.path.config + '/*.json', 'src/html/**/*.html'])
@@ -166,7 +173,18 @@ gulp.task('concat-conponent-js', ['clean-js'], function() {
     .pipe(gulp.dest('src/js'))
 })
 
+// gulp.task('default', ['revHtml', 'webserver'], function() {
+//   gulp.start('watch') //被弃用，仍能用，4.0官方将提供同步任务
+//   gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
+// })
+//
 gulp.task('default', ['revHtml', 'webserver'], function() {
+  // gulp.start('mergeToServer')
   gulp.start('watch') //被弃用，仍能用，4.0官方将提供同步任务
-  gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
+  // gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
+})
+
+gulp.task('mergeToServer',function(){
+  gulp.src('dist/**/*')
+  .pipe(gulp.dest('C:\\Users\\mpand\\Desktop\\BrochureManagement\\ZEISS.BrochureManagement\\ZEISS.BrochureManagement.WebApi\\html'))
 })

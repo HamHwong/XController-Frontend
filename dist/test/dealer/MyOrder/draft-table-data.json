@@ -1,7 +1,7 @@
 {
   "tablename": "order",
   "hasHeader": true,
-  "hasDetail": true,
+  "hasDetail": false,
   "hasButton": true,
   "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
   "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"],
