@@ -1,4 +1,4 @@
-<div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,8 +6,8 @@
         <h4 class="modal-title" id="myModalLabel">添加代理商</h4>
       </div>
 
-      <div class="modal-body">
-        <form id="add_Dealer" class="form-horizontal" role="form">
+      <div class="modal-body clearfix">
+        <form id="add_Dealer" class="form-horizontal " role="form">
 
           <div class="form-group col-md-12">
             <label for="_dealername">姓名:</label>
@@ -33,15 +33,11 @@
             <label for="DemanderFK">邮箱:</label>
             <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-12">
             <label for="_dealerregion">区域:</label>
             <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-            <select class="form-control" name="_dealerregion" id="_dealerregion">
+            <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
                 <option value="-1" selected>请选择地区</option>
-                <option value="hddq">华东地区</option>
-                <option value="hbdq">华北地区</option>
-                <option value="hzdq">华中地区</option>
-                <option value="xndq">西南地区</option>
             </select>
           </div>
         </form>
@@ -56,12 +52,13 @@
 <script>
 function addDealer() {
   var data = formToSet("#add_Dealer")
-  var dealerId = POST("/api/dealer/new", data)
-  if(dealerId){
-    $("#AddDealer").modal("hide")
+  var dealerId = apiConfig.dealer.Add(data)
+  if (dealerId) {
+    $("#Add").modal("hide")
     ClearInputs("#add_Dealer")
     ClearSelecton("#add_Dealer")
     ClearTextArea("#add_Dealer")
   }
+  DealerAdmin()
 }
 </script>

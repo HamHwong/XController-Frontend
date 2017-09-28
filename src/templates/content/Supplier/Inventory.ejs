@@ -4,7 +4,7 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
@@ -29,20 +29,28 @@
     </ul>
   </nav>
 </div>
+<%-include('/components/modal/modal',{type:"Supplier.Inventory.History"})%>
+<%-include('/components/modal/modal',{type:"Common.Supply"})%>
+<%-include('/components/table/table.init.ejs')%>
 <script>
   var CurrentTableList = {
     "#Inventory-table-container": "./test/supplier/Brochure/Inventory.json"
   }
 
-  function Detail(primarykey){
-    $("#Details").modal()
+  function Detail(primarykey) {
+    $("#Detail").modal()
     var t = new table("./test/supplier/Brochure/History.json")
-    t.load().to("#Details .goodsInfomation")
-    console.log("Primary Key",primarykey);
+    t.load().to("#Detail .goodsInfomation")
+    console.log("Primary Key", primarykey);
   }
-  function supply(primarykey){
-$("#supply").modal()
+
+  //补充物品数量操作
+  var supply = function(rid) {
+    // console.log(rid);
+    window._target = apiConfig.brochure.Get(rid)
+
+    $("#Supply")
+      .modal()
   }
+
 </script>
-  <%-include('/components/modal/modal',{type:"Supplier.Inventory.Detail"})%>
-    <%-include('/components/modal/modal',{type:"Common.Supply"})%>

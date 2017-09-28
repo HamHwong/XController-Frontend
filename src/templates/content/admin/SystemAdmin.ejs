@@ -1,0 +1,63 @@
+<div class="contentTitle clearfix">
+  <h3>系统管理员</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+  </div>
+</div>
+
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加管理员</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Admin-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
+  </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+<%-include('/components/modal/modal',{type:"Admin.SystemAdmin.Add"})%>
+  <%-include('/components/modal/modal',{type:"Admin.SystemAdmin.Edit"})%>
+    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+      <script>
+        //载入供应商表操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
+          var dataOrder = ["_id", "_accountname", "_password", "_email"]
+          new table().loadFromTemplateJson("/api/systemuser/top(100)", templateOpts, dataOrder).to("#Admin-table-container")
+        }
+        //删除供应商操作
+        var del = function(rid) {
+          $("#Delete")
+            .modal()
+        }
+        //编辑供应商操作
+        var edit = function(rid) {
+          window._target = apiConfig.supplier.Get(rid)
+          autoComplateInfo(window._target, "#edit_Supplier")
+          var search=function() {}
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
+          var dataOrder = ["_id", "_accountname", "_password", "_email"]
+          var result = apiConfig.supplier.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Admin-table-container")
+        }
+      </script>

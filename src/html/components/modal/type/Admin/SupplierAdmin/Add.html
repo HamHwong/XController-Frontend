@@ -1,4 +1,4 @@
-<div class="modal fade" id="addSupplier" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -112,20 +112,21 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addSupplier()">完成</button>
       </div>
     </div>
   </div>
 </div>
 <script>
-function addDealer() {
+function addSupplier() {
   var data = formToSet("#add_Supplier")
-  var dealerId = POST("/api/supplier/new", data)
+  var dealerId = apiConfig.supplier.Add(data)
   if(dealerId){
-    $("#addSupplier").modal("hide")
+    $("#Add").modal("hide")
     ClearInputs("#add_Supplier")
     ClearSelecton("#add_Supplier")
     ClearTextArea("#add_Supplier")
   }
+  table_init()
 }
 </script>

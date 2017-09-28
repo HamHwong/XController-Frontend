@@ -1,0 +1,206 @@
+<div class="contentTitle clearfix">
+  <h3>数据字典</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
+</div>
+
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加字典</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Brochure-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
+  </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+
+    <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dimdiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加字典</h4>
+      </div>
+
+      <div class="modal-body clearfix">
+        <form id="add_Option" class="form" role="form">
+          <div class="form-group col-md-12">
+            <label for="_optionname" class="control-label">选项名:</label>
+            <input name="_optionname" id="_optionname" placeholder="请输入选项名" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_optionvalue" class="control-label">选项值:</label>
+            <input name="_optionvalue" id="_optionvalue" placeholder="请输入选项值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_sequence" class="control-label">排序值:</label>
+            <input name="_sequence" id="_sequence" placeholder="请输入排序值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_description" class="control-label">描述:</label>
+            <input name="_description" id="_description" placeholder="请输入描述" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_category" class="control-label">描述:</label>
+            <input name="_category" id="_category" placeholder="请输入分类" class="form-control" />
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addOptionList()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function addOptionList() {
+    var data = formToSet("#add_Option")
+    var dealerId = apiConfig.optionlist.Add(data)
+    if (dealerId) {
+      $("#Add").modal("hide")
+      ClearInputs("#add_Option")
+      ClearSelecton("#add_Option")
+      ClearTextArea("#add_Option")
+    }
+    table_init()
+  }
+</script>
+
+  
+
+  
+    <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">编辑字典</h4>
+      </div>
+
+      <div class="modal-body clearfix">
+        <form id="edit_Option" class="form" role="form">
+          <div class="form-group col-md-12">
+            <label for="_optionname" class="control-label">选项名:</label>
+            <input name="_optionname" id="_optionname" placeholder="请输入选项名" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_optionvalue" class="control-label">选项值:</label>
+            <input name="_optionvalue" id="_optionvalue" placeholder="请输入选项值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_sequence" class="control-label">排序值:</label>
+            <input name="_sequence" id="_sequence" placeholder="请输入排序值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_description" class="control-label">描述:</label>
+            <input name="_description" id="_description" placeholder="请输入描述" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_category" class="control-label">描述:</label>
+            <input name="_category" id="_category" placeholder="请输入分类" class="form-control" />
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editOptionList()">完成</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function editOptionList() {
+    var rawData = window._target
+    var data = formToSet("#edit_Option")
+    for(var i in data){
+      rawData[i] = data[i]
+    }
+    var optionId = apiConfig.optionlist.Edit(rawData['_id'],data)
+    if (optionId) {
+      $("#Add").modal("hide")
+      ClearInputs("#edit_Option")
+      ClearSelecton("#edit_Option")
+      ClearTextArea("#edit_Option")
+      $("#Edit").modal('hide')
+    }
+    table_init()
+  }
+</script>
+
+  
+
+    
+    <div class="modal fade" id="Delete">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+      <script>
+        // var CurrentTableList = {
+        //   "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
+        // }
+        //载入物品操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.Dictionary
+          var dataOrder = ["_id", "_optionname", "_optionvalue", "_sequence", "_description", "_category"]
+          new table().loadFromTemplateJson("/api/optionlist/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
+        }
+
+        //删除物品记录操作
+        var del = function(rid) {
+          window._target = apiConfig.optionlist.Get(rid)
+          $("#Delete")
+            .modal()
+        }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.optionlist.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        //编辑操作
+        var edit = function(rid) {
+          window._target = apiConfig.optionlist.Get(rid)
+          autoComplateInfo(window._target,"#edit_Option")
+          $("#Edit")
+            .modal()
+        }
+        $(document).ready(function() {
+          table_init()
+        })
+      </script>

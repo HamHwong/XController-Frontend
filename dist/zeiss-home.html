@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>HomePage - Marketing Materials Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
+<script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+</head>
+
+<body>
+  <div id="right_wapper">
+    <header id="header_wapper" class="clearfix">
+      <div class="page-header row">
+  <div class="header_logo col-md-10 col-md-9 col-sm-8 ">
+    <span class="logo text-info"></span>
+    <span class="system_name h4">Marketing Materials Management</span>
+  </div>
+  <div class="header_userInfo col-md-3 col-sm-4 pull-right">
+    <div class="information clearfix text-center">
+      <span class="account">Hello,<span class="uname"></span></span>
+      <a href="javascript:;" class="logout">Log Out</a></span>
+    </div>
+  </div>
+</div>
+
+        <div id="topNav_wapper" class="nav-show">
+  <span class="logo"><small>Marketing Materials Management</small></span>
+  <nav class="topNav" id="sidebar-wrapper">
+    <ul class="nav sidebar-nav section-group">
+      <li class="section"><a href="#MyOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
+      <li class="section"><a href="#Approval"><span class="glyphicon glyphicon-th-list"></span>订单审批</a></li>
+    </ul>
+    <div class="sideavatar">
+      <div class="greet clearfix">
+        <span>Hi,Zeiss Employee</span>
+      </div>
+      <br/>
+      <div class="logout">
+        <span><a href="javascript:;"  class="logout" >Logout</a></span>
+      </div>
+    </div>
+    <div class="sideBtn text-center">
+      <span class="glyphicon sideBtnIcon-open"></span>
+    </div>
+  </nav>
+</div>
+
+    </header>
+    <div id="content_wapper" class="container-fluid">
+      <div class="contentTitle clearfix">
+  <h3>我的订单</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <ul class="nav nav-tabs" id="myTab">
+    
+      
+        <li><a href=#draft>草稿箱</a></li>
+        
+        <li><a href=#applying>申请中</a></li>
+        
+        <li><a href=#finished>已完成</a></li>
+        
+        <li><a href=#reject>已拒绝</a></li>
+        
+  </ul>
+</div>
+
+  <div class="operation-menu">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="draft">
+    </div>
+    <div class="tab-pane" id="applying">
+    </div>
+    <div class="tab-pane" id="finished">
+    </div>
+    <div class="tab-pane" id="reject">
+    </div>
+
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+    <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">订单申请</h4>
+      </div>
+
+      <div class="modal-body">
+        <form class="form" method="post" id="PurchaseRequisition_form">
+          <div class="modal-infopart baseInfomation form-group clearfix">
+            <input type="text" name="_id" id="_id" value="" hidden>
+            <div class="form-group col-md-4">
+              <label for="_dealerregion">区域:</label>
+              <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
+              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+                <option value="-1" selected>请选择地区</option>
+                <option value="hddq">华东地区</option>
+                <option value="hbdq">华北地区</option>
+                <option value="hzdq">华中地区</option>
+                <option value="xndq">西南地区</option>
+              </select>
+            </div>
+            <div class="form-group col-md-4 search_box_warp">
+              <label for="_demanderfk">代理商:</label>
+              <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="_purposefk">用途:</label>
+              <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" >
+                <option value="0" selected>请选择用途</option>
+                <option value="1">一般销售用途</option>
+                <option value="2">区域会议</option>
+                <option value="3">全国性会议</option>
+              </select>
+            </div>
+            
+              <input type="text" name="_requestorfk" id="saver" value="" hidden>
+              <div class="Comments editable col-md-12">
+                <span>备注：</span>
+                <textarea name="_comments" rows="4" id="Comments"></textarea>
+              </div>
+
+          </div>
+          <div class="modal-infopart goodsInfomation">
+            <button type="button" id="addPRItem" class="btn btn-primary addBtn" data-toggle="modal" data-target="#PruchaseItem"><span class="glyphicon glyphicon-plus"></span></button>
+            <div id="InfomationAddArea">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1" onclick="Draft()">Draft</button>
+        <button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="submitPR()">提交</button>
+        <button type="button" class="btn btn-danger col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="PruchaseItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加物品</h4>
+      </div>
+
+      <div class="modal-body">
+        <form id="PruchaseItem_form" class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">申请种类 ：</label>
+            <div class="col-sm-8 search_box_warp">
+              <input type="text" class="form-control" name="_brochurename" id="BrochureName" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">交付时间 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">申请数量 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="_quantity" id="Quantity" placeholder="申请数量" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货人 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="_consignee" id="Consignee" placeholder="收货人" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货电话 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="_contactnumber" id="ContactNumber" placeholder="收货电话" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3 control-label">收货地址 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="_deliveryaddress" id="DeliveryAddress" placeholder="收货地址" required />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  //确认
+  function AddPurchaseItem() {
+    AppendPurchaseItem()
+    $("#PruchaseItem")
+      .modal('hide')
+  }
+  //添加
+  function AppendPurchaseItem() {
+    if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
+      return
+    var arr = []
+    arr.push(++row_counter)
+    var set = formToSet("#PruchaseItem_form")
+    var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
+    for (var i of order) {
+      arr.push(set[i])
+    }
+    if (window.__PurchaseRequisitionItem_table) {
+      window.__PurchaseRequisitionItem_table.addRow(arr)
+      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
+    }
+    ClearInputs("#PruchaseItem_form", ["#BrochureName", "#Quantity"])
+  }
+  //取消
+  function Cancel() {
+    $("#PruchaseItem")
+      .modal('hide')
+  }
+</script>
+
+  <script>
+    //存为草稿（本地）
+    function Draft() {
+      $("#itemId")
+        .val(window.__PurchaseRequisition_tempID)
+      // $("#saveTime")
+      //   .val(new Date())
+      $("#saver")
+        .val(getCookie("name"))
+      if (!window.__draftTable) {
+        var draftTable = new table()
+        var t = {
+          "tablename": "Draft",
+          "rowsperpage": 10,
+          "hasHeader": true,
+          "hasButton": true,
+          "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
+          "keyArr": ["prop", "id", "key", "prop"]
+        }
+        draftTable.new(t, ["编号", "订单号", "用途", "保存时间"])
+          .to($("#draft"))
+        window.__draftTable = draftTable
+        window.__draft_set = {}
+      }
+
+      $("#_dealerregion")
+        .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
+      var formArr = $("#PurchaseRequisition_form")
+        .serializeArray()
+      $("#_dealerregion")
+        .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
+      var set = {}
+      for (var record of formArr) {
+        var key = record["name"]
+        var value = record["value"]
+        set[key] = value
+      }
+      //此即为function formToArr
+      var arr = []
+      // arr.push(++row_counter) //编号
+      var order = ["_id", "_prnumber", "_purposefk", "_prcreated"]
+      for (var i of order) {
+        arr.push(set[i])
+      }
+      window.__draftTable.addRow(arr)
+      var itemsArray = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] ? window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] : null
+      window.__draft_set[window.__PurchaseRequisition_tempID] = {
+        "PR": set,
+        "PRItemsArray": itemsArray
+      }
+      ClearInputs("#PurchaseRequisition")
+      ClearSelecton("#PurchaseRequisition")
+      ClearTextArea("#PurchaseRequisition")
+      $("#PurchaseRequisition")
+        .modal('hide')
+    }
+    //确认
+    function submitPR() {
+      $("#itemId")
+        .val(window.__PurchaseRequisition_tempID)
+      $("#saver")
+        .val(getCookie("name"))
+      var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      if (items.length <= 0) {
+        throw "请购单item数量不能为0"
+      }
+      var data = formToSet("#PurchaseRequisition_form")
+      data["_prnumber"] = window.__PurchaseRequisition_tempID
+      data["_prcreated"] = new Date()
+      var PRid = POST("/api/purchaserequisition/new", data)
+      console.log("PRid", PRid)
+      for (var i = 0; i < items.length; i++) {
+        items[i]["_purchaserequisitionfk"] = PRid
+        console.log(items[i])
+        var itemID = POST("/api/purchaseitem/new", items[i])
+        console.log(itemID);
+      }
+      if (PRid) {
+        // window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+        $("#PurchaseRequisition").modal("hide")
+      }
+      table_init() //更新
+    }
+  </script>
+
+  
+
+    
+    <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix">
+            <!-- progressbar -->
+<ul id="progressbar" class="clearfix">
+  <li class="glyphicon complated"><span>提出申请</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon complated"><span>直线经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon validating"><span>BU经理</span><span class="operationtime">2016.11.12  00:00</span></li>
+  <li class="glyphicon reject"><span>通知MM</span><span class="operationtime">2016.11.12  00:00</span></li>
+</ul>
+
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>代理商：dealer</li>
+            <li>区   域：华南地区</li>
+            <li>手机号：13883762902</li>
+            <li>邮   箱：admin@elitsrouce.net</li>
+            <li>用   途：一般销售用途</li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="comment" rows="4" disabled>备注</textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="center-block">
+          <button type="submit" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+      
+    <!-- 信息删除确认 -->
+<div class="modal fade" id="Submit">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认提交申请吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+  
+
+        
+    <div class="modal fade" id="Delete">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+          <script type="text/javascript">
+   var table_init = function(tableList) {
+     for (var i in CurrentTableList) {
+       var $tablecontainer = $(i)
+       var t = new table()
+       console.log(CurrentTableList[i]);
+       t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
+     }
+   }
+</script>
+
+            <script>
+              //载入我的订单的申请表操作
+              var table_init = function() {
+                var templateOpts = tableStructures.Dealer.MyOrder.Approving
+                var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+              }
+
+              $(document).ready(function() {
+                table_init()
+              })
+
+              var CurrentTableList = {
+                "#draft": "./test/dealer/MyOrder/draft-table-data.json",
+                "#applying": "./test/dealer/MyOrder/approving-table-data.json",
+                "#finished": "./test/dealer/MyOrder/success-table-data.json",
+                "#reject": "./test/dealer/MyOrder/rejected-table-data.json"
+              }
+
+              //订单详情操作
+              var Detail = function(primaryKey) {
+                console.log("primaryKey", primaryKey);
+                var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
+                t.load().to("#Detail .goodsInfomation")
+                $("#Detail").modal()
+              }
+
+              //复制操作
+              var copy = function(primaryKey) {
+                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
+                console.log(infoSet)
+                // for(var i in infoSet){
+                //   infoSet["_"+i.toLowerCase()] = infoSet[i]
+                // }
+                //自动填充
+                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
+                //填充dealer
+                autoComplateInfoOfDealer()
+
+                $("#PurchaseRequisition").modal()
+              }
+              var edit = function(primaryKey) {
+                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
+                //自动填充
+                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
+                //填充dealer
+                autoComplateInfoOfDealer()
+
+                $("#PurchaseRequisition").modal()
+              }
+              var submit = function(primaryKey) {
+                $("#Submit").modal()
+                applyingTable()
+              }
+              var deleteDraft = function(primaryKey) {
+                $("#Delete").modal()
+              }
+              var deleteDraftBtn = function(primaryKey) {
+
+              }
+            </script>
+
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
+  <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
+  <link rel="stylesheet" href="./css/content-2f97396e13.css">
+  <link rel="stylesheet" href="./css/components-e1f6377b02.css">
+  <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
+  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
+
+  <script type="text/javascript" src="./js/plugs/bootstrap-fb81549ee2.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
+  <script type="text/javascript" src="./js/api/apimethod-b477b1418e.js"></script>
+  <script type="text/javascript" src="./js/api/config-6cb289daff.js"></script>
+  <script type="text/javascript" src="./js/components-4a35ae3378.js"></script>
+  <script type="text/javascript" src="./js/init-1a1e557c66.js"></script>
+  <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
+  <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      for (var i in init) {
+        for (var j in init[i])
+          init[i][j]()
+      }
+    })
+  </script>
+
+</body>
+
+</html>

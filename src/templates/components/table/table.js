@@ -23,7 +23,7 @@ table.prototype.load = function(url) {
     this.url = url
   }
   //第一次load 或者 大于60s没更新，就去获取一波
-  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || this.isUpdated) {
     this.fetch(this.url)
       .init()
       .bindEvents()
@@ -33,9 +33,15 @@ table.prototype.load = function(url) {
 }
 
 table.prototype.loadFromTemplateJson = function(url, templateOpts, dataOrder) {
-  //若参数带url，更新url
-  if (!(url === undefined || "" === url)) {
-    this.url = url
+  if (typeof url == "string") {
+    //若参数带url，更新url
+    if (!(url === undefined || "" === url)) {
+      this.url = url
+    }
+
+    var c = url.split('.')
+    if (c.length - 1 == c.lastIndexOf('json'))
+      return this.load(url)
   }
 
   var template = {
@@ -52,18 +58,20 @@ table.prototype.loadFromTemplateJson = function(url, templateOpts, dataOrder) {
   template["hasHeader"] = templateOpts["hasHeader"] ? templateOpts["hasHeader"] : false
   template["hasDetail"] = templateOpts["hasDetail"] ? templateOpts["hasDetail"] : false
   template["hasButton"] = templateOpts["hasButton"] ? templateOpts["hasButton"] : false
-  template["buttonPool"] = templateOpts["buttonPool"] ? templateOpts["buttonPool"] :[]
-  template["keyArr"] = templateOpts["keyArr"] ? templateOpts["keyArr"] : ["id", "key", "prop", "prop", "prop", "prop"]
-  template["data"] = templateOpts["data"] ? templateOpts["data"] : []
+  template["buttonPool"] = templateOpts["buttonPool"] ? templateOpts["buttonPool"] : []
+  template["keyArr"] = templateOpts["keyArr"] ? templateOpts["keyArr"].slice(0) : ["id"]
+  template["data"] = templateOpts["data"] ? templateOpts["data"].slice(0) : []
   //第一次load 或者 大于60s没更新，就去获取一波
-  if (this.urlTimestamp == null || this.timeDiff() > 60 || !this.isUpdated) {
-    var data = Adapter(GET(url), dataOrder)
-    template["data"]= template["data"].concat(data)
+  if (this.urlTimestamp == null || this.timeDiff() > 60 || this.isUpdated) {
+    var datasource = (typeof url == "object") ? url : GET(url)
+    var data = Adapter(datasource, dataOrder)
+    template["data"] = template["data"].concat(data)
     this.responseJson = template
     this.init()
       .bindEvents()
     this.urlTimestamp = new Date()
   }
+
   return this
 }
 
@@ -74,8 +82,8 @@ table.prototype.timeDiff = function() {
 table.prototype.fetch = function(url) {
   var tableJsonResponse = $.ajax({
     url: url,
-    type:"GET",
-    cache:false,
+    type: "GET",
+    cache: false,
     async: false
   })
   // console.log(tableJsonResponse.responseText);
@@ -88,9 +96,9 @@ table.prototype.init = function() {
   this.hasDetail = this.responseJson.hasDetail
   this.buttonPool = this.responseJson.buttonPool
   this.hasButton = this.responseJson.hasButton ? this.responseJson.buttonPool : false
-  this.keyArr = this.responseJson.keyArr
+  this.keyArr = this.responseJson.keyArr.slice(0)
   this.PrimaryKeyIndex = this.keyArr.indexOf('id')
-  var data = this.responseJson.data
+  var data = this.responseJson.data.slice(0)
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
   table.append(tbody)
@@ -100,7 +108,7 @@ table.prototype.init = function() {
   if (this.hasHeader && !this.Header) {
     var hr = data.reverse()
       .pop()
-    this.Header = hr
+    this.Header = hr.slice(0)
     if (this.hasButton) {
       this.Header.push("Operation")
       this.keyArr.push("operation")
@@ -124,18 +132,22 @@ table.prototype.to = function($tableContainer) {
   return this
 }
 
-table.prototype.bindEvents = function() {
+table.prototype.bindEvents = function(callback) {
   if (!this.hasDetail)
     return
+  callback = callback ? callback : Detail
   var data = this.data
   for (var i in data) {
     data[i].onClick(function() {
-      Detail(this.dataset.primarykey)
+      callback.call(this, this.dataset.primarykey)
+      // eval(callback+""+(this.dataset.primarykey))
     })
     data[i].onCardLongPress(500, function() {
-      Detail(this.dataset.primarykey)
+      callback.call(this, this.dataset.primarykey)
+      // eval(callback+""+(this.dataset.primarykey))
     })
   }
+  return this
 }
 table.prototype.addInfoCard = function() {
   // 为所有子节点添加hidden-xs标签，缩放时隐藏

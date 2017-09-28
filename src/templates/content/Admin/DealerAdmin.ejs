@@ -2,14 +2,14 @@
   <h3>代理商</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddDealer">添加代理商</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加代理商</button>
 </div>
 
 <div class="table-content tab-content">
@@ -33,30 +33,42 @@
   <%-include('/components/modal/modal',{type:"Admin.DealerAdmin.Edit"})%>
     <%-include('/components/modal/modal',{type:"Common.Delete"})%>
       <script>
-        var dealerAdmin = function() {
-          var templateOpts = {
-            "tablename": "agent",
-            "hasHeader": true,
-            "hasButton": true,
-            "buttonPool": ["editBtn", "delBtn"],
-            "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "key", "prop"],
-            "data": [
-              ["序列", "代理商名称", "区域", "代理产品", "手机号", "邮箱", "账号", "密码"],
-            ]
-          }
+        //载入代理商表操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
           var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
           new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts, dataOrder).to("#Dealer-table-container")
         }
-        dealerAdmin()
-        // var CurrentTableList = {
-        //   "#Dealer-table-container": "./test/admin/Dealer-table-data.json"
-        // }
+
+        //删除代理商操作
         var del = function(rid) {
-          $("#delete")
+          window._target = apiConfig.dealer.Get(rid)
+          $("#Delete")
             .modal()
         }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.dealer.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        var search=function() {}
+        //编辑代理商操作
         var edit = function(rid) {
-          $("#EditBrochure")
+          window._target = apiConfig.dealer.Get(rid)
+          autoComplateInfo(window._target, "#edit_Dealer")
+          $("#Edit")
             .modal()
+        }
+
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
+          var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
+          var result = apiConfig.dealer.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
         }
       </script>

@@ -3,11 +3,11 @@
   "hasHeader": true,
   "hasDetail": false,
   "hasButton": true,
-  "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
+  "buttonPool": ["copyBtn", "editBtn", "deleteDraftBtn"],
   "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"],
   "data": [
-    ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"],
-    [1, "6-Dealer-53", "dealer", "forSales","hddq", "2017-04-23 23:00:00", "Dealer"],
-    [2, "6-Dealer-58", "dealer", "forSales","hddq", "2017-04-23 23:00:00", "Sales"]
+    ["编号", "序号", "用途", "区域", "保存时间"],
+    [1, "6-Dealer-53", "forSales", "2017-04-23 23:00:00", "Dealer"],
+    [2, "6-Dealer-58", "forSales", "2017-04-23 23:00:00", "Sales"]
   ]
 }

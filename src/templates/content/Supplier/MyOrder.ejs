@@ -4,7 +4,7 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
@@ -28,24 +28,56 @@
       </ul>
     </nav>
   </div>
-
+<%-include('/components/modal/modal',{type:"Supplier.Express.Detail"})%>
+<%-include('/components/modal/modal',{type:"Common.Finish"})%>
+<%-include('/components/table/table.init.ejs')%>
   <script>
     var CurrentTableList = {
       "#applying": "./test/supplier/MyOrder/approving-table-data.json",
       "#finished": "./test/supplier/MyOrder/success-table-data.json"
     }
 
+    var table_init = function() {
+      //TODO 此处需要显示联系人电话，需要多表连接
+      var templateOpts = tableStructures.Supplier.MyOrder.Approving
+      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", ]
+      var result = apiConfig.purchaserequisition.Top(100)
+      for(var i of result){
+        console.log(i)
+        var requestor = i["_requestorfk"]
+        var dealer = apiConfig.dealer.GetByUserName(requestor)
+        console.log(dealer)
+        var phoneNumber = dealer["_phonenumber"]
+        i["_phonenumber"] = phoneNumber
+      }
+      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#applying")
+    }
+
+    var supply = function(rid) {
+      // console.log(rid);
+      window._target = apiConfig.brochure.Get(rid)
+
+      $("#Supply")
+        .modal()
+    }
+
     var expressUpdate = function() {
       var t = new table("./test/supplier/MyOrder/ExpressUpdate/ExpressUpdateDetail.json")
-      t.load().to("#ExpressDetail .goodsInfomation")
-      $("#ExpressDetail").modal()
+      t.load().to("#Detail .goodsInfomation")
+      $("#Detail").modal()
     }
 
     function finish(primarykey) {
-      $("#finish").modal()
+      $("#Finish").modal()
       // console.log("Primary Key", primarykey);
     }
+
+    var search = function() {
+      var keyword = filterXSS($("input.searchBox").val().trim())
+      var templateOpts = tableStructures.Dealer.MyOrder.Approving
+      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+      var result = apiConfig.dealer.Search(keyword)
+      console.log(result)
+      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+    }
   </script>
-  <%-include('/components/modal/modal',{type:"Supplier.Express.Detail"})%>
-  <%-include('/components/modal/modal',{type:"Common.Finish"})%>
-    <%-include('/components/table/table.init.ejs')%>

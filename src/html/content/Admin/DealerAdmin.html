@@ -2,14 +2,14 @@
   <h3>代理商</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddDealer">添加代理商</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加代理商</button>
 </div>
 
 <div class="table-content tab-content">
@@ -30,7 +30,7 @@
   </nav>
 </div>
 
-    <div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -38,8 +38,8 @@
         <h4 class="modal-title" id="myModalLabel">添加代理商</h4>
       </div>
 
-      <div class="modal-body">
-        <form id="add_Dealer" class="form-horizontal" role="form">
+      <div class="modal-body clearfix">
+        <form id="add_Dealer" class="form-horizontal " role="form">
 
           <div class="form-group col-md-12">
             <label for="_dealername">姓名:</label>
@@ -65,15 +65,11 @@
             <label for="DemanderFK">邮箱:</label>
             <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
           </div>
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-12">
             <label for="_dealerregion">区域:</label>
             <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-            <select class="form-control" name="_dealerregion" id="_dealerregion">
+            <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
                 <option value="-1" selected>请选择地区</option>
-                <option value="hddq">华东地区</option>
-                <option value="hbdq">华北地区</option>
-                <option value="hzdq">华中地区</option>
-                <option value="xndq">西南地区</option>
             </select>
           </div>
         </form>
@@ -88,20 +84,21 @@
 <script>
 function addDealer() {
   var data = formToSet("#add_Dealer")
-  var dealerId = POST("/api/dealer/new", data)
-  if(dealerId){
-    $("#AddDealer").modal("hide")
+  var dealerId = apiConfig.dealer.Add(data)
+  if (dealerId) {
+    $("#Add").modal("hide")
     ClearInputs("#add_Dealer")
     ClearSelecton("#add_Dealer")
     ClearTextArea("#add_Dealer")
   }
+  DealerAdmin()
 }
 </script>
 
   
 
   
-    <div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -109,147 +106,71 @@ function addDealer() {
         <h4 class="modal-title" id="myModalLabel">修改代理商</h4>
       </div>
 
-      <div class="modal-body">
-        <form id="add_Dealer" class="form-horizontal" role="form">
-          
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="name"
-  
-  >姓名：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="name"
-    id="name"
-    
-    
-      placeholder="请输入姓名"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
+      <div class="modal-body clearfix">
+        <form id="edit_Dealer" class="form-horizontal" role="form">
 
-            
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="phone"
-  
-  >手机号：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="phone"
-    id="phone"
-    
-    
-      placeholder="请输入手机号"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-              
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="user"
-  
-  >账号：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="user"
-    id="user"
-    
-    
-      placeholder="请输入账号"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-                
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="password"
-  
-  >密码：</label>
-  <div class="col-sm-8">
-    <input type="password"
-    class="form-control"
-    
-    name="password"
-    id="password"
-    
-    
-      placeholder="请输入密码"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-                  
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="email"
-  
-  >邮箱：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="email"
-    id="email"
-    
-    
-      placeholder="请输入邮箱"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
+          <div class="form-group col-md-12">
+            <label for="_dealername">姓名:</label>
+            <input name="_dealername" id="_dealername" placeholder="请输入姓名" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_phonenumber">手机号:</label>
+            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_accountname">账号:</label>
+            <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_password">密码:</label>
+            <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="DemanderFK">邮箱:</label>
+            <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_dealerregion">区域:</label>
+            <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
+            <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              <option value="-1" selected>请选择地区</option>
+            </select>
+          </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editDealer()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+  function editDealer() {
+    var rawData = window._target
+    var data = formToSet("#edit_Dealer")
+    for(var i in data){
+      rawData[i] = data[i]
+    }
+    var dealerId = apiConfig.dealer.Edit(rawData['_id'],data)
+    if (dealerId) {
+      $("#Edit").modal("hide")
+      ClearInputs("#edit_Dealer")
+      ClearSelecton("#edit_Dealer")
+      ClearTextArea("#edit_Dealer")
+    }
+    table_init()
+  }
+</script>
 
   
 
     
-    <div class="modal fade" id="delete">
+    <div class="modal fade" id="Delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -261,7 +182,7 @@ function addDealer() {
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
-        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
       </div>
     </div>
@@ -271,30 +192,42 @@ function addDealer() {
   
 
       <script>
-        var dealerAdmin = function() {
-          var templateOpts = {
-            "tablename": "agent",
-            "hasHeader": true,
-            "hasButton": true,
-            "buttonPool": ["editBtn", "delBtn"],
-            "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "key", "prop"],
-            "data": [
-              ["序列", "代理商名称", "区域", "代理产品", "手机号", "邮箱", "账号", "密码"],
-            ]
-          }
+        //载入代理商表操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
           var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
           new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts, dataOrder).to("#Dealer-table-container")
         }
-        dealerAdmin()
-        // var CurrentTableList = {
-        //   "#Dealer-table-container": "./test/admin/Dealer-table-data.json"
-        // }
+
+        //删除代理商操作
         var del = function(rid) {
-          $("#delete")
+          window._target = apiConfig.dealer.Get(rid)
+          $("#Delete")
             .modal()
         }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.dealer.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        var search=function() {}
+        //编辑代理商操作
         var edit = function(rid) {
-          $("#EditBrochure")
+          window._target = apiConfig.dealer.Get(rid)
+          autoComplateInfo(window._target, "#edit_Dealer")
+          $("#Edit")
             .modal()
+        }
+
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
+          var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
+          var result = apiConfig.dealer.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
         }
       </script>

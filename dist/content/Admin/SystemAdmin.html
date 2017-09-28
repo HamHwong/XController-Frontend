@@ -1,0 +1,273 @@
+<div class="contentTitle clearfix">
+  <h3>系统管理员</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+  </div>
+</div>
+
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加管理员</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Admin-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
+  </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+
+    <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加供应商</h4>
+      </div>
+
+      <div class="modal-body">
+        <form id="add_Supplier" class="form-horizontal" role="form">
+          
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_suppliername"
+  
+  >姓名：</label>
+  <div class="col-sm-8">
+    <input type="text"
+    class="form-control"
+    
+    name="_suppliername"
+    id="_suppliername"
+    
+    
+      placeholder="请输入姓名"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
+            
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_phonenumber"
+  
+  >手机号：</label>
+  <div class="col-sm-8">
+    <input type="text"
+    class="form-control"
+    
+    name="_phonenumber"
+    id="_phonenumber"
+    
+    
+      placeholder="请输入手机号"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
+              
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_accountname"
+  
+  >账号：</label>
+  <div class="col-sm-8">
+    <input type="text"
+    class="form-control"
+    
+    name="_accountname"
+    id="_accountname"
+    
+    
+      placeholder="请输入账号"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
+                
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_password"
+  
+  >密码：</label>
+  <div class="col-sm-8">
+    <input type="password"
+    class="form-control"
+    
+    name="_password"
+    id="_password"
+    
+    
+      placeholder="请输入密码"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addSupplier()">完成</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function addSupplier() {
+  var data = formToSet("#add_Supplier")
+  var dealerId = apiConfig.supplier.Add(data)
+  if(dealerId){
+    $("#Add").modal("hide")
+    ClearInputs("#add_Supplier")
+    ClearSelecton("#add_Supplier")
+    ClearTextArea("#add_Supplier")
+  }
+  table_init()
+}
+</script>
+
+  
+
+  
+    <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">修改供应商</h4>
+      </div>
+
+      <div class="modal-body">
+        <form id="edit_Supplier" class="form-horizontal clearfix" role="form">
+          <div class="form-group col-md-12">
+            <label for="_suppliername" class="control-label">姓名:</label>
+            <input name="_suppliername" id="_suppliername" placeholder="请输入姓名" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_phonenumber" class="control-label">手机号:</label>
+            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_accountname" class="control-label">账号:</label>
+            <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_password" class="control-label">密码:</label>
+            <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editSupplier()">完成</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function editSupplier() {
+  var rawData = window.target_supplier
+  var data = formToSet("#edit_Supplier")
+  for(var i in data){
+    rawData[i] = data[i]
+  }
+  var dealerId = apiConfig.supplier.Edit(rawData['_id'],data)
+  if (dealerId) {
+    $("#Edit").modal("hide")
+    ClearInputs("#edit_Supplier")
+    ClearSelecton("#edit_Supplier")
+    ClearTextArea("#edit_Supplier")
+  }
+  table_init()
+}
+</script>
+
+  
+
+    
+    <div class="modal fade" id="Delete">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url" />
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+      <script>
+        //载入供应商表操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
+          var dataOrder = ["_id", "_accountname", "_password", "_email"]
+          new table().loadFromTemplateJson("/api/systemuser/top(100)", templateOpts, dataOrder).to("#Admin-table-container")
+        }
+        //删除供应商操作
+        var del = function(rid) {
+          $("#Delete")
+            .modal()
+        }
+        //编辑供应商操作
+        var edit = function(rid) {
+          window._target = apiConfig.supplier.Get(rid)
+          autoComplateInfo(window._target, "#edit_Supplier")
+          var search=function() {}
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
+          var dataOrder = ["_id", "_accountname", "_password", "_email"]
+          var result = apiConfig.supplier.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Admin-table-container")
+        }
+      </script>

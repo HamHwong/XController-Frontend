@@ -1,20 +1,10 @@
 <script type="text/javascript">
-  /**
-   * @description Table初始化
-   */
-
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
        var t = new table()
+       console.log(CurrentTableList[i]);
        t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
      }
    }
-  //  var table_init = function(tableList) {
-  //    for (var i in CurrentTableList) {
-  //      var $tablecontainer = $(i)
-  //      var t = new table(CurrentTableList[i])
-  //      t.load().to($tablecontainer)
-  //    }
-  //  }
 </script>

@@ -7,7 +7,7 @@ $('#DeliveryDate')
     weekStart: 1,
     startDate: '2017-01-01',
     autoclose: true,
-    startView: 4,
+    startView: 2,
     minView: 2,
     forceParse: false,
     language: 'zh-CN'

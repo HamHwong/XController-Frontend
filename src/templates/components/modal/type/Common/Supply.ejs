@@ -1,4 +1,4 @@
-<div class="modal fade" id="supply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Supply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,12 +8,12 @@
 
       <div class="modal-body">
         <form id="Supply" class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-sm-4 control-label" for="quantitySupply">补充数量：</label>
-              <div class="col-sm-8">
-                <input type="<%-locals.type%>" class="form-control" name="quantitySupply" id="quantitySupply" placeholder="请输入补充数量" />
-              </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="quantitySupply">补充数量：</label>
+            <div class="col-sm-8">
+              <input type="<%-locals.type%>" class="form-control" name="quantitySupply" id="quantitySupply" placeholder="请输入补充数量" />
             </div>
+          </div>
         </form>
       </div>
 
@@ -25,18 +25,15 @@
 </div>
 <script>
   function quantitySupply() {
-    var beforeQuantity = window.targrt_brochure["Quantity"]
-    window.targrt_brochure["Quantity"] = parseInt($("#quantitySupply").val()) + parseInt(beforeQuantity)
-    console.log(window.targrt_brochure);
-    for(var i in window.targrt_brochure){
-      window.targrt_brochure["_"+i.toLowerCase()] = window.targrt_brochure[i]
-    }
-    PUT('/api/brochure/' + window.targrt_brochure["ID"] + '/update', window.targrt_brochure)
-    window.targrt_brochure = null
-    $("#supply").modal('hide')
+    var before_quantity = window._target["_quantity"] ? window._target["_quantity"] : 0
+    window._target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
+    console.log(window._target);
+    PUT('/api/brochure/' + window._target["_id"] + '/update', window._target)
+    window._target = null
+    $("#Supply").modal('hide')
     ClearInputs("#Supply")
     ClearSelecton("#Supply")
     ClearTextArea("#Supply")
-    BrochureAdmin()
+    table_init()
   }
 </script>

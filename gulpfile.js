@@ -184,7 +184,7 @@ gulp.task('default', ['revHtml', 'webserver'], function() {
   // gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })
 
-gulp.task('mergeToServer',function(){
+gulp.task('mergeToServer',['revHtml'],function(){
   gulp.src('dist/**/*')
   .pipe(gulp.dest('C:\\Users\\mpand\\Desktop\\BrochureManagement\\ZEISS.BrochureManagement\\ZEISS.BrochureManagement.WebApi\\html'))
 })

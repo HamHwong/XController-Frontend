@@ -17,8 +17,3 @@ function Adapter(data, orderArray) {
   }
   return result
 }
-
-function Mapper(dataSet) {
-  //HACK GET方式获得单个数据的response结构不一样，需要修改结构
-  //HACK 全小写，前面加下划线
-}

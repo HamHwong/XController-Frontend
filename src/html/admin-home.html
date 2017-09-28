@@ -5,11 +5,7 @@
   <meta charset="utf-8">
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
-  <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-    <script type="text/javascript" src="./js/apimethod.js"></script>
-  <script type="text/javascript" src="./js/components.js"></script>
+<script type="text/javascript" src="./js/plugs/jquery.js"></script>
 </head>
 
 <body>
@@ -71,9 +67,9 @@
   <h3>订单管理</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
@@ -90,9 +86,9 @@
   </ul>
 </div>
 
-<div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
-</div>
+  <div class="operation-menu">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+  </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
     </div>
@@ -112,13 +108,6 @@
       </ul>
     </nav>
   </div>
-  <script>
-    var CurrentTableList = {
-      // "#applying": "./test/admin/OrderAdmin/order-admin-table-data.json",
-      // "#finished": "./test/admin/OrderAdmin/rejected-table-data.json",
-      // "#reject": "./test/admin/OrderAdmin/success-table-data.json"
-    }
-  </script>
   
     <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -130,12 +119,12 @@
 
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
-          <div class="modal-infopart baseInfomation form-group">
-            <input type="text" name="itemId" id="itemId" value="" hidden>
+          <div class="modal-infopart baseInfomation form-group clearfix">
+            <input type="text" name="_id" id="_id" value="" hidden>
             <div class="form-group col-md-4">
-              <label for="area">区域:</label>
+              <label for="_dealerregion">区域:</label>
               <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-              <select class="form-control" name="area" id="area">
+              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
                 <option value="-1" selected>请选择地区</option>
                 <option value="hddq">华东地区</option>
                 <option value="hbdq">华北地区</option>
@@ -144,14 +133,14 @@
               </select>
             </div>
             <div class="form-group col-md-4 search_box_warp">
-              <label for="DemanderFK">代理商:</label>
-              <input name="_demanderfk" id="DemanderFK" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <label for="_demanderfk">代理商:</label>
+              <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
             <div class="form-group col-md-4">
-              <label for="PurposeFK">用途:</label>
+              <label for="_purposefk">用途:</label>
               <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-              <select name="_purposefk" id="PurposeFK" class="form-control">
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" >
                 <option value="0" selected>请选择用途</option>
                 <option value="1">一般销售用途</option>
                 <option value="2">区域会议</option>
@@ -199,6 +188,12 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="col-sm-3 control-label">交付时间 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+            </div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" name="_quantity" id="Quantity" placeholder="申请数量" required />
@@ -216,12 +211,7 @@
               <input type="text" class="form-control" name="_contactnumber" id="ContactNumber" placeholder="收货电话" required />
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">交付时间 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
-            </div>
-          </div>
+
           <div class="form-group">
             <label class="col-sm-3 control-label">收货地址 ：</label>
             <div class="col-sm-8">
@@ -232,28 +222,28 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="AppendPR()"><span class="glyphicon glyphicon-plus"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>
         <button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>
-        <button type="submit" class="btn btn-primary" onclick="AddPR()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>
       </div>
     </div>
   </div>
 </div>
 <script>
   //确认
-  function AddPR() {
-    AppendPR()
+  function AddPurchaseItem() {
+    AppendPurchaseItem()
     $("#PruchaseItem")
       .modal('hide')
   }
   //添加
-  function AppendPR() {
+  function AppendPurchaseItem() {
     if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
       return
     var arr = []
     arr.push(++row_counter)
     var set = formToSet("#PruchaseItem_form")
-    var order = ["_brochurename", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress"]
+    var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
     for (var i of order) {
       arr.push(set[i])
     }
@@ -261,7 +251,7 @@
       window.__PurchaseRequisitionItem_table.addRow(arr)
       window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
     }
-    ClearInputs("#PruchaseItem_form")
+    ClearInputs("#PruchaseItem_form", ["#BrochureName", "#Quantity"])
   }
   //取消
   function Cancel() {
@@ -278,7 +268,7 @@
       // $("#saveTime")
       //   .val(new Date())
       $("#saver")
-        .val(getCookie("auth"))
+        .val(getCookie("name"))
       if (!window.__draftTable) {
         var draftTable = new table()
         var t = {
@@ -287,19 +277,19 @@
           "hasHeader": true,
           "hasButton": true,
           "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
-          "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
+          "keyArr": ["prop", "id", "key", "prop"]
         }
-        draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
+        draftTable.new(t, ["编号", "订单号", "用途", "保存时间"])
           .to($("#draft"))
         window.__draftTable = draftTable
         window.__draft_set = {}
       }
 
-      $("#area")
+      $("#_dealerregion")
         .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
       var formArr = $("#PurchaseRequisition_form")
         .serializeArray()
-      $("#area")
+      $("#_dealerregion")
         .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
       var set = {}
       for (var record of formArr) {
@@ -308,10 +298,9 @@
         set[key] = value
       }
       //此即为function formToArr
-
       var arr = []
-      arr.push(++row_counter) //编号
-      var order = ["itemId", "DemanderFK", "PurposeFK", "area", "saveTime", "saver"]
+      // arr.push(++row_counter) //编号
+      var order = ["_id", "_prnumber", "_purposefk", "_prcreated"]
       for (var i of order) {
         arr.push(set[i])
       }
@@ -332,7 +321,7 @@
       $("#itemId")
         .val(window.__PurchaseRequisition_tempID)
       $("#saver")
-        .val(getCookie("auth"))
+        .val(getCookie("name"))
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       if (items.length <= 0) {
         throw "请购单item数量不能为0"
@@ -349,17 +338,17 @@
         console.log(itemID);
       }
       if (PRid) {
-        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+        // window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
         $("#PurchaseRequisition").modal("hide")
       }
-      applyingTable()//更新
+      table_init() //更新
     }
   </script>
 
   
 
-  
-    <div class="modal fade" id="delete">
+    
+    <div class="modal fade" id="Delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -371,7 +360,7 @@
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
-        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
       </div>
     </div>
@@ -380,8 +369,8 @@
 
   
 
-    
-    <div class="modal fade lg-modal" id="Details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      
+    <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -430,47 +419,52 @@
   
     <script>
       var approve = function() {
-        $("#approve").modal()
+        $("#Approve").modal()
       }
       var reject = function() {
-        $("#reject").modal()
+        $("#Reject").modal()
       }
     </script>
 
   
 
-    <script>
-    var orderAdmin = function() {
-      var templateOpts = {
-        "tablename": "order",
-        "hasHeader": true,
-        "hasDetail":true,
-        "hasButton": false,
-        "keyArr":
-          ["prop", "id", "key", "prop", "prop", "prop"],
-        "data": [
-          ["序列", "订单号", "用途", "提交人", "申请时间", "当前审批人"],
-        ]
-      }
-      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-      new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
-    }
-    orderAdmin()
-      var del = function(rid) {
-        $("#delete")
-          .modal()
-      }
-      var edit = function(rid) {
-        $("#EditBrochure")
-          .modal()
-      }
-      var Detail = function(primaryKey) {
-        console.log("primaryKey", primaryKey);
-        var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
-        t.load().to("#Details .goodsInfomation")
-        $("#Details").modal()
-      }
-    </script>
+        <script>
+          //载入订单管理表操作
+          var table_init = function() {
+            var templateOpts = tableStructures.Admin.OrderAdmin.Order
+            var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+            new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+          }
+
+          // //删除订单操作
+          //   var del = function(rid) {
+          //     $("#Delete")
+          //       .modal()
+          //   }
+          //   var edit = function(rid) {
+          //     $("#EditBrochure")
+          //       .modal()
+          //   }
+          var search=function() {}
+          //订单详情操作
+          var Detail = function(primaryKey) {
+            console.log("primaryKey", primaryKey);
+            var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
+            t.load().to("#Detail .goodsInfomation")
+            $("#Detail").modal()
+          }
+          $(document).ready(function() {
+            table_init()
+          })
+          var search = function() {
+            var keyword = filterXSS($("input.searchBox").val().trim())
+            var templateOpts = tableStructures.Admin.OrderAdmin.Order
+            var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+            var result = apiConfig.purchaserequisition.Search(keyword)
+            console.log(result)
+            new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#applying")
+          }
+        </script>
 
     </div>
   </div>
@@ -480,12 +474,15 @@
   <link rel="stylesheet" href="./css/content.css">
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/plugs/buttons.css">
-  <link rel="stylesheet" href="./css/plugs/blue.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
   <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
 
-  <script type="text/javascript" src="./js/plugs/icheck.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
   <script type="text/javascript" src="./js/plugs/xss.js"></script>
+  <script type="text/javascript" src="./js/api/apimethod.js"></script>
+  <script type="text/javascript" src="./js/api/config.js"></script>
+  <script type="text/javascript" src="./js/components.js"></script>
   <script type="text/javascript" src="./js/init.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
   <script type="text/javascript" src="./js/cookies.js"></script>

@@ -1,8 +1,8 @@
-<div class="modal fade" id="AddBrochure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dimdiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">添加物品</h4>
       </div>
 
@@ -13,22 +13,12 @@
             <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_quantity" class="control-label">物品数量:</label>
-            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
-          </div>
-          <div class="form-group col-md-12 search_box_wapper">
-            <label for="_supplierfk" class="control-label">供应商 :</label>
-            <input name="_supplierfk" id="_supplierfk" placeholder="供应商名称" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
+            <label for="_brochurenumber" class="control-label">版本号:</label>
+            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_purposefk" class="control-label">用途:</label>
-            <select name="_purposefk" id="_purposefk" class="form-control">
-                <option value="-1" selected>请选择用途</option>
-                <option value="0">一般销售用途</option>
-                <option value="1">区域会议</option>
-                <option value="2">全国性会议</option>
-              </select>
+            <label for="_quantity" class="control-label">物品数量:</label>
+            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
           </div>
           <div class="Comments editable col-md-12" id="_description">
             <span>备注：</span>
@@ -45,14 +35,15 @@
 </div>
 <script>
   function addBrochure() {
-    var data = formToSet("#add_Brochure")
-    var dealerId = POST("/api/brochure/new", data)
-    if (dealerId) {
-      $("#AddBrochure").modal("hide")
+    var data = formToSet("#Add")
+    data["_createtime"] = new date()
+    var brochureId = apiConfig.brochure.Add(data)
+    if (brochureId) {
+      $("#Add").modal("hide")
       ClearInputs("#add_Brochure")
       ClearSelecton("#add_Brochure")
       ClearTextArea("#add_Brochure")
     }
-    BrochureAdmin()
+    table_init()
   }
 </script>

@@ -1,0 +1,102 @@
+<div class="contentTitle clearfix">
+  <h3>我的订单</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+  </div>
+</div>
+
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
+  <div class="operation-menu">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+  </div>
+  <div class="table-content tab-content">
+    <div class="tab-pane active" id="draft">
+    </div>
+    <div class="tab-pane" id="applying">
+    </div>
+    <div class="tab-pane" id="finished">
+    </div>
+    <div class="tab-pane" id="reject">
+    </div>
+
+    <nav style="text-align: center">
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </nav>
+  </div>
+  <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
+    <%-include('/components/modal/modal',{type:"Dealer.Order.Detail"})%>
+      <%-include('/components/modal/modal',{type:"Common.Submit"})%>
+        <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+          <%-include('/components/table/table.init.ejs')%>
+            <script>
+              //载入我的订单的申请表操作
+              var table_init = function() {
+                var templateOpts = tableStructures.Dealer.MyOrder.Approving
+                var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+              }
+
+              $(document).ready(function() {
+                table_init()
+              })
+
+              var CurrentTableList = {
+                "#draft": "./test/dealer/MyOrder/draft-table-data.json",
+                "#applying": "./test/dealer/MyOrder/approving-table-data.json",
+                "#finished": "./test/dealer/MyOrder/success-table-data.json",
+                "#reject": "./test/dealer/MyOrder/rejected-table-data.json"
+              }
+
+              //订单详情操作
+              var Detail = function(primaryKey) {
+                console.log("primaryKey", primaryKey);
+                var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
+                t.load().to("#Detail .goodsInfomation")
+                $("#Detail").modal()
+              }
+
+              //复制操作
+              var copy = function(primaryKey) {
+                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
+                console.log(infoSet)
+                // for(var i in infoSet){
+                //   infoSet["_"+i.toLowerCase()] = infoSet[i]
+                // }
+                //自动填充
+                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
+                //填充dealer
+                autoComplateInfoOfDealer()
+
+                $("#PurchaseRequisition").modal()
+              }
+              var edit = function(primaryKey) {
+                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
+                //自动填充
+                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
+                //填充dealer
+                autoComplateInfoOfDealer()
+
+                $("#PurchaseRequisition").modal()
+              }
+              var submit = function(primaryKey) {
+                $("#Submit").modal()
+                applyingTable()
+              }
+              var deleteDraft = function(primaryKey) {
+                $("#Delete").modal()
+              }
+              var deleteDraftBtn = function(primaryKey) {
+
+              }
+            </script>

@@ -1,4 +1,4 @@
-<div class="modal fade lg-modal" id="ExpressDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,23 +10,18 @@
 
         <div class="modal-infopart goodsInfomation">
         </div>
-        <div class="modal-infopart">
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="comment" rows="4" disabled>备注</textarea>
-          </div>
-        </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
-          <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button" class="btn btn-success">完成该订单</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="ExpressUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -35,18 +30,15 @@
       </div>
 
       <div class="modal-body">
-          <textarea name="expressStatus" rows="5" disabled>
-            订单详情：订单详情
-          </textarea>
-          <form id="update_Express" class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-sm-3 control-label">更新信息 ：</label>
-              <div class="col-sm-8">
-                <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
-                
-              </div>
+        <form id="update_Express" class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">更新信息 ：</label>
+            <div class="col-sm-8">
+              <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
+              
             </div>
-          </form>
+          </div>
+        </form>
       </div>
 
       <div class="modal-footer">
@@ -59,7 +51,7 @@
 
 <script>
   var update = function(PrimaryKey){
-    $("#ExpressUpdate").modal()
+    $("#Update").modal()
     console.log("primaryKey",PrimaryKey);
   }
 </script>

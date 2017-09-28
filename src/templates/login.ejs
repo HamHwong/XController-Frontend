@@ -28,17 +28,19 @@
             <select class="role form-control" id="role" name="">
               <option value="dealer">Dealer</option>
               <option value="supplier">Supplier</option>
-              <option value="admin">Zeiss</option>
+              <option value="zeiss">Zeiss Emplopyee</option>
+              <option value="admin">System Admin</option>
             </select>
           </div>
 
-          <div id="slide-wrapper">
+          <%# <div id="slide-wrapper">
             <input type="hidden" value="" id="lockable" />
             <div id="slider">
               <span id="label"><span id="label-shadow"></span></span>
               <span id="lableTip">Slide to unlock!</span>
             </div>
-          </div>
+          </div>%>
+
           <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
           </div>
           <div class="btn-group btn-block">
@@ -65,7 +67,8 @@
 <script type="text/javascript" src="./js/plugs/jquery.js"></script>
 <script type="text/javascript" src="./js/plugs/slideunlock.min.js"></script>
 <script type="text/javascript" src="./js/cookies.js"></script>
-<script type="text/javascript" src="./js/apimethod.js"></script>
+<script type="text/javascript" src="./js/api/apimethod.js"></script>
+<script type="text/javascript" src="./js/api/config.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
@@ -74,20 +77,20 @@
   var e = elem => document.querySelector(elem)
   var log = (e) => console.log.bind(console)(e)
 
-  $(function() {
-    var slider = new SliderUnlock("#slider", {
-      labelTip: "滑动验证",
-      successLabelTip: "验证成功"
-    }, function() {
-      login()
-    }, function() {});
-    slider.init();
-  })
+  // $(function() {
+  //   var slider = new SliderUnlock("#slider", {
+  //     labelTip: "滑动验证",
+  //     successLabelTip: "验证成功"
+  //   }, function() {
+  //     login()
+  //   }, function() {});
+  //   slider.init();
+  // })
+
   function formToSet(form) {
     form = $(form)
     var formArr = form
       .serializeArray()
-
     var set = {}
     for (var record of formArr) {
       var key = record["name"]
@@ -96,58 +99,59 @@
     }
     return set
   }
+
   function login() {
     var root = ""
     var set = formToSet("#login_form")
-    var url = root+window.logUrl + "?username=" + set["username"] + "&password=" + set["password"]
-    url = url.trim()
-    console.log(url);
-    var isUser = $.ajax({
-      "url": url,
-      "contentType": "application/json; charset=utf-8",
-      "type": "PUT",
-      "dataType": "json",
-      "async":false
-    }).responseText
-    console.log(isUser);
-    if (!eval(isUser))
-      return false
+    var username = set["username"]
+    var password = set["password"]
+
     switch (window.role) {
       case 'admin':
       case 'Admin':
-        window.location.href = "./admin-home.html"
-        setCookie("auth", "Admin")
+        if (apiConfig.systemuser.Login(username, password)) { //BUG
+          window.location.href = "./admin-home.html"
+          setCookie("auth", "Admin")
+          setCookie("name", username)
+        }
         break
       case 'dealer':
       case 'Dealer':
-        window.location.href = "./dealer-home.html"
-        setCookie("auth", "Dealer")
+        if (apiConfig.dealer.Login(username, password)) {
+          window.location.href = "./dealer-home.html"
+          setCookie("auth", "Dealer")
+          setCookie("name", username)
+        }
         break
       case 'supplier':
       case 'Supplier':
-        window.location.href = "./supplier-home.html"
-        setCookie("auth", "Supplier")
+        if (apiConfig.supplier.Login(username, password)) {
+          window.location.href = "./supplier-home.html"
+          setCookie("auth", "Supplier")
+          setCookie("name", username)
+        }
         break
       case 'sales':
       case 'Sales':
-        window.location.href = "./dealer-home.html"
-        setCookie("auth", "Sales")
+        if (apiConfig.dealer.Login(username, password)) {
+          window.location.href = "./dealer-home.html"
+          setCookie("auth", "Sales")
+          setCookie("name", username)
+        }
+        break
+      case 'zeiss':
+      case 'Zeiss':
+        if (username.toLowerCase() == "zeiss") {
+          window.location.href = "./zeiss-home.html"
+          setCookie("auth", "Zeiss")
+          setCookie("name", username)
+        }
         break
     }
     return false
   }
   $("#role").on('change', function(e) {
-    init_role()
-  })
-  var init_role = function(){
-    var root = ""
-    var map = {
-      "supplier": "/api/supplier/login",
-      "dealer": "/api/dealer/login",
-      "admin": "/api/systemuser/login"
-    }
     window.role = $("#role").val()
-    window.logUrl = root + map[window.role]
-  }
-  init_role()
+  })
+  window.role = $("#role").val()
 </script>

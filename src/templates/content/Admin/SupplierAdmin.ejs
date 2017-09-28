@@ -2,14 +2,14 @@
   <h3>供应商</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSupplier">添加供应商</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加供应商</button>
 </div>
 
 <div class="table-content tab-content">
@@ -29,36 +29,44 @@
     </ul>
   </nav>
 </div>
-<script>
-  var CurrentTableList = {
-    // "#Supplier-table-container": "./test/admin/Supplier-table-data.json"
-  }
-</script>
 <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
-  <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-
-    <script>
-      var supplierAdmin = function() {
-        var templateOpts = {
-          "tablename": "agent",
-          "hasHeader": true,
-          "hasButton": true,
-          "buttonPool": ["editBtn", "delBtn"],
-          "keyArr": ["id", "key", "prop", "prop", "prop"],
-          "data": [
-            ["序列", "名称", "手机号", "账号", "密码"],
-          ]
+  <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Edit"})%>
+    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+      <script>
+        //载入供应商表操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.SupplierAdmin.Supplier
+          var dataOrder = ["_id", "_suppliername", "_phonenumber", "_accountname", "_password"]
+          new table().loadFromTemplateJson("/api/supplier/top(100)", templateOpts, dataOrder).to("#Supplier-table-container")
         }
-        var dataOrder = ["_id", "_suppliername", "_phonenumber", "_accountname", "_password"]
-        new table().loadFromTemplateJson("/api/supplier/top(100)", templateOpts, dataOrder).to("#Supplier-table-container")
-      }
-      supplierAdmin()
-      var del = function(rid) {
-        $("#delete")
-          .modal()
-      }
-      var edit = function(rid) {
-        $("#EditBrochure")
-          .modal()
-      }
-    </script>
+        //删除供应商操作
+        var del = function(rid) {
+          window._target = apiConfig.supplier.Get(rid)
+          $("#Delete")
+            .modal()
+        }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.supplier.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        var search=function() {}
+        //编辑供应商操作
+        var edit = function(rid) {
+          window._target = apiConfig.supplier.Get(rid)
+          autoComplateInfo(window._target, "#edit_Supplier")
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.SupplierAdmin.Supplier
+          var dataOrder = ["_id", "_suppliername", "_phonenumber", "_accountname", "_password"]
+          var result = apiConfig.supplier.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Supplier-table-container")
+        }
+      </script>

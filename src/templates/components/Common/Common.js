@@ -1,10 +1,18 @@
-function ClearInputs(form) {
+
+function ClearInputs(form, idList) {
   form = $(form)
   var inputs = form.find("input")
   var a = inputs
   for (var i = 0; i < a.length; i++) {
-    $(a[i])
+    if (!idList)
+      $(a[i])
       .val("")
+    else if (idList && idList.includes(("#"+a[i].id))) {
+      $(a[i])
+        .val("")
+    }else{
+      continue
+    }
   }
 }
 

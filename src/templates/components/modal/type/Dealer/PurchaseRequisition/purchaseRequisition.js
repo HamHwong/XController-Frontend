@@ -1,5 +1,5 @@
 //绑定input搜索栏数据源
-bindInputQuery("#DemanderFK", "./test/searchDictionary/DealerCollections.json")
+bindInputQuery("#_demanderfk", "./test/searchDictionary/DealerCollections.json")
 
 $("#PurchaseRequisition")
   .on("hidden.bs.modal", function() {
@@ -32,13 +32,13 @@ function getPrototypies(uid, pname) {
 function autoComplateInfoOfDealer() {
   if ("dealer" == (getCookie("auth")
       .toLowerCase())) {
-    $("#DemanderFK")
+    $("#_demanderfk")
       .val("dealer")
-    $("#DemanderFK")
+    $("#_demanderfk")
       .attr("readonly", "readonly")
-    $("#area")
-      .val(getPrototypies("dealer", "area"))
-    $("#area")
+    $("#_dealerregion")
+      .val(apiConfig.dealer.GetByUserName(getCookie("name"))["_dealerregion"])
+    $("#_dealerregion")
       .attr("disabled", "true")
   }
 }
@@ -51,12 +51,13 @@ $("#addPRItem").on("click", function() {
       "tablename": "AddPR",
       "hasHeader": true,
       "hasButton": true,
-      "buttonPool": ["delBtn"],
+      "hasDetail": true,
+      "buttonPool": ["editBtn", "delBtn"],
       "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
     }
-    var header = ["编号", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址"]
+    var header = ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"]
     window.__PurchaseRequisitionItem_table = PurchaseRequisitionItemTable
-    window.__PurchaseRequisitionItem_table.new(t, header)
+    window.__PurchaseRequisitionItem_table.new(t, header).bindEvents()
       .to($("#InfomationAddArea"))
     window.__PurchaseRequisitionItem_Unsave_set = {}
     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []

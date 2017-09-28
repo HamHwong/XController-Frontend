@@ -8,12 +8,12 @@
 
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
-          <div class="modal-infopart baseInfomation form-group">
-            <input type="text" name="itemId" id="itemId" value="" hidden>
+          <div class="modal-infopart baseInfomation form-group clearfix">
+            <input type="text" name="_id" id="_id" value="" hidden>
             <div class="form-group col-md-4">
-              <label for="area">区域:</label>
+              <label for="_dealerregion">区域:</label>
               <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-              <select class="form-control" name="area" id="area">
+              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
                 <option value="-1" selected>请选择地区</option>
                 <option value="hddq">华东地区</option>
                 <option value="hbdq">华北地区</option>
@@ -22,14 +22,14 @@
               </select>
             </div>
             <div class="form-group col-md-4 search_box_warp">
-              <label for="DemanderFK">代理商:</label>
-              <input name="_demanderfk" id="DemanderFK" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <label for="_demanderfk">代理商:</label>
+              <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
             <div class="form-group col-md-4">
-              <label for="PurposeFK">用途:</label>
+              <label for="_purposefk">用途:</label>
               <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-              <select name="_purposefk" id="PurposeFK" class="form-control">
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" >
                 <option value="0" selected>请选择用途</option>
                 <option value="1">一般销售用途</option>
                 <option value="2">区域会议</option>
@@ -68,7 +68,7 @@
       // $("#saveTime")
       //   .val(new Date())
       $("#saver")
-        .val(getCookie("auth"))
+        .val(getCookie("name"))
       if (!window.__draftTable) {
         var draftTable = new table()
         var t = {
@@ -77,19 +77,19 @@
           "hasHeader": true,
           "hasButton": true,
           "buttonPool": ["copyBtn", "editBtn", "submitBtn", "deleteDraftBtn"],
-          "keyArr": ["prop", "id", "key", "prop", "prop", "prop", "prop"]
+          "keyArr": ["prop", "id", "key", "prop"]
         }
-        draftTable.new(t, ["编号", "序号", "代理商", "用途", "区域", "保存时间", "保存人"])
+        draftTable.new(t, ["编号", "订单号", "用途", "保存时间"])
           .to($("#draft"))
         window.__draftTable = draftTable
         window.__draft_set = {}
       }
 
-      $("#area")
+      $("#_dealerregion")
         .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
       var formArr = $("#PurchaseRequisition_form")
         .serializeArray()
-      $("#area")
+      $("#_dealerregion")
         .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
       var set = {}
       for (var record of formArr) {
@@ -98,10 +98,9 @@
         set[key] = value
       }
       //此即为function formToArr
-
       var arr = []
-      arr.push(++row_counter) //编号
-      var order = ["itemId", "DemanderFK", "PurposeFK", "area", "saveTime", "saver"]
+      // arr.push(++row_counter) //编号
+      var order = ["_id", "_prnumber", "_purposefk", "_prcreated"]
       for (var i of order) {
         arr.push(set[i])
       }
@@ -122,7 +121,7 @@
       $("#itemId")
         .val(window.__PurchaseRequisition_tempID)
       $("#saver")
-        .val(getCookie("auth"))
+        .val(getCookie("name"))
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       if (items.length <= 0) {
         throw "请购单item数量不能为0"
@@ -139,9 +138,9 @@
         console.log(itemID);
       }
       if (PRid) {
-        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+        // window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
         $("#PurchaseRequisition").modal("hide")
       }
-      applyingTable()//更新
+      table_init() //更新
     }
   </script>

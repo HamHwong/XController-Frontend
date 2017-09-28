@@ -2,14 +2,14 @@
   <h3>物品管理</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" data-targetData="brochure" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddBrochure">添加物品</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加物品</button>
 </div>
 
 <div class="table-content tab-content">
@@ -29,13 +29,8 @@
     </ul>
   </nav>
 </div>
-<script>
-  var CurrentTableList = {
-    // "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
-  }
-</script>
 
-    <div class="modal fade" id="histroy" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="History" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -48,7 +43,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <div class="modal-infopart Approval">
+        <div class="modal-infopart">
+          <button type="button" class="btn btn-primary center-block col-xs-12" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
         </div>
       </div>
     </div>
@@ -58,11 +54,11 @@
   
 
   
-    <div class="modal fade" id="AddBrochure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dimdiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">添加物品</h4>
       </div>
 
@@ -73,22 +69,12 @@
             <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_quantity" class="control-label">物品数量:</label>
-            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
-          </div>
-          <div class="form-group col-md-12 search_box_wapper">
-            <label for="_supplierfk" class="control-label">供应商 :</label>
-            <input name="_supplierfk" id="_supplierfk" placeholder="供应商名称" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
+            <label for="_brochurenumber" class="control-label">版本号:</label>
+            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_purposefk" class="control-label">用途:</label>
-            <select name="_purposefk" id="_purposefk" class="form-control">
-                <option value="-1" selected>请选择用途</option>
-                <option value="0">一般销售用途</option>
-                <option value="1">区域会议</option>
-                <option value="2">全国性会议</option>
-              </select>
+            <label for="_quantity" class="control-label">物品数量:</label>
+            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
           </div>
           <div class="Comments editable col-md-12" id="_description">
             <span>备注：</span>
@@ -105,22 +91,23 @@
 </div>
 <script>
   function addBrochure() {
-    var data = formToSet("#add_Brochure")
-    var dealerId = POST("/api/brochure/new", data)
-    if (dealerId) {
-      $("#AddBrochure").modal("hide")
+    var data = formToSet("#Add")
+    data["_createtime"] = new date()
+    var brochureId = apiConfig.brochure.Add(data)
+    if (brochureId) {
+      $("#Add").modal("hide")
       ClearInputs("#add_Brochure")
       ClearSelecton("#add_Brochure")
       ClearTextArea("#add_Brochure")
     }
-    BrochureAdmin()
+    table_init()
   }
 </script>
 
   
 
     
-    <div class="modal fade" id="EditBrochure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -130,46 +117,53 @@
 
       <div class="modal-body clearfix">
         <form id="edit_Brochure" class="form" role="form">
-            <div class="form-group col-md-4">
-              <label for="BrochureName">物品名称:</label>
-              <input name="BrochureName" id="BrochureName" placeholder="请输入物品名称" class="form-control" />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="PONumber">PONumber:</label>
-              <input name="PONumber" id="PONumber" placeholder="请输入PONumber" class="form-control" />
-            </div>
-            <div class="form-group col-md-4">
-              <label for="Quantity">物品数量:</label>
-              <input name="Quantity" id="Quantity" placeholder="请输入物品数量" class="form-control" />
-            </div>
-            <div class="form-group col-md-12">
-              <label for="PurposeFK">用途:</label>
-              <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-              <select name="PurposeFK" id="PurposeFK" class="form-control">
-                <option value="-1" selected>请选择用途</option>
-                <option value="forSales">一般销售用途</option>
-                <option value="partMeeting">区域会议</option>
-                <option value="nationalMeeting">全国性会议</option>
-              </select>
-            </div>
-            <div class="Comments editable col-md-12" id="Description">
-                <span>备注：</span>
-                <textarea name="Description" rows="4"></textarea>
-              </div>
+          <div class="form-group col-md-12">
+            <label for="_brochurename" class="control-label">物品名称:</label>
+            <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_brochurenumber" class="control-label">版本号:</label>
+            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_quantity" class="control-label">物品数量:</label>
+            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
+          </div>
+          <div class="Comments editable col-md-12" id="_description">
+            <span>备注：</span>
+            <textarea name="_description" rows="4"></textarea>
+          </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editBrochure()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+  function editBrochure() {
+    var rawData = window._target
+    var data = formToSet("#edit_Brochure")
+    for(var i in data){
+      rawData[i] = data[i]
+    }
+    var brochureId = apiConfig.brochure.Edit(rawData['_id'],data)
+    if (brochureId) {
+      $("#Edit").modal("hide")
+      ClearInputs("#edit_Brochure")
+      ClearSelecton("#edit_Brochure")
+      ClearTextArea("#edit_Brochure")
+    }
+    table_init()
+  }
+</script>
 
   
 
       
-    <div class="modal fade" id="delete">
+    <div class="modal fade" id="Delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -181,7 +175,7 @@
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
-        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <a class="btn btn-danger" data-dismiss="modal" onclick="deleteSubmit()">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
       </div>
     </div>
@@ -191,7 +185,7 @@
   
 
         
-    <div class="modal fade" id="supply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Supply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -201,12 +195,12 @@
 
       <div class="modal-body">
         <form id="Supply" class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-sm-4 control-label" for="quantitySupply">补充数量：</label>
-              <div class="col-sm-8">
-                <input type="Common.Supply" class="form-control" name="quantitySupply" id="quantitySupply" placeholder="请输入补充数量" />
-              </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="quantitySupply">补充数量：</label>
+            <div class="col-sm-8">
+              <input type="Common.Supply" class="form-control" name="quantitySupply" id="quantitySupply" placeholder="请输入补充数量" />
             </div>
+          </div>
         </form>
       </div>
 
@@ -218,58 +212,69 @@
 </div>
 <script>
   function quantitySupply() {
-    var beforeQuantity = window.targrt_brochure["Quantity"]
-    window.targrt_brochure["Quantity"] = parseInt($("#quantitySupply").val()) + parseInt(beforeQuantity)
-    console.log(window.targrt_brochure);
-    for(var i in window.targrt_brochure){
-      window.targrt_brochure["_"+i.toLowerCase()] = window.targrt_brochure[i]
-    }
-    PUT('/api/brochure/' + window.targrt_brochure["ID"] + '/update', window.targrt_brochure)
-    window.targrt_brochure = null
-    $("#supply").modal('hide')
+    var before_quantity = window._target["_quantity"] ? window._target["_quantity"] : 0
+    window._target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
+    console.log(window._target);
+    PUT('/api/brochure/' + window._target["_id"] + '/update', window._target)
+    window._target = null
+    $("#Supply").modal('hide')
     ClearInputs("#Supply")
     ClearSelecton("#Supply")
     ClearTextArea("#Supply")
-    BrochureAdmin()
+    table_init()
   }
 </script>
 
   
 
           <script>
-            var BrochureAdmin = function() {
-              var templateOpts = {
-                "tablename": "goods",
-                "hasHeader": true,
-                "hasButton": true,
-                "buttonPool": ["supplyBtn", "historyBtn", "editBtn", "delBtn"],
-                "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
-                "data": [
-                  ["序列", "物品编号", "物品名称", "物品数量", "供应商", "创建时间"],
-                ]
-              }
-              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_purposefk", "_createtime"]
+            //载入物品操作
+            var table_init = function() {
+              var templateOpts = tableStructures.Admin.Bruchure.Inventory
+              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
               new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
             }
-            BrochureAdmin()
-            var del = function(rid) {
-              $("#delete")
-                .modal()
-            }
-            var supply = function(rid) {
-              window.targrt_brochure = GET("/api/brochure/" + rid)
-              $("#supply")
-                .modal()
-            }
-            var supplyment = function(rid) {
 
-            }
-            var history = function(rid) {
-              $("#history")
+            //删除物品记录操作
+            var del = function(rid) {
+              window._target = apiConfig.brochure.Get(rid)
+              $("#Delete")
                 .modal()
             }
+            var deleteSubmit = function() {
+              if (window._target) {
+                var id = window._target["_id"]
+                apiConfig.brochure.Delete(id)
+                $("#Delete").modal("hide")
+              }
+              table_init()
+            }
+            //补充物品数量操作
+            var supply = function(rid) {
+              // console.log(rid);
+              window._target = apiConfig.brochure.Get(rid)
+
+              $("#Supply")
+                .modal()
+            }
+            //查看出入库历史操作
+            var History = function(rid) {
+              $("#History")
+                .modal()
+            }
+            //编辑操作
             var edit = function(rid) {
-              $("#edit")
+              window._target = apiConfig.brochure.Get(rid)
+              autoComplateInfo(window._target, "#edit_Brochure")
+              $("#Edit")
                 .modal()
+            }
+            var search = function() {
+              var keyword = filterXSS($("input.searchBox").val().trim())
+              var templateOpts = tableStructures.Admin.Bruchure.Inventory
+              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
+              var result = apiConfig.brochure.Search(keyword)
+              console.log(result)
+              new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
             }
           </script>

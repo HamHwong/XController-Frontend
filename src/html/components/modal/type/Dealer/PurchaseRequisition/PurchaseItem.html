@@ -16,6 +16,12 @@
             </div>
           </div>
           <div class="form-group">
+            <label class="col-sm-3 control-label">交付时间 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+            </div>
+          </div>
+          <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" name="_quantity" id="Quantity" placeholder="申请数量" required />
@@ -33,12 +39,7 @@
               <input type="text" class="form-control" name="_contactnumber" id="ContactNumber" placeholder="收货电话" required />
             </div>
           </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">交付时间 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
-            </div>
-          </div>
+
           <div class="form-group">
             <label class="col-sm-3 control-label">收货地址 ：</label>
             <div class="col-sm-8">
@@ -49,28 +50,28 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="AppendPR()"><span class="glyphicon glyphicon-plus"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>
         <button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>
-        <button type="submit" class="btn btn-primary" onclick="AddPR()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>
       </div>
     </div>
   </div>
 </div>
 <script>
   //确认
-  function AddPR() {
-    AppendPR()
+  function AddPurchaseItem() {
+    AppendPurchaseItem()
     $("#PruchaseItem")
       .modal('hide')
   }
   //添加
-  function AppendPR() {
+  function AppendPurchaseItem() {
     if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
       return
     var arr = []
     arr.push(++row_counter)
     var set = formToSet("#PruchaseItem_form")
-    var order = ["_brochurename", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress"]
+    var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
     for (var i of order) {
       arr.push(set[i])
     }
@@ -78,7 +79,7 @@
       window.__PurchaseRequisitionItem_table.addRow(arr)
       window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
     }
-    ClearInputs("#PruchaseItem_form")
+    ClearInputs("#PruchaseItem_form", ["#BrochureName", "#Quantity"])
   }
   //取消
   function Cancel() {

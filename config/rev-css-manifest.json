@@ -1,9 +1,8 @@
 {
-  "components.css": "components-459c7c238f.css",
+  "components.css": "components-e1f6377b02.css",
   "content.css": "content-2f97396e13.css",
-  "login.css": "login-678469bc36.css",
+  "login.css": "login-e0c34b19e1.css",
   "main.css": "main-8c511f7ad2.css",
-  "plugs/blue.css": "plugs/blue-f6afd81cde.css",
   "plugs/bootstrap-theme.css": "plugs/bootstrap-theme-b9b46bcc4d.css",
   "plugs/bootstrap-theme.min.css": "plugs/bootstrap-theme-ab6b02efea.min.css",
   "plugs/bootstrap.css": "plugs/bootstrap-2a31dca112.css",

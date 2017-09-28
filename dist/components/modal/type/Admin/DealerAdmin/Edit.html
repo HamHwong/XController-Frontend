@@ -1,4 +1,4 @@
-<div class="modal fade" id="AddDealer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,139 +6,63 @@
         <h4 class="modal-title" id="myModalLabel">修改代理商</h4>
       </div>
 
-      <div class="modal-body">
-        <form id="add_Dealer" class="form-horizontal" role="form">
-          
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="name"
-  
-  >姓名：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="name"
-    id="name"
-    
-    
-      placeholder="请输入姓名"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
+      <div class="modal-body clearfix">
+        <form id="edit_Dealer" class="form-horizontal" role="form">
 
-            
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="phone"
-  
-  >手机号：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="phone"
-    id="phone"
-    
-    
-      placeholder="请输入手机号"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-              
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="user"
-  
-  >账号：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="user"
-    id="user"
-    
-    
-      placeholder="请输入账号"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-                
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="password"
-  
-  >密码：</label>
-  <div class="col-sm-8">
-    <input type="password"
-    class="form-control"
-    
-    name="password"
-    id="password"
-    
-    
-      placeholder="请输入密码"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-                  
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="email"
-  
-  >邮箱：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="email"
-    id="email"
-    
-    
-      placeholder="请输入邮箱"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
+          <div class="form-group col-md-12">
+            <label for="_dealername">姓名:</label>
+            <input name="_dealername" id="_dealername" placeholder="请输入姓名" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_phonenumber">手机号:</label>
+            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_accountname">账号:</label>
+            <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_password">密码:</label>
+            <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="form-group col-md-12">
+            <label for="DemanderFK">邮箱:</label>
+            <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_dealerregion">区域:</label>
+            <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
+            <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              <option value="-1" selected>请选择地区</option>
+            </select>
+          </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editDealer()">完成</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+  function editDealer() {
+    var rawData = window._target
+    var data = formToSet("#edit_Dealer")
+    for(var i in data){
+      rawData[i] = data[i]
+    }
+    var dealerId = apiConfig.dealer.Edit(rawData['_id'],data)
+    if (dealerId) {
+      $("#Edit").modal("hide")
+      ClearInputs("#edit_Dealer")
+      ClearSelecton("#edit_Dealer")
+      ClearTextArea("#edit_Dealer")
+    }
+    table_init()
+  }
+</script>

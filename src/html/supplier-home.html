@@ -6,10 +6,6 @@
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
   <script type="text/javascript" src="./js/plugs/jquery.js"></script>
-    <script type="text/javascript" src="./js/apimethod.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-    <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-  <script type="text/javascript" src="./js/components.js"></script>
 </head>
 
 <body>
@@ -29,7 +25,7 @@
 </div>
 
         <div id="topNav_wapper" class="nav-show">
-  <span class="logo"><small>Brochure Management</small></span>
+  <span class="logo"><small>Marketing Materials Management</small></span>
   <nav class="topNav" id="sidebar-wrapper">
     <ul class="nav sidebar-nav section-group">
       <li class="section"><a href="#MyOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
@@ -59,7 +55,7 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
@@ -94,25 +90,7 @@
     </nav>
   </div>
 
-  <script>
-    var CurrentTableList = {
-      "#applying": "./test/supplier/MyOrder/approving-table-data.json",
-      "#finished": "./test/supplier/MyOrder/success-table-data.json"
-    }
-
-    var expressUpdate = function() {
-      var t = new table("./test/supplier/MyOrder/ExpressUpdate/ExpressUpdateDetail.json")
-      t.load().to("#ExpressDetail .goodsInfomation")
-      $("#ExpressDetail").modal()
-    }
-
-    function finish(primarykey) {
-      $("#finish").modal()
-      // console.log("Primary Key", primarykey);
-    }
-  </script>
-  
-    <div class="modal fade lg-modal" id="ExpressDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -124,23 +102,18 @@
 
         <div class="modal-infopart goodsInfomation">
         </div>
-        <div class="modal-infopart">
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="comment" rows="4" disabled>备注</textarea>
-          </div>
-        </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
-          <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button" class="btn btn-success">完成该订单</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="ExpressUpdate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -149,18 +122,15 @@
       </div>
 
       <div class="modal-body">
-          <textarea name="expressStatus" rows="5" disabled>
-            订单详情：订单详情
-          </textarea>
-          <form id="update_Express" class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-sm-3 control-label">更新信息 ：</label>
-              <div class="col-sm-8">
-                <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
-                
-              </div>
+        <form id="update_Express" class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">更新信息 ：</label>
+            <div class="col-sm-8">
+              <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
+              
             </div>
-          </form>
+          </div>
+        </form>
       </div>
 
       <div class="modal-footer">
@@ -173,16 +143,16 @@
 
 <script>
   var update = function(PrimaryKey){
-    $("#ExpressUpdate").modal()
+    $("#Update").modal()
     console.log("primaryKey",PrimaryKey);
   }
 </script>
 
   
 
-  
+
     <!-- 信息删除确认 -->
-<div class="modal fade" id="finish">
+<div class="modal fade" id="Finish">
   <div class="modal-dialog">
     <div class="modal-content message_align">
       <div class="modal-header">
@@ -206,48 +176,86 @@
 
   
 
-    <script type="text/javascript">
-  /**
-   * @description Table初始化
-   */
-
+<script type="text/javascript">
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
        var t = new table()
+       console.log(CurrentTableList[i]);
        t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
      }
    }
-  //  var table_init = function(tableList) {
-  //    for (var i in CurrentTableList) {
-  //      var $tablecontainer = $(i)
-  //      var t = new table(CurrentTableList[i])
-  //      t.load().to($tablecontainer)
-  //    }
-  //  }
 </script>
 
+  <script>
+    var CurrentTableList = {
+      "#applying": "./test/supplier/MyOrder/approving-table-data.json",
+      "#finished": "./test/supplier/MyOrder/success-table-data.json"
+    }
+
+    var table_init = function() {
+      //TODO 此处需要显示联系人电话，需要多表连接
+      var templateOpts = tableStructures.Supplier.MyOrder.Approving
+      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", ]
+      var result = apiConfig.purchaserequisition.Top(100)
+      for(var i of result){
+        console.log(i)
+        var requestor = i["_requestorfk"]
+        var dealer = apiConfig.dealer.GetByUserName(requestor)
+        console.log(dealer)
+        var phoneNumber = dealer["_phonenumber"]
+        i["_phonenumber"] = phoneNumber
+      }
+      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#applying")
+    }
+
+    var supply = function(rid) {
+      // console.log(rid);
+      window._target = apiConfig.brochure.Get(rid)
+
+      $("#Supply")
+        .modal()
+    }
+
+    var expressUpdate = function() {
+      var t = new table("./test/supplier/MyOrder/ExpressUpdate/ExpressUpdateDetail.json")
+      t.load().to("#Detail .goodsInfomation")
+      $("#Detail").modal()
+    }
+
+    function finish(primarykey) {
+      $("#Finish").modal()
+      // console.log("Primary Key", primarykey);
+    }
+
+    var search = function() {
+      var keyword = filterXSS($("input.searchBox").val().trim())
+      var templateOpts = tableStructures.Dealer.MyOrder.Approving
+      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
+      var result = apiConfig.dealer.Search(keyword)
+      console.log(result)
+      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+    }
+  </script>
 
     </div>
   </div>
-
   <link rel="stylesheet" href="./css/plugs/bootstrap.css">
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/content.css">
   <link rel="stylesheet" href="./css/components.css">
   <link rel="stylesheet" href="./css/plugs/buttons.css">
-  <link rel="stylesheet" href="./css/plugs/blue.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
   <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
-
-  <script type="text/javascript" src="./js/plugs/icheck.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
   <script type="text/javascript" src="./js/plugs/xss.js"></script>
-
-  <script type="text/javascript" src="./js/init.js"></script>
+  <script type="text/javascript" src="./js/api/apimethod.js"></script>
+  <script type="text/javascript" src="./js/api/config.js"></script>
   <script type="text/javascript" src="./js/components.js"></script>
+  <script type="text/javascript" src="./js/init.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>
   <script type="text/javascript" src="./js/cookies.js"></script>
-  <script type="text/javascript" src="./js/apimethod.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       for (var i in init) {

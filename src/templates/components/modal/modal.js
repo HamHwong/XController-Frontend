@@ -1,14 +1,18 @@
 //多模态HACK
-var couter = 0;
-$(document)
-  .on('hidden.bs.modal', '.modal', function (e) {
+var counter = 0;
+$(document).unbind('hidden.bs.modal')
+  .on('hidden.bs.modal', '.modal', function(e) {
     $(this)
       .css("z-index", 1050)
-    couter--
+    // $('.modal-backdrop')[counter].css("z-index",1049)
+    counter--
   });
-$(document)
-  .on('show.bs.modal', '.modal', function (e) {
+$(document).unbind('show.bs.modal')
+  .on('show.bs.modal', '.modal', function(e) {
     $(this)
-      .css("z-index", 1050 + couter)
-    couter++
+      .css("z-index", 1050 + counter)
+    // if ($('.modal-backdrop').length <= 1 )
+    //   return
+    // $('.modal-backdrop')[counter].css("z-index", 1049 + counter)
+    counter++
   });

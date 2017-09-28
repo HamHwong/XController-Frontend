@@ -2,14 +2,14 @@
   <h3>物品管理</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" data-targetData="brochure" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddBrochure">添加物品</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加物品</button>
 </div>
 
 <div class="table-content tab-content">
@@ -29,50 +29,59 @@
     </ul>
   </nav>
 </div>
-<script>
-  var CurrentTableList = {
-    // "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
-  }
-</script>
-<%-include('/components/modal/modal',{type:"Admin.Inventory.Detail"})%>
+<%-include('/components/modal/modal',{type:"Admin.Inventory.History"})%>
   <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Add"})%>
     <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Edit"})%>
       <%-include('/components/modal/modal',{type:"Common.Delete"})%>
         <%-include('/components/modal/modal',{type:"Common.Supply"})%>
           <script>
-            var BrochureAdmin = function() {
-              var templateOpts = {
-                "tablename": "goods",
-                "hasHeader": true,
-                "hasButton": true,
-                "buttonPool": ["supplyBtn", "historyBtn", "editBtn", "delBtn"],
-                "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
-                "data": [
-                  ["序列", "物品编号", "物品名称", "物品数量", "供应商", "创建时间"],
-                ]
-              }
-              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_purposefk", "_createtime"]
+            //载入物品操作
+            var table_init = function() {
+              var templateOpts = tableStructures.Admin.Bruchure.Inventory
+              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
               new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
             }
-            BrochureAdmin()
-            var del = function(rid) {
-              $("#delete")
-                .modal()
-            }
-            var supply = function(rid) {
-              window.targrt_brochure = GET("/api/brochure/" + rid)
-              $("#supply")
-                .modal()
-            }
-            var supplyment = function(rid) {
 
-            }
-            var history = function(rid) {
-              $("#history")
+            //删除物品记录操作
+            var del = function(rid) {
+              window._target = apiConfig.brochure.Get(rid)
+              $("#Delete")
                 .modal()
             }
+            var deleteSubmit = function() {
+              if (window._target) {
+                var id = window._target["_id"]
+                apiConfig.brochure.Delete(id)
+                $("#Delete").modal("hide")
+              }
+              table_init()
+            }
+            //补充物品数量操作
+            var supply = function(rid) {
+              // console.log(rid);
+              window._target = apiConfig.brochure.Get(rid)
+
+              $("#Supply")
+                .modal()
+            }
+            //查看出入库历史操作
+            var History = function(rid) {
+              $("#History")
+                .modal()
+            }
+            //编辑操作
             var edit = function(rid) {
-              $("#edit")
+              window._target = apiConfig.brochure.Get(rid)
+              autoComplateInfo(window._target, "#edit_Brochure")
+              $("#Edit")
                 .modal()
+            }
+            var search = function() {
+              var keyword = filterXSS($("input.searchBox").val().trim())
+              var templateOpts = tableStructures.Admin.Bruchure.Inventory
+              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
+              var result = apiConfig.brochure.Search(keyword)
+              console.log(result)
+              new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
             }
           </script>

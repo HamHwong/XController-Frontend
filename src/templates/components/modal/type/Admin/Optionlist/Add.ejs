@@ -1,0 +1,52 @@
+<div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加字典</h4>
+      </div>
+
+      <div class="modal-body clearfix">
+        <form id="add_Option" class="form" role="form">
+          <div class="form-group col-md-12">
+            <label for="_optionname" class="control-label">选项名:</label>
+            <input name="_optionname" id="_optionname" placeholder="请输入选项名" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_optionvalue" class="control-label">选项值:</label>
+            <input name="_optionvalue" id="_optionvalue" placeholder="请输入选项值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_sequence" class="control-label">排序值:</label>
+            <input name="_sequence" id="_sequence" placeholder="请输入排序值" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_description" class="control-label">描述:</label>
+            <input name="_description" id="_description" placeholder="请输入描述" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_category" class="control-label">分类:</label>
+            <input name="_category" id="_category" placeholder="请输入分类" class="form-control" />
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addOptionList()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function addOptionList() {
+    var data = formToSet("#add_Option")
+    var dealerId = apiConfig.optionlist.Add(data)
+    if (dealerId) {
+      $("#Add").modal("hide")
+      ClearInputs("#add_Option")
+      ClearSelecton("#add_Option")
+      ClearTextArea("#add_Option")
+    }
+    table_init()
+  }
+</script>

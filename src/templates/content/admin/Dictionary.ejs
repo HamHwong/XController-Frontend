@@ -1,0 +1,75 @@
+<div class="contentTitle clearfix">
+  <h3>数据字典</h3>
+  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
+    <div class="form-group col-xs-9">
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+    </div>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+  </div>
+</div>
+
+<div class="operation-menu">
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加字典</button>
+</div>
+
+<div class="table-content tab-content">
+  <div class="tab-pane active" id="Brochure-table-container">
+    <table class="table table-bordered table-hover">
+    </table>
+  </div>
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+</div>
+<%-include('/components/modal/modal',{type:"Admin.Optionlist.Add"})%>
+  <%-include('/components/modal/modal',{type:"Admin.Optionlist.Edit"})%>
+    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+      <script>
+        // var CurrentTableList = {
+        //   "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
+        // }
+        //载入物品操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Admin.Dictionary
+          var dataOrder = ["_id", "_optionname", "_optionvalue", "_sequence", "_description", "_category"]
+          new table().loadFromTemplateJson("/api/optionlist/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
+        }
+
+        //删除物品记录操作
+        var del = function(rid) {
+          window._target = apiConfig.optionlist.Get(rid)
+          $("#Delete")
+            .modal()
+        }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.optionlist.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        //编辑操作
+        var edit = function(rid) {
+          window._target = apiConfig.optionlist.Get(rid)
+          autoComplateInfo(window._target, "#edit_Option")
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input.searchBox").val().trim())
+          var templateOpts = tableStructures.Admin.Dictionary
+          var dataOrder = ["_id", "_optionname", "_optionvalue", "_sequence", "_description", "_category"]
+          var result = apiConfig.optionlist.Search(keyword)
+          console.log(result)
+          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+        }
+      </script>

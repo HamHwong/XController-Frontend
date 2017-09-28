@@ -1,5 +1,5 @@
 {
-  "tablename": "goods",
+  "tablename": "history",
   "hasHeader": true,
   "hasButton":true,
   "keyArr": ["id", "key", "key", "prop", "prop", "prop"],

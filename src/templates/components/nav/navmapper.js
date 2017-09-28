@@ -6,7 +6,11 @@ var contentmapper = {
   BrochureAdmin: "BrochureAdmin.html",
   DealerAdmin: "DealerAdmin.html",
   SupplierAdmin: "SupplierAdmin.html",
+  SystemAdmin: "SystemAdmin.html",
   Inventory: "Inventory.html",
+  Dictionary: "Dictionary.html",
+  Approval: "Approval.html",
+  Workflow: "Workflow.html",
 }
 
 var hyperlink_init = function () {
@@ -25,9 +29,7 @@ var hyperlink_init = function () {
             .empty()
           $("#content_wapper")
             .append(Obj.trim())
-
-          window.currentPos = getCookie("auth") + "." + position //HACK Button
-
+          // window.currentPos = getCookie("auth") + "." + position //HACK Button
           initPageByName("content")
           sideclose()
         }
