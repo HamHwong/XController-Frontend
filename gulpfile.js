@@ -168,7 +168,7 @@ gulp.task('concat-conponent-css', ['less'], function() {
 })
 
 gulp.task('concat-conponent-js', ['clean-js'], function() {
-  return gulp.src(['./src/templates/components/**/*.js'])
+  return gulp.src(['./src/templates/components/**/*.js','./src/js/util/**/*.js'])
     .pipe(concat('components.js'))
     .pipe(gulp.dest('src/js'))
 })

@@ -36,6 +36,7 @@ var sideBtn_init = function() {
 var logout_init = function() {
   $(".logout").on("click", function() {
     delCookie("auth")
+    delCookie("name")
     window.location.href = "./login.html"
   })
 }
@@ -50,7 +51,7 @@ var name_init = function() {
 var optionlist_init = function() {
   //bug 给每个都加了
   var optionlist = $("select.optionlist")
-  for(var i =0;i< optionlist.length;i++){
+  for (var i = 0; i < optionlist.length; i++) {
     $(optionlist[i]).empty()
     var category = $(optionlist[i]).data('category')
     var optionArray = apiConfig.optionlist.GetByCategory(category)
@@ -67,7 +68,7 @@ var optionlist_init = function() {
 var searchbox_init = function() {
   var input = $("input.search")
   var btn = $("button.searchBtn")
-  btn.on("click",function(){
+  btn.on("click", function() {
     search()
   })
   // var datasource = input.data('targetdata')

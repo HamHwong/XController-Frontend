@@ -39,8 +39,7 @@
         //载入物品操作
         var table_init = function() {
           var templateOpts = tableStructures.Admin.Dictionary
-          var dataOrder = ["_id", "_optionname", "_optionvalue", "_sequence", "_description", "_category"]
-          new table().loadFromTemplateJson("/api/optionlist/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
+          new table().loadFromTemplateJson("/api/optionlist/top(100)", templateOpts).to("#Brochure-table-container")
         }
 
         //删除物品记录操作
@@ -67,9 +66,7 @@
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
           var templateOpts = tableStructures.Admin.Dictionary
-          var dataOrder = ["_id", "_optionname", "_optionvalue", "_sequence", "_description", "_category"]
           var result = apiConfig.optionlist.Search(keyword)
-          console.log(result)
-          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+          new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
         }
       </script>

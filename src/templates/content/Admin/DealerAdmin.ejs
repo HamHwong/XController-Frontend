@@ -36,8 +36,7 @@
         //载入代理商表操作
         var table_init = function() {
           var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
-          var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
-          new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts, dataOrder).to("#Dealer-table-container")
+          new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts).to("#Dealer-table-container")
         }
 
         //删除代理商操作
@@ -66,9 +65,7 @@
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
           var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
-          var dataOrder = ["_id", "_dealername", "_dealerregion", "_dealerproduct", "_phonenumber", "_email", "_accountname", "_password"]
           var result = apiConfig.dealer.Search(keyword)
-          console.log(result)
           new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
         }
       </script>

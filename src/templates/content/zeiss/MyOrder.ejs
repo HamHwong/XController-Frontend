@@ -43,20 +43,12 @@
               //载入我的订单的申请表操作
               var table_init = function() {
                 var templateOpts = tableStructures.Dealer.MyOrder.Approving
-                var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
               }
 
               $(document).ready(function() {
                 table_init()
               })
-
-              var CurrentTableList = {
-                "#draft": "./test/dealer/MyOrder/draft-table-data.json",
-                "#applying": "./test/dealer/MyOrder/approving-table-data.json",
-                "#finished": "./test/dealer/MyOrder/success-table-data.json",
-                "#reject": "./test/dealer/MyOrder/rejected-table-data.json"
-              }
 
               //订单详情操作
               var Detail = function(primaryKey) {
@@ -69,17 +61,13 @@
               //复制操作
               var copy = function(primaryKey) {
                 var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                console.log(infoSet)
-                // for(var i in infoSet){
-                //   infoSet["_"+i.toLowerCase()] = infoSet[i]
-                // }
                 //自动填充
                 autoComplateInfo(infoSet, "#PurchaseRequisition_form")
                 //填充dealer
                 autoComplateInfoOfDealer()
-
                 $("#PurchaseRequisition").modal()
               }
+
               var edit = function(primaryKey) {
                 var infoSet = GET("/api/purchaserequisition/" + primaryKey)
                 //自动填充
@@ -89,13 +77,16 @@
 
                 $("#PurchaseRequisition").modal()
               }
+
               var submit = function(primaryKey) {
                 $("#Submit").modal()
                 applyingTable()
               }
+
               var deleteDraft = function(primaryKey) {
                 $("#Delete").modal()
               }
+
               var deleteDraftBtn = function(primaryKey) {
 
               }

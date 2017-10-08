@@ -11,39 +11,39 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">申请种类 ：</label>
             <div class="col-sm-8 search_box_warp">
-              <input type="text" class="form-control" name="_brochurename" id="BrochureName" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
+              <input type="text" class="form-control" name="_brochurefk" id="_brochurefk" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
               <ul class="dropdown-menu keyhint"></ul>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">交付时间 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="DeliveryDate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_quantity" id="Quantity" placeholder="申请数量" required />
+              <input type="text" class="form-control" name="_quantity" id="_quantity" placeholder="申请数量" required />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">收货人 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_consignee" id="Consignee" placeholder="收货人" required />
+              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" required />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">收货电话 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_contactnumber" id="ContactNumber" placeholder="收货电话" required />
+              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" required />
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-sm-3 control-label">收货地址 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_deliveryaddress" id="DeliveryAddress" placeholder="收货地址" required />
+              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" required />
             </div>
           </div>
         </form>
@@ -60,30 +60,15 @@
 <script>
   //确认
   function AddPurchaseItem() {
-    AppendPurchaseItem()
-    $("#PruchaseItem")
-      .modal('hide')
+    PurchaseItem.add()
+    PurchaseItem.hide()
   }
   //添加
   function AppendPurchaseItem() {
-    if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
-      return
-    var arr = []
-    arr.push(++row_counter)
-    var set = formToSet("#PruchaseItem_form")
-    var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-    for (var i of order) {
-      arr.push(set[i])
-    }
-    if (window.__PurchaseRequisitionItem_table) {
-      window.__PurchaseRequisitionItem_table.addRow(arr)
-      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
-    }
-    ClearInputs("#PruchaseItem_form", ["#BrochureName", "#Quantity"])
+    PurchaseItem.add()
   }
   //取消
   function Cancel() {
-    $("#PruchaseItem")
-      .modal('hide')
+    PurchaseItem.hide()
   }
 </script>

@@ -4,7 +4,7 @@
 }
 @media (min-width: 768px) {
   .lg-modal > .modal-dialog {
-    width: 70%;
+    width: 100%;
     min-width: 768px;
   }
 }

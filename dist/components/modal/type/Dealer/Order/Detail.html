@@ -8,31 +8,27 @@
 
       <div class="modal-body">
         <div class="modal-infopart orderStatus">
-          <div class="steps clearfix">
-            <!-- progressbar -->
-<ul id="progressbar" class="clearfix">
-  <li class="glyphicon complated"><span>提出申请</span><span class="operationtime">2016.11.12  00:00</span></li>
-  <li class="glyphicon complated"><span>直线经理</span><span class="operationtime">2016.11.12  00:00</span></li>
-  <li class="glyphicon validating"><span>BU经理</span><span class="operationtime">2016.11.12  00:00</span></li>
-  <li class="glyphicon reject"><span>通知MM</span><span class="operationtime">2016.11.12  00:00</span></li>
-</ul>
-
+          <div class="steps clearfix" id="steps">
+            <ul id="progressbar" class="clearfix">
+              <ul>
           </div>
         </div>
         <div class="modal-infopart baseInfomation">
           <ul>
-            <li>代理商：dealer</li>
-            <li>区   域：华南地区</li>
-            <li>手机号：13883762902</li>
-            <li>邮   箱：admin@elitsrouce.net</li>
-            <li>用   途：一般销售用途</li>
+            <li>代理商：<span id="PRD_demanderfk"></span></li>
+            <li>区 域：<span id="PRD_dealerregion"></span></li>
+            <li>手机号：<span id="PRD_phonenumber"></span></li>
+            <li>邮 箱：<span id="PRD_email"></span></li>
+            <li>用 途：<span id="PRD_purposefk"></span></li>
           </ul>
           <div class="comment">
             <span>备注：</span>
-            <textarea name="comment" rows="4" disabled>备注</textarea>
+            <textarea name="comment" id="PRD_comments" rows="4" disabled>备注</textarea>
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
+          <div id="InfomationArea">
+          </div>
         </div>
       </div>
       <div class="modal-footer">

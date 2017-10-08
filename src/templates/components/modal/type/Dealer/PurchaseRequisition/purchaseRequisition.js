@@ -1,66 +1,64 @@
-//绑定input搜索栏数据源
-bindInputQuery("#_demanderfk", "./test/searchDictionary/DealerCollections.json")
+var PurchaseRequisition = {
+  show: function() {
+    this.init()
+    $("#PurchaseRequisition")
+      .modal()
+  },
+  hide: function() {
+    $("#PurchaseRequisition")
+      .modal('hide')
+  },
+  autoComplate: function(PRid) {
+    var targetPRArea = "#PurchaseRequisition_form"
+    targetPRITableArea = "#InfomationAddArea"
+    templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
+    if (PRid) {
+      //填充其他信息
+      var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
+      autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+      //填充PRI
+      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
 
-$("#PurchaseRequisition")
-  .on("hidden.bs.modal", function() {
-    ClearInputs("#PurchaseRequisition")
-    ClearSelecton("#PurchaseRequisition")
-    ClearTextArea("#PurchaseRequisition")
+      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PRIinfoSet
+      // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
+      var PRItable = new table().loadFromTemplateJson(PRIinfoSet, templateOpts)
+      window.__PurchaseRequisitionItem_table = PRItable
+      PRItable.to(targetPRITableArea)
+    }
+
+    //若为dealer，则自动填充名字和区域
+    if ("dealer" == (getCookie("auth")
+        .toLowerCase())) {
+      $("#_demanderfk")
+        .val("dealer")
+      $("#_demanderfk")
+        .attr("readonly", "readonly")
+      $("#_dealerregion")
+        .val(apiConfig.dealer.GetByUserName(getCookie("name"))["_dealerregion"])
+      $("#_dealerregion")
+        .attr("disabled", "true")
+    }
+  },
+  detail: function(PRid) {
+    PRDetail.autoComplate(PRid)
+    PRDetail.show()
+  },
+  init: function() {
+    window.__PurchaseRequisition_tempID = generateUUID()
+    window.__PurchaseRequisitionItem_Unsave_set = {}
+    window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []
+  },
+  destory: function() {
+    ClearAllFields("#PurchaseRequisition")
     if (window.__PurchaseRequisitionItem_table) {
       window.__PurchaseRequisitionItem_table.remove()
       window.__PurchaseRequisitionItem_table = null
-      window.__PurchaseRequisition_tempID = null
     }
-  })
-$("#PurchaseRequisition").on("shown.bs.modal", function() {
-  window.__PurchaseRequisition_tempID = generateUUID()
-  autoComplateInfoOfDealer()
-})
-
-//获取用户信息
-function getPrototypies(uid, pname) {
-  var c = $.ajax({
-    url: './test/userInfo.json', // api统一接口不同参数获取用户信息
-    type: "GET",
-    async: false
-  })
-  var j = JSON.parse(c.responseText)
-  var r = j[uid][pname]
-  return r
-}
-//检测若是aealer，则将需求方设为dealer本人
-function autoComplateInfoOfDealer() {
-  if ("dealer" == (getCookie("auth")
-      .toLowerCase())) {
-    $("#_demanderfk")
-      .val("dealer")
-    $("#_demanderfk")
-      .attr("readonly", "readonly")
-    $("#_dealerregion")
-      .val(apiConfig.dealer.GetByUserName(getCookie("name"))["_dealerregion"])
-    $("#_dealerregion")
-      .attr("disabled", "true")
+    window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+    window.__PurchaseRequisition_tempID = null
+    window.__PurchaseRequisitionItem_Unsave_set = null
+    window._target = null
+    window._operation = null
+    $("#operation").empty()
   }
 }
-
-$("#addPRItem").on("click", function() {
-  //如果没有请购单，则new一个
-  if (!window.__PurchaseRequisitionItem_table) {
-    var PurchaseRequisitionItemTable = new table()
-    var t = {
-      "tablename": "AddPR",
-      "hasHeader": true,
-      "hasButton": true,
-      "hasDetail": true,
-      "buttonPool": ["editBtn", "delBtn"],
-      "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"]
-    }
-    var header = ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"]
-    window.__PurchaseRequisitionItem_table = PurchaseRequisitionItemTable
-    window.__PurchaseRequisitionItem_table.new(t, header).bindEvents()
-      .to($("#InfomationAddArea"))
-    window.__PurchaseRequisitionItem_Unsave_set = {}
-    window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []
-  }
-})
-var row_counter = 0

@@ -106,7 +106,7 @@
       <div class="modal-footer">
         <div class="center-block">
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
-          <button type="button" class="btn btn-success">完成该订单</button>
+          <button type="button" class="btn btn-success" onclick="finish()">完成该订单</button>
         </div>
       </div>
     </div>
@@ -134,19 +134,28 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="Update()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="UpdateMe()"><span class="glyphicon glyphicon-ok"></span></button>
         <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
       </div>
     </div>
   </div>
 </div>
-
 <script>
-  var update = function(PrimaryKey){
-    $("#Update").modal()
-    console.log("primaryKey",PrimaryKey);
+  var UpdateMe = function() {
+    
   }
 </script>
+
+  <script>
+    var update = function(PrimaryKey) {
+      $("#Update").modal()
+      // console.log("primaryKey", PrimaryKey);
+    }
+
+    function finish(primarykey) {
+      $("#Finish").modal()
+    }
+  </script>
 
   
 
@@ -188,54 +197,51 @@
 </script>
 
   <script>
-    var CurrentTableList = {
-      "#applying": "./test/supplier/MyOrder/approving-table-data.json",
-      "#finished": "./test/supplier/MyOrder/success-table-data.json"
-    }
 
     var table_init = function() {
       //TODO 此处需要显示联系人电话，需要多表连接
       var templateOpts = tableStructures.Supplier.MyOrder.Approving
-      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", ]
-      var result = apiConfig.purchaserequisition.Top(100)
-      for(var i of result){
-        console.log(i)
-        var requestor = i["_requestorfk"]
-        var dealer = apiConfig.dealer.GetByUserName(requestor)
-        console.log(dealer)
-        var phoneNumber = dealer["_phonenumber"]
-        i["_phonenumber"] = phoneNumber
-      }
-      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#applying")
+      // var result = apiConfig.purchaserequisition.Top(100)
+      var completed = false
+      var keyword = 1 //demonderkey
+      var startIndex = 0
+      var endIndex = 100
+      var result = GET(`/api/PRSupplierView/search(${completed},${keyword},${startIndex},${endIndex})`)
+      // for(var i of result){
+      //   //GET /api/PRSupplierView/search({completed},{keyword},{startIndex},{endIndex})
+      //   console.log(i)
+      //   var requestor = i["_requestor"]
+      //   // var dealer = apiConfig.dealer.GetByUserName(requestor)
+      //   // console.log(dealer)
+      //   // var phoneNumber = dealer["_phonenumber"]
+      //   var phoneNumber = i["_phonenumber"]
+      //   // i["_phonenumber"] = phoneNumber
+      // }
+      new table().loadFromTemplateJson(result, templateOpts).to("#applying")
     }
 
     var supply = function(rid) {
       // console.log(rid);
       window._target = apiConfig.brochure.Get(rid)
-
       $("#Supply")
         .modal()
     }
 
-    var expressUpdate = function() {
-      var t = new table("./test/supplier/MyOrder/ExpressUpdate/ExpressUpdateDetail.json")
-      t.load().to("#Detail .goodsInfomation")
-      $("#Detail").modal()
-    }
-
-    function finish(primarykey) {
-      $("#Finish").modal()
-      // console.log("Primary Key", primarykey);
+    var expressUpdate = function(primarykey) {
+      window._operation = Enum.operation.Read
+      window._target = apiConfig.purchaserequisition.Get(primarykey)
+      SupplierPRDetail.autoComplate(primarykey)
+      SupplierPRDetail.show()
     }
 
     var search = function() {
       var keyword = filterXSS($("input.searchBox").val().trim())
       var templateOpts = tableStructures.Dealer.MyOrder.Approving
-      var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
       var result = apiConfig.dealer.Search(keyword)
       console.log(result)
-      new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+      new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
     }
+
   </script>
 
     </div>
@@ -250,8 +256,7 @@
   <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
   <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
   <script type="text/javascript" src="./js/plugs/xss.js"></script>
-  <script type="text/javascript" src="./js/api/apimethod.js"></script>
-  <script type="text/javascript" src="./js/api/config.js"></script>
+  <script type="text/javascript" src="./js/util/apimethod.js"></script>
   <script type="text/javascript" src="./js/components.js"></script>
   <script type="text/javascript" src="./js/init.js"></script>
   <script type="text/javascript" src="./js/content.js"></script>

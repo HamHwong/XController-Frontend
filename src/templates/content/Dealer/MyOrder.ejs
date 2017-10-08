@@ -2,22 +2,22 @@
   <h3>我的订单</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
     <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
   </div>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",success:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+    <button type="button" class="btn btn-primary" onclick="create()">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="draft">
     </div>
     <div class="tab-pane" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="success">
     </div>
     <div class="tab-pane" id="reject">
     </div>
@@ -38,69 +38,98 @@
     <%-include('/components/modal/modal',{type:"Dealer.Order.Detail"})%>
       <%-include('/components/modal/modal',{type:"Common.Submit"})%>
         <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-          <%-include('/components/table/table.init.ejs')%>
-            <script>
-              //载入我的订单的申请表操作
-              var table_init = function() {
-                var templateOpts = tableStructures.Dealer.MyOrder.Approving
-                var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
-              }
+          <script>
+            //载入我的订单的申请表操作
+            var table_init = function() {
+              window.__PurchaseRequisitionItem_Unsave_set = {}
+              //申请中table初始化
+              var templateOpts = tableStructures.Dealer.MyOrder.Approving
+              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
+              //草稿箱table初始化
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#draft")
+              //successtable初始化
+              var templateOpts = tableStructures.Dealer.MyOrder.Success
+              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#success")
+            }
 
-              var CurrentTableList = {
-                "#draft": "./test/dealer/MyOrder/draft-table-data.json",
-                "#applying": "./test/dealer/MyOrder/approving-table-data.json",
-                "#finished": "./test/dealer/MyOrder/success-table-data.json",
-                "#reject": "./test/dealer/MyOrder/rejected-table-data.json"
+            //订单详情操作
+            var Detail = function(PRid) {
+              window._operation = Enum.operation.Read
+              PurchaseRequisition.detail(PRid)
+            }
+            //复制操作
+            var copy = function(PRid) {
+              window._operation = Enum.operation.Copy
+              window._target = apiConfig.purchaserequisition.Get(PRid)
+              PurchaseRequisition.show()
+              //填充dealer
+              PurchaseRequisition.autoComplate(PRid)
+            }
+            /**
+             * 根据PRID修改该PR内容
+             * @param  {string} PRid PRID
+             */
+            var edit = function(PRid) {
+              window._operation = Enum.operation.Update
+              window._target = apiConfig.purchaserequisition.Get(PRid)
+              PurchaseRequisition.show()
+              //填充dealer
+              PurchaseRequisition.autoComplate(PRid)
+            }
+            var PRIEdit = function(PRIid) {
+              console.log(PRIid)
+            }
+            var PRIDelete = function(PRIid) {
+              window.__PurchaseRequisitionItem_table.data[PRIid].remove()
+              var PRItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+              for (var i = 0; i < PRItems.length; i++) {
+                if (PRIid == PRItems[i]["_id"]) {
+                  var tempArr = PRItems.splice(0,i-1)
+                  PRItems.reverse()
+                  PRItems.pop()
+                  PRItems.reverse()
+                  tempArr.concat(PRItems)
+                }
               }
+              console.log(PRIid)
+            }
 
-              //订单详情操作
-              var Detail = function(primaryKey) {
-                console.log("primaryKey", primaryKey);
-                var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
-                t.load().to("#Detail .goodsInfomation")
-                $("#Detail").modal()
-              }
+            var create = function() {
+              window._operation = Enum.operation.Create
+              PurchaseRequisition.show()
+              PurchaseRequisition.autoComplate()
+            }
 
-              //复制操作
-              var copy = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                console.log(infoSet)
-                // for(var i in infoSet){
-                //   infoSet["_"+i.toLowerCase()] = infoSet[i]
-                // }
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
+            var deleteDraft = function(PRid) {
+              $("#Delete").modal()
+            }
 
-                $("#PurchaseRequisition").modal()
+            var search = function() {
+              //TODO search需要API根据不同情况来get
+              var keywrod = $("input.searchBox").val()
+              var li = $(".tabs").child("li.active") //正在显示的li tab
+              var tabname = li.child("a").attr("href").substring(1)
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              var result = apiConfig.purchaserequisition.Search(keyword)
+              switch (tabname) {
+                case "draft":
+                  break
+                case "approving":
+                  templateOpts = tableStructures.Dealer.MyOrder.Approving
+                  result = apiConfig.purchaserequisition.Search(keyword)
+                  break
+                case "finished":
+                  break
+                case "reject":
+                  break
               }
-              var edit = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
-
-                $("#PurchaseRequisition").modal()
-              }
-              var submit = function(primaryKey) {
-                $("#Submit").modal()
-                applyingTable()
-              }
-              var deleteDraft = function(primaryKey) {
-                $("#Delete").modal()
-              }
-              var deleteDraftBtn = function(primaryKey) {
-
-              }
-              var search = function() {
-                var keyword = filterXSS($("input.searchBox").val().trim())
-                var templateOpts = tableStructures.Dealer.MyOrder.Approving
-                var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-                var result = apiConfig.dealer.Search(keyword)
+              if ("" != keyword) {
+                keyword = filterXSS(keywrod.trim())
                 console.log(result)
-                new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+                new table().loadFromTemplateJson(result, templateOpts).to("#applying")
+              } else {
+                table_init()
               }
-            </script>
+            }
+          </script>

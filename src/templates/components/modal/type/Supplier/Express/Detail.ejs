@@ -14,7 +14,7 @@
       <div class="modal-footer">
         <div class="center-block">
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
-          <button type="button" class="btn btn-success">完成该订单</button>
+          <button type="button" class="btn btn-success" onclick="finish()">完成该订单</button>
         </div>
       </div>
     </div>
@@ -22,9 +22,13 @@
 </div>
 
 <%-include('./Update')%>
-<script>
-  var update = function(PrimaryKey){
-    $("#Update").modal()
-    console.log("primaryKey",PrimaryKey);
-  }
-</script>
+  <script>
+    var update = function(PrimaryKey) {
+      $("#Update").modal()
+      // console.log("primaryKey", PrimaryKey);
+    }
+
+    function finish(primarykey) {
+      $("#Finish").modal()
+    }
+  </script>

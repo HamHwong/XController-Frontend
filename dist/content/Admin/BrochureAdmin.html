@@ -92,7 +92,7 @@
 <script>
   function addBrochure() {
     var data = formToSet("#Add")
-    data["_createtime"] = new date()
+    data["_createtime"] = new Date()
     var brochureId = apiConfig.brochure.Add(data)
     if (brochureId) {
       $("#Add").modal("hide")
@@ -231,8 +231,8 @@
             //载入物品操作
             var table_init = function() {
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
-              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
-              new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts, dataOrder).to("#Brochure-table-container")
+              // var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
+              new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
             }
 
             //删除物品记录操作
@@ -272,9 +272,8 @@
             var search = function() {
               var keyword = filterXSS($("input.searchBox").val().trim())
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
-              var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
               var result = apiConfig.brochure.Search(keyword)
               console.log(result)
-              new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Brochure-table-container")
+              new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
             }
           </script>

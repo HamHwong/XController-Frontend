@@ -31,43 +31,127 @@
       </ul>
     </nav>
   </div>
-  <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
-    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-      <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
-        <script>
-          //载入订单管理表操作
-          var table_init = function() {
-            var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-            new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
-          }
+  <!-- 信息删除确认 -->
+  <div class="modal fade" id="Approve">
+    <div class="modal-dialog">
+      <div class="modal-content message_align">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">提示信息</h4>
+        </div>
+        <div class="modal-body">
+          <p>您确认通过吗？</p>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="url" />
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <a onclick="ApproveIt()" class="btn btn-success" data-dismiss="modal">确定</a>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
 
-          // //删除订单操作
-          //   var del = function(rid) {
-          //     $("#Delete")
-          //       .modal()
-          //   }
-          //   var edit = function(rid) {
-          //     $("#EditBrochure")
-          //       .modal()
-          //   }
-          var search=function() {}
-          //订单详情操作
-          var Detail = function(primaryKey) {
-            console.log("primaryKey", primaryKey);
-            var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
-            t.load().to("#Detail .goodsInfomation")
-            $("#Detail").modal()
-          }
-          $(document).ready(function() {
-            table_init()
-          })
-          var search = function() {
-            var keyword = filterXSS($("input.searchBox").val().trim())
-            var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-            var result = apiConfig.purchaserequisition.Search(keyword)
-            console.log(result)
-            new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#applying")
-          }
-        </script>
+  <%include('/components/modal/modal',{type:"Common.Reject"})%>
+    <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
+      <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+        <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
+
+          <script>
+            //载入订单管理表操作
+            var table_init = function() {
+              var templateOpts = tableStructures.Admin.OrderAdmin.Order
+              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
+            }
+
+            // //删除订单操作
+            //   var del = function(rid) {
+            //     $("#Delete")
+            //       .modal()
+            //   }
+            //   var edit = function(rid) {
+            //     $("#EditBrochure")
+            //       .modal()
+            //   }
+            //订单详情操作
+            var Detail = function(primaryKey) {
+              console.log("primaryKey", primaryKey);
+              // var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
+              // t.load().to("#Detail .goodsInfomation")
+
+              var infoSet = apiConfig.purchaseitem.Paging(primaryKey, 0, 100)
+              var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
+              new table().loadFromTemplateJson(infoSet, templateOpts).to("#InfomationArea")
+
+              var steps = apiConfig.prprocess.Paging(primaryKey, 0, 100).reverse()
+              //  <li class="glyphicon complated"><span>提出申请</span><span class="operationtime">2016.11.12  00:00</span></li>
+              var arr = []
+              for (var i of steps) {
+                var result = i["_result"]
+                var time = i["_lastmodified"]
+                var step = i["_prprocessstep"]
+                var mod = `<li class="glyphicon"><span>${step}</span><span class="operationtime">${time}</span></li>`
+                $mod = $(mod)
+                // if ("Success" == result)
+                $mod.addClass('complated')
+                // else
+                //   $mod.addClass('validating')
+                // $("#progressbar").append($mod)
+                arr.push($mod)
+              }
+              $(arr[arr.length-1]).removeClass('complated').addClass('validating')
+
+              for(var i = 0 ;i <arr.length;i++){
+                $("#progressbar").append(arr[i])
+              }
+
+              window._target = apiConfig.purchaserequisition.Get(primaryKey)
+
+              $("#Detail").modal()
+            }
+
+            var search = function() {
+              var keyword = filterXSS($("input.searchBox").val().trim())
+              var templateOpts = tableStructures.Admin.OrderAdmin.Order
+              var result = apiConfig.purchaserequisition.Search(keyword)
+              console.log(result)
+              new table().loadFromTemplateJson(result, templateOpts).to("#applying")
+            }
+
+            var approve = function() {
+              $("#Approve").modal()
+            }
+            var reject = function() {
+              $("#Reject").modal()
+            }
+            var ApproveIt = function() {
+
+              var prid = window._target["_id"]
+              var steps = apiConfig.prprocess.Paging(prid, 0, 100)
+              steps.reverse()
+              var lastpoint = steps.pop()
+              var laststeps = lastpoint["_prprocessstep"]
+              var breakPoint = false
+              var currentSteps = null
+              for (var i in Enum.processStatus) {
+                // console.log(i)
+                currentSteps = i
+                if (breakPoint) {
+                  break
+                }
+                if (i == laststeps) {
+                  breakPoint = true
+                }
+              }
+
+              var newpoint = lastpoint
+              newpoint["_prprocessstep"] = currentSteps
+              newpoint["_purchaserequisitionfk"] = prid
+              var id = newpoint["_id"]
+              ///api/prprocess/{id}/update
+              apiConfig.prprocess.Edit(id, newpoint)
+              $("#Detail").modal("hide")
+            }
+          </script>

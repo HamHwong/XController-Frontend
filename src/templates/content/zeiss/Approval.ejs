@@ -38,8 +38,7 @@
           //载入订单管理表操作
           var table_init = function() {
             var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-            new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts, dataOrder).to("#applying")
+            new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
           }
 
           // //删除订单操作
@@ -53,13 +52,13 @@
           //   }
 
           //订单详情操作
+
           var Detail = function(primaryKey) {
             console.log("primaryKey", primaryKey);
             var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
             t.load().to("#Detail .goodsInfomation")
             $("#Detail").modal()
           }
-          $(document).ready(function() {
-            table_init()
-          })
+
+
         </script>

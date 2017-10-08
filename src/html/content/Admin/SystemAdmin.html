@@ -246,8 +246,7 @@ function editSupplier() {
         //载入供应商表操作
         var table_init = function() {
           var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
-          var dataOrder = ["_id", "_accountname", "_password", "_email"]
-          new table().loadFromTemplateJson("/api/systemuser/top(100)", templateOpts, dataOrder).to("#Admin-table-container")
+          new table().loadFromTemplateJson("/api/systemuser/top(100)", templateOpts).to("#Admin-table-container")
         }
         //删除供应商操作
         var del = function(rid) {
@@ -265,9 +264,8 @@ function editSupplier() {
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
           var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
-          var dataOrder = ["_id", "_accountname", "_password", "_email"]
           var result = apiConfig.supplier.Search(keyword)
           console.log(result)
-          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Admin-table-container")
+          new table().loadFromTemplateJson(result, templateOpts).to("#Admin-table-container")
         }
       </script>

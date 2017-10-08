@@ -6,5 +6,7 @@ var tab_init = function() {
   $('#myTab a').click(function(e) {
     e.preventDefault()
     $(this).tab('show')
+    var currentTab = $(this).attr("href")
+    //获取到当前tab,
   })
 }

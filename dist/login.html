@@ -35,11 +35,11 @@
 
           
 
-          <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
-          </div>
-          <div class="btn-group btn-block">
-            <button type="button" name="button" class="btn btn-block btn-primary" onclick="login()">登陆</button>
-          </div>
+            <div class="input-group input-group-lg col-lg-12 col-md-12 col-xs-12 col-sm-12">
+            </div>
+            <div class="btn-group btn-block">
+              <button type="button" name="button" class="btn btn-block btn-primary" onclick="login()">登陆</button>
+            </div>
         </div>
       </form>
     </div>
@@ -55,14 +55,14 @@
 
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/login-e0c34b19e1.css">
-<link rel="stylesheet" href="./css/components-e1f6377b02.css">
+<link rel="stylesheet" href="./css/components-a03c1b309b.css">
 <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/plugs/slideunlock-dcf9b5ccef.css">
 <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
 <script type="text/javascript" src="./js/plugs/slideunlock-386e151aa1.min.js"></script>
 <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
-<script type="text/javascript" src="./js/api/apimethod-b477b1418e.js"></script>
-<script type="text/javascript" src="./js/api/config-6cb289daff.js"></script>
+<script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
+<script type="text/javascript" src="./js/util/API-19beb47fdd.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
@@ -103,34 +103,29 @@
     switch (window.role) {
       case 'admin':
       case 'Admin':
-        if (apiConfig.systemuser.Login(username, password)) { //BUG
+        var user = apiConfig.systemuser.Login(username, password)
+        if (user) { //BUG
           window.location.href = "./admin-home.html"
           setCookie("auth", "Admin")
-          setCookie("name", username)
+          setCookie("name", user["_accountname"])
         }
         break
       case 'dealer':
       case 'Dealer':
-        if (apiConfig.dealer.Login(username, password)) {
+        var user = apiConfig.dealer.Login(username, password)
+        if (user) {
           window.location.href = "./dealer-home.html"
           setCookie("auth", "Dealer")
-          setCookie("name", username)
+          setCookie("name", user["_accountname"])
         }
         break
       case 'supplier':
       case 'Supplier':
-        if (apiConfig.supplier.Login(username, password)) {
+        var user = apiConfig.supplier.Login(username, password)
+        if (user) {
           window.location.href = "./supplier-home.html"
           setCookie("auth", "Supplier")
-          setCookie("name", username)
-        }
-        break
-      case 'sales':
-      case 'Sales':
-        if (apiConfig.dealer.Login(username, password)) {
-          window.location.href = "./dealer-home.html"
-          setCookie("auth", "Sales")
-          setCookie("name", username)
+          setCookie("name", user["_accountname"])
         }
         break
       case 'zeiss':
@@ -138,7 +133,7 @@
         if (username.toLowerCase() == "zeiss") {
           window.location.href = "./zeiss-home.html"
           setCookie("auth", "Zeiss")
-          setCookie("name", username)
+          setCookie("name", user["_accountname"])
         }
         break
     }

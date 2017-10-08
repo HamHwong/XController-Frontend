@@ -13,7 +13,6 @@
   list-style: none;
   color: #000;
   line-height: 4rem;
-  width: 25%;
   list-style-type: none;
   list-style-position: outside;
   /*z-index: 1029;*/
@@ -37,6 +36,7 @@
   border-radius: 2rem;
   margin: 0 auto;
   background-color: #d4d4d4;
+  color: #fff;
   position: relative;
   z-index: 2;
 }

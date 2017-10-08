@@ -36,7 +36,7 @@
 <script>
   function addBrochure() {
     var data = formToSet("#Add")
-    data["_createtime"] = new date()
+    data["_createtime"] = new Date()
     var brochureId = apiConfig.brochure.Add(data)
     if (brochureId) {
       $("#Add").modal("hide")
