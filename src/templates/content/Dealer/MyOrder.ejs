@@ -77,7 +77,12 @@
               //填充dealer
               PurchaseRequisition.autoComplate(PRid)
             }
+
             var PRIEdit = function(PRIid) {
+              window._operation = Enum.operation.Update
+              window._target = apiConfig.purchaseitem.Get(PRIid)
+              PurchaseItem.show()
+              PurchaseItem.autoComplate(PRIid)
               console.log(PRIid)
             }
             var PRIDelete = function(PRIid) {
@@ -94,6 +99,7 @@
               }
               console.log(PRIid)
             }
+
 
             var create = function() {
               window._operation = Enum.operation.Create

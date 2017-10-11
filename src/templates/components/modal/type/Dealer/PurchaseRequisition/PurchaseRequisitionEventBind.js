@@ -11,7 +11,8 @@ $("#PurchaseRequisition")
     PurchaseRequisition.destory()
   })
 $("#PurchaseRequisition").on("shown.bs.modal", function() {
-  var draftbtn = `<button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1" onclick="Draft()">Draft</button>`
+  var operationArea = $("#operation")
+  var draftbtn = `<button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1">Draft</button>`
   var submitbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="submitPR()">提交</button>`
   var editbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="editPR()">修改</button>`
   var cancelbtn = `<button type="button" class="btn btn-danger col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">取消</button>`
@@ -19,16 +20,16 @@ $("#PurchaseRequisition").on("shown.bs.modal", function() {
 
   switch (window._operation) {
     case Enum.operation.Update:
-      $("#operation").append($(editbtn)).append($(cancelbtn))
+      operationArea.append($(editbtn)).append($(cancelbtn))
       break
     case Enum.operation.Create:
-      $("#operation").append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+      operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
       break
     case Enum.operation.Copy:
-      $("#operation").append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+      operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
       break
     default:
-      $("#operation").append($(closebtnlbtn))
+      operationArea.append($(closebtnlbtn))
       break
   }
 })

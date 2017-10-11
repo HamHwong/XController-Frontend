@@ -108,6 +108,7 @@
           window.location.href = "./admin-home.html"
           setCookie("auth", "Admin")
           setCookie("name", user["_accountname"])
+          setCookie("user", JSON.stringify(user))
         }
         break
       case 'dealer':
@@ -117,6 +118,7 @@
           window.location.href = "./dealer-home.html"
           setCookie("auth", "Dealer")
           setCookie("name", user["_accountname"])
+          setCookie("user", JSON.stringify(user))
         }
         break
       case 'supplier':
@@ -126,6 +128,7 @@
           window.location.href = "./supplier-home.html"
           setCookie("auth", "Supplier")
           setCookie("name", user["_accountname"])
+          setCookie("user", JSON.stringify(user))
         }
         break
       case 'zeiss':
@@ -134,6 +137,7 @@
           window.location.href = "./zeiss-home.html"
           setCookie("auth", "Zeiss")
           setCookie("name", user["_accountname"])
+          // setCookie("user", JSON.stringify(user))
         }
         break
     }

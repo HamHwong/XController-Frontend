@@ -15,28 +15,32 @@
         </div>
         <div class="modal-infopart baseInfomation">
           <ul>
-            <li>代理商：dealer</li>
-            <li>区   域：华南地区</li>
-            <li>手机号：13883762902</li>
-            <li>邮   箱：admin@elitsrouce.net</li>
-            <li>用   途：一般销售用途</li>
+            <li>代理商：<span id="PRD_demanderfk"></span></li>
+            <li>区 域：<span id="PRD_dealerregion"></span></li>
+            <li>手机号：<span id="PRD_phonenumber"></span></li>
+            <li>邮 箱：<span id="PRD_email"></span></li>
+            <li>用 途：<span id="PRD_purposefk"></span></li>
           </ul>
           <div class="comment">
             <span>备注：</span>
-            <textarea name="comment" rows="4" disabled>备注</textarea>
+            <textarea name="comment" id="PRD_comments" rows="4" disabled>备注</textarea>
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
+          <div id="InfomationArea">
+          </div>
+        </div>
+        <div class="modal-infopart Approval">
+          <textarea name="approvalComment" rows="4" cols="80" placeholder="审核意见"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <div class="modal-infopart Approval">
-          <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
-        </div>
+        <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
       </div>
     </div>
   </div>
 </div>
+
 <%include('/components/modal/modal',{type:"Common.Approve"})%>
   <%include('/components/modal/modal',{type:"Common.Reject"})%>
     <script>

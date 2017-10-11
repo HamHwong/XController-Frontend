@@ -164,15 +164,15 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="col-sm-3 control-label">交付时间 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
-            </div>
-          </div>
-          <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
               <input type="text" class="form-control" name="_quantity" id="_quantity" placeholder="申请数量" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">交付时间 ：</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
             </div>
           </div>
           <div class="form-group">
@@ -197,10 +197,7 @@
         </form>
       </div>
 
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>
-        <button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>
-        <button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>
+      <div class="modal-footer" id= "PRIOperation">
       </div>
     </div>
   </div>
@@ -222,58 +219,12 @@
 </script>
 
   <script>
-    // //存为草稿（本地）
-    // function Draft() {
-    //   $("#itemId")
-    //     .val(window.__PurchaseRequisition_tempID)
-    //   $("#saveTime")
-    //     .val(new Date())
-    //   $("#saver")
-    //     .val(getCookie("name"))
-    //   if (!window.__draftTable) {
-    //     var draftTable = new table()
-    //     var t = tableStructures.Dealer.MyOrder.Draft
-    //     var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-    //     // draftTable.new(t, ["编号", "序号", "用途", "区域", "保存时间"])
-    //     //   .to($("#draft"))
-    //     window.__draftTable = draftTable
-    //     window.__draft_set = {}
-    //   }
-    //
-    //   $("#_dealerregion")
-    //     .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
-    //   var formArr = $("#PurchaseRequisition_form")
-    //     .serializeArray()
-    //   $("#_dealerregion")
-    //     .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
-    //   var set = {}
-    //   for (var record of formArr) {
-    //     var key = record["name"]
-    //     var value = record["value"]
-    //     set[key] = value
-    //   }
-    //   //此即为function formToArr
-    //   var arr = []
-    //   // arr.push(++row_counter) //编号
-    //   var order = ["_id", "_prnumber", "_purposefk", "_prcreated"]
-    //   for (var i of order) {
-    //     arr.push(set[i])
-    //   }
-    //   window.__draftTable.addRow(arr)
-    //   var itemsArray = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] ? window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] : null
-    //   window.__draft_set[window.__PurchaseRequisition_tempID] = {
-    //     "PR": set,
-    //     "PRItemsArray": itemsArray
-    //   }
-    //   ClearAllFields("#PurchaseRequisition")
-    //   $("#PurchaseRequisition")
-    //     .modal('hide')
-    // }
     function Draft() {
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_processstatus"] = Enum.prstatus.Draft
       data["_prnumber"] = generateUUID()
+      data["_prstatus"] = Enum.prstatus.Draft
       var PRid = apiConfig.purchaserequisition.Draft(data)
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
@@ -290,6 +241,7 @@
     function submitPR() {
       $("#saver")
         .val(getCookie("name"))
+
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       // if (items.length <= 0) {
@@ -298,11 +250,13 @@
       var data = formToSet("#PurchaseRequisition_form")
       //data["_prnumber"] = window.__PurchaseRequisition_tempID //后台生成应该
       data["_prcreated"] = new Date()
+      data["_prstatus"] = Enum.prstatus.Progress
       var PRid = apiConfig.purchaserequisition.Add(data)
       for (var i = 0; i < items.length; i++) {
         items[i]["_purchaserequisitionfk"] = PRid
         var itemID = apiConfig.purchaseitem.Add(items[i])
       }
+      apiConfig.prprocess.GenerateAll(PRid)//获取所有steps
       if (PRid) {
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
         window.__PurchaseRequisition_tempID = null
@@ -448,11 +402,9 @@
               })
 
               //订单详情操作
-              var Detail = function(primaryKey) {
-                console.log("primaryKey", primaryKey);
-                var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
-                t.load().to("#Detail .goodsInfomation")
-                $("#Detail").modal()
+              var Detail = function(PRid) {
+                window._operation = Enum.operation.Read
+                PurchaseRequisition.detail(PRid)
               }
 
               //复制操作
@@ -495,7 +447,7 @@
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
   <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
   <link rel="stylesheet" href="./css/content-2f97396e13.css">
-  <link rel="stylesheet" href="./css/components-a03c1b309b.css">
+  <link rel="stylesheet" href="./css/components-2f48c61963.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
   <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
@@ -504,8 +456,8 @@
   <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-9ae21e5aa6.js"></script>
   <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
   <script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
-  <script type="text/javascript" src="./js/components-1b81598cc3.js"></script>
-  <script type="text/javascript" src="./js/init-4ba7cc84b3.js"></script>
+  <script type="text/javascript" src="./js/components-4aecf6bab5.js"></script>
+  <script type="text/javascript" src="./js/init-5b0b7a5ed1.js"></script>
   <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
   <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
 

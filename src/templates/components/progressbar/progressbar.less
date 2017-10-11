@@ -66,7 +66,7 @@
 }
 
 #progressbar li.complated::before {
-  content:"\e013";
+  content: "\e013";
   background-color: #506687;
 }
 
@@ -90,13 +90,31 @@
   background-color: #de4747;
 }
 
-#progressbar li.notstart::before {
-}
-
 #progressbar li.active::before {
   color: #FFF;
 }
 
-#progressbar li.active::after {
-  // background-color: #36908d;
+//2017年10月11日
+
+#progressbar li.approved::before {
+  background-color: #506687;
+  content: "\e013";
+}
+
+#progressbar li.noAction::before {
+  background-color: #888888;
+  // content: '' !important;
+}
+
+#progressbar li.processing::before {
+  content: "\e105";
+  background-color: #36908d;
+}
+
+#progressbar li.rejected::before {
+  background-color: #de4747;
+}
+
+#progressbar li.infomation::before {
+  content: "\e101" !important;
 }

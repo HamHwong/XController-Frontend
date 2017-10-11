@@ -175,12 +175,12 @@ const tableStructures = {
       orderDetail: {
         "name": "orderDetail",
         "hasHeader": true,
-        "hasButton": true,
-        "viewOrder": ["_id", "_brochurefk", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop", "prop", "prop"],
-        "buttonPool": ["expressViewBtn"],
+        "hasButton": false,
+        "viewOrder": ["_id", "_brochurefk", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk","_logistics"],
+        "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "prop", "prop", "key"],
+        // "buttonPool": ["expressViewBtn"],
         "data": [
-          ["序列", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址", "紧急程度"],
+          ["序列", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址", "紧急程度","物流信息"],
         ]
       }
     }

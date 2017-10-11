@@ -51,11 +51,9 @@
               })
 
               //订单详情操作
-              var Detail = function(primaryKey) {
-                console.log("primaryKey", primaryKey);
-                var t = new table("./test/dealer/MyOrder/OrderDetail/OrderDetail.json")
-                t.load().to("#Detail .goodsInfomation")
-                $("#Detail").modal()
+              var Detail = function(PRid) {
+                window._operation = Enum.operation.Read
+                PurchaseRequisition.detail(PRid)
               }
 
               //复制操作

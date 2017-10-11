@@ -39,6 +39,21 @@ const Enum = {
     /// 完成
     End: "End"
   },
+  enumApprovalResult: {
+    /// <summary>
+    /// 未操作
+    /// </summary>
+    NoAction:"NoAction",
+    /// <summary>
+    /// 审批通过
+    /// </summary>
+    Success:"Success",
+    /// <summary>
+    /// 审批拒绝
+    /// </summary>
+    Rejected:"Rejected"
+
+  },
   operation: {
     Create: "Create",
     Update: "Update",

@@ -49,7 +49,6 @@ var name_init = function() {
 }
 
 var optionlist_init = function() {
-  //bug 给每个都加了
   var optionlist = $("select.optionlist")
   for (var i = 0; i < optionlist.length; i++) {
     $(optionlist[i]).empty()

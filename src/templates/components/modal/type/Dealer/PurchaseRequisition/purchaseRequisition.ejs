@@ -47,58 +47,12 @@
 </div>
 <%-include('./PurchaseItem')%>
   <script>
-    // //存为草稿（本地）
-    // function Draft() {
-    //   $("#itemId")
-    //     .val(window.__PurchaseRequisition_tempID)
-    //   $("#saveTime")
-    //     .val(new Date())
-    //   $("#saver")
-    //     .val(getCookie("name"))
-    //   if (!window.__draftTable) {
-    //     var draftTable = new table()
-    //     var t = tableStructures.Dealer.MyOrder.Draft
-    //     var dataOrder = ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"]
-    //     // draftTable.new(t, ["编号", "序号", "用途", "区域", "保存时间"])
-    //     //   .to($("#draft"))
-    //     window.__draftTable = draftTable
-    //     window.__draft_set = {}
-    //   }
-    //
-    //   $("#_dealerregion")
-    //     .removeAttr("disabled") //HACK Select没有readonly属性，且disabled后无法传值
-    //   var formArr = $("#PurchaseRequisition_form")
-    //     .serializeArray()
-    //   $("#_dealerregion")
-    //     .attr("disabled", "true") //HACK Select没有readonly属性，且disabled后无法传值
-    //   var set = {}
-    //   for (var record of formArr) {
-    //     var key = record["name"]
-    //     var value = record["value"]
-    //     set[key] = value
-    //   }
-    //   //此即为function formToArr
-    //   var arr = []
-    //   // arr.push(++row_counter) //编号
-    //   var order = ["_id", "_prnumber", "_purposefk", "_prcreated"]
-    //   for (var i of order) {
-    //     arr.push(set[i])
-    //   }
-    //   window.__draftTable.addRow(arr)
-    //   var itemsArray = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] ? window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] : null
-    //   window.__draft_set[window.__PurchaseRequisition_tempID] = {
-    //     "PR": set,
-    //     "PRItemsArray": itemsArray
-    //   }
-    //   ClearAllFields("#PurchaseRequisition")
-    //   $("#PurchaseRequisition")
-    //     .modal('hide')
-    // }
     function Draft() {
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_processstatus"] = Enum.prstatus.Draft
       data["_prnumber"] = generateUUID()
+      data["_prstatus"] = Enum.prstatus.Draft
       var PRid = apiConfig.purchaserequisition.Draft(data)
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
@@ -115,6 +69,7 @@
     function submitPR() {
       $("#saver")
         .val(getCookie("name"))
+
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       // if (items.length <= 0) {
@@ -123,11 +78,13 @@
       var data = formToSet("#PurchaseRequisition_form")
       //data["_prnumber"] = window.__PurchaseRequisition_tempID //后台生成应该
       data["_prcreated"] = new Date()
+      data["_prstatus"] = Enum.prstatus.Progress
       var PRid = apiConfig.purchaserequisition.Add(data)
       for (var i = 0; i < items.length; i++) {
         items[i]["_purchaserequisitionfk"] = PRid
         var itemID = apiConfig.purchaseitem.Add(items[i])
       }
+      apiConfig.prprocess.GenerateAll(PRid)//获取所有steps
       if (PRid) {
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
         window.__PurchaseRequisition_tempID = null

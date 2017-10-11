@@ -7,14 +7,21 @@ var PurchaseItem = {
     $("#PruchaseItem")
       .modal('hide')
   },
+  autoComplate:function(PRIid){
+    var targetPRArea = "#PruchaseItem_form"
+    var PRinfoSet = apiConfig.purchaseitem.Get(PRIid) //查出改PR详情
+    autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+  },
   add: function() {
     //是否fields全为空
     if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
       return
     //
     var arr = []
-    arr.push(++row_counter)
+    var localid = ++row_counter
+    arr.push(localid)
     var set = formToSet("#PruchaseItem_form")
+    set["_id"] = localid
     var order = ["_brochurefk", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
     for (var i of order) {
       arr.push(set[i])

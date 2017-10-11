@@ -173,6 +173,10 @@ const apiConfig = {
       var api = root + `/api/prprocess/${id}`
       return DELETE(api)
     },
+    GenerateAll: function(prid) {
+      var api = root + `/api/prprocess/generateall?prID=${prid}`
+      return POST(api)
+    },
     Count: function() {
       var api = root + `/api/prprocess/count`
       return GET(api)
@@ -185,11 +189,11 @@ const apiConfig = {
       var api = root + `/api/prprocess/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     },
-    Approving: function(id,processEnum) {
-        var pr = this.Get(id)
-        //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
-        pr["_prprocessstep"] = processEnum
-        this.Edit(id,pr)
+    Approving: function(id, processEnum) {
+      var pr = this.Get(id)
+      //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
+      pr["_prprocessstep"] = processEnum
+      this.Edit(id, pr)
     }
   },
   prprocesssetting: {
