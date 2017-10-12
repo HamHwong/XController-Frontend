@@ -1,4 +1,9 @@
-var PurchaseRequisition = {
+const PurchaseRequisition = {
+  new:function(obj){
+    var PR = new Object()
+//TODO PR的model
+    return PR
+  },
   show: function() {
     this.init()
     $("#PurchaseRequisition")

@@ -1,0 +1,39 @@
+html {
+  font-size: 10px;
+  background: #333;
+}
+
+.MassageAlert_Warp {
+  background: #fff;
+  position: fixed;
+  margin: 1 auto;
+  border-radius: .15rem;
+  z-index: 1101;
+  left: 50%;
+  top: 30%;
+  /*-webkit-transform: translate(-50%, -50%);*/
+  transform: translate(-50%, -50%);
+  min-width: 15rem;
+  /*max-width: 30rem;*/
+}
+
+.MassageAlert_Title {
+  font-size: 1.4rem;
+}
+
+.MassageAlert {
+  padding: 1rem;
+}
+
+.MassageAlert_Body {
+  word-break: break-all;
+}
+.MassageAlert_dropback{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.3);
+  z-index: 1100;
+}
