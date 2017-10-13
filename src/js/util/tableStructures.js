@@ -130,8 +130,8 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "buttonPool": ["PRIEditBtn", "PRIdeleteBtn"],
-        "viewOrder": ["_id", "_brochurefk", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"],
+        "buttonPool": ["PIEditBtn", "PIdeleteBtn"],
+        "viewOrder": ["_id", "_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"],
         "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"]
@@ -176,7 +176,7 @@ const tableStructures = {
         "name": "orderDetail",
         "hasHeader": true,
         "hasButton": false,
-        "viewOrder": ["_id", "_brochurefk", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk","_logistics"],
+        "viewOrder": ["_id", "_brochurename", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk","_logistics"],
         "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "prop", "prop", "key"],
         // "buttonPool": ["expressViewBtn"],
         "data": [
@@ -214,7 +214,7 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "viewOrder":["_id","_brochurefk", "_quantity", "_purchaserequisitionfk","_consignee", "_deliverydate"],
+        "viewOrder":["_id","_brochurename", "_quantity", "_purchaserequisitionfk","_consignee", "_deliverydate"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "buttonPool": ["updateBtn"],
         "data": [

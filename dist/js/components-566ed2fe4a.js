@@ -11,6 +11,133 @@ var tab_init = function() {
   })
 }
 
+var MessageAlert = function () {
+  this.status = "success"
+  this.statusCode = 0
+  this.html = null
+  this.dropback = null
+  this.showoutTime = 600
+  this.showtime = 1000
+  this.hideTime = 300
+  this.mod =
+    `
+  <div class="MassageAlert_Warp">
+    <div class="MassageAlert">
+      <label class="MassageAlert_Title">
+        <i class="Icon"></i>
+        <span class="Status">MSG STATUS</span>
+      </label>
+      <div class="MassageAlert_Body">
+        <span>STATUS INFOMATION!</span>
+      </div>
+      <div class="MassageAlert_Footer"></div>
+    </div>
+  </div>
+  `
+}
+
+MessageAlert.prototype.new = function () {
+  if (!this.html) {
+    this.html = $(this.mod)
+    this.html.css("display", "none")
+    $("body").append(this.html)
+  }
+  if (!this.dropback) {
+    this.dropback = $('<div class="MassageAlert_dropback"></div>')
+    $("body").append(this.dropback)
+  }
+  return this
+}
+
+MessageAlert.prototype.destory = function () {
+  if (this.html) {
+    this.html.remove()
+  }
+  if (this.dropback) {
+    this.dropback.remove()
+  }
+}
+
+MessageAlert.prototype.show = function (msg, status) {
+  this.new(msg, status).html
+    .show(this.showoutTime)
+  this.dropback.fadeIn(this.showoutTime)
+
+  var self = this
+  setTimeout(function () {
+    self.hide()
+  }, this.showoutTime + this.showtime)
+};
+
+MessageAlert.prototype.hide = function () {
+  this.html
+    .hide(this.hideTime)
+  this.dropback
+    .fadeOut(this.hideTime)
+};
+
+MessageAlert.Status = {
+  SUCCESS: "SUCCESS",
+  EXCEPTION: "EXCEPTION",
+  ERROR: "ERROR",
+}
+
+MessageAlert.prototype.inStatus = function (status) {
+  var isContain = true
+  if ('string' != typeof status) {
+    throw 'invalid status'
+  }
+  for (var i in this.Status) {
+    isContain = isContain && (status.toUpperCase == this.Status[i])
+  }
+  return isContain
+}
+
+var messageAlert = new MessageAlert()
+
+var bindInputQuery = function ($input, url) {
+  $input = $($input)
+  $input
+    .on('keyup', function (e) {
+      e.preventDefault()
+      var keywordsdata = JSON.parse($.ajax({
+          url: url,
+          async: false
+        })
+        .responseText)
+      var droplist = $input
+        .siblings(".keyhint")
+      droplist.empty()
+      var data = queryKeyWords(this.value, keywordsdata)
+      for (var i in data) {
+        var li = $("<li></li>")
+        var a = $("<a href=\"#\" class='keywords'></a>")
+        a.html(data[i])
+        li.append(a)
+        droplist.append(li)
+      }
+      if (data.length > 0 && this.value != "") {
+        $input
+          .parent(".search_box_warp")
+          .addClass("open")
+        $(".keywords")
+          .on('click', function (e) {
+            $input
+              .val(this.innerText)
+            droplist.empty()
+            $input
+              .parent(".search_box_warp")
+              .removeClass("open")
+          })
+      } else {
+        $input
+          .parent(".search_box_warp")
+          .removeClass("open")
+      }
+    })
+
+}
+
 //===========================================================================================================================
 //搜索条
 //TODO-要有个sleep,函数执行太快
@@ -63,49 +190,6 @@ var queryKeyWords = function (keys, dic) {
     }
   }
   return r
-}
-
-var bindInputQuery = function ($input, url) {
-  $input = $($input)
-  $input
-    .on('keyup', function (e) {
-      e.preventDefault()
-      var keywordsdata = JSON.parse($.ajax({
-          url: url,
-          async: false
-        })
-        .responseText)
-      var droplist = $input
-        .siblings(".keyhint")
-      droplist.empty()
-      var data = queryKeyWords(this.value, keywordsdata)
-      for (var i in data) {
-        var li = $("<li></li>")
-        var a = $("<a href=\"#\" class='keywords'></a>")
-        a.html(data[i])
-        li.append(a)
-        droplist.append(li)
-      }
-      if (data.length > 0 && this.value != "") {
-        $input
-          .parent(".search_box_warp")
-          .addClass("open")
-        $(".keywords")
-          .on('click', function (e) {
-            $input
-              .val(this.innerText)
-            droplist.empty()
-            $input
-              .parent(".search_box_warp")
-              .removeClass("open")
-          })
-      } else {
-        $input
-          .parent(".search_box_warp")
-          .removeClass("open")
-      }
-    })
-
 }
 
 //多模态HACK
@@ -436,10 +520,10 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     var td = $("<td class='operation'></td>")
     var buttonPool = []
     var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
-    var PRIEditBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"PRIEdit('" + this.PrimaryKeyValue + "')\">Edit</button>")
+    var PIEditBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"PurchaseItem.view.edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
     var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">Submit</button>")
     var deleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"delete('" + this.PrimaryKeyValue + "')\">Delete</button>")
-    var PRIdeleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"PRIDelete('" + this.PrimaryKeyValue + "')\">Delete</button>")
+    var PIdeleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"PurchaseItem.view.delete('" + this.PrimaryKeyValue + "')\">Delete</button>")
     var updateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary update\" onclick=\"update('" + this.PrimaryKeyValue + "')\">Update</button>")
     var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success supply\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">Supply</button>")
     var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info approve\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">Approve</button>")
@@ -614,16 +698,16 @@ var PRDetail = {
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#Detail",
-      targetPRITableArea = "#InfomationArea",
+      targetPITableArea = "#InfomationArea",
       templateOpts = tableStructures.Dealer.MyOrder.orderDetail
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
-      //填充PRI
-      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
       // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea)
+      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
     }
 
     var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse()
@@ -646,8 +730,6 @@ var PRDetail = {
 
       if (step == Enum.processStatus.NotifiedParty) {
         $mod.addClass('infomation')
-      } else if (step == Enum.processStatus.SupplierUpdate) {
-        $mod.addClass('supplierupdate')
       }
 
       $("#progressbar").append($mod)
@@ -676,64 +758,116 @@ var PurchaseItem = {
     $("#PruchaseItem")
       .modal('hide')
   },
-  autoComplate:function(PRIid){
+  autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
-    var PRinfoSet = apiConfig.purchaseitem.Get(PRIid) //查出改PR详情
-    autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+    var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
+    autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  add: function() {
-    //是否fields全为空
-    if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
-      return
-    //
-    var arr = []
-    var localid = ++row_counter
-    arr.push(localid)
-    var set = formToSet("#PruchaseItem_form")
-    set["_id"] = localid
-    var order = ["_brochurefk", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-    for (var i of order) {
-      arr.push(set[i])
-    }
-    if (window.__PurchaseRequisitionItem_table) {
-      window.__PurchaseRequisitionItem_table.addRow(arr)
-      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
-    }
-    ClearInputs("#PruchaseItem_form", ["#_brochurefk", "#_quantity"])
-  },
-  update() {
-    var PRIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
-    var unsavePRI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-    var remotePRI = arrayToSet(PRIArr, "_id")
-    if (unsavePRI && unsavePRI.length > 0) {
-      var PRid = window._target["_id"]
-      for (var i = 0; i < unsavePRI.length; i++) {
+  update: function() {
+    var PIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
+    var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+    var remotePI = arrayToSet(PIArr, "_id")
+    debugger
+    if (remotePI != unsavePI.length) {
+      var PId = window._target["_id"]
+      for (var i = 0; i < unsavePI.length; i++) {
         //若有新的，则添加，若为老的，则修改
-        var nativePRIid = unsavePRI[i]["_id"]
-        if (remotePRI[nativePRIid]) {
-          var itemID = apiConfig.purchaseitem.Edit(nativePRIid, unsavePRI[i])
+        var nativePIid = unsavePI[i]["_id"]
+        if (remotePI[nativePIid]) {
+          var itemID = apiConfig.purchaseitem.Edit(nativePIid, unsavePI[i])
         } else {
-          unsavePRI[i]["_purchaserequisitionfk"] = PRid
-          var itemID = apiConfig.purchaseitem.Add(unsavePRI[i])
+          unsavePI[i]["_purchaserequisitionfk"] = PId
+          var itemID = apiConfig.purchaseitem.Add(unsavePI[i])
+          unsavePI[i]["_id"] = itemID
         }
       }
-      //如果删除PRI
-      //更新一下
-      PRIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
-      nativePRI = arrayToSet(unsavePRI, "_id")
-      for (var j = 0; j < PRIArr.length; j++) {
-        var remotePRIid = PRIArr[j]["_id"]
-        debugger
-        if (!nativePRI[remotePRIid]) {
-          apiConfig.purchaseitem.Delete(remotePRIid)
+      //如果删除PI
+      //更新后重新获取一下
+      PIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
+      nativePI = arrayToSet(unsavePI, "_id")
+      for (var j = 0; j < PIArr.length; j++) {
+        var remotePIid = PIArr[j]["_id"]
+        if (!nativePI[remotePIid]) {
+          apiConfig.purchaseitem.Delete(remotePIid)
         }
       }
+    }
+  },
+  view: {
+    add: function() {
+      window._operation = Enum.operation.Create
+      PurchaseItem.show()
+    },
+    edit: function(PIid) {
+      window._operation = Enum.operation.Update
+      debugger
+      if (PIid.includes("[unsave]")) {
+        var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
+        window._target = PItems[PIid]
+      } else {
+        window._target = apiConfig.purchaseitem.Get(PIid)
+      }
+      PurchaseItem.show()
+      PurchaseItem.autoComplate(window._target)
+    },
+    delete: function(PIid) {
+      window.__PurchaseRequisitionItem_table.data[PIid].remove()
+      var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      for (var i = 0; i < PItems.length; i++) {
+        if (PIid == PItems[i]["_id"]) {
+          var tempArr = PItems.splice(0, i - 1)
+          PItems.reverse()
+          PItems.pop()
+          PItems.reverse()
+          tempArr.concat(PItems)
+        }
+      }
+      console.log(PIid)
+    }
+  },
+  event: {
+    add: function() {
+      this.append()
+      PurchaseItem.hide()
+    },
+    append: function() {
+      //是否fields全为空
+      if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
+        return
+      //
+      var arr = []
+      var localid = ++row_counter + '[unsave]'
+      arr.push(localid)
+      var set = formToSet("#PruchaseItem_form")
+      set["_id"] = localid
+      var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
+      for (var i of order) {
+        arr.push(set[i])
+      }
+      if (window.__PurchaseRequisitionItem_table) {
+        window.__PurchaseRequisitionItem_table.addRow(arr)
+        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
+      }
+      ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
+
+    },
+    edit: function() {
+      var target = window._target
+      var targetid = window._target["_id"]
+      var set = formToSet("#PruchaseItem_form")
+      for (var k in set) {
+        target[k] = set[k]
+      }
+      target["_id"] = targetid
+      apiConfig.purchaseitem.Edit(targetid, target)
+      ClearInputs("#PruchaseItem_form")
+      PurchaseItem.hide()
     }
   }
 }
 
 //绑定输入查询数据
-bindInputQuery("#_brochurefk", "./test/searchDictionary/BrochureName.json")
+bindInputQuery("#_brochurename", "./test/searchDictionary/BrochureName.json")
 //绑定交付时间组件
 $('#_deliverydate')
   .datetimepicker({
@@ -749,14 +883,14 @@ $('#_deliverydate')
 $("#PruchaseItem")
   .on("hidden.bs.modal", function() {
     ClearInputs("#PruchaseItem")
-    $("#PRIOperation").empty()
+    $("#PIOperation").empty()
   })
 $("#PruchaseItem").on("shown.bs.modal", function() {
-  var operationArea = $("#PRIOperation")
-  var addbtn = `<button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>`
-  var appendbtn = `<button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>`
-  var editbtn = `<button type="submit" class="btn btn-primary" onclick="EditPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>`
-  var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>`
+  var operationArea = $("#PIOperation")
+  var addbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.add()"><span class="glyphicon glyphicon-ok"></span></button>`
+  var appendbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.append()"><span class="glyphicon glyphicon-plus"></span></button>`
+  var editbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.edit()"><span class="glyphicon glyphicon-ok"></span></button>`
+  var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
   switch (window._operation) {
     case Enum.operation.Update:
@@ -772,7 +906,12 @@ $("#PruchaseItem").on("shown.bs.modal", function() {
 })
 var row_counter = 0
 
-var PurchaseRequisition = {
+const PurchaseRequisition = {
+  new: function(obj) {
+    var PR = new Object()
+    //TODO PR的model
+    return PR
+  },
   show: function() {
     this.init()
     $("#PurchaseRequisition")
@@ -784,36 +923,35 @@ var PurchaseRequisition = {
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#PurchaseRequisition_form"
-    targetPRITableArea = "#InfomationAddArea"
+    targetPITableArea = "#InfomationAddArea"
     templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
       autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-      //填充PRI
-      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-
-      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PRIinfoSet
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PIinfoSet
       // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      var PRItable = new table().loadFromTemplateJson(PRIinfoSet, templateOpts)
-      window.__PurchaseRequisitionItem_table = PRItable
-      PRItable.to(targetPRITableArea)
+      var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
+      window.__PurchaseRequisitionItem_table = PItable
+      PItable.to(targetPITableArea)
     }
 
     // //若为dealer，则自动填充名字和区域
     if ("dealer" == (getCookie("auth")
         .toLowerCase())) {
-          var dealer = JSON.parse(getCookie('user'))
-          if(dealer){
-              $("#_demanderfk")
-                .val(dealer["_id"])
-              $("#_demanderfk")
-                .attr("readonly", "readonly")
-              $("#_dealerregion")
-                .val(dealer["_dealerregion"])
-              $("#_dealerregion")
-                .attr("disabled", "true")
-          }
+      var dealer = JSON.parse(getCookie('user'))
+      if (dealer) {
+        $("#_demanderfk")
+          .val(dealer["_id"])
+        $("#_demanderfk")
+          .attr("readonly", "readonly")
+        $("#_dealerregion")
+          .val(dealer["_dealerregion"])
+        $("#_dealerregion")
+          .attr("disabled", "true")
+      }
       // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
     }
   },
@@ -840,6 +978,30 @@ var PurchaseRequisition = {
     window._operation = null
     $("#operation").empty()
   },
+  view: {
+    create:function(){
+      window._operation = Enum.operation.Create
+      PurchaseRequisition.show()
+      PurchaseRequisition.autoComplate()
+    },
+    copy: function(PRid) {
+      window._operation = Enum.operation.Copy
+      window._target = apiConfig.purchaserequisition.Get(PRid)
+      PurchaseRequisition.show()
+      //填充dealer
+      PurchaseRequisition.autoComplate(PRid)
+    },
+    edit: function(PRid) {
+      window._operation = Enum.operation.Update
+      window._target = apiConfig.purchaserequisition.Get(PRid)
+      PurchaseRequisition.show()
+      //填充dealer
+      PurchaseRequisition.autoComplate(PRid)
+    },
+    delete:function(PRid){
+      $("#Delete").modal()
+    }
+  },
   event: {
     draft: function() {
       var data = formToSet("#PurchaseRequisition_form")
@@ -856,10 +1018,12 @@ var PurchaseRequisition = {
       ClearAllFields("#PurchaseRequisition")
       PurchaseRequisition.hide()
       table_init()
+      PurchaseRequisition.hide()
     },
     submit: function() {
       $("#saver")
         .val(getCookie("name"))
+
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       // if (items.length <= 0) {
@@ -868,17 +1032,20 @@ var PurchaseRequisition = {
       var data = formToSet("#PurchaseRequisition_form")
       //data["_prnumber"] = window.__PurchaseRequisition_tempID //后台生成应该
       data["_prcreated"] = new Date()
+      data["_prstatus"] = Enum.prstatus.Progress
       var PRid = apiConfig.purchaserequisition.Add(data)
       for (var i = 0; i < items.length; i++) {
         items[i]["_purchaserequisitionfk"] = PRid
         var itemID = apiConfig.purchaseitem.Add(items[i])
       }
+      apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
       if (PRid) {
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
         window.__PurchaseRequisition_tempID = null
         PurchaseRequisition.hide()
       }
       table_init() //更新
+      PurchaseRequisition.hide()
     },
     edit: function() {
       $("#saver")
@@ -895,6 +1062,7 @@ var PurchaseRequisition = {
       window.__PurchaseRequisition_tempID = null
       PurchaseRequisition.hide()
       table_init() //更新
+      PurchaseRequisition.hide()
     }
   }
 }
@@ -935,7 +1103,7 @@ $("#PurchaseRequisition").on("shown.bs.modal", function() {
   }
 })
 
-$("#addPRItem").on("click", function() {
+$("#addPItem").on("click", function() {
   //如果没有请购单，则new一个
   if (!window.__PurchaseRequisitionItem_table) {
     // var PurchaseRequisitionItemTable = new table()
@@ -1565,7 +1733,12 @@ function formToSet(form) {
   }
   return set
 }
-
+/**
+ * 按照key字段将array转变成{key:array}的对象
+ * @param  Array array [description]
+ * @param  string key   [description]
+ * @return set       [description]
+ */
 function arrayToSet(array, key) {
   var set = {}
   for (i of array) {
@@ -1803,8 +1976,8 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "buttonPool": ["PRIEditBtn", "PRIdeleteBtn"],
-        "viewOrder": ["_id", "_brochurefk", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"],
+        "buttonPool": ["PIEditBtn", "PIdeleteBtn"],
+        "viewOrder": ["_id", "_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"],
         "keyArr": ["id", "key", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"]
@@ -1849,7 +2022,7 @@ const tableStructures = {
         "name": "orderDetail",
         "hasHeader": true,
         "hasButton": false,
-        "viewOrder": ["_id", "_brochurefk", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk","_logistics"],
+        "viewOrder": ["_id", "_brochurename", "_quantity", "_consignee", "_contactnumber", "_deliverydate", "_deliveryaddress", "_deliverypriorityfk","_logistics"],
         "keyArr": ["id", "key", "prop", "prop", "prop", "prop", "prop", "prop", "key"],
         // "buttonPool": ["expressViewBtn"],
         "data": [
@@ -1887,7 +2060,7 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "viewOrder":["_id","_brochurefk", "_quantity", "_purchaserequisitionfk","_consignee", "_deliverydate"],
+        "viewOrder":["_id","_brochurename", "_quantity", "_purchaserequisitionfk","_consignee", "_deliverydate"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "buttonPool": ["updateBtn"],
         "data": [

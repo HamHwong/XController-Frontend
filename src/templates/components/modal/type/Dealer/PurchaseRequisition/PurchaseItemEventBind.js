@@ -1,5 +1,5 @@
 //绑定输入查询数据
-bindInputQuery("#_brochurefk", "./test/searchDictionary/BrochureName.json")
+bindInputQuery("#_brochurename", "./test/searchDictionary/BrochureName.json")
 //绑定交付时间组件
 $('#_deliverydate')
   .datetimepicker({
@@ -15,14 +15,14 @@ $('#_deliverydate')
 $("#PruchaseItem")
   .on("hidden.bs.modal", function() {
     ClearInputs("#PruchaseItem")
-    $("#PRIOperation").empty()
+    $("#PIOperation").empty()
   })
 $("#PruchaseItem").on("shown.bs.modal", function() {
-  var operationArea = $("#PRIOperation")
-  var addbtn = `<button type="submit" class="btn btn-primary" onclick="AddPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>`
-  var appendbtn = `<button type="submit" class="btn btn-primary" onclick="AppendPurchaseItem()"><span class="glyphicon glyphicon-plus"></span></button>`
-  var editbtn = `<button type="submit" class="btn btn-primary" onclick="EditPurchaseItem()"><span class="glyphicon glyphicon-ok"></span></button>`
-  var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="Cancel()"><span class="glyphicon glyphicon-remove"></span></button>`
+  var operationArea = $("#PIOperation")
+  var addbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.add()"><span class="glyphicon glyphicon-ok"></span></button>`
+  var appendbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.append()"><span class="glyphicon glyphicon-plus"></span></button>`
+  var editbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.edit()"><span class="glyphicon glyphicon-ok"></span></button>`
+  var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
   switch (window._operation) {
     case Enum.operation.Update:

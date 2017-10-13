@@ -60,55 +60,19 @@
             }
             //复制操作
             var copy = function(PRid) {
-              window._operation = Enum.operation.Copy
-              window._target = apiConfig.purchaserequisition.Get(PRid)
-              PurchaseRequisition.show()
-              //填充dealer
-              PurchaseRequisition.autoComplate(PRid)
+              PurchaseRequisition.view.copy(PRid)
             }
-            /**
-             * 根据PRID修改该PR内容
-             * @param  {string} PRid PRID
-             */
+
             var edit = function(PRid) {
-              window._operation = Enum.operation.Update
-              window._target = apiConfig.purchaserequisition.Get(PRid)
-              PurchaseRequisition.show()
-              //填充dealer
-              PurchaseRequisition.autoComplate(PRid)
+              PurchaseRequisition.view.edit(PRid)
             }
-
-            var PRIEdit = function(PRIid) {
-              window._operation = Enum.operation.Update
-              window._target = apiConfig.purchaseitem.Get(PRIid)
-              PurchaseItem.show()
-              PurchaseItem.autoComplate(PRIid)
-              console.log(PRIid)
-            }
-            var PRIDelete = function(PRIid) {
-              window.__PurchaseRequisitionItem_table.data[PRIid].remove()
-              var PRItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-              for (var i = 0; i < PRItems.length; i++) {
-                if (PRIid == PRItems[i]["_id"]) {
-                  var tempArr = PRItems.splice(0,i-1)
-                  PRItems.reverse()
-                  PRItems.pop()
-                  PRItems.reverse()
-                  tempArr.concat(PRItems)
-                }
-              }
-              console.log(PRIid)
-            }
-
 
             var create = function() {
-              window._operation = Enum.operation.Create
-              PurchaseRequisition.show()
-              PurchaseRequisition.autoComplate()
+              PurchaseRequisition.view.create()
             }
 
             var deleteDraft = function(PRid) {
-              $("#Delete").modal()
+              PurchaseRequisition.view.delete(PRid)
             }
 
             var search = function() {

@@ -35,7 +35,7 @@
 
           </div>
           <div class="modal-infopart goodsInfomation">
-            <button type="button" id="addPRItem" class="btn btn-primary addBtn" data-toggle="modal" data-target="#PruchaseItem"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="addPI()"><span class="glyphicon glyphicon-plus"></span></button>
             <div id="InfomationAddArea">
             </div>
           </div>
@@ -48,66 +48,24 @@
 <%-include('./PurchaseItem')%>
   <script>
     function Draft() {
-      var data = formToSet("#PurchaseRequisition_form")
-      data["_prcreated"] = new Date()
-      data["_processstatus"] = Enum.prstatus.Draft
-      data["_prnumber"] = generateUUID()
-      data["_prstatus"] = Enum.prstatus.Draft
-      var PRid = apiConfig.purchaserequisition.Draft(data)
-      var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      items = items ? items : []
-      for (var i = 0; i < items.length; i++) {
-        items[i]["_purchaserequisitionfk"] = PRid
-        var itemID = apiConfig.purchaseitem.Add(items[i])
-      }
-      ClearAllFields("#PurchaseRequisition")
-      PurchaseRequisition.hide()
-      table_init()
+      PurchaseRequisition.event.draft()
     }
-
     //确认
     function submitPR() {
-      $("#saver")
-        .val(getCookie("name"))
-
-      var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      items = items ? items : []
-      // if (items.length <= 0) {
-      //   throw "请购单item数量不能为0"
-      // }
-      var data = formToSet("#PurchaseRequisition_form")
-      //data["_prnumber"] = window.__PurchaseRequisition_tempID //后台生成应该
-      data["_prcreated"] = new Date()
-      data["_prstatus"] = Enum.prstatus.Progress
-      var PRid = apiConfig.purchaserequisition.Add(data)
-      for (var i = 0; i < items.length; i++) {
-        items[i]["_purchaserequisitionfk"] = PRid
-        var itemID = apiConfig.purchaseitem.Add(items[i])
-      }
-      apiConfig.prprocess.GenerateAll(PRid)//获取所有steps
-      if (PRid) {
-        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
-        window.__PurchaseRequisition_tempID = null
-        PurchaseRequisition.hide()
-      }
-      table_init() //更新
+      PurchaseRequisition.event.submit()
     }
 
-
     function editPR() {
-      $("#saver")
-        .val(getCookie("name"))
+      PurchaseRequisition.event.edit()
+    }
+    var addPI = function() {
+      PurchaseItem.view.add()
+    }
+    var editPI = function(PIid) {
+      PurchaseItem.view.edit(PIid)
+    }
 
-      var data = formToSet("#PurchaseRequisition_form")
-
-      for (var v in data) {
-        window._target[v] = data[v]
-      }
-      apiConfig.purchaserequisition.Edit(window._target["_id"], window._target)
-      PurchaseItem.update()
-      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
-      window.__PurchaseRequisition_tempID = null
-      PurchaseRequisition.hide()
-      table_init() //更新
+    var deletePI = function(PIid) {
+      PurchaseItem.view.delete(PIid)
     }
   </script>

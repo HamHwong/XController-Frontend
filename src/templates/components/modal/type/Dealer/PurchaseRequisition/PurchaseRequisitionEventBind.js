@@ -34,7 +34,7 @@ $("#PurchaseRequisition").on("shown.bs.modal", function() {
   }
 })
 
-$("#addPRItem").on("click", function() {
+$("#addPItem").on("click", function() {
   //如果没有请购单，则new一个
   if (!window.__PurchaseRequisitionItem_table) {
     // var PurchaseRequisitionItemTable = new table()

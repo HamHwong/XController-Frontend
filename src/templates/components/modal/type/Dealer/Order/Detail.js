@@ -7,16 +7,16 @@ var PRDetail = {
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#Detail",
-      targetPRITableArea = "#InfomationArea",
+      targetPITableArea = "#InfomationArea",
       templateOpts = tableStructures.Dealer.MyOrder.orderDetail
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
-      //填充PRI
-      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
       // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea)
+      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
     }
 
     var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse()

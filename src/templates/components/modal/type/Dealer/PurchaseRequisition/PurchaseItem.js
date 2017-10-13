@@ -7,58 +7,110 @@ var PurchaseItem = {
     $("#PruchaseItem")
       .modal('hide')
   },
-  autoComplate:function(PRIid){
+  autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
-    var PRinfoSet = apiConfig.purchaseitem.Get(PRIid) //查出改PR详情
-    autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+    var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
+    autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  add: function() {
-    //是否fields全为空
-    if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
-      return
-    //
-    var arr = []
-    var localid = ++row_counter
-    arr.push(localid)
-    var set = formToSet("#PruchaseItem_form")
-    set["_id"] = localid
-    var order = ["_brochurefk", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-    for (var i of order) {
-      arr.push(set[i])
-    }
-    if (window.__PurchaseRequisitionItem_table) {
-      window.__PurchaseRequisitionItem_table.addRow(arr)
-      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
-    }
-    ClearInputs("#PruchaseItem_form", ["#_brochurefk", "#_quantity"])
-  },
-  update() {
-    var PRIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
-    var unsavePRI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-    var remotePRI = arrayToSet(PRIArr, "_id")
-    if (unsavePRI && unsavePRI.length > 0) {
-      var PRid = window._target["_id"]
-      for (var i = 0; i < unsavePRI.length; i++) {
+  update: function() {
+    var PIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
+    var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+    var remotePI = arrayToSet(PIArr, "_id")
+    debugger
+    if (remotePI != unsavePI.length) {
+      var PId = window._target["_id"]
+      for (var i = 0; i < unsavePI.length; i++) {
         //若有新的，则添加，若为老的，则修改
-        var nativePRIid = unsavePRI[i]["_id"]
-        if (remotePRI[nativePRIid]) {
-          var itemID = apiConfig.purchaseitem.Edit(nativePRIid, unsavePRI[i])
+        var nativePIid = unsavePI[i]["_id"]
+        if (remotePI[nativePIid]) {
+          var itemID = apiConfig.purchaseitem.Edit(nativePIid, unsavePI[i])
         } else {
-          unsavePRI[i]["_purchaserequisitionfk"] = PRid
-          var itemID = apiConfig.purchaseitem.Add(unsavePRI[i])
+          unsavePI[i]["_purchaserequisitionfk"] = PId
+          var itemID = apiConfig.purchaseitem.Add(unsavePI[i])
+          unsavePI[i]["_id"] = itemID
         }
       }
-      //如果删除PRI
-      //更新一下
-      PRIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
-      nativePRI = arrayToSet(unsavePRI, "_id")
-      for (var j = 0; j < PRIArr.length; j++) {
-        var remotePRIid = PRIArr[j]["_id"]
-        debugger
-        if (!nativePRI[remotePRIid]) {
-          apiConfig.purchaseitem.Delete(remotePRIid)
+      //如果删除PI
+      //更新后重新获取一下
+      PIArr = apiConfig.purchaseitem.Paging(window._target["_id"], 0, 100)
+      nativePI = arrayToSet(unsavePI, "_id")
+      for (var j = 0; j < PIArr.length; j++) {
+        var remotePIid = PIArr[j]["_id"]
+        if (!nativePI[remotePIid]) {
+          apiConfig.purchaseitem.Delete(remotePIid)
         }
       }
+    }
+  },
+  view: {
+    add: function() {
+      window._operation = Enum.operation.Create
+      PurchaseItem.show()
+    },
+    edit: function(PIid) {
+      window._operation = Enum.operation.Update
+      debugger
+      if (PIid.includes("[unsave]")) {
+        var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
+        window._target = PItems[PIid]
+      } else {
+        window._target = apiConfig.purchaseitem.Get(PIid)
+      }
+      PurchaseItem.show()
+      PurchaseItem.autoComplate(window._target)
+    },
+    delete: function(PIid) {
+      window.__PurchaseRequisitionItem_table.data[PIid].remove()
+      var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      for (var i = 0; i < PItems.length; i++) {
+        if (PIid == PItems[i]["_id"]) {
+          var tempArr = PItems.splice(0, i - 1)
+          PItems.reverse()
+          PItems.pop()
+          PItems.reverse()
+          tempArr.concat(PItems)
+        }
+      }
+      console.log(PIid)
+    }
+  },
+  event: {
+    add: function() {
+      this.append()
+      PurchaseItem.hide()
+    },
+    append: function() {
+      //是否fields全为空
+      if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
+        return
+      //
+      var arr = []
+      var localid = ++row_counter + '[unsave]'
+      arr.push(localid)
+      var set = formToSet("#PruchaseItem_form")
+      set["_id"] = localid
+      var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
+      for (var i of order) {
+        arr.push(set[i])
+      }
+      if (window.__PurchaseRequisitionItem_table) {
+        window.__PurchaseRequisitionItem_table.addRow(arr)
+        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
+      }
+      ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
+
+    },
+    edit: function() {
+      var target = window._target
+      var targetid = window._target["_id"]
+      var set = formToSet("#PruchaseItem_form")
+      for (var k in set) {
+        target[k] = set[k]
+      }
+      target["_id"] = targetid
+      apiConfig.purchaseitem.Edit(targetid, target)
+      ClearInputs("#PruchaseItem_form")
+      PurchaseItem.hide()
     }
   }
 }

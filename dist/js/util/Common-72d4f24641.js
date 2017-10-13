@@ -74,7 +74,12 @@ function formToSet(form) {
   }
   return set
 }
-
+/**
+ * 按照key字段将array转变成{key:array}的对象
+ * @param  Array array [description]
+ * @param  string key   [description]
+ * @return set       [description]
+ */
 function arrayToSet(array, key) {
   var set = {}
   for (i of array) {
