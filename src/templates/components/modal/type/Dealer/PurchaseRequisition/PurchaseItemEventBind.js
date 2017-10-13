@@ -13,11 +13,10 @@ $('#_deliverydate')
     language: 'zh-CN'
   });
 $("#PruchaseItem")
-  .on("hidden.bs.modal", function() {
-    ClearInputs("#PruchaseItem")
-    $("#PIOperation").empty()
+  .on("hidden.bs.modal", function () {
+    PurchaseItem.destory()
   })
-$("#PruchaseItem").on("shown.bs.modal", function() {
+$("#PruchaseItem").on("shown.bs.modal", function () {
   var operationArea = $("#PIOperation")
   var addbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.add()"><span class="glyphicon glyphicon-ok"></span></button>`
   var appendbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.append()"><span class="glyphicon glyphicon-plus"></span></button>`
@@ -25,15 +24,15 @@ $("#PruchaseItem").on("shown.bs.modal", function() {
   var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
   switch (window._operation) {
-    case Enum.operation.Update:
-      operationArea.append($(cancelbtn)).append($(editbtn))
-      break
-    case Enum.operation.Create:
-      operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
-      break
-    default:
-      operationArea.append($(cancelbtn))
-      break
+  case Enum.operation.Update:
+    operationArea.append($(cancelbtn)).append($(editbtn))
+    break
+  case Enum.operation.Create:
+    operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
+    break
+  default:
+    operationArea.append($(cancelbtn))
+    break
   }
 })
 var row_counter = 0

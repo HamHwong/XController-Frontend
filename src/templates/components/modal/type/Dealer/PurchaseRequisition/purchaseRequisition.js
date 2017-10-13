@@ -1,19 +1,20 @@
 const PurchaseRequisition = {
-  new: function(obj) {
+  new: function (obj) {
     var PR = new Object()
     //TODO PR的model
     return PR
   },
-  show: function() {
+  show: function () {
+    window.__PurchaseRequisition_tempID = generateUUID()
     this.init()
     $("#PurchaseRequisition")
       .modal()
   },
-  hide: function() {
+  hide: function () {
     $("#PurchaseRequisition")
       .modal('hide')
   },
-  autoComplate: function(PRid) {
+  autoComplate: function (PRid) {
     var targetPRArea = "#PurchaseRequisition_form"
     targetPITableArea = "#InfomationAddArea"
     templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
@@ -47,16 +48,39 @@ const PurchaseRequisition = {
       // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
     }
   },
-  detail: function(PRid) {
+  detail: function (PRid) {
+    window._operation = Enum.operation.Read
     PRDetail.autoComplate(PRid)
     PRDetail.show()
   },
-  init: function() {
-    window.__PurchaseRequisition_tempID = generateUUID()
+  init: function () {
     window.__PurchaseRequisitionItem_Unsave_set = {}
     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []
+
+    var operationArea = $("#operation")
+    var draftbtn = `<button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1" onclick="PurchaseRequisition.event.draft()">Draft</button>`
+    var submitbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="PurchaseRequisition.event.submit()">提交</button>`
+    var editbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="PurchaseRequisition.event.edit()">修改</button>`
+    var cancelbtn = `<button type="button" class="btn btn-danger col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">取消</button>`
+    var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+
+    switch (window._operation) {
+    case Enum.operation.Update:
+      operationArea.append($(editbtn)).append($(cancelbtn))
+      break
+    case Enum.operation.Create:
+      operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+      break
+    case Enum.operation.Copy:
+      operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+      break
+    default:
+      operationArea.append($(closebtnlbtn))
+      break
+    }
+
   },
-  destory: function() {
+  destory: function () {
     ClearAllFields("#PurchaseRequisition")
     $("#progressbar").empty()
     if (window.__PurchaseRequisitionItem_table) {
@@ -66,36 +90,36 @@ const PurchaseRequisition = {
     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
     window.__PurchaseRequisition_tempID = null
     window.__PurchaseRequisitionItem_Unsave_set = null
-    window._targetPR = null
+    window._target.PR = null
     window._operation = null
     $("#operation").empty()
   },
   view: {
-    create:function(){
+    create: function () {
       window._operation = Enum.operation.Create
       PurchaseRequisition.show()
       PurchaseRequisition.autoComplate()
     },
-    copy: function(PRid) {
+    copy: function (PRid) {
       window._operation = Enum.operation.Copy
-      window._targetPR = apiConfig.purchaserequisition.Get(PRid)
+      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
       //填充dealer
       PurchaseRequisition.autoComplate(PRid)
     },
-    edit: function(PRid) {
+    edit: function (PRid) {
       window._operation = Enum.operation.Update
-      window._targetPR = apiConfig.purchaserequisition.Get(PRid)
+      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
       //填充dealer
       PurchaseRequisition.autoComplate(PRid)
     },
-    delete:function(PRid){
+    delete: function (PRid) {
       $("#Delete").modal()
     }
   },
   event: {
-    draft: function() {
+    draft: function () {
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_processstatus"] = Enum.prstatus.Draft
@@ -111,7 +135,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.hide()
       table_init()
     },
-    submit: function() {
+    submit: function () {
       $("#saver")
         .val(getCookie("name"))
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -120,7 +144,6 @@ const PurchaseRequisition = {
       //   throw "请购单item数量不能为0"
       // }
       var data = formToSet("#PurchaseRequisition_form")
-      //data["_prnumber"] = window.__PurchaseRequisition_tempID //后台生成应该
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Progress
       var PRid = apiConfig.purchaserequisition.Add(data)
@@ -136,21 +159,20 @@ const PurchaseRequisition = {
       table_init() //更新
       PurchaseRequisition.hide()
     },
-    edit: function() {
+    edit: function () {
       $("#saver")
         .val(getCookie("name"))
       var data = formToSet("#PurchaseRequisition_form")
 
       for (var v in data) {
-        window._targetPR[v] = data[v]
+        window._target.PR[v] = data[v]
       }
-      apiConfig.purchaserequisition.Edit(window._targetPR["_id"], window._targetPR)
-      PurchaseItem.update()
+      apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
+      // PurchaseItem.update()
       window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
       window.__PurchaseRequisition_tempID = null
       PurchaseRequisition.hide()
       table_init() //更新
-      PurchaseRequisition.hide()
     }
   }
 }

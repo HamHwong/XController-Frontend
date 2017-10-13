@@ -10,7 +10,7 @@
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",success:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" onclick="create()">申领物品</button>
+    <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="draft">
@@ -55,7 +55,6 @@
 
             //订单详情操作
             var Detail = function(PRid) {
-              window._operation = Enum.operation.Read
               PurchaseRequisition.detail(PRid)
             }
             //复制操作
@@ -65,10 +64,6 @@
 
             var edit = function(PRid) {
               PurchaseRequisition.view.edit(PRid)
-            }
-
-            var create = function() {
-              PurchaseRequisition.view.create()
             }
 
             var deleteDraft = function(PRid) {

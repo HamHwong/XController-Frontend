@@ -5,37 +5,31 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">订单申请</h4>
       </div>
-
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            <%# <input type="text" name="_id" id="_id" value="" hidden>%>
-              <div class="form-group col-md-4">
-                <label for="_dealerregion">区域:</label>
-                <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-                <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+            <div class="form-group col-md-4">
+              <label for="_dealerregion">区域:</label>
+              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>
-              </div>
-              <div class="form-group col-md-4 search_box_warp">
-                <label for="_demanderfk">代理商:</label>
-                <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-                <ul class="dropdown-menu keyhint"></ul>
-              </div>
-              <div class="form-group col-md-4">
-                <label for="_purposefk">用途:</label>
-                <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-                <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
-              </div>
-              <%# <input type="text" name="_prcreated" id="saveTime" value="" hidden>%>
-                <input type="text" name="_requestorfk" id="_requestorfk" value="" hidden>
-                <div class="Comments editable col-md-12">
-                  <span>备注：</span>
-                  <textarea name="_comments" rows="4" id="_comments"></textarea>
-                </div>
-
+            </div>
+            <div class="form-group col-md-4 search_box_warp">
+              <label for="_demanderfk">代理商:</label>
+              <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="_purposefk">用途:</label>
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
+            </div>
+            <input type="text" name="_requestorfk" id="_requestorfk" value="" hidden>
+            <div class="Comments editable col-md-12">
+              <span>备注：</span>
+              <textarea name="_comments" rows="4" id="_comments"></textarea>
+            </div>
           </div>
           <div class="modal-infopart goodsInfomation">
-            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="addPI()"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="PurchaseItem.view.add()"><span class="glyphicon glyphicon-plus"></span></button>
             <div id="InfomationAddArea">
             </div>
           </div>
@@ -46,26 +40,3 @@
   </div>
 </div>
 <%-include('./PurchaseItem')%>
-  <script>
-    function Draft() {
-      PurchaseRequisition.event.draft()
-    }
-    //确认
-    function submitPR() {
-      PurchaseRequisition.event.submit()
-    }
-
-    function editPR() {
-      PurchaseRequisition.event.edit()
-    }
-    var addPI = function() {
-      PurchaseItem.view.add()
-    }
-    var editPI = function(PIid) {
-      PurchaseItem.view.edit(PIid)
-    }
-
-    var deletePI = function(PIid) {
-      PurchaseItem.view.delete(PIid)
-    }
-  </script>
