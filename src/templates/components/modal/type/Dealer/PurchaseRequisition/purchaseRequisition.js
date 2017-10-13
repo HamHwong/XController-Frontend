@@ -98,7 +98,7 @@ const PurchaseRequisition = {
       if(window._target){
           window._target={}
       }
-    }
+    },
     create: function () {
       window._operation = Enum.operation.Create
       PurchaseRequisition.show()
