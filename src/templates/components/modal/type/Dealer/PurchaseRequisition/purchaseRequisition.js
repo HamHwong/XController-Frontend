@@ -78,7 +78,6 @@ const PurchaseRequisition = {
       operationArea.append($(closebtnlbtn))
       break
     }
-
   },
   destory: function () {
     ClearAllFields("#PurchaseRequisition")
@@ -95,6 +94,11 @@ const PurchaseRequisition = {
     $("#operation").empty()
   },
   view: {
+    init:function(){
+      if(window._target){
+          window._target={}
+      }
+    }
     create: function () {
       window._operation = Enum.operation.Create
       PurchaseRequisition.show()
