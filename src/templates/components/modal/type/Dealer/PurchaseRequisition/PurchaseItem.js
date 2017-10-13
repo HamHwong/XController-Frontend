@@ -57,12 +57,12 @@ var PurchaseItem = {
       }
     },
     add: function () {
-      this.view.init()
+      PurchaseItem.view.init()
       window._operation = Enum.operation.Create
       PurchaseItem.show()
     },
     edit: function (PIid) {
-      this.view.init()
+      PurchaseItem.view.init()
       window._operation = Enum.operation.Update
       if (PIid.includes("[unsave]")) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -76,7 +76,7 @@ var PurchaseItem = {
   },
   event: {
     add: function () {
-      this.append()
+      PurchaseItem.event.append()
       PurchaseItem.hide()
     },
     append: function () {

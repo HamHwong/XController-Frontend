@@ -6,7 +6,7 @@ const PurchaseRequisition = {
   },
   show: function () {
     window.__PurchaseRequisition_tempID = generateUUID()
-    this.init()
+    PurchaseRequisition.init()
     $("#PurchaseRequisition")
       .modal()
   },
@@ -108,7 +108,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate()
     },
     copy: function (PRid) {
-      this.view.init()
+      PurchaseRequisition.view.init()
       window._operation = Enum.operation.Copy
       window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
@@ -116,7 +116,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate(PRid)
     },
     edit: function (PRid) {
-      this.view.init()
+      PurchaseRequisition.view.init()
       window._operation = Enum.operation.Update
       window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
@@ -124,7 +124,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate(PRid)
     },
     delete: function (PRid) {
-      this.view.init()
+      PurchaseRequisition.view.init()
       $("#Delete").modal()
     }
   },
