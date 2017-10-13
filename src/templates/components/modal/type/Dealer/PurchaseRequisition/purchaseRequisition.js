@@ -95,10 +95,10 @@ const PurchaseRequisition = {
   },
   view: {
     init: function () {
-      if (window._target) {
+      if (!window._target) {
         window._target = {}
       }
-      if (window._target.PR) {
+      if (!window._target.PR) {
         window._target.PR = {}
       }
     },

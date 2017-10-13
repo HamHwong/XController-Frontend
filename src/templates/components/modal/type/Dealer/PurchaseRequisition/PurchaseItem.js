@@ -49,10 +49,10 @@ var PurchaseItem = {
   },
   view: {
     init: function () {
-      if (window._target) {
+      if (!window._target) {
         window._target = {}
       }
-      if (window._target.PI) {
+      if (!window._target.PI) {
         window._target.PI={}
       }
     },
