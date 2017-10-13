@@ -94,9 +94,12 @@ const PurchaseRequisition = {
     $("#operation").empty()
   },
   view: {
-    init:function(){
-      if(window._target){
-          window._target={}
+    init: function () {
+      if (window._target) {
+        window._target = {}
+      }
+      if (window._target.PR) {
+        window._target.PR = {}
       }
     },
     create: function () {
@@ -105,6 +108,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate()
     },
     copy: function (PRid) {
+      this.view.init()
       window._operation = Enum.operation.Copy
       window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
@@ -112,6 +116,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate(PRid)
     },
     edit: function (PRid) {
+      this.view.init()
       window._operation = Enum.operation.Update
       window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
@@ -119,6 +124,7 @@ const PurchaseRequisition = {
       PurchaseRequisition.autoComplate(PRid)
     },
     delete: function (PRid) {
+      this.view.init()
       $("#Delete").modal()
     }
   },

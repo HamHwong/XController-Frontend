@@ -48,11 +48,21 @@ var PurchaseItem = {
     window._target.PI = null
   },
   view: {
+    init: function () {
+      if (window._target) {
+        window._target = {}
+      }
+      if (window._target.PI) {
+        window._target.PI={}
+      }
+    },
     add: function () {
+      this.view.init()
       window._operation = Enum.operation.Create
       PurchaseItem.show()
     },
     edit: function (PIid) {
+      this.view.init()
       window._operation = Enum.operation.Update
       if (PIid.includes("[unsave]")) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
