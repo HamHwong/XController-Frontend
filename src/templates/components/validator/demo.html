@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" href="../../../css/components.css">
+  <link rel="stylesheet" href="../../../css/plugs/bootstrap.css">
+
+</head>
+
+<body>
+  <pre>
+    思路：通过读取表单的标记，
+    如 form 的 data-validator 来获取表单数据，为该表单绑定数据,
+    正则单独写成一个类统一管理，如 Validator.regx.phone
+    要支持函数的验证
+    要有一个方法来确定是否所有的都已经验证（用来控制流程）
+  </pre>
+
+
+  <span>DEMO:</span>
+  <button type="button" name="button" onclick='show()'>show out</button>
+  <div class="modal" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">添加供应商</h4>
+        </div>
+
+        <div class="modal-body">
+          <form id="add_Supplier" class="form-horizontal" role="form" data-validator="true">
+            <div class="form-group col-md-12">
+              <label for="_suppliercode">供应商编码:D</label>
+              <input name="_suppliercode" id="_suppliercode" placeholder="请输入供应商编码" class="form-control" data-regxRule="number(10)" />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="_suppliername" class="control-label">姓名:</label>
+              <input name="_suppliername" id="_suppliername" placeholder="请输入姓名" class="form-control" data-regxRule="string(10)" />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="_phonenumber" class="control-label">手机号:</label>
+              <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" data-regxRule="number(11)" />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="_accountname" class="control-label">账号:</label>
+              <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" data-regxRule="account" />
+            </div>
+            <div class="form-group col-md-12">
+              <label for="_password" class="control-label">密码:</label>
+              <input name="_password" id="_password" placeholder="请输入密码" class="form-control" data-regxRule="password(12)" />
+            </div>
+            <select class="" name="" id="selector" data-regxRule="select">
+              <option value="-1">A</option>
+              <option value="0">B</option>
+              <option value="1">C</option>
+              <option value="2">D</option>
+            </select>
+
+
+            <!--不能为空、只能选三个-->
+            <span>A:</span>
+            <input type="checkbox" name="checkbox[]" value="A" data-regxRule="checkbox(3)">
+            <span>B:</span>
+            <input type="checkbox" name="checkbox[]" value="B" data-regxRule="checkbox(3)">
+            <span>C:</span>
+            <input type="checkbox" name="checkbox[]" value="C" data-regxRule="checkbox(3)">
+            <span>D:</span>
+            <input type="checkbox" name="checkbox[]" value="D" data-regxRule="checkbox(3)">
+
+            <!-- 不能为空 -->
+            <input type="radio" name="radio" value="1" data-regxRule="radio">
+            <input type="radio" name="radio" value="2" data-regxRule="radio">
+            <input type="radio" name="radio" value="3" data-regxRule="radio">
+
+
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addSupplier()">完成</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
+<script type="text/javascript">
+  function show() {
+    $("#Add").modal()
+  }
+</script>
+<script type="text/javascript" src="../../../js/plugs/jquery.js"></script>
+<script type="text/javascript" src="../../../js/plugs/bootstrap.js"></script>
+<script type="text/javascript" src="validator.js"></script>
+<script type="text/javascript" src="regxRule.js"></script>
