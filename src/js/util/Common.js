@@ -87,6 +87,20 @@ function arrayToSet(array, key) {
   }
   return set
 }
+
+function setToArray(set, arrOrder) {
+  var arr = []
+  if (arrOrder)
+    for (var i = 0; i < arrOrder.length; i++) {
+      arr.push(set[arrOrder[i]])
+    }
+  else {
+    for (var i in set) {
+      arr.push(set[i])
+    }
+  }
+  return arr
+}
 /**
  * 传入一个form，和infomation Set（键值对应），将form表单里对应id的val值自动填写
  * @param  {set} infoSet 数据和信息键值对

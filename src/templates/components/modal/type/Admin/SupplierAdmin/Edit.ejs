@@ -9,6 +9,10 @@
       <div class="modal-body">
         <form id="edit_Supplier" class="form-horizontal clearfix" role="form">
           <div class="form-group col-md-12">
+            <label for="_suppliercode">供应商编码:D</label>
+            <input name="_suppliercode" id="_suppliercode" placeholder="请输入供应商编码" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
             <label for="_suppliername" class="control-label">姓名:</label>
             <input name="_suppliername" id="_suppliername" placeholder="请输入姓名" class="form-control" />
           </div>
@@ -33,19 +37,19 @@
   </div>
 </div>
 <script>
-function editSupplier() {
-  var rawData = window._target
-  var data = formToSet("#edit_Supplier")
-  for(var i in data){
-    rawData[i] = data[i]
+  function editSupplier() {
+    var rawData = window._target
+    var data = formToSet("#edit_Supplier")
+    for (var i in data) {
+      rawData[i] = data[i]
+    }
+    var dealerId = apiConfig.supplier.Edit(rawData['_id'], data)
+    if (dealerId) {
+      $("#Edit").modal("hide")
+      ClearInputs("#edit_Supplier")
+      ClearSelecton("#edit_Supplier")
+      ClearTextArea("#edit_Supplier")
+    }
+    table_init()
   }
-  var dealerId = apiConfig.supplier.Edit(rawData['_id'],data)
-  if (dealerId) {
-    $("#Edit").modal("hide")
-    ClearInputs("#edit_Supplier")
-    ClearSelecton("#edit_Supplier")
-    ClearTextArea("#edit_Supplier")
-  }
-  table_init()
-}
 </script>

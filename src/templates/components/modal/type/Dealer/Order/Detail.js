@@ -31,6 +31,8 @@ var PRDetail = {
 
       if (result == Enum.enumApprovalResult.NoAction) {
         $mod.addClass('noAction')
+      } else if (result == Enum.enumApprovalResult.Ready) {
+        $mod.addClass('processing')
       } else if (result == Enum.enumApprovalResult.Success) {
         $mod.addClass('approved')
       } else if (result == Enum.enumApprovalResult.Rejected) {
@@ -43,11 +45,11 @@ var PRDetail = {
 
       $("#progressbar").append($mod)
     }
-
-    var noAction = $("#progressbar").find('.noAction')
-    if (noAction.length > 1) {
-      var processing = $(noAction[0])
-      processing.addClass('processing')
-    }
+    // 
+    // var noAction = $("#progressbar").find('.noAction')
+    // if (noAction.length > 1) {
+    //   var processing = $(noAction[0])
+    //   processing.addClass('processing')
+    // }
   }
 }

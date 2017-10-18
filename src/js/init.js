@@ -48,6 +48,22 @@ var name_init = function() {
   }
 }
 
+var queryInput_init = function(){
+  var optionlist = $("select.queryinput")
+  for (var i = 0; i < optionlist.length; i++) {
+    $(optionlist[i]).empty()
+    var category = $(optionlist[i]).data('target')
+    var optionArray = apiConfig.dealer.Top(1000)
+    for (var j of optionArray) {
+      var id = j["_id"]
+      var name = j["_dealername"]
+      // var optionsequence = j["_sequence"]
+      var option = `<option value="${id}">${name}</option>`
+      $(optionlist[i]).append($(option))
+    }
+  }
+}
+
 var optionlist_init = function() {
   var optionlist = $("select.optionlist")
   for (var i = 0; i < optionlist.length; i++) {
@@ -101,6 +117,9 @@ var init = {
     },
     searchbox: function() {
       searchbox_init()
+    },
+    queryInput:function(){
+      queryInput_init()
     }
   },
   sideNav: {

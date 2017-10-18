@@ -8,7 +8,7 @@
   </div>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",success:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",success:"已完成",rejected:"已拒绝"}})%>
   <div class="operation-menu">
     <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
   </div>
@@ -19,7 +19,7 @@
     </div>
     <div class="tab-pane" id="success">
     </div>
-    <div class="tab-pane" id="reject">
+    <div class="tab-pane" id="rejected">
     </div>
 
     <nav style="text-align: center">
@@ -43,14 +43,25 @@
             var table_init = function() {
               window.__PurchaseRequisitionItem_Unsave_set = {}
               //申请中table初始化
+              var role = Enum.role.DEALEAR
+              var uid = JSON.parse(getCookie('user'))["_id"]
+              var status = Enum.prstatus.Progress
+              var startRow = 0
+              var endRow = 100
               var templateOpts = tableStructures.Dealer.MyOrder.Approving
-              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#applying")
               //草稿箱table初始化
+              var status = Enum.prstatus.Draft
               var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#draft")
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#draft")
               //successtable初始化
+              var status = Enum.prstatus.Completed
               var templateOpts = tableStructures.Dealer.MyOrder.Success
-              new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#success")
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#success")
+              //拒绝table初始化
+              var status = Enum.prstatus.Rejected
+              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#rejected")
             }
 
             //订单详情操作
@@ -64,6 +75,7 @@
 
             var edit = function(PRid) {
               PurchaseRequisition.view.edit(PRid)
+              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
             }
 
             var deleteDraft = function(PRid) {

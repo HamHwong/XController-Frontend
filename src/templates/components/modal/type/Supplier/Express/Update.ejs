@@ -11,7 +11,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">物流信息 ：</label>
             <div class="col-sm-8">
-              <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
+              <textarea name="_logistics" id="_logistics" class="form-control" placeholder="输入最新信息"></textarea>
               <%# <input type="text" class="form-control" name="newest" id="newest" class="form-control col-md-11" placeholder="输入关键字" autocomplete="off">%>
             </div>
           </div>
@@ -19,14 +19,9 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="UpdateMe()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="SupplierPRDetail.event.Express.update()"><span class="glyphicon glyphicon-ok"></span></button>
         <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  var UpdateMe = function() {
-
-  }
-</script>

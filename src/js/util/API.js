@@ -1,4 +1,5 @@
 // var root = "http://192.168.1.101:8082"
+// var root = "http://192.168.1.101:7856"
 var root = ""
 const apiConfig = {
   brochure: {
@@ -240,6 +241,11 @@ const apiConfig = {
       var api = root + `/api/purchaseitem/${id}/update`
       return PUT(api, data)
     },
+    UpdateLogitics(id, data) {
+      //PUT
+      var api = root + `/api/purchaseitem/${id}/updatelogistics`
+      return PUT(api, data)
+    },
     Delete: function(id) {
       //PUT
       var api = root + `/api/purchaseitem/${id}`
@@ -261,7 +267,7 @@ const apiConfig = {
     },
     Add: function(data) {
       //POST
-      var api = root + `/api/purchaserequisition/new`
+      var api = root + `/api/purchaserequisition/submit`
       return POST(api, data)
     },
     Edit: function(id, data) {
@@ -283,10 +289,12 @@ const apiConfig = {
       return GET(api)
     },
     SearchByStatus: function(role, userID, Status, startIndex, endIndex) {
-      //TODO
+      var api = root + `/api/purchaserequisition/search(${role},${userID},${Status},${startIndex},${endIndex})`
+      return GET(api)
     },
     SearchByKeywordAndStatus: function(role, userID, status, keyword, startIndex, endIndex) {
-      //TODO
+      var api = root + `/api/purchaserequisition/search(${role},${userID},${status},${keyword},${startIndex},${endIndex})`
+      return GET(api)
     },
     Top: function(topcount) {
       var api = root + `/api/purchaserequisition/top(${topcount})`
@@ -319,8 +327,16 @@ const apiConfig = {
     }
   },
   PRSupplierView: {
-    Search: function() {
-      var api = root + `/api/PRSupplierView/search`
+    Count:function(){
+      var api = root +`/api/PRSupplierView/count`
+      return GET(api)
+    },
+    Search: function(isCompeleted, keyword, startIndex, endIndex) {
+      var api = root + `/api/PRSupplierView/search(${isCompeleted},${keyword},${startIndex},${endIndex})`
+      return GET(api)
+    },
+    Paging: function(isCompeleted, startIndex, endIndex) {
+      var api = root + `/api/PRSupplierView/search(${isCompeleted},${startIndex},${endIndex})`
       return GET(api)
     }
   },
@@ -443,4 +459,20 @@ const apiConfig = {
       return PUT(api)
     }
   },
+  employee: {
+    Login: function(username, password) {
+      var api = root + `/api/employee/login(${userName},${password})`
+      return GET(api)
+    }
+  },
+  PRApproverView: {
+    Count: function() {
+      var api = root + `/api/PRApproverView/count`
+      return GET(api)
+    },
+    Paging: function(account, completed, startIndex, endIndex) {
+      var api = root + `/api/PRApproverView/paging(${account},${completed},${startIndex},${endIndex}`
+      return GET(api)
+    }
+  }
 }

@@ -10,7 +10,7 @@
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{draft:"草稿箱",applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+    <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="draft">
@@ -40,52 +40,47 @@
         <%-include('/components/modal/modal',{type:"Common.Delete"})%>
           <%-include('/components/table/table.init.ejs')%>
             <script>
-              //载入我的订单的申请表操作
-              var table_init = function() {
-                var templateOpts = tableStructures.Dealer.MyOrder.Approving
-                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
-              }
+            //载入我的订单的申请表操作
+            var table_init = function() {
+              window.__PurchaseRequisitionItem_Unsave_set = {}
+              //申请中table初始化
+              var role = Enum.role.EMPLOYEE
+              var uid = JSON.parse(getCookie('user'))["_id"]
+              var status = Enum.prstatus.Progress
+              var startRow = 0
+              var endRow = 100
+              var templateOpts = tableStructures.Dealer.MyOrder.Approving
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#applying")
+              //草稿箱table初始化
+              var status = Enum.prstatus.Draft
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#draft")
+              //successtable初始化
+              var status = Enum.prstatus.Completed
+              var templateOpts = tableStructures.Dealer.MyOrder.Success
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#success")
+              //拒绝table初始化
+              var status = Enum.prstatus.Rejected
+              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#rejected")
+            }
 
-              $(document).ready(function() {
-                table_init()
-              })
+            //订单详情操作
+            var Detail = function(PRid) {
+              PurchaseRequisition.detail(PRid)
+            }
+            //复制操作
+            var copy = function(PRid) {
+              PurchaseRequisition.view.copy(PRid)
+            }
 
-              //订单详情操作
-              var Detail = function(PRid) {
-                window._operation = Enum.operation.Read
-                PurchaseRequisition.detail(PRid)
-              }
+            var edit = function(PRid) {
+              PurchaseRequisition.view.edit(PRid)
+              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
+            }
 
-              //复制操作
-              var copy = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
-                $("#PurchaseRequisition").modal()
-              }
+            var deleteDraft = function(PRid) {
+              PurchaseRequisition.view.delete(PRid)
+            }
 
-              var edit = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
-
-                $("#PurchaseRequisition").modal()
-              }
-
-              var submit = function(primaryKey) {
-                $("#Submit").modal()
-                applyingTable()
-              }
-
-              var deleteDraft = function(primaryKey) {
-                $("#Delete").modal()
-              }
-
-              var deleteDraftBtn = function(primaryKey) {
-
-              }
             </script>

@@ -14,7 +14,7 @@
       
         <li><a href=#applying>处理中</a></li>
         
-        <li><a href=#finished>已完成</a></li>
+        <li><a href=#success>已完成</a></li>
         
   </ul>
 </div>
@@ -24,7 +24,7 @@
   <div class="table-content tab-content">
     <div class="tab-pane active" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="success">
     </div>
     <nav style="text-align: center">
       <ul class="pagination">
@@ -75,7 +75,7 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">物流信息 ：</label>
             <div class="col-sm-8">
-              <textarea name="name" class="form-control" placeholder="输入最新信息"></textarea>
+              <textarea name="_logistics" id="_logistics" class="form-control" placeholder="输入最新信息"></textarea>
               
             </div>
           </div>
@@ -83,33 +83,14 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="UpdateMe()"><span class="glyphicon glyphicon-ok"></span></button>
+        <button type="submit" class="btn btn-primary" onclick="SupplierPRDetail.event.Express.update()"><span class="glyphicon glyphicon-ok"></span></button>
         <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  var UpdateMe = function() {
 
-  }
-</script>
-
-  <script>
-    var update = function(PrimaryKey) {
-      $("#Update").modal()
-      // console.log("primaryKey", PrimaryKey);
-    }
-
-    function finish(primarykey) {
-      $("#Finish").modal()
-    }
-  </script>
-
-  
-
-
-    <!-- 信息删除确认 -->
+<!-- 信息删除确认 -->
 <div class="modal fade" id="Finish">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -122,7 +103,7 @@
       </div>
       <div class="modal-footer">
         <input type="hidden" id="url" />
-        <a onclick="urlSubmit()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <a onclick="SupplierPRDetail.event.finish()" class="btn btn-danger" data-dismiss="modal">确定</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
       </div>
     </div>
@@ -131,6 +112,17 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+  <script>
+    var update = function(PRid) {
+      SupplierPRDetail.view.Express.update(PRid)
+      // SupplierPRDetail.view.Express.show()
+    }
+
+    function finish(primarykey) {
+      $("#Finish").modal()
+    }
+  </script>
 
   
 
@@ -147,26 +139,41 @@
 
   <script>
 
+    // var table_init = function() {
+    //   //TODO 此处需要显示联系人电话，需要多表连接
+    //   var templateOpts = tableStructures.Supplier.MyOrder.Approving
+    //   // var result = apiConfig.purchaserequisition.Top(100)
+    //   var completed = false
+    //   var keyword = 1 //demonderkey
+    //   var startIndex = 0
+    //   var endIndex = 100
+    //   var result = GET(`/api/PRSupplierView/search(${completed},${keyword},${startIndex},${endIndex})`)
+    //   // for(var i of result){
+    //   //   //GET /api/PRSupplierView/search({completed},{keyword},{startIndex},{endIndex})
+    //   //   console.log(i)
+    //   //   var requestor = i["_requestor"]
+    //   //   // var dealer = apiConfig.dealer.GetByUserName(requestor)
+    //   //   // console.log(dealer)
+    //   //   // var phoneNumber = dealer["_phonenumber"]
+    //   //   var phoneNumber = i["_phonenumber"]
+    //   //   // i["_phonenumber"] = phoneNumber
+    //   // }
+    //   new table().loadFromTemplateJson(result, templateOpts).to("#applying")
+    // }
+    //
+    //载入我的订单的申请表操作
     var table_init = function() {
-      //TODO 此处需要显示联系人电话，需要多表连接
+      // window.__PurchaseRequisitionItem_Unsave_set = {}
+      //申请中table初始化
+      var startRow = 0
+      var endRow = 100
       var templateOpts = tableStructures.Supplier.MyOrder.Approving
-      // var result = apiConfig.purchaserequisition.Top(100)
-      var completed = false
-      var keyword = 1 //demonderkey
-      var startIndex = 0
-      var endIndex = 100
-      var result = GET(`/api/PRSupplierView/search(${completed},${keyword},${startIndex},${endIndex})`)
-      // for(var i of result){
-      //   //GET /api/PRSupplierView/search({completed},{keyword},{startIndex},{endIndex})
-      //   console.log(i)
-      //   var requestor = i["_requestor"]
-      //   // var dealer = apiConfig.dealer.GetByUserName(requestor)
-      //   // console.log(dealer)
-      //   // var phoneNumber = dealer["_phonenumber"]
-      //   var phoneNumber = i["_phonenumber"]
-      //   // i["_phonenumber"] = phoneNumber
-      // }
-      new table().loadFromTemplateJson(result, templateOpts).to("#applying")
+      new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(false,0,100), templateOpts).to("#applying")
+      //successtable初始化
+      var status = Enum.prstatus.Completed
+      var templateOpts = tableStructures.Supplier.MyOrder.Success
+      new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(true,0,100), templateOpts).to("#success")
+
     }
 
     var supply = function(rid) {
@@ -174,13 +181,6 @@
       window._target = apiConfig.brochure.Get(rid)
       $("#Supply")
         .modal()
-    }
-
-    var expressUpdate = function(primarykey) {
-      window._operation = Enum.operation.Read
-      window._target = apiConfig.purchaserequisition.Get(primarykey)
-      SupplierPRDetail.autoComplate(primarykey)
-      SupplierPRDetail.show()
     }
 
     var search = function() {

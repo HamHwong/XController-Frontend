@@ -133,10 +133,27 @@
         break
       case 'zeiss':
       case 'Zeiss':
-        if (username.toLowerCase() == "zeiss") {
+        // var user = apiConfig.employee.login(username, password)
+        if ("zeiss" == username.toLowerCase()) {
           window.location.href = "./zeiss-home.html"
+          /**
+           *
+           *   "statusField": 0,
+                "nameField": "string",
+                "eNNameField": "string",
+                "mobileField": "string",
+                "emailField": "string",
+                "accountField": "string"
+           *
+           */
           setCookie("auth", "Zeiss")
-          setCookie("name", user["_accountname"])
+          // setCookie("name", user["_accountField"])
+          setCookie("name", "BLManager")
+          var user = {
+            "_id":"BLManager"
+          }
+          setCookie("user", JSON.stringify(user))
+          // setCookie("name", user["_accountname"])
           // setCookie("user", JSON.stringify(user))
         }
         break
@@ -147,4 +164,13 @@
     window.role = $("#role").val()
   })
   window.role = $("#role").val()
+
+
+  $("#login_form").on("keydown", function(e) {
+    if (e.which === 13) {
+      console.log("Enter")
+      e.preventDefault()
+      login()
+    }
+  })
 </script>

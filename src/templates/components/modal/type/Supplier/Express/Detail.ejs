@@ -22,10 +22,11 @@
 </div>
 
 <%-include('./Update')%>
+<%-include('./Finish')%>
   <script>
-    var update = function(PrimaryKey) {
-      $("#Update").modal()
-      // console.log("primaryKey", PrimaryKey);
+    var update = function(PRid) {
+      SupplierPRDetail.view.Express.update(PRid)
+      // SupplierPRDetail.view.Express.show()
     }
 
     function finish(primarykey) {

@@ -1,16 +1,10 @@
 <div class="contentTitle clearfix">
   <h3>审批</h3>
-  <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
-    <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
-    </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
-  </div>
 </div>
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"待审批",finished:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
@@ -38,7 +32,7 @@
           //载入订单管理表操作
           var table_init = function() {
             var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
+            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("name"),false,0,100), templateOpts).to("#applying")
           }
 
           // //删除订单操作
@@ -54,7 +48,6 @@
           //订单详情操作
 
           var Detail = function(PRid) {
-            window._operation = Enum.operation.Read
             PurchaseRequisition.detail(PRid)
           }
 

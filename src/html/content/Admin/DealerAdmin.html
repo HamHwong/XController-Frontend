@@ -40,26 +40,25 @@
 
       <div class="modal-body clearfix">
         <form id="add_Dealer" class="form-horizontal " role="form">
-
+          <div class="form-group col-md-12">
+            <label for="_dealercode">代理商编码:D</label>
+            <input name="_dealercode" id="_dealercode" placeholder="请输入代理商编码" class="form-control" />
+          </div>
           <div class="form-group col-md-12">
             <label for="_dealername">姓名:</label>
             <input name="_dealername" id="_dealername" placeholder="请输入姓名" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_phonenumber">手机号:</label>
             <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_accountname">账号:</label>
             <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_password">密码:</label>
             <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="DemanderFK">邮箱:</label>
@@ -67,7 +66,6 @@
           </div>
           <div class="form-group col-md-12">
             <label for="_dealerregion">区域:</label>
-            <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
             <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
                 <option value="-1" selected>请选择地区</option>
             </select>
@@ -91,7 +89,7 @@ function addDealer() {
     ClearSelecton("#add_Dealer")
     ClearTextArea("#add_Dealer")
   }
-  DealerAdmin()
+  table_init()
 }
 </script>
 
@@ -108,26 +106,25 @@ function addDealer() {
 
       <div class="modal-body clearfix">
         <form id="edit_Dealer" class="form-horizontal" role="form">
-
+          <div class="form-group col-md-12">
+            <label for="_dealercode">代理商编码:D</label>
+            <input name="_dealercode" id="_dealercode" placeholder="请输入代理商编码" class="form-control" />
+          </div>
           <div class="form-group col-md-12">
             <label for="_dealername">姓名:</label>
             <input name="_dealername" id="_dealername" placeholder="请输入姓名" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_phonenumber">手机号:</label>
             <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_accountname">账号:</label>
             <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="_password">密码:</label>
             <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
-            <ul class="dropdown-menu keyhint"></ul>
           </div>
           <div class="form-group col-md-12">
             <label for="DemanderFK">邮箱:</label>
@@ -135,9 +132,8 @@ function addDealer() {
           </div>
           <div class="form-group col-md-12">
             <label for="_dealerregion">区域:</label>
-            <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
             <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              <option value="-1" selected>请选择地区</option>
+                <option value="-1" selected>请选择地区</option>
             </select>
           </div>
         </form>
@@ -195,7 +191,7 @@ function addDealer() {
         //载入代理商表操作
         var table_init = function() {
           var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
-          new table().loadFromTemplateJson("/api/dealer/top(100)", templateOpts).to("#Dealer-table-container")
+          new table().loadFromTemplateJson(apiConfig.dealer.Top(100), templateOpts).to("#Dealer-table-container")
         }
 
         //删除代理商操作

@@ -8,10 +8,26 @@
 
       <div class="modal-body">
         <form id="add_Supplier" class="form-horizontal" role="form">
-          <%-include('/components/input/forminput',{name:"姓名",id:"_suppliername",type:"text",placeholder:"请输入姓名",required:true})%>
-            <%-include('/components/input/forminput',{name:"手机号",id:"_phonenumber",type:"text",placeholder:"请输入手机号",required:true})%>
-              <%-include('/components/input/forminput',{name:"账号",id:"_accountname",type:"text",placeholder:"请输入账号",required:true})%>
-                <%-include('/components/input/forminput',{name:"密码",id:"_password",type:"password",placeholder:"请输入密码",required:true})%>
+          <div class="form-group col-md-12">
+            <label for="_suppliercode">供应商编码:D</label>
+            <input name="_suppliercode" id="_suppliercode" placeholder="请输入供应商编码" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_suppliername" class="control-label">姓名:</label>
+            <input name="_suppliername" id="_suppliername" placeholder="请输入姓名" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_phonenumber" class="control-label">手机号:</label>
+            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_accountname" class="control-label">账号:</label>
+            <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_password" class="control-label">密码:</label>
+            <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+          </div>
         </form>
       </div>
 

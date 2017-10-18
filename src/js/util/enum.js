@@ -1,13 +1,13 @@
 const Enum = {
   role: {
     /// ZEISS员工
-    EMPLOYEE: "EMPLOYEE",
+    EMPLOYEE: 0,
     /// 代理商
-    DEALERL: "DEALERL",
+    DEALEAR: 1,
     /// 供应商
-    SUPPLIER: "SUPPLIER",
+    SUPPLIER: 2,
     /// 系统管理员
-    SYSADMIN: "SYSADMIN"
+    SYSADMIN: 3
   },
   prstatus: {
     /// 草稿状态
@@ -19,7 +19,9 @@ const Enum = {
     /// 结束状态：审核已拒绝
     Rejected: "Rejected",
     /// 已交付状态
-    Delivered: "Delivered"
+    Delivered: "Delivered",
+    /// 完成状态
+    Completed: "Completed"
   },
   processStatus: {
     /// 提交进入流程状态
@@ -43,15 +45,16 @@ const Enum = {
     /// <summary>
     /// 未操作
     /// </summary>
-    NoAction:"NoAction",
+    NoAction: "NoAction",
+    Ready: "Ready",
     /// <summary>
     /// 审批通过
     /// </summary>
-    Success:"Success",
+    Success: "Success",
     /// <summary>
     /// 审批拒绝
     /// </summary>
-    Rejected:"Rejected"
+    Rejected: "Rejected"
 
   },
   operation: {

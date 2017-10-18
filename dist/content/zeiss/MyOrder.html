@@ -24,7 +24,7 @@
 </div>
 
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#PurchaseRequisition">申领物品</button>
+    <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane active" id="draft">
@@ -56,37 +56,33 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">订单申请</h4>
       </div>
-
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            
-              <div class="form-group col-md-4">
-                <label for="_dealerregion">区域:</label>
-                <!--<input type="text" name="area_input" id="area_input" value="" hidden>-->
-                <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+            <div class="form-group col-md-4">
+              <label for="_dealerregion">区域:</label>
+              <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>
-              </div>
-              <div class="form-group col-md-4 search_box_warp">
-                <label for="_demanderfk">代理商:</label>
-                <input name="_demanderfk" id="_demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-                <ul class="dropdown-menu keyhint"></ul>
-              </div>
-              <div class="form-group col-md-4">
-                <label for="_purposefk">用途:</label>
-                <!--<input type="text" name="PurposeFK" id="PurposeFK" value="PurposeFK" hidden>-->
-                <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
-              </div>
-              
-                <input type="text" name="_requestorfk" id="_requestorfk" value="" hidden>
-                <div class="Comments editable col-md-12">
-                  <span>备注：</span>
-                  <textarea name="_comments" rows="4" id="_comments"></textarea>
-                </div>
-
+            </div>
+            <div class="form-group col-md-4 search_box_warp">
+              <label for="demanderfk">代理商:</label>
+              <select class="queryinput" name="_demanderfk" id="_demanderfk" data-target="demanderfk" style="display:none;">
+              </select>
+              <input name="demanderfk" id="demanderfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+            <div class="form-group col-md-4">
+              <label for="_purposefk">用途:</label>
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
+            </div>
+            <input type="text" name="_requestorfk" id="_requestorfk" value="" hidden>
+            <div class="Comments editable col-md-12">
+              <span>备注：</span>
+              <textarea name="_comments" rows="4" id="_comments"></textarea>
+            </div>
           </div>
           <div class="modal-infopart goodsInfomation">
-            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="addPI()"><span class="glyphicon glyphicon-plus"></span></button>
+            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="PurchaseItem.view.add()"><span class="glyphicon glyphicon-plus"></span></button>
             <div id="InfomationAddArea">
             </div>
           </div>
@@ -103,7 +99,6 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">添加物品</h4>
       </div>
-
       <div class="modal-body">
         <form id="PruchaseItem_form" class="form-horizontal" role="form">
           <div class="form-group">
@@ -146,36 +141,12 @@
           </div>
         </form>
       </div>
-
       <div class="modal-footer" id="PIOperation">
       </div>
     </div>
   </div>
 </div>
 
-  <script>
-    function Draft() {
-      PurchaseRequisition.event.draft()
-    }
-    //确认
-    function submitPR() {
-      PurchaseRequisition.event.submit()
-    }
-
-    function editPR() {
-      PurchaseRequisition.event.edit()
-    }
-    var addPI = function() {
-      PurchaseItem.view.add()
-    }
-    var editPI = function(PIid) {
-      PurchaseItem.view.edit(PIid)
-    }
-
-    var deletePI = function(PIid) {
-      PurchaseItem.view.delete(PIid)
-    }
-  </script>
 
   
 
@@ -284,52 +255,47 @@
 </script>
 
             <script>
-              //载入我的订单的申请表操作
-              var table_init = function() {
-                var templateOpts = tableStructures.Dealer.MyOrder.Approving
-                new table().loadFromTemplateJson("/api/purchaserequisition/top(100)", templateOpts).to("#applying")
-              }
+            //载入我的订单的申请表操作
+            var table_init = function() {
+              window.__PurchaseRequisitionItem_Unsave_set = {}
+              //申请中table初始化
+              var role = Enum.role.EMPLOYEE
+              var uid = JSON.parse(getCookie('user'))["_id"]
+              var status = Enum.prstatus.Progress
+              var startRow = 0
+              var endRow = 100
+              var templateOpts = tableStructures.Dealer.MyOrder.Approving
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#applying")
+              //草稿箱table初始化
+              var status = Enum.prstatus.Draft
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#draft")
+              //successtable初始化
+              var status = Enum.prstatus.Completed
+              var templateOpts = tableStructures.Dealer.MyOrder.Success
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#success")
+              //拒绝table初始化
+              var status = Enum.prstatus.Rejected
+              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#rejected")
+            }
 
-              $(document).ready(function() {
-                table_init()
-              })
+            //订单详情操作
+            var Detail = function(PRid) {
+              PurchaseRequisition.detail(PRid)
+            }
+            //复制操作
+            var copy = function(PRid) {
+              PurchaseRequisition.view.copy(PRid)
+            }
 
-              //订单详情操作
-              var Detail = function(PRid) {
-                window._operation = Enum.operation.Read
-                PurchaseRequisition.detail(PRid)
-              }
+            var edit = function(PRid) {
+              PurchaseRequisition.view.edit(PRid)
+              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
+            }
 
-              //复制操作
-              var copy = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
-                $("#PurchaseRequisition").modal()
-              }
+            var deleteDraft = function(PRid) {
+              PurchaseRequisition.view.delete(PRid)
+            }
 
-              var edit = function(primaryKey) {
-                var infoSet = GET("/api/purchaserequisition/" + primaryKey)
-                //自动填充
-                autoComplateInfo(infoSet, "#PurchaseRequisition_form")
-                //填充dealer
-                autoComplateInfoOfDealer()
-
-                $("#PurchaseRequisition").modal()
-              }
-
-              var submit = function(primaryKey) {
-                $("#Submit").modal()
-                applyingTable()
-              }
-
-              var deleteDraft = function(primaryKey) {
-                $("#Delete").modal()
-              }
-
-              var deleteDraftBtn = function(primaryKey) {
-
-              }
             </script>

@@ -1,6 +1,5 @@
 //绑定input搜索栏数据源
-bindInputQuery("#_demanderfk", "./test/searchDictionary/DealerCollections.json")
-
+// bindInputQuery("#_demanderfk", "./test/searchDictionary/DealerCollections.json")
 $("#PurchaseRequisition")
   .on("hidden.bs.modal", function() {
     //操作需要获取tempID来保存set，
@@ -11,7 +10,6 @@ $("#PurchaseRequisition")
     PurchaseRequisition.destory()
   })
 $("#PurchaseRequisition").on("shown.bs.modal", function() {
-  PurchaseRequisition.init()
 })
 
 $("#addPItem").on("click", function() {

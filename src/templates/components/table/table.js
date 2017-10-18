@@ -32,22 +32,22 @@ table.prototype.load = function(url) {
   return this
 }
 
-table.prototype.loadFromTemplateJson = function(url, Options) {
-  if (typeof url == "string") {
+table.prototype.loadFromTemplateJson = function(DataSource, Options) {
+  if (typeof DataSource == "string") {
     //若参数带url，更新url
-    if (!(url === undefined || "" === url)) {
-      this.url = url
+    if (!(DataSource === undefined || "" === DataSource)) {
+      this.url = DataSource
     }
-    var c = url.split('.')
+    var c = DataSource.split('.')
     if (c.length - 1 == c.lastIndexOf('json'))
-      return this.load(url)
+      return this.load(DataSource)
   }
   var template = {
     "tablename": "template",
     "hasHeader": false,
     "hasDetail": false,
     "hasButton": false,
-    "viewOrder":[],
+    "viewOrder": [],
     "keyArr": [],
     "data": [
       [""]
@@ -61,15 +61,14 @@ table.prototype.loadFromTemplateJson = function(url, Options) {
   template["buttonPool"] = Options["buttonPool"] ? Options["buttonPool"] : []
   template["keyArr"] = Options["keyArr"] ? Options["keyArr"].slice(0) : []
   template["data"] = Options["data"] ? Options["data"].slice(0) : []
-  template["viewOrder"] = Options["viewOrder"] ? Options["viewOrder"]: undefined
+  template["viewOrder"] = Options["viewOrder"] ? Options["viewOrder"] : undefined
   //第一次load 或者 大于60s没更新，就去获取一波
   if (this.urlTimestamp == null || this.timeDiff() > 60 || this.isUpdated) {
-    var datasource = (typeof url == "object") ? url : GET(url)
+    var datasource = (typeof DataSource == "object") ? DataSource : GET(DataSource)
     var data = Adapter(datasource, template["viewOrder"])
     template["data"] = template["data"].concat(data)
     this.responseJson = template
-    this.init()
-      .bindEvents()
+    this.init().bindEvents()
     this.urlTimestamp = new Date()
   }
   return this
@@ -112,7 +111,7 @@ table.prototype.init = function() {
       .pop()
     this.Header = hr.slice(0)
     if (this.hasButton) {
-      this.Header.push("Operation")
+      this.Header.push("操作")
       this.keyArr.push("operation")
     }
     var headRow = new table_row(this.Header, this, true)
@@ -184,7 +183,7 @@ table.prototype.new = function(Obj, header) {
   this.responseJson = Json
   this.init()
   return this
-}//disposable
+} //disposable
 
 table.prototype.addRow = function(rowJSONObj) {
   var tbody = $(this.tableHTML)
@@ -199,6 +198,9 @@ table.prototype.addRow = function(rowJSONObj) {
   tbody.append(row.HTMLObj)
   this.addInfoCard()
   this.isUpdated = true
+}
+table.prototype.editRow = function(key, row) {
+
 }
 
 table.prototype.onCardLongPress = function(callback) {
@@ -219,7 +221,18 @@ table.prototype.remove = function() {
   }
 }
 
-table.prototype.update = function() {
-  this.loadFromTemplateJson().to(this.container)
-  this.isUpdated = false
+table.prototype.update = function(rowKey, row) {
+  var set = arrayToSet(this.responseJson.data, this.PrimaryKeyIndex)
+  if (row instanceof Array)
+    set[rowKey] = row
+  else {
+    var c  = setToArray(row,this.responseJson["viewOrder"])
+    set[rowKey] = c
+  }
+  // this.init()
+  // this.loadFromTemplateJson(this.responseJson.data, this.responseJson).to(this.container)
+  return this
+  // this.init().bindEvents()
+  // this.loadFromTemplateJson().to(this.container)
+  // this.isUpdated = false
 }
