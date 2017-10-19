@@ -139,28 +139,25 @@
         break
       case 'zeiss':
       case 'Zeiss':
-        // var user = apiConfig.employee.login(username, password)
-        if ("zeiss" == username.toLowerCase()) {
+        var user = apiConfig.employee.Login(username, password)
+        // if ("zeiss" == username.toLowerCase()) {
+        if (user) {
           window.location.href = "./zeiss-home.html"
           /**
-           *
            *   "statusField": 0,
                 "nameField": "string",
                 "eNNameField": "string",
                 "mobileField": "string",
                 "emailField": "string",
                 "accountField": "string"
-           *
            */
           setCookie("auth", "Zeiss")
-          // setCookie("name", user["_accountField"])
-          setCookie("name", "BLManager")
-          var user = {
-            "_id":"BLManager"
-          }
+          setCookie("name", user["nameField"])
+          // setCookie("name", "BLManager")
+          // var user = {
+          //   "_id":"BLManager"
+          // }
           setCookie("user", JSON.stringify(user))
-          // setCookie("name", user["_accountname"])
-          // setCookie("user", JSON.stringify(user))
         }
         break
     }

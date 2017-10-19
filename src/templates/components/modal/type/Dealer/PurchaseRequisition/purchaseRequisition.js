@@ -14,19 +14,111 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
-    bindInputQuery("#demanderfk", apiConfig.dealer.Top(1000), function() {
-      var val = $("#_demanderfk").val()
+    //
+    bindInputQuery("#requestordealerfk", apiConfig.dealer.Top(1000), "_dealername", function() {
+      var val = $("#_requestordealerfk").val()
       var dealer = apiConfig.dealer.Get(val)
       $("#_dealerregion")
         .val(dealer["_dealerregion"])
       $("#_dealerregion")
         .attr("disabled", "true")
     })
+
+    $("#requestoremployeefk").on("keyup", function(e) {
+      bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", function() {
+        var val = $("#_requestoremployeefk").val()
+        var employee = apiConfig.employee.Search(val)
+        $("#_dealerregion") //字段不见了
+          .val(employee["_dealerregion"])
+        $("#_dealerregion")
+          .attr("disabled", "true")
+      })
+    })
+
+    $("#submitter").val(getCookie('name'))
+    $("#submitter").attr("disabled", "true")
     // PurchaseRequisition.view.init()
+
+    // //若为dealer，则自动填充名字和区域
+    if ("dealer" == (getCookie("auth").toLowerCase())) {
+      var dealer = JSON.parse(getCookie('user'))
+      if (dealer) {
+        $("#_requestordealerfk")
+          .val(dealer["_id"])
+        $("#requestordealerfk").val(dealer["_dealername"])
+        $("#requestoremployeefk").val(dealer["_dealername"])
+        $("#requestordealerfk")
+          .attr("readonly", "readonly")
+        $("#requestoremployeefk")
+          .attr("readonly", "readonly")
+        $("#_dealerregion")
+          .val(dealer["_dealerregion"])
+        $("#_dealerregion")
+          .attr("disabled", "true")
+      }
+      // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+    } else if ("zeiss" == (getCookie("auth").toLowerCase())) {
+      $("#requestoremployeefk").val(getCookie('name'))
+      $("#requestoremployeefk")
+        .attr("readonly", "readonly")
+      var employee = JSON.parse(getCookie('user'))
+      if (employee) {
+        $(".requestorInput").hide()
+        $("#forEmployee").show()
+        $("#agentCheck").hide()
+        $("#requireAgent").on("click", function() {
+          if ($(this).is(":checked")) {
+            $("#requestoremployeefk").val("")
+            $("#requestoremployeefk")
+              .removeAttr("readonly")
+
+            $("#agentCheck input").removeAttr('disabled')
+            $("#agentCheck").show()
+          } else {
+            $(".queryinput").val("")
+            $(".requestorInput").hide()
+            $("#forEmployee").show()
+
+            var radio = $("#agentCheck input")
+            for (var a = 0; a < radio.length; a++) {
+              radio[a].checked = false
+            }
+
+            $("#requestoremployeefk").val(getCookie('name'))
+            $("#requestoremployeefk")
+              .attr("readonly", "readonly")
+
+            $("#forEmployee").attr("readonly", "readonly")
+            $("#agentCheck input").attr("checked", "false")
+            $("#agentCheck input").attr('disabled', 'true')
+            $("#agentCheck").hide()
+          }
+        })
+        $("#agentCheck input").on("click", function(e) {
+          var t = $(e.target)
+          console.log(t.val());
+          if (t.is(':checked')) {
+            if (0 == t.val()) {
+              $(".requestorInput").attr('disabled', 'true')
+              $(".requestorInput").hide()
+              $("#forEmployee").removeAttr('disabled')
+              $("#forEmployee").show()
+            } else {
+              //for Dealer
+              $(".requestorInput").attr('disabled', 'true')
+              $(".requestorInput").hide()
+              $("#forDealer").removeAttr('disabled')
+              $("#forDealer").show()
+            }
+          }
+        })
+      }
+    }
+
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#PurchaseRequisition_form"
-    targetPITableArea = "#InfomationAddArea"
+    window._targetPITableArea = "#InfomationAddArea"
 
     if (PRid) {
       //填充其他信息
@@ -35,23 +127,6 @@ const PurchaseRequisition = {
       PurchaseRequisition.loadPITable(PRid)
     }
 
-    // //若为dealer，则自动填充名字和区域
-    if ("dealer" == (getCookie("auth")
-        .toLowerCase())) {
-      var dealer = JSON.parse(getCookie('user'))
-      if (dealer) {
-        $("#_demanderfk")
-          .val(dealer["_id"])
-        $("#demanderfk").val(dealer["_dealername"])
-        $("#demanderfk")
-          .attr("readonly", "readonly")
-        $("#_dealerregion")
-          .val(dealer["_dealerregion"])
-        $("#_dealerregion")
-          .attr("disabled", "true")
-      }
-      // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-    }
   },
   loadPITable: function(PRid) {
     //填充PI
@@ -64,7 +139,7 @@ const PurchaseRequisition = {
     // console.log(2, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
     window.__PurchaseRequisitionItem_table = PItable
     // console.log(3, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
-    PItable.to(targetPITableArea)
+    PItable.to(window._targetPITableArea)
     // console.log(4, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
   },
   detail: function(PRid) {
@@ -85,6 +160,7 @@ const PurchaseRequisition = {
     window.__PurchaseRequisitionItem_Unsave_set = null
     window._target.PR = null
     window._operation = null
+    window._targetPITableArea = null
     $("#operation").empty()
   },
   view: {
@@ -172,17 +248,33 @@ const PurchaseRequisition = {
       table_init()
     },
     submit: function() {
-      $("#saver")
-        .val(getCookie("name"))
-      debugger
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       // if (items.length <= 0) {
       //   throw "请购单item数量不能为0"
       // }
+      debugger
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Progress
+      var submitter = $("#submitter").val()
+      switch (getCookie('auth').toLowerCase()) {
+        case 'zeiss':
+          data["_submitteremployeefk"] = submitter
+          // if ("" != $("#_requestordealerfk").val()) {
+          //   if ($("#_requestoremployeefk").val() == submitter)
+          //     data["_submitteremployeefk"] = submitter
+          //   else
+          //     data["_submitteremployeefk"] = $("#_requestoremployeefk").val()
+          // } else if ("" != $("#_requestordealerfk").val()) {
+          //   data["_submitteremployeefk"] = submitter
+          // }
+          // data["_submitteremployee"] = submitter
+          break
+        case 'dealer':
+          data["_submitterdealerfk"] = submitter
+          break
+      }
       var PRid = apiConfig.purchaserequisition.Add(data)
 
       for (var i = 0; i < items.length; i++) {

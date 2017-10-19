@@ -195,6 +195,15 @@ const apiConfig = {
       //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
       pr["_prprocessstep"] = processEnum
       this.Edit(id, pr)
+    },
+    Approve: function() {
+
+    },
+    Reject: function() {
+
+    },
+    SupplierComplete: function() {
+
     }
   },
   prprocesssetting: {
@@ -327,8 +336,8 @@ const apiConfig = {
     }
   },
   PRSupplierView: {
-    Count:function(){
-      var api = root +`/api/PRSupplierView/count`
+    Count: function() {
+      var api = root + `/api/PRSupplierView/count`
       return GET(api)
     },
     Search: function(isCompeleted, keyword, startIndex, endIndex) {
@@ -461,7 +470,11 @@ const apiConfig = {
   },
   employee: {
     Login: function(username, password) {
-      var api = root + `/api/employee/login(${userName},${password})`
+      var api = root + `/api/employee/login(${username},${password})`
+      return GET(api)
+    },
+    Search: function(accountName){
+      var api = root +`/api/employee/search(${accountName})`
       return GET(api)
     }
   },

@@ -35,7 +35,7 @@ var PRDetail = {
         $mod.addClass('processing')
       } else if (result == Enum.enumApprovalResult.Success) {
         $mod.addClass('approved')
-      } else if (result == Enum.enumApprovalResult.Rejected) {
+      } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
         $mod.addClass('rejected')
       }
 
@@ -45,7 +45,7 @@ var PRDetail = {
 
       $("#progressbar").append($mod)
     }
-    // 
+    //
     // var noAction = $("#progressbar").find('.noAction')
     // if (noAction.length > 1) {
     //   var processing = $(noAction[0])

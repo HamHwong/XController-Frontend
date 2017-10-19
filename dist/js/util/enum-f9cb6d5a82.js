@@ -18,6 +18,7 @@ const Enum = {
     Approved: "Approved",
     /// 结束状态：审核已拒绝
     Rejected: "Rejected",
+    Failure: "Failure",
     /// 已交付状态
     Delivered: "Delivered",
     /// 完成状态

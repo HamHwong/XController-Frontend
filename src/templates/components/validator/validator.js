@@ -1,5 +1,5 @@
 var validator = {
-  init: function () {
+  init: function() {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")
     for (var i = 0; i < validatelist.length; i++) {
@@ -8,41 +8,41 @@ var validator = {
       if (control.is("input")) {
         var type = control.attr('type') || 'text'
         switch (type) {
-        case 'password':
-        case 'text':
-        case 'email':
-        case 'tel':
-        case 'url':
-        case 'search':
-          control.on('keyup', function (e) {
-            console.log($(e.target).data('regxrule'), 'onkeyup works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-          })
-          break
-        case 'radio':
-        case 'checkbox':
-        case 'hidden':
-          control.on('change', function (e) {
-            console.log($(e.target).data('regxrule'), 'onchange works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-          })
-          break
-        default:
-          break
+          case 'password':
+          case 'text':
+          case 'email':
+          case 'tel':
+          case 'url':
+          case 'search':
+            control.on('keyup', function(e) {
+              console.log($(e.target).data('regxrule'), 'onkeyup works')
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              validator.validate(target, rule)
+            })
+            break
+          case 'radio':
+          case 'checkbox':
+          case 'hidden':
+            control.on('change', function(e) {
+              console.log($(e.target).data('regxrule'), 'onchange works')
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              validator.validate(target, rule)
+            })
+            break
+          default:
+            break
         }
       } else if (control.is("select")) {
-        control.on('change', function (e) {
+        control.on('change', function(e) {
           console.log($(e.target).data('regxrule'), 'onchange works')
           var target = $(e.target)
           var rule = target.data('regxrule')
           validator.validate(target, rule)
         })
       } else if (control.is("textarea")) {
-        control.on('keyup', function (e) {
+        control.on('keyup', function(e) {
           console.log($(e.target).data('regxrule'), 'onkeyup works')
           var target = $(e.target)
           var rule = target.data('regxrule')
@@ -55,15 +55,73 @@ var validator = {
       //若是input checkbox radio 则绑定 onchange
     }
   },
-  validate: function (target,rule) {
-    // var result = rule.match(/\(([^)]*)\)/)[1] //匹配括号里的内容
-    var result = rule.split(/\(([^)]*)\)/)//匹配括号里的内容
-    var category = result[0]
-    var limit = result[1]
-    if(limit){
-      //若有limit 则说明需要限制长度
+  validate: function(target, rule) {
+    var result = {}
+    var regStr = ""
+    var regxResult = rule.split(/\(([^)]*)\)/) //匹配括号里的内容
+    var category = regxResult[0]
+    var limit = regxResult[1]
+    console.log(category, limit)
+    var c = null
+    if (!(c = regxRule[category])) {
+      //无值
+      var str = category
+      try {
+        c = eval(str)
+      } catch (e) {
+        c = str
+      }
+
+      if ('function' == typeof c) {
+        //若为函数,则将target传入进行判断,返回true或者false
+        result['result'] = c(target)
+        result['warning'] = result['result'] ? "OK" : "ERROR"
+      } else if ('string' == typeof c) {
+        //若为字符串，则为正则
+        regStr = c
+        var regexp = new RegExp(regStr)
+        var value = $(target).is("input") ? $(target).val() : $(target).text()
+        result['result'] = regexp.test(value)
+        result['warning'] = result['result'] ? "OK" : "ERROR"
+      }
+    } else if (c = regxRule[category]) {
+      //若在正则库中到，则说明为正则
+      if ('function' == typeof c["regx"]) {
+        if (limit) {
+          //若有limit 则说明需要限制长度
+          var limitList = limit.split(",")
+          var min = ""
+          var max = ""
+          var MinAndMax = ""
+          if (limitList.length > 2)
+            throw ('only two integers required,Max and Min')
+          else if (limitList.length == 2) {
+            try {
+              var i1 = parseInt(limitList[0])
+              var i2 = parseInt(limitList[1])
+              max = i1 > i2 ? i1 : i2
+              min = i1 < i2 ? i1 : i2
+              // MinAndMax = min + "," + max
+            } catch (e) {
+              throw e
+            }
+          } else {
+            min = parseInt(limitList[0])
+          }
+          regStr = c["regx"](min, max)
+        } else {
+          regStr = c["regx"]()
+        }
+      }else{
+        regStr = c["regx"]
+      }
+      console.log(c["regx"])
+      var regexp = new RegExp(regStr)
+      var value = $(target).is("input") ? $(target).val() : $(target).text()
+      console.log(value, regexp.test(value))
+      result['result'] = regexp.test(value)
+      result['warning'] = c['warning']
     }
-    console.log(category,limit)
-    var c = regxRule[rule]
+    return result
   }
 }

@@ -103,73 +103,6 @@ MessageAlert.prototype.inStatus = function(status) {
 
 var messageAlert = new MessageAlert()
 
-var bindInputQuery = function($input, datasource, callback) {
-
-  $input = $($input)
-  $($input).unbind("keyup")
-  $input
-    .on('keyup', function(e) {
-      e.preventDefault()
-      var keywordsdata = null
-      if ("string" == typeof datasource) {
-        keywordsdata = JSON.parse($.ajax({
-            url: datasource,
-            async: false
-          })
-          .responseText)
-      } else {
-        keywordsdata = datasource // 以name为主键
-      }
-      //HACK
-      var set = {}
-      var result = arrayToSet(keywordsdata, "_dealername")
-      var nameArray = []
-      for (var i in result) {
-        nameArray.push(i)
-        set[i] = result[i]["_id"]
-      }
-
-
-      var droplist = $input
-        .siblings(".keyhint")
-      droplist.empty()
-      var data = queryKeyWords(this.value, nameArray)
-      for (var i = 0; i < data["raw"].length; i++) {
-        var key = data["raw"][i]
-        var value = set[key]
-        var li = $("<li></li>")
-        var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
-        a.html(data["blod"][i])
-        li.append(a)
-        droplist.append(li)
-      }
-      if (data["raw"].length > 0 && this.value != "") {
-        $input
-          .parent(".search_box_warp")
-          .addClass("open")
-        $(".keywords")
-          .on('click', function(e) {
-            var select = $input.siblings("select.queryinput")
-            // $select
-            var val = $(this).attr("value")
-            select.val(val)
-            $input.val(this.innerText)
-            droplist.empty()
-            $input
-              .parent(".search_box_warp")
-              .removeClass("open")
-            if (callback) {
-              callback()
-            }
-          })
-      } else {
-        $input
-          .parent(".search_box_warp")
-          .removeClass("open")
-      }
-    })
-
-}
 
 //===========================================================================================================================
 //搜索条
@@ -177,43 +110,43 @@ var bindInputQuery = function($input, datasource, callback) {
 /**
  * @description 为搜索框绑定keyup事件，调用queryKeyWords动态地查询关键字，然后添加到下拉列表中
  */
-$(".search_box")
-  .on('keyup', function (e) {
-    // console.log(e);
-    e.preventDefault()
-    var droplist = $(".search_box_warp .keyhint")
-    droplist.empty()
-    var data = queryKeyWords(this.value, keywordsdata)
-    for (var i in data) {
-      var li = $("<li></li>")
-      var a = $("<a href=\"#\" class='keywords'></a>")
-      a.html(data[i])
-      li.append(a)
-      droplist.append(li)
-    }
-    if (data.length > 0 && this.value != "") {
-      $(".search_box_warp")
-        .addClass("open")
-      $(".keywords")
-        .on('click', function (e) {
-          $("#search_box")
-            .val(this.innerText)
-          droplist.empty()
-          $(".search_box_warp")
-            .removeClass("open")
-        })
-    } else {
-      $(".search_box_warp")
-        .removeClass("open")
-    }
-  })
+// $(".search_box")
+//   .on('keyup', function (e) {
+//     // console.log(e);
+//     e.preventDefault()
+//     var droplist = $(".search_box_warp .keyhint")
+//     droplist.empty()
+//     var data = queryKeyWords(this.value, keywordsdata)
+//     for (var i in data) {
+//       var li = $("<li></li>")
+//       var a = $("<a href=\"#\" class='keywords'></a>")
+//       a.html(data[i])
+//       li.append(a)
+//       droplist.append(li)
+//     }
+//     if (data.length > 0 && this.value != "") {
+//       $(".search_box_warp")
+//         .addClass("open")
+//       $(".keywords")
+//         .on('click', function (e) {
+//           $("#search_box")
+//             .val(this.innerText)
+//           droplist.empty()
+//           $(".search_box_warp")
+//             .removeClass("open")
+//         })
+//     } else {
+//       $(".search_box_warp")
+//         .removeClass("open")
+//     }
+//   })
 /**
  * @description 从字典数组中查询到
  * @param  {String} keys 输入的关键字字符串
  * @param  {StringArray} dic  Dictionary字符串字典数组
  * @return {StringArray}      返回一个装有所有搜索结果的字符数组
  */
-var queryKeyWords = function (keys, dic) {
+var queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
@@ -225,9 +158,88 @@ var queryKeyWords = function (keys, dic) {
     }
   }
   return {
-    blod:b,
-    raw:r
+    blod: b,
+    raw: r
   }
+}
+
+var bindInputQuery = function($input, datasource, keywordKey, callback) {
+  $input = $($input)
+  $($input).unbind("keyup")
+
+  //给select添加上option（真正提交的部分）
+  var optionlist = $input.siblings("select.queryinput")
+  $(optionlist).empty()
+  var category = $(optionlist).data('source')
+  for (var j of datasource) {
+    var id = ""
+    var name = ""
+    if ("ziess" == category) {
+      id = j["eNNameField"]
+      name = j["nameField"]
+    } else {
+      id = j["_id"]
+      name = j[keywordKey]
+    }
+    var option = `<option value="${id}">${name}</option>`
+    $(optionlist).append($(option))
+  }
+
+  //给input绑定上keyup事件
+  $input.on('keyup', function(e) {
+    e.preventDefault()
+    var keywordsdata = null
+    if ("string" == typeof datasource) {
+      keywordsdata = JSON.parse($.ajax({
+          url: datasource,
+          async: false
+        })
+        .responseText)
+    } else {
+      keywordsdata = datasource // 以name为主键
+    }
+
+    //HACK
+    var set = {}
+    var result = arrayToSet(keywordsdata, keywordKey)
+    var nameArray = []
+    for (var i in result) {
+      nameArray.push(i)
+      //dealername-dealerid
+      set[i] = result[i]["_id"]
+    }
+
+    var droplist = $input.siblings(".keyhint")
+    droplist.empty()
+
+    var data = queryKeyWords(this.value, nameArray)
+    for (var i = 0; i < data["raw"].length; i++) {
+      var key = data["raw"][i]
+      var value = set[key]
+      var li = $("<li></li>")
+      var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
+      a.html(data["blod"][i])
+      li.append(a)
+      droplist.append(li)
+    }
+
+    if (data["raw"].length > 0 && this.value != "") {
+      $input.parent(".search_box_warp").addClass("open")
+      $(".keywords").on('click', function(e) {
+        var select = $input.siblings("select.queryinput")
+        var val = $(this).attr("value")
+        select.val(val)
+        $input.val(this.innerText)
+        droplist.empty()
+        $input.parent(".search_box_warp").removeClass("open")
+        if (callback) {
+          callback()
+        }
+      })
+    } else {
+      $input.parent(".search_box_warp").removeClass("open")
+    }
+  })
 }
 
 //多模态HACK
@@ -739,6 +751,155 @@ table_row.prototype.onClick = function(callback) {
     .on("click", callback)
 }
 
+const regxRule = {
+  account: "",
+  email: {
+    regx: "\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}",
+    warning: "请输入正常的邮箱"
+  },
+  mobile: {
+    regx: "(13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}",
+    warning: ""
+  },
+  number: {
+    regx: function(min, max) {
+      var result = min
+      if (max)
+        result += "," + max
+      return `^\\d{${result}}$`
+    },
+    warning: ""
+  }
+}
+
+var validator = {
+  init: function() {
+    var form = $("form[data-validator=true]")
+    var validatelist = form.find("*[data-regxRule]")
+    for (var i = 0; i < validatelist.length; i++) {
+      var control = $(validatelist[i])
+      // debugger
+      if (control.is("input")) {
+        var type = control.attr('type') || 'text'
+        switch (type) {
+          case 'password':
+          case 'text':
+          case 'email':
+          case 'tel':
+          case 'url':
+          case 'search':
+            control.on('keyup', function(e) {
+              console.log($(e.target).data('regxrule'), 'onkeyup works')
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              validator.validate(target, rule)
+            })
+            break
+          case 'radio':
+          case 'checkbox':
+          case 'hidden':
+            control.on('change', function(e) {
+              console.log($(e.target).data('regxrule'), 'onchange works')
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              validator.validate(target, rule)
+            })
+            break
+          default:
+            break
+        }
+      } else if (control.is("select")) {
+        control.on('change', function(e) {
+          console.log($(e.target).data('regxrule'), 'onchange works')
+          var target = $(e.target)
+          var rule = target.data('regxrule')
+          validator.validate(target, rule)
+        })
+      } else if (control.is("textarea")) {
+        control.on('keyup', function(e) {
+          console.log($(e.target).data('regxrule'), 'onkeyup works')
+          var target = $(e.target)
+          var rule = target.data('regxrule')
+          validator.validate(target, rule)
+        })
+      }
+
+      // console.log(control,control.data('regxrule'))
+      //若是input text password，则绑定onkeyup
+      //若是input checkbox radio 则绑定 onchange
+    }
+  },
+  validate: function(target, rule) {
+    var result = {}
+    var regStr = ""
+    var regxResult = rule.split(/\(([^)]*)\)/) //匹配括号里的内容
+    var category = regxResult[0]
+    var limit = regxResult[1]
+    console.log(category, limit)
+    var c = null
+    if (!(c = regxRule[category])) {
+      //无值
+      var str = category
+      try {
+        c = eval(str)
+      } catch (e) {
+        c = str
+      }
+
+      if ('function' == typeof c) {
+        //若为函数,则将target传入进行判断,返回true或者false
+        result['result'] = c(target)
+        result['warning'] = result['result'] ? "OK" : "ERROR"
+      } else if ('string' == typeof c) {
+        //若为字符串，则为正则
+        regStr = c
+        var regexp = new RegExp(regStr)
+        var value = $(target).is("input") ? $(target).val() : $(target).text()
+        result['result'] = regexp.test(value)
+        result['warning'] = result['result'] ? "OK" : "ERROR"
+      }
+    } else if (c = regxRule[category]) {
+      //若在正则库中到，则说明为正则
+      if ('function' == typeof c["regx"]) {
+        if (limit) {
+          //若有limit 则说明需要限制长度
+          var limitList = limit.split(",")
+          var min = ""
+          var max = ""
+          var MinAndMax = ""
+          if (limitList.length > 2)
+            throw ('only two integers required,Max and Min')
+          else if (limitList.length == 2) {
+            try {
+              var i1 = parseInt(limitList[0])
+              var i2 = parseInt(limitList[1])
+              max = i1 > i2 ? i1 : i2
+              min = i1 < i2 ? i1 : i2
+              // MinAndMax = min + "," + max
+            } catch (e) {
+              throw e
+            }
+          } else {
+            min = parseInt(limitList[0])
+          }
+          regStr = c["regx"](min, max)
+        } else {
+          regStr = c["regx"]()
+        }
+      }else{
+        regStr = c["regx"]
+      }
+      console.log(c["regx"])
+      var regexp = new RegExp(regStr)
+      var value = $(target).is("input") ? $(target).val() : $(target).text()
+      console.log(value, regexp.test(value))
+      result['result'] = regexp.test(value)
+      result['warning'] = c['warning']
+    }
+    return result
+  }
+}
+
 
 var PRDetail = {
   show: function() {
@@ -777,7 +938,7 @@ var PRDetail = {
         $mod.addClass('processing')
       } else if (result == Enum.enumApprovalResult.Success) {
         $mod.addClass('approved')
-      } else if (result == Enum.enumApprovalResult.Rejected) {
+      } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
         $mod.addClass('rejected')
       }
 
@@ -787,7 +948,7 @@ var PRDetail = {
 
       $("#progressbar").append($mod)
     }
-    // 
+    //
     // var noAction = $("#progressbar").find('.noAction')
     // if (noAction.length > 1) {
     //   var processing = $(noAction[0])
@@ -849,10 +1010,22 @@ var PurchaseItem = {
     //   }
     // }
   },
+  updatePITable: function() {
+    if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
+      //填充PI
+      var PIinfoSet = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
+      var tmp = PIinfoSet.slice(0)
+      var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
+      window.__PurchaseRequisitionItem_table = PItable
+      PItable.to(window._targetPITableArea)
+    }
+  },
   destory: function() {
     ClearInputs("#PruchaseItem")
     $("#PIOperation").empty()
     window._target.PI = null
+    window._operation = null
   },
   view: {
     init: function() {
@@ -883,13 +1056,13 @@ var PurchaseItem = {
 
     },
     add: function() {
-      PurchaseItem.view.init()
       window._operation = Enum.operation.Create
+      PurchaseItem.view.init()
       PurchaseItem.show()
     },
     edit: function(PIid) {
-      PurchaseItem.view.init()
       window._operation = Enum.operation.Update
+      PurchaseItem.view.init()
       if (PIid.includes("[unsave]")) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
@@ -936,7 +1109,12 @@ var PurchaseItem = {
       if (!targetid.toString().includes("[unsave]")) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
-      window.__PurchaseRequisitionItem_table.update(target['_id'], target)
+      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID],"_id")
+      for(var info in target){
+        localSource[targetid][info] = target[info]
+      }
+      // window.__PurchaseRequisitionItem_table.update(target['_id'], target)
+      PurchaseItem.updatePITable()
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
@@ -1002,19 +1180,111 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
-    bindInputQuery("#demanderfk", apiConfig.dealer.Top(1000), function() {
-      var val = $("#_demanderfk").val()
+    //
+    bindInputQuery("#requestordealerfk", apiConfig.dealer.Top(1000), "_dealername", function() {
+      var val = $("#_requestordealerfk").val()
       var dealer = apiConfig.dealer.Get(val)
       $("#_dealerregion")
         .val(dealer["_dealerregion"])
       $("#_dealerregion")
         .attr("disabled", "true")
     })
+
+    $("#requestoremployeefk").on("keyup", function(e) {
+      bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", function() {
+        var val = $("#_requestoremployeefk").val()
+        var employee = apiConfig.employee.Search(val)
+        $("#_dealerregion") //字段不见了
+          .val(employee["_dealerregion"])
+        $("#_dealerregion")
+          .attr("disabled", "true")
+      })
+    })
+
+    $("#submitter").val(getCookie('name'))
+    $("#submitter").attr("disabled", "true")
     // PurchaseRequisition.view.init()
+
+    // //若为dealer，则自动填充名字和区域
+    if ("dealer" == (getCookie("auth").toLowerCase())) {
+      var dealer = JSON.parse(getCookie('user'))
+      if (dealer) {
+        $("#_requestordealerfk")
+          .val(dealer["_id"])
+        $("#requestordealerfk").val(dealer["_dealername"])
+        $("#requestoremployeefk").val(dealer["_dealername"])
+        $("#requestordealerfk")
+          .attr("readonly", "readonly")
+        $("#requestoremployeefk")
+          .attr("readonly", "readonly")
+        $("#_dealerregion")
+          .val(dealer["_dealerregion"])
+        $("#_dealerregion")
+          .attr("disabled", "true")
+      }
+      // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
+    } else if ("zeiss" == (getCookie("auth").toLowerCase())) {
+      $("#requestoremployeefk").val(getCookie('name'))
+      $("#requestoremployeefk")
+        .attr("readonly", "readonly")
+      var employee = JSON.parse(getCookie('user'))
+      if (employee) {
+        $(".requestorInput").hide()
+        $("#forEmployee").show()
+        $("#agentCheck").hide()
+        $("#requireAgent").on("click", function() {
+          if ($(this).is(":checked")) {
+            $("#requestoremployeefk").val("")
+            $("#requestoremployeefk")
+              .removeAttr("readonly")
+
+            $("#agentCheck input").removeAttr('disabled')
+            $("#agentCheck").show()
+          } else {
+            $(".queryinput").val("")
+            $(".requestorInput").hide()
+            $("#forEmployee").show()
+
+            var radio = $("#agentCheck input")
+            for (var a = 0; a < radio.length; a++) {
+              radio[a].checked = false
+            }
+
+            $("#requestoremployeefk").val(getCookie('name'))
+            $("#requestoremployeefk")
+              .attr("readonly", "readonly")
+
+            $("#forEmployee").attr("readonly", "readonly")
+            $("#agentCheck input").attr("checked", "false")
+            $("#agentCheck input").attr('disabled', 'true')
+            $("#agentCheck").hide()
+          }
+        })
+        $("#agentCheck input").on("click", function(e) {
+          var t = $(e.target)
+          console.log(t.val());
+          if (t.is(':checked')) {
+            if (0 == t.val()) {
+              $(".requestorInput").attr('disabled', 'true')
+              $(".requestorInput").hide()
+              $("#forEmployee").removeAttr('disabled')
+              $("#forEmployee").show()
+            } else {
+              //for Dealer
+              $(".requestorInput").attr('disabled', 'true')
+              $(".requestorInput").hide()
+              $("#forDealer").removeAttr('disabled')
+              $("#forDealer").show()
+            }
+          }
+        })
+      }
+    }
+
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#PurchaseRequisition_form"
-    targetPITableArea = "#InfomationAddArea"
+    window._targetPITableArea = "#InfomationAddArea"
 
     if (PRid) {
       //填充其他信息
@@ -1023,23 +1293,6 @@ const PurchaseRequisition = {
       PurchaseRequisition.loadPITable(PRid)
     }
 
-    // //若为dealer，则自动填充名字和区域
-    if ("dealer" == (getCookie("auth")
-        .toLowerCase())) {
-      var dealer = JSON.parse(getCookie('user'))
-      if (dealer) {
-        $("#_demanderfk")
-          .val(dealer["_id"])
-        $("#demanderfk").val(dealer["_dealername"])
-        $("#demanderfk")
-          .attr("readonly", "readonly")
-        $("#_dealerregion")
-          .val(dealer["_dealerregion"])
-        $("#_dealerregion")
-          .attr("disabled", "true")
-      }
-      // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-    }
   },
   loadPITable: function(PRid) {
     //填充PI
@@ -1052,7 +1305,7 @@ const PurchaseRequisition = {
     // console.log(2, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
     window.__PurchaseRequisitionItem_table = PItable
     // console.log(3, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
-    PItable.to(targetPITableArea)
+    PItable.to(window._targetPITableArea)
     // console.log(4, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
   },
   detail: function(PRid) {
@@ -1073,6 +1326,7 @@ const PurchaseRequisition = {
     window.__PurchaseRequisitionItem_Unsave_set = null
     window._target.PR = null
     window._operation = null
+    window._targetPITableArea = null
     $("#operation").empty()
   },
   view: {
@@ -1160,17 +1414,33 @@ const PurchaseRequisition = {
       table_init()
     },
     submit: function() {
-      $("#saver")
-        .val(getCookie("name"))
-      debugger
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       // if (items.length <= 0) {
       //   throw "请购单item数量不能为0"
       // }
+      debugger
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Progress
+      var submitter = $("#submitter").val()
+      switch (getCookie('auth').toLowerCase()) {
+        case 'zeiss':
+          data["_submitteremployeefk"] = submitter
+          // if ("" != $("#_requestordealerfk").val()) {
+          //   if ($("#_requestoremployeefk").val() == submitter)
+          //     data["_submitteremployeefk"] = submitter
+          //   else
+          //     data["_submitteremployeefk"] = $("#_requestoremployeefk").val()
+          // } else if ("" != $("#_requestordealerfk").val()) {
+          //   data["_submitteremployeefk"] = submitter
+          // }
+          // data["_submitteremployee"] = submitter
+          break
+        case 'dealer':
+          data["_submitterdealerfk"] = submitter
+          break
+      }
       var PRid = apiConfig.purchaserequisition.Add(data)
 
       for (var i = 0; i < items.length; i++) {
@@ -1525,6 +1795,15 @@ const apiConfig = {
       //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
       pr["_prprocessstep"] = processEnum
       this.Edit(id, pr)
+    },
+    Approve: function() {
+
+    },
+    Reject: function() {
+
+    },
+    SupplierComplete: function() {
+
     }
   },
   prprocesssetting: {
@@ -1657,8 +1936,8 @@ const apiConfig = {
     }
   },
   PRSupplierView: {
-    Count:function(){
-      var api = root +`/api/PRSupplierView/count`
+    Count: function() {
+      var api = root + `/api/PRSupplierView/count`
       return GET(api)
     },
     Search: function(isCompeleted, keyword, startIndex, endIndex) {
@@ -1791,7 +2070,11 @@ const apiConfig = {
   },
   employee: {
     Login: function(username, password) {
-      var api = root + `/api/employee/login(${userName},${password})`
+      var api = root + `/api/employee/login(${username},${password})`
+      return GET(api)
+    },
+    Search: function(accountName){
+      var api = root +`/api/employee/search(${accountName})`
       return GET(api)
     }
   },
@@ -2011,6 +2294,7 @@ const Enum = {
     Approved: "Approved",
     /// 结束状态：审核已拒绝
     Rejected: "Rejected",
+    Failure: "Failure",
     /// 已交付状态
     Delivered: "Delivered",
     /// 完成状态

@@ -45,10 +45,22 @@ var PurchaseItem = {
     //   }
     // }
   },
+  updatePITable: function() {
+    if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
+      //填充PI
+      var PIinfoSet = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+      var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
+      var tmp = PIinfoSet.slice(0)
+      var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
+      window.__PurchaseRequisitionItem_table = PItable
+      PItable.to(window._targetPITableArea)
+    }
+  },
   destory: function() {
     ClearInputs("#PruchaseItem")
     $("#PIOperation").empty()
     window._target.PI = null
+    window._operation = null
   },
   view: {
     init: function() {
@@ -79,13 +91,13 @@ var PurchaseItem = {
 
     },
     add: function() {
-      PurchaseItem.view.init()
       window._operation = Enum.operation.Create
+      PurchaseItem.view.init()
       PurchaseItem.show()
     },
     edit: function(PIid) {
-      PurchaseItem.view.init()
       window._operation = Enum.operation.Update
+      PurchaseItem.view.init()
       if (PIid.includes("[unsave]")) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
@@ -132,7 +144,12 @@ var PurchaseItem = {
       if (!targetid.toString().includes("[unsave]")) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
-      window.__PurchaseRequisitionItem_table.update(target['_id'], target)
+      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID],"_id")
+      for(var info in target){
+        localSource[targetid][info] = target[info]
+      }
+      // window.__PurchaseRequisitionItem_table.update(target['_id'], target)
+      PurchaseItem.updatePITable()
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
