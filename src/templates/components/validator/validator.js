@@ -1,5 +1,5 @@
 var validator = {
-  init: function() {
+  init: function () {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")
     for (var i = 0; i < validatelist.length; i++) {
@@ -8,42 +8,51 @@ var validator = {
       if (control.is("input")) {
         var type = control.attr('type') || 'text'
         switch (type) {
-          case 'password':
-          case 'text':
-          case 'email':
-          case 'tel':
-          case 'url':
-          case 'search':
-            control.on('keyup', function(e) {
-              console.log($(e.target).data('regxrule'), 'onkeyup works')
-              var target = $(e.target)
-              var rule = target.data('regxrule')
-              validator.validate(target, rule)
-            })
-            break
-          case 'radio':
-          case 'checkbox':
-          case 'hidden':
-            control.on('change', function(e) {
-              console.log($(e.target).data('regxrule'), 'onchange works')
-              var target = $(e.target)
-              var rule = target.data('regxrule')
-              validator.validate(target, rule)
-            })
-            break
-          default:
-            break
+        case 'password':
+        case 'text':
+        case 'email':
+        case 'tel':
+        case 'url':
+        case 'search':
+          control.on('keyup', function (e) {
+            // console.log($(e.target).data('regxrule'), 'onkeyup works')
+            var target = $(e.target)
+            var rule = target.data('regxrule')
+            var validate = validator.validate(target, rule)
+            var result = validate["result"]
+            var msg = validate["msg"]
+            if (!result) {
+              target.attr("validate", false)
+              target.parent('div').removeClass("has-success").addClass("has-error")
+            } else {
+              target.attr("validate", true)
+              target.parent('div').removeClass("has-error").addClass("has-success")
+            }
+          })
+          break
+        case 'radio':
+        case 'checkbox':
+        case 'hidden':
+          control.on('change', function (e) {
+            // console.log($(e.target).data('regxrule'), 'onchange works')
+            var target = $(e.target)
+            var rule = target.data('regxrule')
+            validator.validate(target, rule)
+          })
+          break
+        default:
+          break
         }
       } else if (control.is("select")) {
-        control.on('change', function(e) {
-          console.log($(e.target).data('regxrule'), 'onchange works')
+        control.on('change', function (e) {
+          // console.log($(e.target).data('regxrule'), 'onchange works')
           var target = $(e.target)
           var rule = target.data('regxrule')
           validator.validate(target, rule)
         })
       } else if (control.is("textarea")) {
-        control.on('keyup', function(e) {
-          console.log($(e.target).data('regxrule'), 'onkeyup works')
+        control.on('keyup', function (e) {
+          // console.log($(e.target).data('regxrule'), 'onkeyup works')
           var target = $(e.target)
           var rule = target.data('regxrule')
           validator.validate(target, rule)
@@ -55,16 +64,16 @@ var validator = {
       //若是input checkbox radio 则绑定 onchange
     }
   },
-  validate: function(target, rule) {
+  validate: function (target, rule) {
     var result = {}
     var regStr = ""
     var regxResult = rule.split(/\(([^)]*)\)/) //匹配括号里的内容
     var category = regxResult[0]
     var limit = regxResult[1]
-    console.log(category, limit)
+    // console.log(category, limit)
     var c = null
     if (!(c = regxRule[category])) {
-      //无值
+      //regxRule里无值,则说明其可能为一个字符串（函数或者正则）
       var str = category
       try {
         c = eval(str)
@@ -85,7 +94,7 @@ var validator = {
         result['warning'] = result['result'] ? "OK" : "ERROR"
       }
     } else if (c = regxRule[category]) {
-      //若在正则库中到，则说明为正则
+      //若在正则库中到
       if ('function' == typeof c["regx"]) {
         if (limit) {
           //若有limit 则说明需要限制长度
@@ -112,15 +121,15 @@ var validator = {
         } else {
           regStr = c["regx"]()
         }
-      }else{
+      } else {
         regStr = c["regx"]
       }
-      console.log(c["regx"])
+      // console.log(c["regx"])
       var regexp = new RegExp(regStr)
       var value = $(target).is("input") ? $(target).val() : $(target).text()
-      console.log(value, regexp.test(value))
+      // console.log(value, regexp.test(value))
       result['result'] = regexp.test(value)
-      result['warning'] = c['warning']
+      result['msg'] = c['msg']
     }
     return result
   }
