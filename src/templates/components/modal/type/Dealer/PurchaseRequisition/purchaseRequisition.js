@@ -10,6 +10,7 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function () {
+
     bindInputQuery("#requestordealerfk", apiConfig.dealer.Top(1000), "_dealername", "_id", function () {
       var val = $("#_requestordealerfk").val()
       var dealer = apiConfig.dealer.Get(val)
@@ -97,7 +98,6 @@ const PurchaseRequisition = {
           // var t = $(e.target)
           // debugger
           var t = $("#agentCheck input[name='agent']:checked")
-          console.log(t.val());
           if ("forEmp" == t.data("value")) {
             $(".requestorInput").attr('disabled', 'true')
             $(".requestorInput").hide()
@@ -177,6 +177,9 @@ const PurchaseRequisition = {
       }
       if (!window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = []
+      }
+      if(!window.__PurchaseRequisitionItem_table){
+        window.__PurchaseRequisitionItem_table = new table().new(tableStructures.PurchaseRequisitionItemTable,["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"])
       }
 
       var operationArea = $("#operation")
