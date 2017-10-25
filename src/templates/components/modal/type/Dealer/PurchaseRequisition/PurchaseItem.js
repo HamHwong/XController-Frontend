@@ -12,12 +12,12 @@ const PurchaseItem = {
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  // update: function() {
-  //   var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-  //   var count = apiConfig.purchaseitem.Add(unsavePI)
-  //   if (count <= 0) {
-  //   }
-  // },
+  update: function() {
+    var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+    var count = apiConfig.purchaseitem.Add(unsavePI)
+    if (count <= 0) {
+    }
+  },
   updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
       //填充PI
