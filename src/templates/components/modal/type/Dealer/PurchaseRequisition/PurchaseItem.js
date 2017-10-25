@@ -18,6 +18,7 @@ const PurchaseItem = {
     for(var item in unsavePI){
       item["_purchaserequisitionfk"] = prid
     }
+    console.log(unsavePI)
     var count = apiConfig.purchaseitem.Add(unsavePI)
   },
   updatePITable: function () {
