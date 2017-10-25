@@ -41,7 +41,8 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "keyArr": ["prop", "id", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -52,7 +53,8 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "keyArr": ["prop", "id", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -142,10 +144,10 @@ const tableStructures = {
         "hasHeader": true,
         "hasDetail": true,
         "hasButton": false,
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated"],
+        "keyArr": ["id", "prop", "key", "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "提交时间", "当前审批人"],
+          ["序列", "订单号", "用途", "提交时间"],
         ]
       },
       Rejected: {
@@ -193,10 +195,10 @@ const tableStructures = {
         "hasDetail": false,
         "hasButton": true,
         "buttonPool": ["expressUpdateBtn"],
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestor", "_phonenumber", "_prstatus"],
-        "keyArr": ["id", "prop", "key", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_requestor", "_phonenumber"],
+        "keyArr": ["id", "prop", "key", "prop", "hide"],
         "data": [
-          ["序列", "订单号", "用途", "申请人", "联系电话", "状态"],
+          ["序列", "订单号", "用途", "申请人", "联系电话"],
         ]
       },
       Success: {
@@ -204,10 +206,10 @@ const tableStructures = {
         "hasHeader": true,
         "hasDetail": false,
         "hasButton": false,
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestor", "_prcreated", "_prcompleted"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_requestor", "_prCompleted"],
+        "keyArr": ["id", "prop", "key", "prop", , "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "申请时间", "结束时间"],
+          ["序列", "订单号", "用途", "申请人", "结束时间"],
         ]
       },
       ExpressUpdateDetail: {
@@ -225,17 +227,16 @@ const tableStructures = {
 
     },
     Brochure: {
-      Inventory: {
-        "tablename": "Inventory",
-        "hasHeader": true,
-        "hasDetail": true,
-        "hasButton": true,
-        "buttonPool": ["supplyBtn"],
-        "keyArr": ["prop", "id", "key", "prop"],
-        "data": [
-          ["序列", "物品编号", "物品名称", "物品数量"],
-        ]
-      }
+      "tablename": "Inventory",
+      "hasHeader": true,
+      "hasDetail": true,
+      "hasButton": true,
+      "buttonPool": ["supplyBtn"],
+      "viewOrder": ["_id", "_brochurecode", "_brochurename", "_quantity"],
+      "keyArr": ["prop", "id", "key", "prop"],
+      "data": [
+        ["序列", "物品编号", "物品名称", "物品数量"],
+      ]
     }
   },
   Employee: {

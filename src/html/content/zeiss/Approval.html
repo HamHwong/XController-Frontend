@@ -48,27 +48,6 @@
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            <div class="form-group col-md-4">
-              <label for="_dealerregion">区域:</label>
-              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>
-            </div>
-            <!--for employee-->
-            <div class="form-group col-md-4 search_box_warp requestorInput" id="forEmployee">
-              <label for="requestoremployeefk">申请人:</label>
-              <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="employee" style="display:none;">
-              </select>
-              <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
-            </div>
-            <!--for dealer-->
-            <div class="form-group col-md-4 search_box_warp requestorInput" id="forDealer">
-              <label for="requestordealerfk">申请人:</label>
-              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
-              </select>
-              <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
-            </div>
 
             <div class="form-group col-md-4 col-xs-12">
               <label for="requireAgent">代填:</label>
@@ -77,10 +56,37 @@
               </div>
               <div class="checkbox" id="agentCheck">
                 <label for="forEmployee">for Employee:</label>
-                <label for="forEmployee" class="radio-inline"><input type="radio" name="agent" value=0></label>
+                <label for="forEmployee" class="radio-inline">
+                  <input type="radio" data-value="forEmp" name="agent" >
+                </label>
                 <label for="forDealer">for Dealer:</label>
-                <label for="forDealer" class="radio-inline"><input type="radio" name="agent" value=1></label>
+                <label for="forDealer" class="radio-inline">
+                  <input type="radio" data-value="forDea" name="agent" >
+                </label>
               </div>
+            </div>
+
+            <div class="form-group col-md-4 col-xs-12">
+              <label for="_dealerregion">区域:</label>
+              <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              </select>-->
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
+            </div>
+            <!--for employee-->
+            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
+              <label for="requestoremployeefk">申请人:</label>
+              <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
+              </select>
+              <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+            <!--for dealer-->
+            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forDealer">
+              <label for="requestordealerfk">申请人:</label>
+              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
+              </select>
+              <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
             <div class="form-group col-md-6 col-xs-12 search_box_warp">
@@ -125,9 +131,11 @@
       <div class="modal-body">
         <form id="PruchaseItem_form" class="form-horizontal" role="form">
           <div class="form-group">
-            <label class="col-sm-3 control-label">申请种类 ：</label>
-            <div class="col-sm-8 search_box_warp">
-              <input type="text" class="form-control" name="_brochurename" id="_brochurename" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
+            <label for="brochure" class="col-md-3 control-label">申请种类 ：</label>
+            <div class="col-sm-8">
+              <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;">
+              </select>
+              <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
           </div>
@@ -213,7 +221,7 @@
         </div>
         <div class="modal-infopart baseInfomation">
           <ul>
-            <li>代理商：<span id="PRD_demanderfk"></span></li>
+            <li>申请人：<span id="PRD_demanderfk"></span></li>
             <li>区 域：<span id="PRD_dealerregion"></span></li>
             <li>手机号：<span id="PRD_phonenumber"></span></li>
             <li>邮 箱：<span id="PRD_email"></span></li>
@@ -229,26 +237,60 @@
           </div>
         </div>
         <div class="modal-infopart Approval">
-          <textarea name="approvalComment" rows="4" cols="80" placeholder="审核意见"></textarea>
+          <textarea name="approvalComments" id="approvalComments" rows="4" cols="80" placeholder="审核意见"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
+        <button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="Approve">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认通过该申请吗？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <a onclick="PRDetail.event.approve()" class="btn btn-success" data-dismiss="modal">确定</a>
+      </div>
+    </div>
+  </div>
+</div>
 
-  
-    <script>
-      var approve = function() {
-        $("#Approve").modal()
-      }
-      var reject = function() {
-        $("#Reject").modal()
-      }
-    </script>
+<div class="modal fade" id="Reject">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认拒绝该申请吗？</p>
+      </div>
+      <div class="modal-footer">
+        <a onclick="PRDetail.event.reject()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var approve = function() {
+    $("#Approve").modal()
+  }
+  var rejected = function() {
+    $("#Reject").modal()
+  }
+</script>
 
   
 

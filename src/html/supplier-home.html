@@ -18,8 +18,8 @@
   </div>
   <div class="header_userInfo col-md-3 col-sm-4 pull-right">
     <div class="information clearfix text-center">
-      <span class="account">Hello,<span class="uname"></span></span>
-      <a href="javascript:;" class="logout">Log Out</a></span>
+      <span class="account">你好,<span class="uname"></span></span>
+      <a href="javascript:;" class="logout">登出</a></span>
     </div>
   </div>
 </div>
@@ -33,11 +33,11 @@
     </ul>
     <div class="sideavatar">
       <div class="greet clearfix">
-        <span>Hi,Supplier</span>
+        <span>你好,</span><span class="uname"></span>
       </div>
       <br/>
       <div class="logout">
-        <span><a href="javascript:;" class="logout">Logout</a></span>
+        <span><a href="javascript:;" class="logout">登出</a></span>
       </div>
     </div>
     <div class="sideBtn text-center">
@@ -53,9 +53,9 @@
   <h3>我的订单</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -89,7 +89,7 @@
       </ul>
     </nav>
   </div>
-
+  
     <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -177,7 +177,7 @@
 
   
 
-<script type="text/javascript">
+    <script type="text/javascript">
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
@@ -188,61 +188,43 @@
    }
 </script>
 
-  <script>
+      <script>
+        //载入我的订单的申请表操作
+        var table_init = function() {
+          // window.__PurchaseRequisitionItem_Unsave_set = {}
+          //申请中table初始化
+          var startRow = 0
+          var endRow = 100
+          var templateOpts = tableStructures.Supplier.MyOrder.Approving
+          new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(false, 0, 100), templateOpts).to("#applying")
+          //successtable初始化
+          var status = Enum.prstatus.Completed
+          var templateOpts = tableStructures.Supplier.MyOrder.Success
+          new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(true, 0, 100), templateOpts).to("#success")
 
-    // var table_init = function() {
-    //   //TODO 此处需要显示联系人电话，需要多表连接
-    //   var templateOpts = tableStructures.Supplier.MyOrder.Approving
-    //   // var result = apiConfig.purchaserequisition.Top(100)
-    //   var completed = false
-    //   var keyword = 1 //demonderkey
-    //   var startIndex = 0
-    //   var endIndex = 100
-    //   var result = GET(`/api/PRSupplierView/search(${completed},${keyword},${startIndex},${endIndex})`)
-    //   // for(var i of result){
-    //   //   //GET /api/PRSupplierView/search({completed},{keyword},{startIndex},{endIndex})
-    //   //   console.log(i)
-    //   //   var requestor = i["_requestor"]
-    //   //   // var dealer = apiConfig.dealer.GetByUserName(requestor)
-    //   //   // console.log(dealer)
-    //   //   // var phoneNumber = dealer["_phonenumber"]
-    //   //   var phoneNumber = i["_phonenumber"]
-    //   //   // i["_phonenumber"] = phoneNumber
-    //   // }
-    //   new table().loadFromTemplateJson(result, templateOpts).to("#applying")
-    // }
-    //
-    //载入我的订单的申请表操作
-    var table_init = function() {
-      // window.__PurchaseRequisitionItem_Unsave_set = {}
-      //申请中table初始化
-      var startRow = 0
-      var endRow = 100
-      var templateOpts = tableStructures.Supplier.MyOrder.Approving
-      new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(false,0,100), templateOpts).to("#applying")
-      //successtable初始化
-      var status = Enum.prstatus.Completed
-      var templateOpts = tableStructures.Supplier.MyOrder.Success
-      new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(true,0,100), templateOpts).to("#success")
+        }
 
-    }
+        var supply = function(rid) {
+          // console.log(rid);
+          window._target = apiConfig.brochure.Get(rid)
+          $("#Supply")
+            .modal()
+        }
 
-    var supply = function(rid) {
-      // console.log(rid);
-      window._target = apiConfig.brochure.Get(rid)
-      $("#Supply")
-        .modal()
-    }
-
-    var search = function() {
-      var keyword = filterXSS($("input.searchBox").val().trim())
-      var templateOpts = tableStructures.Dealer.MyOrder.Approving
-      var result = apiConfig.dealer.Search(keyword)
-      console.log(result)
-      new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
-    }
-
-  </script>
+        var search = function() {
+          var keyword = filterXSS($("input#search_box").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
+          var templateOpts = tableStructures.Supplier.MyOrder.Approving
+          var result = apiConfig.PRSupplierView.Search(false, keyword, 0, 100)
+          new table().loadFromTemplateJson(result, templateOpts).to("#applying")
+          result = apiConfig.PRSupplierView.Search(true, keyword, 0, 100)
+          templateOpts = tableStructures.Supplier.MyOrder.Success
+          new table().loadFromTemplateJson(result, templateOpts).to("#success")
+        }
+      </script>
 
     </div>
   </div>

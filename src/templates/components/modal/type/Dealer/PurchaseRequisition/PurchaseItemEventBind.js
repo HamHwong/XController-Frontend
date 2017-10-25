@@ -1,6 +1,4 @@
 //绑定输入查询数据
-
-// bindInputQuery("#_brochurename", "./test/searchDictionary/BrochureName.json")
 //绑定交付时间组件
 $('#_deliverydate')
   .datetimepicker({

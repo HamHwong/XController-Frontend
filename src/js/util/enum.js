@@ -52,6 +52,7 @@ const Enum = {
     /// 审批通过
     /// </summary>
     Success: "Success",
+    Approved: "Approved",
     /// <summary>
     /// 审批拒绝
     /// </summary>

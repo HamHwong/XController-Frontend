@@ -2,9 +2,9 @@
   <h3>我的订单</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -82,5 +82,30 @@
             var deleteDraft = function(PRid) {
               PurchaseRequisition.view.delete(PRid)
             }
-
+            var search = function() {
+              var keyword = filterXSS($("input#search_box").val().trim())
+              if ("" == keyword) {
+                table_init()
+                return
+              }
+              var role = Enum.role.EMPLOYEE
+              var uid = JSON.parse(getCookie('user'))["_id"]
+              var status = Enum.prstatus.Progress
+              var startRow = 0
+              var endRow = 100
+              var templateOpts = tableStructures.Dealer.MyOrder.Approving
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
+              //草稿箱table初始化
+              var status = Enum.prstatus.Draft
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#draft")
+              //successtable初始化
+              var status = Enum.prstatus.Completed
+              var templateOpts = tableStructures.Dealer.MyOrder.Success
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
+              //拒绝table初始化
+              var status = Enum.prstatus.Rejected
+              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#rejected")
+            }
             </script>

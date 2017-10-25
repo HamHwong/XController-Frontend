@@ -4,12 +4,12 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control searchBox" name="search_box" id="search_box" data-targetData="brochure" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加物品</button>
+  <button type="button" class="btn btn-primary" onclick="AddBrochure.view.show()">添加物品</button>
 </div>
 
 <div class="table-content tab-content">
@@ -69,40 +69,33 @@
             <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_brochurenumber" class="control-label">版本号:</label>
-            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
+            <label for="_brochurecode" class="control-label">版本号:</label>
+            <input name="_brochurecode" id="_brochurecode" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
             <label for="_quantity" class="control-label">物品数量:</label>
             <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
           </div>
+          <div class="form-group col-md-4 search_box_warp">
+            <label for="supplierfk">供应商:</label>
+            <select class="queryinput" name="_supplierfk" id="_supplierfk" data-target="supplierfk" data-source="supplier" style="display:none;">
+            </select>
+            <input name="supplierfk" id="supplierfk" placeholder="请输入供应商" class="form-control" autocomplete="off" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
           <div class="Comments editable col-md-12" id="_description">
-            <span>备注：</span>
+            <span>描述：</span>
             <textarea name="_description" rows="4"></textarea>
           </div>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addBrochure()">添加</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="Brochure.event.add()">添加</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  function addBrochure() {
-    var data = formToSet("#Add")
-    data["_createtime"] = new Date()
-    var brochureId = apiConfig.brochure.Add(data)
-    if (brochureId) {
-      $("#Add").modal("hide")
-      ClearInputs("#add_Brochure")
-      ClearSelecton("#add_Brochure")
-      ClearTextArea("#add_Brochure")
-    }
-    table_init()
-  }
-</script>
 
   
 
@@ -122,15 +115,22 @@
             <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_brochurenumber" class="control-label">版本号:</label>
-            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
+            <label for="_brochurecode" class="control-label">版本号:</label>
+            <input name="_brochurecode" id="_brochurecode" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
             <label for="_quantity" class="control-label">物品数量:</label>
             <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
           </div>
+          <div class="form-group col-md-4 search_box_warp">
+            <label for="supplierfk">供应商:</label>
+            <select class="queryinput" name="_supplierfk" id="_supplierfk" data-target="supplierfk" data-source="supplier" style="display:none;">
+            </select>
+            <input name="supplierfk" id="supplierfk" placeholder="请输入供应商" class="form-control" autocomplete="off" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
           <div class="Comments editable col-md-12" id="_description">
-            <span>备注：</span>
+            <span>描述：</span>
             <textarea name="_description" rows="4"></textarea>
           </div>
         </form>
@@ -232,8 +232,7 @@
             //载入物品操作
             var table_init = function() {
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
-              // var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
-              new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
+              new table().loadFromTemplateJson(apiConfig.brochure.Top(1000), templateOpts).to("#Brochure-table-container")
             }
 
             //删除物品记录操作
@@ -252,9 +251,7 @@
             }
             //补充物品数量操作
             var supply = function(rid) {
-              // console.log(rid);
               window._target = apiConfig.brochure.Get(rid)
-
               $("#Supply")
                 .modal()
             }
@@ -274,7 +271,6 @@
               var keyword = filterXSS($("input.searchBox").val().trim())
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
               var result = apiConfig.brochure.Search(keyword)
-              console.log(result)
               new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
             }
           </script>

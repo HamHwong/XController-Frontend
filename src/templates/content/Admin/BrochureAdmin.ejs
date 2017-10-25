@@ -4,12 +4,12 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control searchBox" name="search_box" id="search_box" data-targetData="brochure" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Add">添加物品</button>
+  <button type="button" class="btn btn-primary" onclick="AddBrochure.view.show()">添加物品</button>
 </div>
 
 <div class="table-content tab-content">
@@ -38,8 +38,7 @@
             //载入物品操作
             var table_init = function() {
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
-              // var dataOrder = ["_id", "_brochurenumber", "_brochurename", "_quantity", "_description"]
-              new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
+              new table().loadFromTemplateJson(apiConfig.brochure.Top(1000), templateOpts).to("#Brochure-table-container")
             }
 
             //删除物品记录操作
@@ -58,9 +57,7 @@
             }
             //补充物品数量操作
             var supply = function(rid) {
-              // console.log(rid);
               window._target = apiConfig.brochure.Get(rid)
-
               $("#Supply")
                 .modal()
             }
@@ -80,7 +77,6 @@
               var keyword = filterXSS($("input.searchBox").val().trim())
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
               var result = apiConfig.brochure.Search(keyword)
-              console.log(result)
               new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
             }
           </script>

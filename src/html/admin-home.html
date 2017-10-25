@@ -18,8 +18,8 @@
   </div>
   <div class="header_userInfo col-md-3 col-sm-4 pull-right">
     <div class="information clearfix text-center">
-      <span class="account">Hello,<span class="uname"></span></span>
-      <a href="javascript:;" class="logout">Log Out</a></span>
+      <span class="account">你好,<span class="uname"></span></span>
+      <a href="javascript:;" class="logout">登出</a></span>
     </div>
   </div>
 </div>
@@ -47,11 +47,11 @@
     </ul>
     <div class="sideavatar">
       <div class="greet clearfix">
-        <span>Hi,Admin</span>
+        <span>你好,</span><span class="uname"></span>
       </div>
       <br/>
       <div class="logout">
-        <span><a href="javascript:;" class="logout">Logout</a></span>
+        <span><a href="javascript:;" class="logout">登出</a></span>
       </div>
     </div>
     <div class="sideBtn text-center">
@@ -69,7 +69,7 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -79,7 +79,7 @@
       
         <li><a href=#applying>申请中</a></li>
         
-        <li><a href=#finished>已完成</a></li>
+        <li><a href=#success>已完成</a></li>
         
         <li><a href=#reject>已拒绝</a></li>
         
@@ -92,7 +92,7 @@
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="success">
     </div>
     <div class="tab-pane" id="reject">
     </div>
@@ -108,31 +108,8 @@
       </ul>
     </nav>
   </div>
-  <!-- 信息删除确认 -->
-  <div class="modal fade" id="Approve">
-    <div class="modal-dialog">
-      <div class="modal-content message_align">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">提示信息</h4>
-        </div>
-        <div class="modal-body">
-          <p>您确认通过吗？</p>
-        </div>
-        <div class="modal-footer">
-          <input type="hidden" id="url" />
-          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <a onclick="ApproveIt()" class="btn btn-success" data-dismiss="modal">确定</a>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
 
   
-    
     <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -143,21 +120,22 @@
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <label for="_dealerregion">区域:</label>
-              <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>
+              <!--<select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              </select>-->
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
             </div>
 
-            <div class="form-group col-md-4 search_box_warp">
+            <div class="form-group col-md-3 search_box_warp">
               <label for="requestordealerfk">申请人:</label>
-              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" style="display:none;">
+              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
               <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" data-source="dealer" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-4 search_box_warp">
+            <div class="form-group col-md-3 search_box_warp">
               <label for="submitter">提交人:</label>
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
@@ -165,12 +143,12 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-4 col-xs-12">
+            <div class="form-group col-md-3 col-xs-12">
               <label for="_purposefk">用途:</label>
               <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
             </div>
 
-            <div class="Comments editable col-md-12">
+            <div class="Comments editable col-xs-12">
               <span>备注：</span>
               <textarea name="_comments" rows="4" id="_comments"></textarea>
             </div>
@@ -195,13 +173,17 @@
       </div>
       <div class="modal-body">
         <form id="PruchaseItem_form" class="form-horizontal" role="form">
+
           <div class="form-group">
-            <label class="col-sm-3 control-label">申请种类 ：</label>
+            <label for="brochure" class="col-sm-3 control-label">申请种类 ：</label>
             <div class="col-sm-8 search_box_warp">
-              <input type="text" class="form-control" name="_brochurename" id="_brochurename" class="search_box form-control col-md-11" placeholder="输入关键字" autocomplete="off">
+              <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;">
+              </select>
+              <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
           </div>
+
           <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
@@ -212,6 +194,13 @@
             <label class="col-sm-3 control-label">交付时间 ：</label>
             <div class="col-sm-8">
               <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">紧急程度 ：</label>
+            <div class="col-sm-8">
+              <select class="form-control optionlist" data-category="邮寄时限" name="_deliverypriorityfk" id="_deliverypriorityfk">
+              </select>
             </div>
           </div>
           <div class="form-group">
@@ -244,7 +233,7 @@
 
   
 
-      
+    
     <div class="modal fade" id="Delete">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -266,7 +255,7 @@
 
   
 
-        
+      
     <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -284,7 +273,7 @@
         </div>
         <div class="modal-infopart baseInfomation">
           <ul>
-            <li>代理商：<span id="PRD_demanderfk"></span></li>
+            <li>申请人：<span id="PRD_demanderfk"></span></li>
             <li>区 域：<span id="PRD_dealerregion"></span></li>
             <li>手机号：<span id="PRD_phonenumber"></span></li>
             <li>邮 箱：<span id="PRD_email"></span></li>
@@ -300,114 +289,132 @@
           </div>
         </div>
         <div class="modal-infopart Approval">
-          <textarea name="approvalComment" rows="4" cols="80" placeholder="审核意见"></textarea>
+          <textarea name="approvalComments" id="approvalComments" rows="4" cols="80" placeholder="审核意见"></textarea>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary col-md-5" onclick="approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="reject()">拒绝通过</button>
+        <button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="Approve">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认通过该申请吗？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <a onclick="PRDetail.event.approve()" class="btn btn-success" data-dismiss="modal">确定</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="Reject">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认拒绝该申请吗？</p>
+      </div>
+      <div class="modal-footer">
+        <a onclick="PRDetail.event.reject()" class="btn btn-danger" data-dismiss="modal">确定</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var approve = function() {
+    $("#Approve").modal()
+  }
+  var rejected = function() {
+    $("#Reject").modal()
+  }
+</script>
 
   
-    <script>
-      var approve = function() {
-        $("#Approve").modal()
-      }
-      var reject = function() {
-        $("#Reject").modal()
-      }
-    </script>
-
-  
 
 
-          <script>
-            //载入我的订单的申请表操作
-            var table_init = function() {
-              window.__PurchaseRequisitionItem_Unsave_set = {}
-              //申请中table初始化
-              var role = Enum.role.SYSADMIN
-              var uid = JSON.parse(getCookie('user'))["_id"]
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Admin.OrderAdmin.Order
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#applying")
+        <script>
+          //载入我的订单的申请表操作
+          var table_init = function() {
+            window.__PurchaseRequisitionItem_Unsave_set = {}
+            //申请中table初始化
+            var role = Enum.role.SYSADMIN
+            var uid = JSON.parse(getCookie('user'))["_id"]
+            var status = Enum.prstatus.Progress
+            var startRow = 0
+            var endRow = 100
+            var templateOpts = tableStructures.Admin.OrderAdmin.Order
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100).concat(apiConfig.purchaserequisition.SearchByStatus(role, uid, Enum.prstatus.Approved, 0, 100)), templateOpts).to("#applying")
 
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Admin.OrderAdmin.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Admin.OrderAdmin.Reject
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#rejected")
+            //successtable初始化
+            var status = Enum.prstatus.Completed
+            var templateOpts = tableStructures.Admin.OrderAdmin.Success
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#success")
+            //拒绝table初始化
+            var status = Enum.prstatus.Rejected
+            var templateOpts = tableStructures.Admin.OrderAdmin.Reject
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#reject")
+          }
+
+          //订单详情操作
+          var Detail = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.detail(PRid)
+          }
+          //复制操作
+          var copy = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.view.copy(PRid)
+          }
+
+          var edit = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.view.edit(PRid)
+            // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
+          }
+
+          var deleteDraft = function(PRid) {
+            PurchaseRequisition.view.delete(PRid)
+          }
+
+          var search = function() {
+            var keyword = filterXSS($("input#search_box").val().trim())
+            if ("" == keyword) {
+              table_init()
+              return
             }
+            var role = Enum.role.SYSADMIN
+            var uid = JSON.parse(getCookie('user'))["_id"]
+            var status = Enum.prstatus.Progress
+            var startRow = 0
+            var endRow = 100
+            var templateOpts = tableStructures.Dealer.MyOrder.Approving
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
+            //successtable初始化
+            var status = Enum.prstatus.Completed
+            var templateOpts = tableStructures.Dealer.MyOrder.Success
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
+            //拒绝table初始化
+            var status = Enum.prstatus.Rejected
+            var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#reject")
+          }
 
-            //订单详情操作
-            var Detail = function(PRid) {
-              PurchaseRequisition.detail(PRid)
-            }
-            //复制操作
-            var copy = function(PRid) {
-              PurchaseRequisition.view.copy(PRid)
-            }
-
-            var edit = function(PRid) {
-              PurchaseRequisition.view.edit(PRid)
-              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
-            }
-
-            var deleteDraft = function(PRid) {
-              PurchaseRequisition.view.delete(PRid)
-            }
-
-            var search = function() {
-              var keyword = filterXSS($("input.searchBox").val().trim())
-              var templateOpts = tableStructures.Admin.OrderAdmin.Order
-              var result = apiConfig.purchaserequisition.Search(keyword)
-              console.log(result)
-              new table().loadFromTemplateJson(result, templateOpts).to("#applying")
-            }
-
-            var approve = function() {
-              $("#Approve").modal()
-            }
-            var reject = function() {
-              $("#Reject").modal()
-            }
-            var ApproveIt = function() {
-
-              var prid = window._target["_id"]
-              var steps = apiConfig.prprocess.Paging(prid, 0, 100)
-              steps.reverse()
-              var lastpoint = steps.pop()
-              var laststeps = lastpoint["_prprocessstep"]
-              var breakPoint = false
-              var currentSteps = null
-              for (var i in Enum.processStatus) {
-                // console.log(i)
-                currentSteps = i
-                if (breakPoint) {
-                  break
-                }
-                if (i == laststeps) {
-                  breakPoint = true
-                }
-              }
-
-              var newpoint = lastpoint
-              newpoint["_prprocessstep"] = currentSteps
-              newpoint["_purchaserequisitionfk"] = prid
-              var id = newpoint["_id"]
-              ///api/prprocess/{id}/update
-              apiConfig.prprocess.Edit(id, newpoint)
-              $("#Detail").modal("hide")
-            }
-          </script>
+        </script>
 
     </div>
   </div>

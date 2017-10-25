@@ -2,9 +2,9 @@
   <h3>物品出入库</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -13,7 +13,7 @@
 </div>
 
 <div class="table-content tab-content">
-  <div class="tab-pane active" id="Inventory-table-container">
+  <div class="tab-pane active" id="Brochure-table-container">
     <table class="table table-bordered table-hover">
     </table>
   </div>
@@ -30,7 +30,7 @@
   </nav>
 </div>
 
-    <div class="modal fade lg-modal" id="History" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="History" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -44,7 +44,7 @@
       </div>
       <div class="modal-footer">
         <div class="modal-infopart">
-          <button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button" class="btn btn-primary center-block col-xs-12" class="close" data-dismiss="modal" aria-hidden="true">关闭</button>
         </div>
       </div>
     </div>
@@ -53,7 +53,53 @@
 
   
 
+  
+    <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">添加物品</h4>
+      </div>
 
+      <div class="modal-body clearfix">
+        <form id="add_Brochure" class="form" role="form">
+          <div class="form-group col-md-12">
+            <label for="_brochurename" class="control-label">物品名称:</label>
+            <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_brochurecode" class="control-label">版本号:</label>
+            <input name="_brochurecode" id="_brochurecode" placeholder="请输入物品名称" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_quantity" class="control-label">物品数量:</label>
+            <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
+          </div>
+          <div class="form-group col-md-4 search_box_warp">
+            <label for="supplierfk">供应商:</label>
+            <select class="queryinput" name="_supplierfk" id="_supplierfk" data-target="supplierfk" data-source="supplier" style="display:none;">
+            </select>
+            <input name="supplierfk" id="supplierfk" placeholder="请输入供应商" class="form-control" autocomplete="off" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
+          <div class="Comments editable col-md-12" id="_description">
+            <span>描述：</span>
+            <textarea name="_description" rows="4"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="Brochure.event.add()">添加</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+    
     <div class="modal fade" id="Supply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -97,36 +143,57 @@
 
   
 
-<script type="text/javascript">
-   var table_init = function(tableList) {
-     for (var i in CurrentTableList) {
-       var $tablecontainer = $(i)
-       var t = new table()
-       console.log(CurrentTableList[i]);
-       t.loadFromTemplateJson(CurrentTableList[i]).to($tablecontainer)
-     }
-   }
-</script>
+      <script>
+        //载入物品操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Supplier.Brochure
+          new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
+        }
+        var Detail = function() {
+          $("#History").modal()
+        }
 
-<script>
-  var CurrentTableList = {
-    "#Inventory-table-container": "./test/supplier/Brochure/Inventory.json"
-  }
+        //删除物品记录操作
+        var del = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          $("#Delete")
+            .modal()
+        }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.brochure.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        //补充物品数量操作
+        var supply = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          $("#Supply")
+            .modal()
+        }
+        //查看出入库历史操作
+        var History = function(rid) {
+          $("#History")
+            .modal()
+        }
+        //编辑操作
+        var edit = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          autoComplateInfo(window._target, "#edit_Brochure")
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input#search_box").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
+          var templateOpts = tableStructures.Supplier.Brochure
+          var result = apiConfig.brochure.Search(keyword)
+          new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
+        }
 
-  function Detail(primarykey) {
-    $("#Detail").modal()
-    var t = new table("./test/supplier/Brochure/History.json")
-    t.load().to("#Detail .goodsInfomation")
-    console.log("Primary Key", primarykey);
-  }
-
-  //补充物品数量操作
-  var supply = function(rid) {
-    // console.log(rid);
-    window._target = apiConfig.brochure.Get(rid)
-
-    $("#Supply")
-      .modal()
-  }
-
-</script>
+      </script>

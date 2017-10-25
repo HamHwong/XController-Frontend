@@ -89,6 +89,8 @@ var PurchaseItem = {
           break
       }
 
+      bindInputQuery("#brochure", apiConfig.brochure.Top(1000), "_brochurename", "_brochurename", function() {})
+
     },
     add: function() {
       window._operation = Enum.operation.Create
@@ -144,8 +146,8 @@ var PurchaseItem = {
       if (!targetid.toString().includes("[unsave]")) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
-      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID],"_id")
-      for(var info in target){
+      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
+      for (var info in target) {
         localSource[targetid][info] = target[info]
       }
       // window.__PurchaseRequisitionItem_table.update(target['_id'], target)

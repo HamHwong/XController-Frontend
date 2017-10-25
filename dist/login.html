@@ -55,14 +55,14 @@
 
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/login-e0c34b19e1.css">
-<link rel="stylesheet" href="./css/components-4256bf2826.css">
+<link rel="stylesheet" href="./css/components-3ceb163436.css">
 <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/plugs/slideunlock-dcf9b5ccef.css">
 <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
 <script type="text/javascript" src="./js/plugs/slideunlock-386e151aa1.min.js"></script>
 <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
 <script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
-<script type="text/javascript" src="./js/util/API-9513fe05d8.js"></script>
+<script type="text/javascript" src="./js/util/API-4dcda91012.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
@@ -108,6 +108,7 @@
           window.location.href = "./admin-home.html"
           setCookie("auth", "Admin")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
@@ -118,6 +119,7 @@
           window.location.href = "./dealer-home.html"
           setCookie("auth", "Dealer")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
@@ -128,12 +130,14 @@
           window.location.href = "./supplier-home.html"
           setCookie("auth", "Supplier")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
       case 'zeiss':
       case 'Zeiss':
         var user = apiConfig.employee.Login(username, password)
+        console.log(user)
         // if ("zeiss" == username.toLowerCase()) {
         if (user) {
           window.location.href = "./zeiss-home.html"
@@ -147,6 +151,7 @@
            */
           setCookie("auth", "Zeiss")
           setCookie("name", user["nameField"])
+          setCookie("account", user["accountField"])
           // setCookie("name", "BLManager")
           // var user = {
           //   "_id":"BLManager"

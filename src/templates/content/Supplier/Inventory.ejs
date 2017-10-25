@@ -2,9 +2,9 @@
   <h3>物品出入库</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control" name="search_box" id="search_box" placeholder="在这里输入关键字" />
+      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -13,7 +13,7 @@
 </div>
 
 <div class="table-content tab-content">
-  <div class="tab-pane active" id="Inventory-table-container">
+  <div class="tab-pane active" id="Brochure-table-container">
     <table class="table table-bordered table-hover">
     </table>
   </div>
@@ -29,28 +29,60 @@
     </ul>
   </nav>
 </div>
-<%-include('/components/modal/modal',{type:"Supplier.Inventory.History"})%>
-<%-include('/components/modal/modal',{type:"Common.Supply"})%>
-<%-include('/components/table/table.init.ejs')%>
-<script>
-  var CurrentTableList = {
-    "#Inventory-table-container": "./test/supplier/Brochure/Inventory.json"
-  }
+<%-include('/components/modal/modal',{type:"Admin.Inventory.History"})%>
+  <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Add"})%>
+    <%-include('/components/modal/modal',{type:"Common.Supply"})%>
+      <script>
+        //载入物品操作
+        var table_init = function() {
+          var templateOpts = tableStructures.Supplier.Brochure
+          new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
+        }
+        var Detail = function() {
+          $("#History").modal()
+        }
 
-  function Detail(primarykey) {
-    $("#Detail").modal()
-    var t = new table("./test/supplier/Brochure/History.json")
-    t.load().to("#Detail .goodsInfomation")
-    console.log("Primary Key", primarykey);
-  }
+        //删除物品记录操作
+        var del = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          $("#Delete")
+            .modal()
+        }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            apiConfig.brochure.Delete(id)
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
+        //补充物品数量操作
+        var supply = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          $("#Supply")
+            .modal()
+        }
+        //查看出入库历史操作
+        var History = function(rid) {
+          $("#History")
+            .modal()
+        }
+        //编辑操作
+        var edit = function(rid) {
+          window._target = apiConfig.brochure.Get(rid)
+          autoComplateInfo(window._target, "#edit_Brochure")
+          $("#Edit")
+            .modal()
+        }
+        var search = function() {
+          var keyword = filterXSS($("input#search_box").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
+          var templateOpts = tableStructures.Supplier.Brochure
+          var result = apiConfig.brochure.Search(keyword)
+          new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
+        }
 
-  //补充物品数量操作
-  var supply = function(rid) {
-    // console.log(rid);
-    window._target = apiConfig.brochure.Get(rid)
-
-    $("#Supply")
-      .modal()
-  }
-
-</script>
+      </script>

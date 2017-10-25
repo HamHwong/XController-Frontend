@@ -4,18 +4,18 @@
     <div class="form-group col-xs-9">
       <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">Query</button>
+    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",finished:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",success:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
     <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="success">
     </div>
     <div class="tab-pane" id="reject">
     </div>
@@ -31,115 +31,76 @@
       </ul>
     </nav>
   </div>
-  <!-- 信息删除确认 -->
-  <div class="modal fade" id="Approve">
-    <div class="modal-dialog">
-      <div class="modal-content message_align">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">提示信息</h4>
-        </div>
-        <div class="modal-body">
-          <p>您确认通过吗？</p>
-        </div>
-        <div class="modal-footer">
-          <input type="hidden" id="url" />
-          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-          <a onclick="ApproveIt()" class="btn btn-success" data-dismiss="modal">确定</a>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
 
-  <%include('/components/modal/modal',{type:"Common.Reject"})%>
-    <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
-      <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-        <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
+  <%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseRequisition"})%>
+    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+      <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
 
-          <script>
-            //载入我的订单的申请表操作
-            var table_init = function() {
-              window.__PurchaseRequisitionItem_Unsave_set = {}
-              //申请中table初始化
-              var role = Enum.role.SYSADMIN
-              var uid = JSON.parse(getCookie('user'))["_id"]
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Admin.OrderAdmin.Order
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#applying")
+        <script>
+          //载入我的订单的申请表操作
+          var table_init = function() {
+            window.__PurchaseRequisitionItem_Unsave_set = {}
+            //申请中table初始化
+            var role = Enum.role.SYSADMIN
+            var uid = JSON.parse(getCookie('user'))["_id"]
+            var status = Enum.prstatus.Progress
+            var startRow = 0
+            var endRow = 100
+            var templateOpts = tableStructures.Admin.OrderAdmin.Order
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100).concat(apiConfig.purchaserequisition.SearchByStatus(role, uid, Enum.prstatus.Approved, 0, 100)), templateOpts).to("#applying")
 
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Admin.OrderAdmin.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Admin.OrderAdmin.Reject
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#rejected")
+            //successtable初始化
+            var status = Enum.prstatus.Completed
+            var templateOpts = tableStructures.Admin.OrderAdmin.Success
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#success")
+            //拒绝table初始化
+            var status = Enum.prstatus.Rejected
+            var templateOpts = tableStructures.Admin.OrderAdmin.Reject
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role, uid, status, 0, 100), templateOpts).to("#reject")
+          }
+
+          //订单详情操作
+          var Detail = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.detail(PRid)
+          }
+          //复制操作
+          var copy = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.view.copy(PRid)
+          }
+
+          var edit = function(PRid) {
+            console.log(PRid);
+            PurchaseRequisition.view.edit(PRid)
+            // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
+          }
+
+          var deleteDraft = function(PRid) {
+            PurchaseRequisition.view.delete(PRid)
+          }
+
+          var search = function() {
+            var keyword = filterXSS($("input#search_box").val().trim())
+            if ("" == keyword) {
+              table_init()
+              return
             }
+            var role = Enum.role.SYSADMIN
+            var uid = JSON.parse(getCookie('user'))["_id"]
+            var status = Enum.prstatus.Progress
+            var startRow = 0
+            var endRow = 100
+            var templateOpts = tableStructures.Dealer.MyOrder.Approving
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
+            //successtable初始化
+            var status = Enum.prstatus.Completed
+            var templateOpts = tableStructures.Dealer.MyOrder.Success
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
+            //拒绝table初始化
+            var status = Enum.prstatus.Rejected
+            var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+            new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#reject")
+          }
 
-            //订单详情操作
-            var Detail = function(PRid) {
-              PurchaseRequisition.detail(PRid)
-            }
-            //复制操作
-            var copy = function(PRid) {
-              PurchaseRequisition.view.copy(PRid)
-            }
-
-            var edit = function(PRid) {
-              PurchaseRequisition.view.edit(PRid)
-              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
-            }
-
-            var deleteDraft = function(PRid) {
-              PurchaseRequisition.view.delete(PRid)
-            }
-
-            var search = function() {
-              var keyword = filterXSS($("input.searchBox").val().trim())
-              var templateOpts = tableStructures.Admin.OrderAdmin.Order
-              var result = apiConfig.purchaserequisition.Search(keyword)
-              console.log(result)
-              new table().loadFromTemplateJson(result, templateOpts).to("#applying")
-            }
-
-            var approve = function() {
-              $("#Approve").modal()
-            }
-            var reject = function() {
-              $("#Reject").modal()
-            }
-            var ApproveIt = function() {
-
-              var prid = window._target["_id"]
-              var steps = apiConfig.prprocess.Paging(prid, 0, 100)
-              steps.reverse()
-              var lastpoint = steps.pop()
-              var laststeps = lastpoint["_prprocessstep"]
-              var breakPoint = false
-              var currentSteps = null
-              for (var i in Enum.processStatus) {
-                // console.log(i)
-                currentSteps = i
-                if (breakPoint) {
-                  break
-                }
-                if (i == laststeps) {
-                  breakPoint = true
-                }
-              }
-
-              var newpoint = lastpoint
-              newpoint["_prprocessstep"] = currentSteps
-              newpoint["_purchaserequisitionfk"] = prid
-              var id = newpoint["_id"]
-              ///api/prprocess/{id}/update
-              apiConfig.prprocess.Edit(id, newpoint)
-              $("#Detail").modal("hide")
-            }
-          </script>
+        </script>

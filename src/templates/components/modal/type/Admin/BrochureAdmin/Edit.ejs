@@ -13,15 +13,22 @@
             <input name="_brochurename" id="_brochurename" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
-            <label for="_brochurenumber" class="control-label">版本号:</label>
-            <input name="_brochurenumber" id="_brochurenumber" placeholder="请输入物品名称" class="form-control" />
+            <label for="_brochurecode" class="control-label">版本号:</label>
+            <input name="_brochurecode" id="_brochurecode" placeholder="请输入物品名称" class="form-control" />
           </div>
           <div class="form-group col-md-12">
             <label for="_quantity" class="control-label">物品数量:</label>
             <input name="_quantity" id="_quantity" placeholder="请输入物品数量" class="form-control" />
           </div>
+          <div class="form-group col-md-4 search_box_warp">
+            <label for="supplierfk">供应商:</label>
+            <select class="queryinput" name="_supplierfk" id="_supplierfk" data-target="supplierfk" data-source="supplier" style="display:none;">
+            </select>
+            <input name="supplierfk" id="supplierfk" placeholder="请输入供应商" class="form-control" autocomplete="off" />
+            <ul class="dropdown-menu keyhint"></ul>
+          </div>
           <div class="Comments editable col-md-12" id="_description">
-            <span>备注：</span>
+            <span>描述：</span>
             <textarea name="_description" rows="4"></textarea>
           </div>
         </form>

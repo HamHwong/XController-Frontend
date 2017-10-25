@@ -108,6 +108,7 @@
           window.location.href = "./admin-home.html"
           setCookie("auth", "Admin")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
@@ -118,6 +119,7 @@
           window.location.href = "./dealer-home.html"
           setCookie("auth", "Dealer")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
@@ -128,12 +130,14 @@
           window.location.href = "./supplier-home.html"
           setCookie("auth", "Supplier")
           setCookie("name", user["_accountname"])
+          setCookie("account", user["_accountname"])
           setCookie("user", JSON.stringify(user))
         }
         break
       case 'zeiss':
       case 'Zeiss':
         var user = apiConfig.employee.Login(username, password)
+        console.log(user)
         // if ("zeiss" == username.toLowerCase()) {
         if (user) {
           window.location.href = "./zeiss-home.html"
@@ -147,6 +151,7 @@
            */
           setCookie("auth", "Zeiss")
           setCookie("name", user["nameField"])
+          setCookie("account", user["accountField"])
           // setCookie("name", "BLManager")
           // var user = {
           //   "_id":"BLManager"

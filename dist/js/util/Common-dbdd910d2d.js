@@ -62,7 +62,7 @@ function isAllPRTypeFormFieldEmpty(form) {
  * @return {type}      [description]
  */
 function formToSet(form) {
-  form = $(form)
+  form = $(form).is("form") ? $(form) : $(form).find("form")
   var formArr = form
     .serializeArray()
 
@@ -82,7 +82,7 @@ function formToSet(form) {
  */
 function arrayToSet(array, key) {
   var set = {}
-  for (i of array) {
+  for (var i of array) {
     set[i[key]] = i
   }
   return set
@@ -132,4 +132,26 @@ function generateUUID() {
     return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   })
   return uuid;
+}
+
+function getValueArrayFromObjectArray(Array, AttributeName) {
+  var resultArr = []
+  for (var i = 0; i < Array.length; i++) {
+    resultArr.push(Array[i][AttributeName])
+  }
+  return resultArr
+}
+/**
+ * 将对象数组转化为Object[keyName]:Object[valueName] 的Set集
+ * @param  {Array} Array     数据源，对象数组
+ * @param  {string} keyName   单个对象，转换后作为key的属性名
+ * @param  {string} valueName 单个对象，转换后作为value的属性名
+ * @return {Set}           一个为Object[keyName]:Object[valueName] 的Set集
+ */
+function getValueSetFromObjectArray(Array, keyName, valueName) {
+  var resultSet = {}
+  for (var i = 0; i < Array.length; i++) {
+    resultSet[Array[i][keyName]] = Array[i][valueName]
+  }
+  return resultSet
 }

@@ -14,9 +14,10 @@ var SupplierPRDetail = {
     }
   },
   destory: function() {
+    window._target.PI = null
     window._target.PR = null
-
     window._target = null
+    SupplierPRDetail.view.Express.destory()
   },
   view: {
     init: function() {
@@ -30,10 +31,6 @@ var SupplierPRDetail = {
         window._target.PI = {}
       }
     },
-    destory: function() {
-      ClearTextArea("#Update")
-      window._target.PI = null
-    },
     update: function(PRid) {
       window._operation = Enum.operation.Read
       SupplierPRDetail.view.init()
@@ -41,9 +38,10 @@ var SupplierPRDetail = {
       SupplierPRDetail.autoComplate(PRid)
       SupplierPRDetail.show()
     },
-    finish: function(PRid) {
+    finish: function() {
+      // var PRid = window._target.PR["_id"]
       window._operation = Enum.operation.Update
-
+      // apiConfig.prprocess.SupplierComplete(PRid)
       SupplierPRDetail.destory()
       SupplierPRDetail.hide()
     },
@@ -57,21 +55,30 @@ var SupplierPRDetail = {
       update: function(PIid) {
         window._target.PI = apiConfig.purchaseitem.Get(PIid)
         SupplierPRDetail.view.Express.show()
+      },
+      destory: function() {
+        ClearTextArea("#Update")
+
       }
     }
   },
   event: {
     Express: {
       update: function() {
+        var piid = window._target.PI["_id"]
+        var prid = window._target.PR["_id"]
         window._target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
-        apiConfig.purchaseitem.UpdateLogitics(window._target.PI["_id"], window._target.PI)
+        apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+        SupplierPRDetail.autoComplate(prid)
         SupplierPRDetail.view.Express.destory()
         SupplierPRDetail.view.Express.hide()
       }
     },
-    finish:function(){
-      window._target.PR["_prstatus"] = Enum.prstatus.Delivered
-      apiConfig.purchaserequisition.Edit(window._target.PR["_id"],window._target.PR)
+    finish: function() {
+      // window._target.PR["_prstatus"] = Enum.prstatus.Delivered
+      // apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
+      var prid = window._target.PR["_id"]
+      apiConfig.purchaserequisition.SupplierComplete(prid)
       SupplierPRDetail.destory()
       SupplierPRDetail.hide()
       table_init()

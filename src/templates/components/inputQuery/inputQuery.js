@@ -1,46 +1,10 @@
-//===========================================================================================================================
-//搜索条
-//TODO-要有个sleep,函数执行太快
-/**
- * @description 为搜索框绑定keyup事件，调用queryKeyWords动态地查询关键字，然后添加到下拉列表中
- */
-// $(".search_box")
-//   .on('keyup', function (e) {
-//     // console.log(e);
-//     e.preventDefault()
-//     var droplist = $(".search_box_warp .keyhint")
-//     droplist.empty()
-//     var data = queryKeyWords(this.value, keywordsdata)
-//     for (var i in data) {
-//       var li = $("<li></li>")
-//       var a = $("<a href=\"#\" class='keywords'></a>")
-//       a.html(data[i])
-//       li.append(a)
-//       droplist.append(li)
-//     }
-//     if (data.length > 0 && this.value != "") {
-//       $(".search_box_warp")
-//         .addClass("open")
-//       $(".keywords")
-//         .on('click', function (e) {
-//           $("#search_box")
-//             .val(this.innerText)
-//           droplist.empty()
-//           $(".search_box_warp")
-//             .removeClass("open")
-//         })
-//     } else {
-//       $(".search_box_warp")
-//         .removeClass("open")
-//     }
-//   })
 /**
  * @description 从字典数组中查询到
  * @param  {String} keys 输入的关键字字符串
  * @param  {StringArray} dic  Dictionary字符串字典数组
  * @return {StringArray}      返回一个装有所有搜索结果的字符数组
  */
-var queryKeyWords = function(keys, dic) {
+const queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
@@ -57,56 +21,66 @@ var queryKeyWords = function(keys, dic) {
   }
 }
 
-var bindInputQuery = function($input, datasource, keywordKey, callback) {
-  $input = $($input)
-  $($input).unbind("keyup")
+const bindOptionData = function($select, datasource, innerTextName, valueName) {
+  //给类名为queryinput的select添加上option（真正提交的部分）
+  $select = $($select)
+  $select.empty()
+  var category = $select.data('source')
+  //拿到select的data-source，去做关键字匹配
+  //datasource为数据源数组
+  var optionkey = null
+  var optionvalue = null
 
-  //给select添加上option（真正提交的部分）
-  var optionlist = $input.siblings("select.queryinput")
-  $(optionlist).empty()
-  var category = $(optionlist).data('source')
+  // if ("zeiss" == category) {
+  //   optiontext = "nameField"
+  //   optionvalue = "accountField"
+  // } else if ("brochure" == category) {
+    optiontext = innerTextName
+    optionvalue = valueName
+  // } else {
+  //   optionvalue = "_id"
+  //   optiontext = innerTextName
+  // }
+
+
   for (var j of datasource) {
-    var id = ""
-    var name = ""
-    if ("ziess" == category) {
-      id = j["eNNameField"]
-      name = j["nameField"]
-    } else {
-      id = j["_id"]
-      name = j[keywordKey]
-    }
-    var option = `<option value="${id}">${name}</option>`
-    $(optionlist).append($(option))
+    var value = j[optionvalue]
+    var text = j[optiontext]
+    var option = `<option value="${value}">${text}</option>`
+    $select.append($(option))
   }
-
+  //Option 绑定结束
+}
+/**
+ * 带查询功能的输入框
+ * @param  {Jquery.input}   $input     要绑定到的输入框上//仅做展示，并不提交
+ * @param  {string}  datasource 数据源，可以是查询的api，也可以是数据数组
+ * @param  {string}   innerTextName 单个数据对象的属性字段名，用于绑定显示到option上的值
+ * @param  {string}   valueName 单个数据对象的属性字段名，用于绑定option Value上的值
+ * @param  {Function} callback 选择选项后执行的函数
+ */
+const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {
+  $input = $($input)
+  $input.unbind("keyup")
+  var $select = $input.siblings("select.queryinput")
+  bindOptionData($select, datasource, innerTextName, valueName)
   //给input绑定上keyup事件
   $input.on('keyup', function(e) {
     e.preventDefault()
-    var keywordsdata = null
     if ("string" == typeof datasource) {
-      keywordsdata = JSON.parse($.ajax({
-          url: datasource,
-          async: false
-        })
-        .responseText)
+      datasource = GET(datasource)
     } else {
-      keywordsdata = datasource // 以name为主键
+      datasource = datasource
     }
 
-    //HACK
-    var set = {}
-    var result = arrayToSet(keywordsdata, keywordKey)
-    var nameArray = []
-    for (var i in result) {
-      nameArray.push(i)
-      //dealername-dealerid
-      set[i] = result[i]["_id"]
-    }
+    var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
+    var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
 
     var droplist = $input.siblings(".keyhint")
     droplist.empty()
 
     var data = queryKeyWords(this.value, nameArray)
+    //加载bootstrap下拉框
     for (var i = 0; i < data["raw"].length; i++) {
       var key = data["raw"][i]
       var value = set[key]
@@ -116,13 +90,12 @@ var bindInputQuery = function($input, datasource, keywordKey, callback) {
       li.append(a)
       droplist.append(li)
     }
-
+    //绑定下拉框点击事件
     if (data["raw"].length > 0 && this.value != "") {
       $input.parent(".search_box_warp").addClass("open")
       $(".keywords").on('click', function(e) {
-        var select = $input.siblings("select.queryinput")
-        var val = $(this).attr("value")
-        select.val(val)
+        var val = $(this).attr("value") //获取到value值
+        $select.val(val)
         $input.val(this.innerText)
         droplist.empty()
         $input.parent(".search_box_warp").removeClass("open")
@@ -133,5 +106,6 @@ var bindInputQuery = function($input, datasource, keywordKey, callback) {
     } else {
       $input.parent(".search_box_warp").removeClass("open")
     }
+    //
   })
 }

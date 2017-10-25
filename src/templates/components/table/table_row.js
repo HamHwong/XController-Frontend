@@ -13,14 +13,19 @@ var table_row = function(data, ParentTable, isHeader, Headers) {
   this.CardJSONObj = null
   this.CardHTMLObj = null
 }
-table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
+table_row.prototype.init = function() {
   var row = this.isHeader ? $("<tr id='header'></tr>") : $("<tr></tr>")
   var id = null;
   for (var i = 0; i < this.data.length; i++) {
     if (this.isHeader) {
       var th = $("<th></th>")
       row.append(th.html(this.Headers[i]))
-    } else {
+    }
+    //  else if ("hide" == this.keyArr[i]) {
+    //   // console.log(data);
+    //   continue
+    // }
+    else {
       var td = $("<td data-primaryKey='" + this.PrimaryKeyValue + "'></td>")
       row.append(td.html(this.data[i]))
     }
@@ -29,21 +34,21 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
     //如果是header行，则不用加button
     var td = $("<td class='operation'></td>")
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
-    var PIEditBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info edit\" onclick=\"PurchaseItem.view.edit('" + this.PrimaryKeyValue + "')\">Edit</button>")
-    var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">Submit</button>")
-    var deleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"delete('" + this.PrimaryKeyValue + "')\">Delete</button>")
-    var PIdeleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"PurchaseItem.event.delete('" + this.PrimaryKeyValue + "')\">Delete</button>")
-    var updateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary update\" onclick=\"update('" + this.PrimaryKeyValue + "')\">Update</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success supply\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">Supply</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info approve\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">Approve</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger reject\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">Reject</button>")
-    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressUpdate\" onclick=\"SupplierPRDetail.view.update('" + this.PrimaryKeyValue + "')\">Express Update</button>")
-    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressView\" onclick=\"expressStatus('" + this.PrimaryKeyValue + "')\">Express Status</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary finish\" onclick=\"finish('" + this.PrimaryKeyValue + "')\">Finish</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success history\" onclick=\"History('" + this.PrimaryKeyValue + "')\">History</button>")
-    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-info copy\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">Copy</button>")
-    var deleteDraftBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">Delete</button>")
+    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
+    var PIEditBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary edit\" onclick=\"PurchaseItem.view.edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
+    var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">提交</button>")
+    var deleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"delete('" + this.PrimaryKeyValue + "')\">删除</button>")
+    var PIdeleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"PurchaseItem.event.delete('" + this.PrimaryKeyValue + "')\">删除</button>")
+    var updateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary update\" onclick=\"update('" + this.PrimaryKeyValue + "')\">更新</button>")
+    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success supply\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">入库</button>")
+    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary approve\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
+    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger reject\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
+    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressUpdate\" onclick=\"SupplierPRDetail.view.update('" + this.PrimaryKeyValue + "')\">更新物流</button>")
+    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressView\" onclick=\"expressStatus('" + this.PrimaryKeyValue + "')\">物流状态</button>")
+    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary finish\" onclick=\"finish('" + this.PrimaryKeyValue + "')\">完成订单</button>")
+    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success history\" onclick=\"History('" + this.PrimaryKeyValue + "')\">历史纪录</button>")
+    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary copy\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">复制</button>")
+    var deleteDraftBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">删除</button>")
 
     for (var i in this.buttonPool) {
       var button = eval(this.buttonPool[i])
@@ -61,7 +66,7 @@ table_row.prototype.init = function(data, keyArr, hasButton, isHeader) {
   return row
 }
 table_row.prototype.rowAddCard = function(color) {
-  row = this.HTMLObj
+  var row = this.HTMLObj
   var color = color ? color : "#6b85a4"
   var headers = {}
   var props = {}
@@ -71,6 +76,8 @@ table_row.prototype.rowAddCard = function(color) {
     props[this.Headers[i]] = $(tds[i])
       .html() //展示没有必要XSS,控制写入时就行
     //遍历keyArr,找到key对应的数据，填入
+    if (this.keyArr[i].includes("hide"))
+      continue
     if ("key" == this.keyArr[i] || "id" == this.keyArr[i]) {
       headers[this.Headers[i]] = $(tds[i])
         .html()

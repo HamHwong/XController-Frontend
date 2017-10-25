@@ -12,6 +12,8 @@ var pug = require('gulp-pug')
 var concat = require('gulp-concat')
 var cssmin = require('gulp-minify-css')
 var ejs = require('gulp-ejs')
+var babel = require("gulp-babel"); // 用于ES6转化ES5
+var uglify = require('gulp-uglify'); // 用于压缩 JS
 
 var config = require('./config/ServerConfig.js')
 var __dist = config.path.dist
@@ -72,6 +74,8 @@ var cssSrc = config.path.css
 
 gulp.task('revJs', ['concat-conponent-js'], function() {
   return gulp.src([jsSrc + "/**/*.js"])
+    // .pipe(babel())
+    // .pipe(uglify())
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/js"))
     .pipe(rev.manifest({
@@ -89,7 +93,7 @@ gulp.task('revCss', ['concat-conponent-css'], function() {
     .pipe(gulp.dest('config'))
 })
 gulp.task('clean-css', function(event) {
-  return gulp.src(['src/css/components/**/*.css','src/css/*.css','dist/css/**/*.css'])
+  return gulp.src(['src/css/components/**/*.css', 'src/css/*.css', 'dist/css/**/*.css'])
     .pipe(clean({
       force: true
     }));
@@ -107,7 +111,7 @@ gulp.task('clean-html', function(event) {
     }));
 })
 
-gulp.task('ejs',['clean-html'], function() {
+gulp.task('ejs', ['clean-html'], function() {
   return gulp.src([__src + "/templates/**/*.ejs", "!/src/templates/components/**/*.ejs"])
     .pipe(ejs({}, {
       root: "./src/templates"
@@ -155,7 +159,7 @@ gulp.task('concat-css', function() {
 })
 
 gulp.task('concat-conponent-css', ['less'], function() {
-  return gulp.src(['src/css/components/**/*.css','!src/css/components/**/*.bak.css'])
+  return gulp.src(['src/css/components/**/*.css', '!src/css/components/**/*.bak.css'])
     .pipe(concat('components.css'))
     .pipe(cssmin({
       advanced: true, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]
@@ -168,7 +172,7 @@ gulp.task('concat-conponent-css', ['less'], function() {
 })
 
 gulp.task('concat-conponent-js', ['clean-js'], function() {
-  return gulp.src(['./src/templates/components/**/*.js','./src/js/util/**/*.js'])
+  return gulp.src(['./src/templates/components/**/*.js', './src/js/util/**/*.js'])
     .pipe(concat('components.js'))
     .pipe(gulp.dest('src/js'))
 })
@@ -184,7 +188,7 @@ gulp.task('default', ['revHtml', 'webserver'], function() {
   // gulp.start('open') //被弃用，仍能用，4.0官方将提供同步任务
 })
 
-gulp.task('mergeToServer',['revHtml'],function(){
+gulp.task('mergeToServer', ['revHtml'], function() {
   gulp.src('dist/**/*')
-  .pipe(gulp.dest('C:\\Users\\mpand\\Desktop\\BrochureManagement\\ZEISS.BrochureManagement\\ZEISS.BrochureManagement.WebApi\\html'))
+    .pipe(gulp.dest('C:\\Users\\mpand\\Desktop\\BrochureManagement\\ZEISS.BrochureManagement\\ZEISS.BrochureManagement.WebApi\\html'))
 })

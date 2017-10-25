@@ -1,5 +1,3 @@
-"use strict";
-
 var table = function(url) {
   this.tableName = ""
   this.url = url
@@ -98,7 +96,8 @@ table.prototype.init = function() {
   this.buttonPool = this.responseJson.buttonPool
   this.hasButton = this.responseJson.hasButton ? this.responseJson.buttonPool : false
   this.keyArr = this.responseJson.keyArr.slice(0)
-  this.PrimaryKeyIndex = this.keyArr.indexOf('id')
+  // debugger
+  this.PrimaryKeyIndex = this.keyArr.indexOf("id")
   var data = this.responseJson.data.slice(0)
   var table = $('<table class="table table-bordered table-hover table-striped"></table>')
   var tbody = $("<tbody></tbody>")
@@ -120,6 +119,7 @@ table.prototype.init = function() {
   }
   //将data装载成table row
   for (var i = 0; i < data.length; i++) {
+    // debugger
     this.addRow(data[i])
   }
   this.addInfoCard()
@@ -186,9 +186,11 @@ table.prototype.new = function(Obj, header) {
 } //disposable
 
 table.prototype.addRow = function(rowJSONObj) {
+  // debugger
   var tbody = $(this.tableHTML)
     .find("tbody")
   var row = new table_row(rowJSONObj, this, false, this.Header)
+  // console.log(rowJSONObj,row)
   //PrimaryKeyValue 该行的主键值
   var PrimaryKeyValue = rowJSONObj[this.PrimaryKeyIndex]
   if (this.data[PrimaryKeyValue]) {
@@ -200,7 +202,7 @@ table.prototype.addRow = function(rowJSONObj) {
   this.isUpdated = true
 }
 table.prototype.editRow = function(key, row) {
-
+  //TODO
 }
 
 table.prototype.onCardLongPress = function(callback) {
@@ -222,11 +224,12 @@ table.prototype.remove = function() {
 }
 
 table.prototype.update = function(rowKey, row) {
+  //TODO
   var set = arrayToSet(this.responseJson.data, this.PrimaryKeyIndex)
   if (row instanceof Array)
     set[rowKey] = row
   else {
-    var c  = setToArray(row,this.responseJson["viewOrder"])
+    var c = setToArray(row, this.responseJson["viewOrder"])
     set[rowKey] = c
   }
   // this.init()

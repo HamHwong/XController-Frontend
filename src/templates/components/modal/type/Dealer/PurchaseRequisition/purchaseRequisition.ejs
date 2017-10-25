@@ -8,21 +8,22 @@
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <label for="_dealerregion">区域:</label>
-              <select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>
+              <!--<select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              </select>-->
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
             </div>
 
-            <div class="form-group col-md-4 search_box_warp">
+            <div class="form-group col-md-3 search_box_warp">
               <label for="requestordealerfk">申请人:</label>
-              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" style="display:none;">
+              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
               <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" data-source="dealer" autocomplete="off" />
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-4 search_box_warp">
+            <div class="form-group col-md-3 search_box_warp">
               <label for="submitter">提交人:</label>
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
@@ -30,12 +31,12 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-4 col-xs-12">
+            <div class="form-group col-md-3 col-xs-12">
               <label for="_purposefk">用途:</label>
               <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
             </div>
 
-            <div class="Comments editable col-md-12">
+            <div class="Comments editable col-xs-12">
               <span>备注：</span>
               <textarea name="_comments" rows="4" id="_comments"></textarea>
             </div>

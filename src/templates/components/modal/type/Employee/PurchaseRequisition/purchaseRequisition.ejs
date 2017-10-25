@@ -8,27 +8,6 @@
       <div class="modal-body">
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
-            <div class="form-group col-md-4">
-              <label for="_dealerregion">区域:</label>
-              <select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>
-            </div>
-            <!--for employee-->
-            <div class="form-group col-md-4 search_box_warp requestorInput" id="forEmployee">
-              <label for="requestoremployeefk">申请人:</label>
-              <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="employee" style="display:none;">
-              </select>
-              <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
-            </div>
-            <!--for dealer-->
-            <div class="form-group col-md-4 search_box_warp requestorInput" id="forDealer">
-              <label for="requestordealerfk">申请人:</label>
-              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
-              </select>
-              <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
-            </div>
 
             <div class="form-group col-md-4 col-xs-12">
               <label for="requireAgent">代填:</label>
@@ -37,10 +16,37 @@
               </div>
               <div class="checkbox" id="agentCheck">
                 <label for="forEmployee">for Employee:</label>
-                <label for="forEmployee" class="radio-inline"><input type="radio" name="agent" value=0></label>
+                <label for="forEmployee" class="radio-inline">
+                  <input type="radio" data-value="forEmp" name="agent" >
+                </label>
                 <label for="forDealer">for Dealer:</label>
-                <label for="forDealer" class="radio-inline"><input type="radio" name="agent" value=1></label>
+                <label for="forDealer" class="radio-inline">
+                  <input type="radio" data-value="forDea" name="agent" >
+                </label>
               </div>
+            </div>
+
+            <div class="form-group col-md-4 col-xs-12">
+              <label for="_dealerregion">区域:</label>
+              <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
+              </select>-->
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
+            </div>
+            <!--for employee-->
+            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
+              <label for="requestoremployeefk">申请人:</label>
+              <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
+              </select>
+              <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
+            </div>
+            <!--for dealer-->
+            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forDealer">
+              <label for="requestordealerfk">申请人:</label>
+              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
+              </select>
+              <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
+              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
             <div class="form-group col-md-6 col-xs-12 search_box_warp">
