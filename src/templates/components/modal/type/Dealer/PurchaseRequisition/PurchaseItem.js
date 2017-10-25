@@ -125,13 +125,11 @@ const PurchaseItem = {
       for (var info in target) {
         localSource[targetid][info] = target[info]
       }
-      // window.__PurchaseRequisitionItem_table.update(target['_id'], target)
       PurchaseItem.updatePITable()
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
     delete: function (PIid) {
-      // window.__PurchaseRequisitionItem_table.data[PIid].remove()
       var result = null;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       if (!PIid.includes("[unsave]")) {
