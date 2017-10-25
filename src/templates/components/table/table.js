@@ -178,8 +178,10 @@ table.prototype.addInfoCard = function() {
 table.prototype.new = function(Obj, header) {
   Obj["data"] = Obj["data"] ? Obj["data"] : []
   var Json = Obj
-  if (Obj.hasHeader && header)
-    Json["data"].push(header)
+  if (!Obj.hasHeader)
+    Json["data"].pop()
+  // if (Obj.hasHeader && header)
+  //   Json["data"].push(header)
   this.responseJson = Json
   this.init()
   return this
