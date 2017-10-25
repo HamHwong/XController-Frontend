@@ -15,7 +15,7 @@ const PurchaseItem = {
   update: function () {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
     var prid = window._target.PR
-    for(var item in unsavePI){
+    for(var item of unsavePI){
       item["_purchaserequisitionfk"] = prid
     }
     console.log(unsavePI)
