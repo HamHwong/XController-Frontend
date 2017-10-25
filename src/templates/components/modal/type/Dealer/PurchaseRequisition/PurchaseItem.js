@@ -1,4 +1,4 @@
-var PurchaseItem = {
+const PurchaseItem = {
   show: function() {
     $("#PruchaseItem")
       .modal()
@@ -12,45 +12,17 @@ var PurchaseItem = {
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  update: function() {
-    // var PIArr = apiConfig.purchaseitem.Paging(window._target.PI["_id"], 0, 100)
-    var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-    var count = apiConfig.purchaseitem.Add(unsavePI)
-    if (count <= 0) {
-      // new messageAlert().show("Error",)
-    }
-    // var remotePI = arrayToSet(PIArr, "_id")
-    // if (remotePI != unsavePI.length) { //bug
-    //   var PId = window._target.PI["_id"]
-    //   for (var i = 0; i < unsavePI.length; i++) {
-    //     //若有新的，则添加，若为老的，则修改
-    //     var nativePIid = unsavePI[i]["_id"]
-    //     if (remotePI[nativePIid]) {
-    //       var itemID = apiConfig.purchaseitem.Edit(nativePIid, unsavePI[i])
-    //     } else {
-    //       unsavePI[i]["_purchaserequisitionfk"] = PId
-    //       var itemID = apiConfig.purchaseitem.Add(unsavePI[i])
-    //       unsavePI[i]["_id"] = itemID
-    //     }
-    //   }
-    //   //如果删除PI
-    //   //更新后重新获取一下
-    //   PIArr = apiConfig.purchaseitem.Paging(window._target.PI["_id"], 0, 100)
-    //   nativePI = arrayToSet(unsavePI, "_id")
-    //   for (var j = 0; j < PIArr.length; j++) {
-    //     var remotePIid = PIArr[j]["_id"]
-    //     if (!nativePI[remotePIid]) {
-    //       apiConfig.purchaseitem.Delete(remotePIid)
-    //     }
-    //   }
-    // }
-  },
+  // update: function() {
+  //   var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
+  //   var count = apiConfig.purchaseitem.Add(unsavePI)
+  //   if (count <= 0) {
+  //   }
+  // },
   updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
       //填充PI
       var PIinfoSet = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
-      var tmp = PIinfoSet.slice(0)
       var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
       window.__PurchaseRequisitionItem_table = PItable
       PItable.to(window._targetPITableArea)

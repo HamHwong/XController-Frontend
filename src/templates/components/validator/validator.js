@@ -18,16 +18,14 @@ var validator = {
             // console.log($(e.target).data('regxrule'), 'onkeyup works')
             var target = $(e.target)
             var rule = target.data('regxrule')
-            var validate = validator.validate(target, rule)
-            var result = validate["result"]
-            var msg = validate["msg"]
-            if (!result) {
-              target.attr("validate", false)
-              target.parent('div').removeClass("has-success").addClass("has-error")
-            } else {
-              target.attr("validate", true)
-              target.parent('div').removeClass("has-error").addClass("has-success")
-            }
+            validator.validate(target, rule)
+            // var result = validate["result"]
+            // var msg = validate["msg"]
+            // if (!result) {
+            //   validator.addWarninig(target, validate)
+            // } else {
+            //   validator.removeWarning(target)
+            // }
           })
           break
         case 'radio':
@@ -48,6 +46,7 @@ var validator = {
           // console.log($(e.target).data('regxrule'), 'onchange works')
           var target = $(e.target)
           var rule = target.data('regxrule')
+          console.log(target);
           validator.validate(target, rule)
         })
       } else if (control.is("textarea")) {
@@ -130,6 +129,42 @@ var validator = {
       // console.log(value, regexp.test(value))
       result['result'] = regexp.test(value)
       result['msg'] = c['msg']
+    }
+
+    if (!result['result']) {
+      validator.addWarninig(target, result)
+    } else {
+      validator.removeWarning(target)
+    }
+    // return result
+    return result['result']
+  },
+  addWarninig: function (target, result) {
+    target = $(target)
+    var RESULT = result["result"]
+    var MSG = result["msg"]
+    var PNode = target.parent('div')
+    target.attr("validate", true)
+    PNode.removeClass("has-success").addClass("has-error")
+    PNode.find("i.validator_error").remove()
+    PNode.append(`<i class="validator_error text-danger">${MSG}</i>`)
+  },
+  removeWarning: function (target) {
+    target = $(target)
+    var PNode = target.parent('div')
+    target.attr("validate", false)
+    PNode.removeClass("has-error").addClass("has-success")
+    PNode.find("i.validator_error").remove()
+  },
+  validateResult: function () {
+    var form = $("form")
+    if (form.data("validator")) {
+      var validatelist = form.find("*[data-regxRule]")
+      var result = true
+      for (var i = 0; i < validatelist.length; i++) {
+        var input = $(validatelist[i])
+        result = validator.validate(input, input.data("regxrule")) && result
+      }
     }
     return result
   }

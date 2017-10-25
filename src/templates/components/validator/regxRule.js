@@ -30,10 +30,21 @@ const regxRule = {
       var result = min
       // if (max)
       result += "," + max
+      regxRule.number.msg = `请输入至少${min},最多不超过${max}位的数字！`
       return `^\\d{${result}}$`
     },
-    msg: ""
-  }
+    msg: `请输入至少min,最多不超过max位的数字！`
+  },
+  select: {},
+  password: {},
+  checkbox: {
+    regx: function (min, max) {
+      //最少選min個，最多選max個
+
+    }
+  },
+  radio: {},
+
 
 
 }
