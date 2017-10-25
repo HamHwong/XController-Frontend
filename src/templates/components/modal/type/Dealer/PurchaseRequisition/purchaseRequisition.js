@@ -260,9 +260,9 @@ const PurchaseRequisition = {
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Progress
 
-      if (window._operation == enmu.operation.Update) {
+      if (window._operation == Enum.operation.Update) {
         data["_id"] = window._target.PR["_id"]
-      }
+      }//TODO
 
       switch (getCookie('auth').toLowerCase()) {
       case 'zeiss':

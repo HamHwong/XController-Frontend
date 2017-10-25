@@ -48,7 +48,9 @@ function ClearAllFieldsBut(form, idList) {
 //检测，如果所有input都为空，则直接关闭不保存
 function isAllPRTypeFormFieldEmpty(form) {
   var a = $(form).find("input")
-  a.append($(form).find("area")).append($(form).find("select"))
+  a.concat($(form).find("area"))
+    .concat($(form).find("select"))
+
   var isAllEmpty = true
   for (var i = 0; i < a.length; i++) {
     isAllEmpty = isAllEmpty && ($(a[i]).val().length == 0 && $(a[i]).val() != "-1")
