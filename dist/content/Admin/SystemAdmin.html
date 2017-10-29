@@ -263,6 +263,10 @@ function editSupplier() {
         }
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
           var templateOpts = tableStructures.Admin.SystemAdmin.SystemUser
           var result = apiConfig.supplier.Search(keyword)
           console.log(result)

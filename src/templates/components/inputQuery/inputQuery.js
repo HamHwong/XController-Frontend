@@ -8,7 +8,7 @@ const queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
-    if (dic[i].includes(keys)) {
+    if (dic[i].search(keys) >= 0) {
       var keywords = dic[i].match(keys)
       r.push(dic[i])
       var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
@@ -35,17 +35,18 @@ const bindOptionData = function($select, datasource, innerTextName, valueName) {
   //   optiontext = "nameField"
   //   optionvalue = "accountField"
   // } else if ("brochure" == category) {
-    optiontext = innerTextName
-    optionvalue = valueName
+  optionkey = innerTextName
+  optionvalue = valueName
   // } else {
   //   optionvalue = "_id"
   //   optiontext = innerTextName
   // }
 
 
-  for (var j of datasource) {
+  for (var i = 0; i < datasource.length; i++) {
+    var j = datasource[i]
     var value = j[optionvalue]
-    var text = j[optiontext]
+    var text = j[optionkey]
     var option = `<option value="${value}">${text}</option>`
     $select.append($(option))
   }

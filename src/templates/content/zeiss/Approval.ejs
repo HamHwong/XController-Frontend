@@ -2,7 +2,7 @@
   <h3>审批</h3>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"待审批",finished:"已完成",reject:"已拒绝"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"待审批",finished:"已完成"}})%>
   <div class="operation-menu">
 
   </div>
@@ -11,8 +11,7 @@
     </div>
     <div class="tab-pane" id="finished">
     </div>
-    <div class="tab-pane" id="reject">
-    </div>
+
     <nav style="text-align: center">
       <ul class="pagination">
         <li><a href="#">&laquo;</a></li>
@@ -32,21 +31,10 @@
           //载入订单管理表操作
           var table_init = function() {
             var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("name"),false,0,100), templateOpts).to("#applying")
+            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),false,0,100), templateOpts).to("#applying")
+            var templateOpts = tableStructures.Admin.OrderAdmin.Success
+            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),true,0,100), templateOpts).to("#finished")
           }
-
-          // //删除订单操作
-          //   var del = function(rid) {
-          //     $("#Delete")
-          //       .modal()
-          //   }
-          //   var edit = function(rid) {
-          //     $("#EditBrochure")
-          //       .modal()
-          //   }
-
-          //订单详情操作
-
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }

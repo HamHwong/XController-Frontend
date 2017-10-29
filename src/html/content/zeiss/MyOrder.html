@@ -16,7 +16,7 @@
         
         <li><a href=#applying>申请中</a></li>
         
-        <li><a href=#finished>已完成</a></li>
+        <li><a href=#success>已完成</a></li>
         
         <li><a href=#reject>已拒绝</a></li>
         
@@ -31,7 +31,7 @@
     </div>
     <div class="tab-pane" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="success">
     </div>
     <div class="tab-pane" id="reject">
     </div>
@@ -81,7 +81,7 @@
               <label for="_dealerregion">区域:</label>
               <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
             </div>
             <!--for employee-->
             <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
@@ -142,8 +142,8 @@
       <div class="modal-body">
         <form id="PruchaseItem_form" class="form-horizontal" role="form">
           <div class="form-group">
-            <label for="brochure" class="col-md-3 control-label">申请种类 ：</label>
-            <div class="col-sm-8">
+            <label for="brochure" class="col-sm-3 control-label">申请种类 ：</label>
+            <div class="col-sm-8 search_box_warp">
               <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;">
               </select>
               <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
@@ -299,7 +299,7 @@
               window.__PurchaseRequisitionItem_Unsave_set = {}
               //申请中table初始化
               var role = Enum.role.EMPLOYEE
-              var uid = JSON.parse(getCookie('user'))["_id"]
+              var uid = JSON.parse(getCookie('user'))["accountField"]
               var status = Enum.prstatus.Progress
               var startRow = 0
               var endRow = 100
@@ -316,7 +316,7 @@
               //拒绝table初始化
               var status = Enum.prstatus.Rejected
               var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#rejected")
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#reject")
             }
 
             //订单详情操作
@@ -330,7 +330,6 @@
 
             var edit = function(PRid) {
               PurchaseRequisition.view.edit(PRid)
-              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
             }
 
             var deleteDraft = function(PRid) {
@@ -343,7 +342,7 @@
                 return
               }
               var role = Enum.role.EMPLOYEE
-              var uid = JSON.parse(getCookie('user'))["_id"]
+              var uid = getCookie('uid')
               var status = Enum.prstatus.Progress
               var startRow = 0
               var endRow = 100
@@ -360,6 +359,6 @@
               //拒绝table初始化
               var status = Enum.prstatus.Rejected
               var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#rejected")
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#reject")
             }
             </script>

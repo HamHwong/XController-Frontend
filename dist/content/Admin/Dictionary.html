@@ -175,7 +175,7 @@
         //载入物品操作
         var table_init = function() {
           var templateOpts = tableStructures.Admin.Dictionary
-          new table().loadFromTemplateJson("/api/optionlist/top(100)", templateOpts).to("#Brochure-table-container")
+          new table().loadFromTemplateJson(apiConfig.optionlist.Top(100), templateOpts).to("#Brochure-table-container")
         }
 
         //删除物品记录操作
@@ -201,6 +201,10 @@
         }
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
           var templateOpts = tableStructures.Admin.Dictionary
           var result = apiConfig.optionlist.Search(keyword)
           new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")

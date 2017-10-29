@@ -74,24 +74,11 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">添加</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="DealerAdmin.event.add()">添加</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-function addDealer() {
-  var data = formToSet("#add_Dealer")
-  var dealerId = apiConfig.dealer.Add(data)
-  if (dealerId) {
-    $("#Add").modal("hide")
-    ClearInputs("#add_Dealer")
-    ClearSelecton("#add_Dealer")
-    ClearTextArea("#add_Dealer")
-  }
-  table_init()
-}
-</script>
 
   
 
@@ -140,28 +127,11 @@ function addDealer() {
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editDealer()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="DealerAdmin.event.edit()">完成</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  function editDealer() {
-    var rawData = window._target
-    var data = formToSet("#edit_Dealer")
-    for(var i in data){
-      rawData[i] = data[i]
-    }
-    var dealerId = apiConfig.dealer.Edit(rawData['_id'],data)
-    if (dealerId) {
-      $("#Edit").modal("hide")
-      ClearInputs("#edit_Dealer")
-      ClearSelecton("#edit_Dealer")
-      ClearTextArea("#edit_Dealer")
-    }
-    table_init()
-  }
-</script>
 
   
 
@@ -196,31 +166,30 @@ function addDealer() {
 
         //删除代理商操作
         var del = function(rid) {
-          window._target = apiConfig.dealer.Get(rid)
-          $("#Delete")
-            .modal()
+          DealerAdmin.view.delete.show(rid)
         }
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
             apiConfig.dealer.Delete(id)
-            $("#Delete").modal("hide")
+            DealerAdmin.view.delete.hide()
           }
           table_init()
         }
-        var search=function() {}
         //编辑代理商操作
         var edit = function(rid) {
-          window._target = apiConfig.dealer.Get(rid)
-          autoComplateInfo(window._target, "#edit_Dealer")
-          $("#Edit")
-            .modal()
+          DealerAdmin.view.edit.show(rid)
         }
 
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
           var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
           var result = apiConfig.dealer.Search(keyword)
           new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
         }
+
       </script>

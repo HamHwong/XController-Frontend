@@ -196,6 +196,10 @@ function addSupplier() {
         }
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
           var templateOpts = tableStructures.Admin.SupplierAdmin.Supplier
           var result = apiConfig.supplier.Search(keyword)
           console.log(result)

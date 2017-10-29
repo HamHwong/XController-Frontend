@@ -42,25 +42,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editDealer()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="DealerAdmin.event.edit()">完成</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  function editDealer() {
-    var rawData = window._target
-    var data = formToSet("#edit_Dealer")
-    for(var i in data){
-      rawData[i] = data[i]
-    }
-    var dealerId = apiConfig.dealer.Edit(rawData['_id'],data)
-    if (dealerId) {
-      $("#Edit").modal("hide")
-      ClearInputs("#edit_Dealer")
-      ClearSelecton("#edit_Dealer")
-      ClearTextArea("#edit_Dealer")
-    }
-    table_init()
-  }
-</script>

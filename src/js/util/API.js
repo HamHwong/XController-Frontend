@@ -74,7 +74,8 @@ const apiConfig = {
     },
     GetByUserName: function(username) {
       var resultset = this.Search(username)
-      for (var i of resultset) {
+      for (var j = 0; j < resultset.length; j++) {
+        var i = resultset[j]
         if (i["_dealername"] == username)
           return i
       }
@@ -251,7 +252,8 @@ const apiConfig = {
     },
     getCurrentStep: function(prid) {
       var steps = apiConfig.prprocess.Search(prid)
-      for (var step of steps) {
+      for (var i = 0; i < steps.length; i++) {
+        var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
           return step
         }
@@ -345,6 +347,10 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/count`
       return GET(api)
     },
+    CountByDealer:function(dealerID,status){
+      var api = root + `/api/purchaserequisition/countbydealer(${dealerID},${status})`
+      return GET(api)
+    },
     Search: function(keyword) {
       var api = root + `/api/purchaserequisition/search?keyWord=${keyword}`
       return GET(api)
@@ -397,8 +403,8 @@ const apiConfig = {
       // if (currentStep) {
       //   if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
       // var id = currentStep["_id"]
-          var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
-          // result = PUT(api)
+      var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
+      // result = PUT(api)
       //   } else {
       //     throw `Permission Denied`
       //   }

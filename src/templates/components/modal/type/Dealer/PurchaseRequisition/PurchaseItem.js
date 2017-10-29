@@ -1,27 +1,28 @@
 const PurchaseItem = {
-  show: function () {
+  show: function() {
     $("#PruchaseItem")
       .modal()
   },
-  hide: function () {
+  hide: function() {
     $("#PruchaseItem")
       .modal('hide')
   },
-  autoComplate: function (PI) {
+  autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  update: function () {
+  update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
     var prid = window._target.PR["_id"]
-    for (var item of unsavePI) {
+    for (var i = 0; i < unsavePI.length; i++) {
+      var item = unsavePI[i]
       item["_purchaserequisitionfk"] = prid
     }
     console.log(unsavePI)
     var count = apiConfig.purchaseitem.Add(unsavePI)
   },
-  updatePITable: function () {
+  updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
       //填充PI
       var PIinfoSet = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -31,14 +32,14 @@ const PurchaseItem = {
       PItable.to(window._targetPITableArea)
     }
   },
-  destory: function () {
+  destory: function() {
     ClearInputs("#PruchaseItem")
     $("#PIOperation").empty()
     window._target.PI = null
     window._operation = null
   },
   view: {
-    init: function () {
+    init: function() {
       if (!window._target) {
         window._target = {}
       }
@@ -53,29 +54,29 @@ const PurchaseItem = {
       var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
       switch (window._operation) {
-      case Enum.operation.Update:
-        operationArea.append($(cancelbtn)).append($(editbtn))
-        break
-      case Enum.operation.Create:
-        operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
-        break
-      default:
-        operationArea.append($(cancelbtn))
-        break
+        case Enum.operation.Update:
+          operationArea.append($(cancelbtn)).append($(editbtn))
+          break
+        case Enum.operation.Create:
+          operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
+          break
+        default:
+          operationArea.append($(cancelbtn))
+          break
       }
 
-      bindInputQuery("#brochure", apiConfig.brochure.Top(1000), "_brochurename", "_brochurename", function () {})
+      bindInputQuery("#brochure", apiConfig.brochure.Top(1000), "_brochurename", "_brochurename", function() {})
 
     },
-    add: function () {
+    add: function() {
       window._operation = Enum.operation.Create
       PurchaseItem.view.init()
       PurchaseItem.show()
     },
-    edit: function (PIid) {
+    edit: function(PIid) {
       window._operation = Enum.operation.Update
       PurchaseItem.view.init()
-      if (PIid.includes("[unsave]")) {
+      if (PIid.search("[unsave]")>=0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
       } else {
@@ -86,11 +87,11 @@ const PurchaseItem = {
     }
   },
   event: {
-    add: function () {
+    add: function() {
       PurchaseItem.event.append()
       PurchaseItem.hide()
     },
-    append: function () {
+    append: function() {
       //是否fields全为空
       if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
         return
@@ -101,8 +102,8 @@ const PurchaseItem = {
       var set = formToSet("#PruchaseItem_form")
       set["_id"] = localid
       var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-      for (var i of order) {
-        arr.push(set[i])
+      for (var i =0;i< order.length;i++) {
+        arr.push(set[order[i]])
       }
       if (window.__PurchaseRequisitionItem_table) {
         window.__PurchaseRequisitionItem_table.addRow(arr)
@@ -110,7 +111,7 @@ const PurchaseItem = {
       }
       ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
     },
-    edit: function () {
+    edit: function() {
       var target = window._target.PI
       var targetid = window._target.PI["_id"]
       var set = formToSet("#PruchaseItem_form")
@@ -118,7 +119,7 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().includes("[unsave]")) {
+      if (!targetid.toString().search("[unsave]")>=0) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
       var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -129,10 +130,10 @@ const PurchaseItem = {
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
-    delete: function (PIid) {
+    delete: function(PIid) {
       var result = null;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!PIid.includes("[unsave]")) {
+      if (!PIid.search("[unsave]")>=0) {
         result = apiConfig.purchaseitem.delete(PIid)
       }
       window.__PurchaseRequisitionItem_table.data[PIid].remove()

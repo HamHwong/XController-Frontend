@@ -6,12 +6,20 @@ function ClearInputs(form, idList) {
     if (!idList)
       $(a[i])
       .val("")
-    else if (idList && idList.includes(("#" + a[i].id))) {
-      $(a[i])
-        .val("")
-    } else {
-      continue
+    //若idList有值则只将这几个input的值去掉
+    else {
+      for (var j = 0; j < idList.length; j++) {
+        if ("#" + idList[j] == a[i]) {
+          $(a[i]).val("")
+        }
+      }
     }
+    // else if (idList && idList.search(("#" + a[i].id)) >= 0) {
+    //   $(a[i])
+    //     .val("")
+    // } else {
+    //   continue
+    // }
   }
 }
 
@@ -47,7 +55,7 @@ function ClearAllFieldsBut(form, idList) {
 
 //检测，如果所有input都为空，则直接关闭不保存
 function isAllPRTypeFormFieldEmpty(form) {
-  debugger
+  // debugger
   var a = $(form).find("input")
   var b = $(form).find("textarea")
   var c = $(form).find("select")
@@ -76,7 +84,8 @@ function formToSet(form) {
     .serializeArray()
 
   var set = {}
-  for (var record of formArr) {
+  for (var i = 0; i < formArr.length; i++) {
+    var record = formArr[i]
     var key = record["name"]
     var value = record["value"]
     set[key] = value
@@ -91,7 +100,8 @@ function formToSet(form) {
  */
 function arrayToSet(array, key) {
   var set = {}
-  for (var i of array) {
+  for (var j = 0; j < array.length; j++) {
+    var i = array[j]
     set[i[key]] = i
   }
   return set

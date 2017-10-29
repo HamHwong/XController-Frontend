@@ -114,7 +114,7 @@ const queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
-    if (dic[i].includes(keys)) {
+    if (dic[i].search(keys) >= 0) {
       var keywords = dic[i].match(keys)
       r.push(dic[i])
       var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
@@ -141,17 +141,18 @@ const bindOptionData = function($select, datasource, innerTextName, valueName) {
   //   optiontext = "nameField"
   //   optionvalue = "accountField"
   // } else if ("brochure" == category) {
-    optiontext = innerTextName
-    optionvalue = valueName
+  optionkey = innerTextName
+  optionvalue = valueName
   // } else {
   //   optionvalue = "_id"
   //   optiontext = innerTextName
   // }
 
 
-  for (var j of datasource) {
+  for (var i = 0; i < datasource.length; i++) {
+    var j = datasource[i]
     var value = j[optionvalue]
-    var text = j[optiontext]
+    var text = j[optionkey]
     var option = `<option value="${value}">${text}</option>`
     $select.append($(option))
   }
@@ -284,6 +285,69 @@ var sideclose = function() {
   $('.sideBtn').removeClass('nav_open').addClass('nav_collapse');
   $('.topNav').removeClass('nav_open').addClass('nav_collapse');
   $('.sideBtn .glyphicon').removeClass().addClass('glyphicon').addClass('sideBtnIcon-close')
+}
+
+//根据不同的
+var pageHelper = function(options) {
+  //options
+  //{
+  //  recordsCount 记录总数
+  //  rowsPerPage 每页个数
+  //  pagesCount 页总数
+  //  currentPage 当前页
+  //}
+  this.rowsPerPage = options.rowsPerPage | 10 //每页多少条记录
+  this.currentPage = 0 //当前页数
+  this.recordsCount = options.recordsCount | 0
+  this.pagesCount = Math.ceil(this.recordsCount / this.rowsPerPage)
+  this.startRow = 0
+  this.endRow = this.startRow + this.rowsPerPage
+  this.api = options.api | apiConfig.purchaserequisition.SearchByStatus
+  this.module =
+    `
+  <nav style="text-align: center">
+    <ul class="pagination">
+      <li><a href="#">&laquo;</a></li>
+      <li><a href="#">1</a></li>
+      <li><a href="#">2</a></li>
+      <li><a href="#">3</a></li>
+      <li><a href="#">4</a></li>
+      <li><a href="#">5</a></li>
+      <li><a href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+  `
+}
+pageHelper.prototype.generate = function() {
+  var paginationMark = $('<ul class="pagination">')
+  var nav = $('<nav style="text-align: center">')
+  nav.append(paginationMark)
+  for (var i = 1; i <= this.pagesCount; i++) {
+    var a = $(`<a href="#">${i}</a>`)
+    var that = this
+    a.on("click", {
+      page: i,
+      that: that
+    }, function(e) {
+      paginationMark.find("a").removeClass("active")
+      $(this).addClass("active")
+      e.data.that.to(e.data.page)
+      console.log(e.data)
+    })
+    var li = $(`<li></li>`)
+    var page = li.append(a)
+    paginationMark.append(page)
+  }
+  return nav
+}
+pageHelper.prototype.next = function() {
+
+}
+pageHelper.prototype.last = function() {
+
+}
+pageHelper.prototype.to = function(page) {
+  console.log("redirect to",page)
 }
 
 var table = function(url) {
@@ -530,6 +594,30 @@ table.prototype.update = function(rowKey, row) {
   // this.isUpdated = false
 }
 
+const table_buttonPool = {
+  pool: {
+    editBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='edit(${PrimaryKey})'>编辑</button>",
+    PIEditBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='PurchaseItem.view.edit(${PrimaryKey})'>编辑</button>",
+    submitBtn: "<button type='button' name='button' class='btn btn-primary submit' onclick='submit(${PrimaryKey})'>提交</button>",
+    deleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='delete(${PrimaryKey})'>删除</button>",
+    PIdeleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='PurchaseItem.event.delete(${PrimaryKey})'>删除</button>",
+    updateBtn: "<button type='button' name='button' class='btn btn-primary update' onclick='update(${PrimaryKey})'>更新</button>",
+    supplyBtn: "<button type='button' name='button' class='btn btn-success supply' onclick='supply(${PrimaryKey})'>入库</button>",
+    approveBtn: "<button type='button' name='button' class='btn btn-primary approve' onclick='approve(${PrimaryKey})'>通过</button>",
+    rejectBtn: "<button type='button' name='button' class='btn btn-danger reject' onclick='reject(${PrimaryKey})'>拒绝</button>",
+    expressUpdateBtn: "<button type='button' name='button' class='btn btn-success expressUpdate' onclick='SupplierPRDetail.view.update(${PrimaryKey})'>更新物流</button>",
+    expressViewBtn: "<button type='button' name='button' class='btn btn-success expressView' onclick='expressStatus(${PrimaryKey})'>物流状态</button>",
+    finishedBtn: "<button type='button' name='button' class='btn btn-primary finish' onclick='finish(${PrimaryKey})'>完成订单</button>",
+    historyBtn: "<button type='button' name='button' class='btn btn-success history' onclick='History(${PrimaryKey})'>历史纪录</button>",
+    copyBtn: "<button type='button' name='button' class='btn btn-primary copy' onclick='copy(${PrimaryKey})'>复制</button>",
+    deleteDraftBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='deleteDraft(${PrimaryKey})'>删除</button>"
+  },
+  genetrate(PrimaryKey, btnName) {
+    var btnString = table_buttonPool.pool[btnName].replace("${PrimaryKey}", PrimaryKey)
+    return eval($(btnString))
+  }
+}
+
 var table_row = function(data, ParentTable, isHeader, Headers) {
   this.ParentTable = ParentTable
   this.hasButton = ParentTable.hasButton
@@ -566,24 +654,10 @@ table_row.prototype.init = function() {
     //如果是header行，则不用加button
     var td = $("<td class='operation'></td>")
     var buttonPool = []
-    var editBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary edit\" onclick=\"edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
-    var PIEditBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary edit\" onclick=\"PurchaseItem.view.edit('" + this.PrimaryKeyValue + "')\">编辑</button>")
-    var submitBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary submit\" onclick=\"submit('" + this.PrimaryKeyValue + "')\">提交</button>")
-    var deleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"delete('" + this.PrimaryKeyValue + "')\">删除</button>")
-    var PIdeleteBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"PurchaseItem.event.delete('" + this.PrimaryKeyValue + "')\">删除</button>")
-    var updateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary update\" onclick=\"update('" + this.PrimaryKeyValue + "')\">更新</button>")
-    var supplyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success supply\" onclick=\"supply('" + this.PrimaryKeyValue + "')\">入库</button>")
-    var approveBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary approve\" onclick=\"approve('" + this.PrimaryKeyValue + "')\">通过</button>")
-    var rejectBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger reject\" onclick=\"reject('" + this.PrimaryKeyValue + "')\">拒绝</button>")
-    var expressUpdateBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressUpdate\" onclick=\"SupplierPRDetail.view.update('" + this.PrimaryKeyValue + "')\">更新物流</button>")
-    var expressViewBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success expressView\" onclick=\"expressStatus('" + this.PrimaryKeyValue + "')\">物流状态</button>")
-    var finishedBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary finish\" onclick=\"finish('" + this.PrimaryKeyValue + "')\">完成订单</button>")
-    var historyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-success history\" onclick=\"History('" + this.PrimaryKeyValue + "')\">历史纪录</button>")
-    var copyBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-primary copy\" onclick=\"copy('" + this.PrimaryKeyValue + "')\">复制</button>")
-    var deleteDraftBtn = $("<button type=\"button\" name=\"button\" class=\"btn btn-danger del\" onclick=\"deleteDraft('" + this.PrimaryKeyValue + "')\">删除</button>")
 
     for (var i in this.buttonPool) {
-      var button = eval(this.buttonPool[i])
+      // var button = eval(this.buttonPool[i])
+      var button = table_buttonPool.genetrate(this.PrimaryKeyValue,this.buttonPool[i])
       button.prop("parentTable", this.ParentTable)
       button.prop("parentRow", this)
       buttonPool.push(button)
@@ -608,7 +682,9 @@ table_row.prototype.rowAddCard = function(color) {
     props[this.Headers[i]] = $(tds[i])
       .html() //展示没有必要XSS,控制写入时就行
     //遍历keyArr,找到key对应的数据，填入
-    if (this.keyArr[i].includes("hide"))
+    // debugger
+    //ie没有includes 只能用search
+    if (this.keyArr[i].search("hide") >= 0)
       continue
     if ("key" == this.keyArr[i] || "id" == this.keyArr[i]) {
       headers[this.Headers[i]] = $(tds[i])
@@ -961,15 +1037,58 @@ var validator = {
 }
 
 const BrochureAdmin = {
+  //TODO
   view: {
-    show: function() {
-      BrochureAdmin.event.init()
-      $("#Add").modal()
+    add: {
+      show: function() {
+        BrochureAdmin.event.init()
+        $("#Add").modal()
+      },
+      hide: function() {
+        BrochureAdmin.event.destory()
+        $("#Add").modal("hide")
+      },
     },
-    hide: function() {
-      BrochureAdmin.event.destory()
-      $("#Add").modal("hide")
+    edit: {
+      show: function() {
+        BrochureAdmin.event.init()
+        $("#Edit").modal()
+      },
+      hide: function() {
+        BrochureAdmin.event.destory()
+        $("#Edit").modal("hide")
+      },
     },
+    delete: {
+      show: function() {
+        $("#Delete")
+          .modal()
+      },
+      hide: function() {
+        $("#Delete")
+          .modal("hide")
+      }
+    },
+    supply: {
+      show: function() {
+        $("#Supply")
+          .modal()
+      },
+      hide: function() {
+        $("#Supply")
+          .modal("hide")
+      }
+    },
+    history: {
+      show: function() {
+        $("#History")
+          .modal()
+      },
+      hide: function() {
+        $("#History")
+          .modal("hide")
+      }
+    }
   },
   event: {
     add: function() {
@@ -981,6 +1100,21 @@ const BrochureAdmin = {
       }
       BrochureAdmin.view.hide()
     },
+    edit: function() {
+      var rawData = window._target
+      var data = formToSet("#edit_Brochure")
+      for (var i in data) {
+        rawData[i] = data[i]
+      }
+      var brochureId = apiConfig.brochure.Edit(rawData['_id'], data)
+      if (brochureId) {
+        $("#Edit").modal("hide")
+        ClearInputs("#edit_Brochure")
+        ClearSelecton("#edit_Brochure")
+        ClearTextArea("#edit_Brochure")
+      }
+      table_init()
+    },
     destory: function() {
       ClearAllFields("#Add")
     },
@@ -990,140 +1124,123 @@ const BrochureAdmin = {
   }
 }
 
-const PRDetail = {
-  show: function(PRid) {
-    if (PRid) {
-      PRDetail.init(PRid)
-      PRDetail.autoComplate(PRid)
-    }
-    $("#Detail").modal()
-  },
-  hide: function() {
-    PRDetail.destory()
-    $("#Detail").modal('hide')
-  },
-  init: function(PRid) {
-    $("#progressbar").empty()
-    if (!window.target)
-      window.target = {}
-    if (!window.target.PR)
-      window.target.PR = {}
-    if (PRid) {
-      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
-    }
-  },
-  destory: function() {
-    $("#progressbar").empty()
-    ClearAllFields("#Detail")
-    if (window.target.PR)
-      window.target.PR = null
-    if (window.target)
-      window.target = null
-  },
-  autoComplate: function(PRid) {
-    var targetPRArea = "#Detail",
-      targetPITableArea = "#InfomationArea",
-      templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      
-    if (PRid) {
-      //填充其他信息
-      var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
-      autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
-      //填充PI
-      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-      // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
-    }
-
-    var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse()
-    for (var i = 0; i < steps.length; i++) {
-      var result = steps[i]["_result"]
-      var time = steps[i]["_lastmodified"]
-      // var tasktitle = steps[i]["_tasktitle"]
-      var result = steps[i]["_result"]
-      var taskowner = steps[i]["_taskowner"]
-      var prprocessstep = steps[i]["_prprocessstep"]
-      var mod = `<li class="glyphicon"><span>${prprocessstep}</span><span class="small">${taskowner}<span><span class="operationtime">${time}</span></li>`
-      var $mod = $(mod)
-      $mod.css("width", (100 / steps.length) + '%')
-
-      if (result == Enum.enumApprovalResult.NoAction) {
-        $mod.addClass('noAction')
-      } else if (result == Enum.enumApprovalResult.Ready) {
-        $mod.addClass('processing')
-      } else if (result == Enum.enumApprovalResult.Success || Enum.enumApprovalResult.Approved) {
-        $mod.addClass('approved')
-      } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
-        $mod.addClass('rejected')
-      }
-
-      if (prprocessstep == Enum.processStatus.NotifiedParty) {
-        $mod.addClass('infomation')
-      }
-
-      $("#progressbar").append($mod)
-    }
-  },
+const DealerAdmin = {
   view: {
-    approve: function() {
-      $("#Approve").modal()
+    add: {
+      show: function() {
+        $("#Add").modal()
+      },
+      hide: function() {
+        $("#Add").modal("hide")
+      },
     },
-    reject: function() {
-      $("#Reject").modal()
+    edit: {
+      show: function(rid) {
+        window._target = apiConfig.dealer.Get(rid)
+        autoComplateInfo(window._target, "#edit_Dealer")
+        $("#Edit").modal()
+      },
+      hide: function() {
+        $("#Edit").modal("hide")
+      },
+    },
+    delete: {
+      show: function() {
+        window._target = apiConfig.dealer.Get(rid)
+        $("#Delete")
+          .modal()
+      },
+      hide: function() {
+        $("#Delete")
+          .modal("hide")
+      }
     }
   },
   event: {
-    approve: function() {
-      if (window.target.PR) {
-        var PRid = window.target.PR["_id"]
-        var comments = $("textarea#approvalComments").val()
-        var c = apiConfig.prprocess.Approve(PRid, comments)
-        PRDetail.hide()
+    add: function() {
+      var data = formToSet("#add_Dealer")
+      var dealerId = apiConfig.dealer.Add(data)
+      if (dealerId) {
+        $("#Add").modal("hide")
+        ClearInputs("#add_Dealer")
+        ClearSelecton("#add_Dealer")
+        ClearTextArea("#add_Dealer")
       }
       table_init()
     },
-    reject: function() {
-      if (window.target.PR) {
-        var PRid = window.target.PR["_id"]
-        var comments = $("textarea#approvalComments").val()
-        apiConfig.prprocess.Reject(PRid, comments)
-        PRDetail.hide()
+    edit: function() {
+      var rawData = window._target
+      var data = formToSet("#edit_Dealer")
+      for (var i in data) {
+        rawData[i] = data[i]
+      }
+      var dealerId = apiConfig.dealer.Edit(rawData['_id'], data)
+      if (dealerId) {
+        $("#Edit").modal("hide")
+        ClearInputs("#edit_Dealer")
+        ClearSelecton("#edit_Dealer")
+        ClearTextArea("#edit_Dealer")
       }
       table_init()
     }
   }
 }
 
-$("#Detail")
-  .on("hidden.bs.modal", function() {
-      $("#progressbar").empty()
+var Optionlist = {
+  init: function() {
+    Optionlist.__proto__ = baseModalShow.view
+  },
+  view: {
+    show1: function() {
+
+    },
+    hide2: function() {
+
     }
-)
+  },
+  event: {
+
+  }
+}
+
+var baseModalShow = {
+  view: {
+    show: function() {
+      BrochureAdmin.event.init()
+      $("#Add").modal()
+    },
+    hide: function() {
+      BrochureAdmin.event.destory()
+      $("#Add").modal("hide")
+    }
+  }
+}
 
 const PurchaseItem = {
-  show: function () {
+  show: function() {
     $("#PruchaseItem")
       .modal()
   },
-  hide: function () {
+  hide: function() {
     $("#PruchaseItem")
       .modal('hide')
   },
-  autoComplate: function (PI) {
+  autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
-  update: function () {
+  update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
     var prid = window._target.PR["_id"]
-    for (var item of unsavePI) {
+    for (var i = 0; i < unsavePI.length; i++) {
+      var item = unsavePI[i]
       item["_purchaserequisitionfk"] = prid
     }
     console.log(unsavePI)
     var count = apiConfig.purchaseitem.Add(unsavePI)
   },
-  updatePITable: function () {
+  updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
       //填充PI
       var PIinfoSet = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -1133,14 +1250,14 @@ const PurchaseItem = {
       PItable.to(window._targetPITableArea)
     }
   },
-  destory: function () {
+  destory: function() {
     ClearInputs("#PruchaseItem")
     $("#PIOperation").empty()
     window._target.PI = null
     window._operation = null
   },
   view: {
-    init: function () {
+    init: function() {
       if (!window._target) {
         window._target = {}
       }
@@ -1155,29 +1272,29 @@ const PurchaseItem = {
       var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
       switch (window._operation) {
-      case Enum.operation.Update:
-        operationArea.append($(cancelbtn)).append($(editbtn))
-        break
-      case Enum.operation.Create:
-        operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
-        break
-      default:
-        operationArea.append($(cancelbtn))
-        break
+        case Enum.operation.Update:
+          operationArea.append($(cancelbtn)).append($(editbtn))
+          break
+        case Enum.operation.Create:
+          operationArea.append($(addbtn)).append($(cancelbtn)).append($(appendbtn))
+          break
+        default:
+          operationArea.append($(cancelbtn))
+          break
       }
 
-      bindInputQuery("#brochure", apiConfig.brochure.Top(1000), "_brochurename", "_brochurename", function () {})
+      bindInputQuery("#brochure", apiConfig.brochure.Top(1000), "_brochurename", "_brochurename", function() {})
 
     },
-    add: function () {
+    add: function() {
       window._operation = Enum.operation.Create
       PurchaseItem.view.init()
       PurchaseItem.show()
     },
-    edit: function (PIid) {
+    edit: function(PIid) {
       window._operation = Enum.operation.Update
       PurchaseItem.view.init()
-      if (PIid.includes("[unsave]")) {
+      if (PIid.search("[unsave]")>=0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
       } else {
@@ -1188,11 +1305,11 @@ const PurchaseItem = {
     }
   },
   event: {
-    add: function () {
+    add: function() {
       PurchaseItem.event.append()
       PurchaseItem.hide()
     },
-    append: function () {
+    append: function() {
       //是否fields全为空
       if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
         return
@@ -1203,8 +1320,8 @@ const PurchaseItem = {
       var set = formToSet("#PruchaseItem_form")
       set["_id"] = localid
       var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-      for (var i of order) {
-        arr.push(set[i])
+      for (var i =0;i< order.length;i++) {
+        arr.push(set[order[i]])
       }
       if (window.__PurchaseRequisitionItem_table) {
         window.__PurchaseRequisitionItem_table.addRow(arr)
@@ -1212,7 +1329,7 @@ const PurchaseItem = {
       }
       ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
     },
-    edit: function () {
+    edit: function() {
       var target = window._target.PI
       var targetid = window._target.PI["_id"]
       var set = formToSet("#PruchaseItem_form")
@@ -1220,7 +1337,7 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().includes("[unsave]")) {
+      if (!targetid.toString().search("[unsave]")>=0) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
       var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -1231,10 +1348,10 @@ const PurchaseItem = {
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
-    delete: function (PIid) {
+    delete: function(PIid) {
       var result = null;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!PIid.includes("[unsave]")) {
+      if (!PIid.search("[unsave]")>=0) {
         result = apiConfig.purchaseitem.delete(PIid)
       }
       window.__PurchaseRequisitionItem_table.data[PIid].remove()
@@ -1512,23 +1629,35 @@ const PurchaseRequisition = {
   },
   event: {
     draft: function() {
-      var data = formToSet("#PurchaseRequisition_form")
-      data["_prcreated"] = new Date()
-      data["_processstatus"] = Enum.prstatus.Draft
-      data["_prnumber"] = generateUUID()
-      var PRid = apiConfig.purchaserequisition.Draft(data)
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      var arr = []
+      // if (items.length <= 0) {
+      //   throw "请购单item数量不能为0"
+      // }
+      var submitter = $("#submitter").val()
+      var data = formToSet("#PurchaseRequisition_form")
+      data["_prcreated"] = new Date()
+      data["_prstatus"] = Enum.prstatus.Draft
+
+      switch (getCookie('auth').toLowerCase()) {
+        case 'zeiss':
+          data["_submitteremployeefk"] = submitter
+          data["_requestordealerfk"] = null
+          break
+        case 'dealer':
+          data["_submitterdealerfk"] = submitter
+          break
+      }
+
+      var PRid = apiConfig.purchaserequisition.Draft(data)
+
       for (var i = 0; i < items.length; i++) {
         items[i]["_purchaserequisitionfk"] = PRid
-        // var itemID = apiConfig.purchaseitem.Add(items[i])
-        arr.push(item[i])
       }
-      apiConfig.purchaseitem.Add(arr)
-      ClearAllFields("#PurchaseRequisition")
+      apiConfig.purchaseitem.Add(items)
+      // apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
+      table_init() //更新
       PurchaseRequisition.hide()
-      table_init()
     },
     submit: function() {
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -1543,6 +1672,7 @@ const PurchaseRequisition = {
 
       if (window._operation == Enum.operation.Update) {
         data["_id"] = window._target.PR["_id"]
+        data["_prstatus"] = window._target.PR["_prstatus"]
       } //TODO
 
       switch (getCookie('auth').toLowerCase()) {
@@ -1560,7 +1690,7 @@ const PurchaseRequisition = {
           // data["_submitteremployee"] = submitter
           break
         case 'dealer':
-          data["_submitterdealerfk"] = submitter
+          data["_submitterdealerfk"] = JSON.parse(getCookie('user'))["_id"]
           break
       }
 
@@ -1613,6 +1743,116 @@ const PurchaseRequisition = {
 //     // .to($("#InfomationAddArea"))
 //   }
 // })
+
+const PRDetail = {
+  show: function(PRid) {
+    if (PRid) {
+      PRDetail.init(PRid)
+      PRDetail.autoComplate(PRid)
+    }
+    $("#Detail").modal()
+  },
+  hide: function() {
+    PRDetail.destory()
+    $("#Detail").modal('hide')
+  },
+  init: function(PRid) {
+    $("#progressbar").empty()
+    if (!window.target)
+      window.target = {}
+    if (!window.target.PR)
+      window.target.PR = {}
+    if (PRid) {
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
+    }
+  },
+  destory: function() {
+    $("#progressbar").empty()
+    ClearAllFields("#Detail")
+    if (window.target.PR)
+      window.target.PR = null
+    if (window.target)
+      window.target = null
+  },
+  autoComplate: function(PRid) {
+    var targetPRArea = "#Detail",
+      targetPITableArea = "#InfomationArea",
+      templateOpts = tableStructures.Dealer.MyOrder.orderDetail
+      
+    if (PRid) {
+      //填充其他信息
+      var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
+      autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
+      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
+    }
+
+    var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse()
+    for (var i = 0; i < steps.length; i++) {
+      var result = steps[i]["_result"]
+      var time = steps[i]["_lastmodified"]
+      // var tasktitle = steps[i]["_tasktitle"]
+      var result = steps[i]["_result"]
+      var taskowner = steps[i]["_taskowner"]
+      var prprocessstep = steps[i]["_prprocessstep"]
+      var mod = `<li class="glyphicon"><span>${prprocessstep}</span><span class="small">${taskowner}<span><span class="operationtime">${time}</span></li>`
+      var $mod = $(mod)
+      $mod.css("width", (100 / steps.length) + '%')
+
+      if (result == Enum.enumApprovalResult.NoAction) {
+        $mod.addClass('noAction')
+      } else if (result == Enum.enumApprovalResult.Ready) {
+        $mod.addClass('processing')
+      } else if (result == Enum.enumApprovalResult.Success || Enum.enumApprovalResult.Approved) {
+        $mod.addClass('approved')
+      } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
+        $mod.addClass('rejected')
+      }
+
+      if (prprocessstep == Enum.processStatus.NotifiedParty) {
+        $mod.addClass('infomation')
+      }
+
+      $("#progressbar").append($mod)
+    }
+  },
+  view: {
+    approve: function() {
+      $("#Approve").modal()
+    },
+    reject: function() {
+      $("#Reject").modal()
+    }
+  },
+  event: {
+    approve: function() {
+      if (window.target.PR) {
+        var PRid = window.target.PR["_id"]
+        var comments = $("textarea#approvalComments").val()
+        var c = apiConfig.prprocess.Approve(PRid, comments)
+        PRDetail.hide()
+      }
+      table_init()
+    },
+    reject: function() {
+      if (window.target.PR) {
+        var PRid = window.target.PR["_id"]
+        var comments = $("textarea#approvalComments").val()
+        apiConfig.prprocess.Reject(PRid, comments)
+        PRDetail.hide()
+      }
+      table_init()
+    }
+  }
+}
+
+$("#Detail")
+  .on("hidden.bs.modal", function() {
+      $("#progressbar").empty()
+    }
+)
 
 var SupplierPRDetail = {
   show: function() {
@@ -1802,7 +2042,8 @@ const apiConfig = {
     },
     GetByUserName: function(username) {
       var resultset = this.Search(username)
-      for (var i of resultset) {
+      for (var j = 0; j < resultset.length; j++) {
+        var i = resultset[j]
         if (i["_dealername"] == username)
           return i
       }
@@ -1979,7 +2220,8 @@ const apiConfig = {
     },
     getCurrentStep: function(prid) {
       var steps = apiConfig.prprocess.Search(prid)
-      for (var step of steps) {
+      for (var i = 0; i < steps.length; i++) {
+        var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
           return step
         }
@@ -2073,6 +2315,10 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/count`
       return GET(api)
     },
+    CountByDealer:function(dealerID,status){
+      var api = root + `/api/purchaserequisition/countbydealer(${dealerID},${status})`
+      return GET(api)
+    },
     Search: function(keyword) {
       var api = root + `/api/purchaserequisition/search?keyWord=${keyword}`
       return GET(api)
@@ -2125,8 +2371,8 @@ const apiConfig = {
       // if (currentStep) {
       //   if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
       // var id = currentStep["_id"]
-          var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
-          // result = PUT(api)
+      var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
+      // result = PUT(api)
       //   } else {
       //     throw `Permission Denied`
       //   }
@@ -2345,12 +2591,20 @@ function ClearInputs(form, idList) {
     if (!idList)
       $(a[i])
       .val("")
-    else if (idList && idList.includes(("#" + a[i].id))) {
-      $(a[i])
-        .val("")
-    } else {
-      continue
+    //若idList有值则只将这几个input的值去掉
+    else {
+      for (var j = 0; j < idList.length; j++) {
+        if ("#" + idList[j] == a[i]) {
+          $(a[i]).val("")
+        }
+      }
     }
+    // else if (idList && idList.search(("#" + a[i].id)) >= 0) {
+    //   $(a[i])
+    //     .val("")
+    // } else {
+    //   continue
+    // }
   }
 }
 
@@ -2386,7 +2640,7 @@ function ClearAllFieldsBut(form, idList) {
 
 //检测，如果所有input都为空，则直接关闭不保存
 function isAllPRTypeFormFieldEmpty(form) {
-  debugger
+  // debugger
   var a = $(form).find("input")
   var b = $(form).find("textarea")
   var c = $(form).find("select")
@@ -2415,7 +2669,8 @@ function formToSet(form) {
     .serializeArray()
 
   var set = {}
-  for (var record of formArr) {
+  for (var i = 0; i < formArr.length; i++) {
+    var record = formArr[i]
     var key = record["name"]
     var value = record["value"]
     set[key] = value
@@ -2430,7 +2685,8 @@ function formToSet(form) {
  */
 function arrayToSet(array, key) {
   var set = {}
-  for (var i of array) {
+  for (var j = 0; j < array.length; j++) {
+    var i = array[j]
     set[i[key]] = i
   }
   return set
@@ -2573,6 +2829,118 @@ const Enum = {
     Copy: "Copy"
   }
 }
+
+var e = elem => document.querySelector(elem)
+var log = (e) => console.log.bind(console)(e)
+
+// $(function() {
+//   var slider = new SliderUnlock("#slider", {
+//     labelTip: "滑动验证",
+//     successLabelTip: "验证成功"
+//   }, function() {
+//     login()
+//   }, function() {});
+//   slider.init();
+// })
+
+function formToSet(form) {
+  form = $(form)
+  var formArr = form
+    .serializeArray()
+  var set = {}
+  for (var i = 0; i < formArr.length; i++) {
+    var record = formArr[i]
+    var key = record["name"]
+    var value = record["value"]
+    set[key] = value
+  }
+  return set
+}
+
+function login() {
+  var root = ""
+  var set = formToSet("#login_form")
+  var username = set["username"]
+  var password = set["password"]
+
+  switch (window.role) {
+    case 'admin':
+    case 'Admin':
+      var user = apiConfig.systemuser.Login(username, password)
+      if (user) { //BUG
+        window.location.href = "./admin-home.html"
+        setCookie("auth", "Admin")
+        setCookie("name", user["_accountname"])
+        setCookie("account", user["_accountname"])
+        setCookie("uid", user["_id"])
+        setCookie("user", JSON.stringify(user))
+      }
+      break
+    case 'dealer':
+    case 'Dealer':
+      var user = apiConfig.dealer.Login(username, password)
+      if (user) {
+        window.location.href = "./dealer-home.html"
+        setCookie("auth", "Dealer")
+        setCookie("name", user["_accountname"])
+        setCookie("account", user["_accountname"])
+        setCookie("uid", user["_id"])
+        setCookie("user", JSON.stringify(user))
+      }
+      break
+    case 'supplier':
+    case 'Supplier':
+      var user = apiConfig.supplier.Login(username, password)
+      if (user) {
+        window.location.href = "./supplier-home.html"
+        setCookie("auth", "Supplier")
+        setCookie("name", user["_accountname"])
+        setCookie("account", user["_accountname"])
+        setCookie("uid", user["_id"])
+        setCookie("user", JSON.stringify(user))
+      }
+      break
+    case 'zeiss':
+    case 'Zeiss':
+      var user = apiConfig.employee.Login(username, password)
+      console.log(user)
+      // if ("zeiss" == username.toLowerCase()) {
+      if (user) {
+        window.location.href = "./zeiss-home.html"
+        /**
+         *   "statusField": 0,
+              "nameField": "string",
+              "eNNameField": "string",
+              "mobileField": "string",
+              "emailField": "string",
+              "accountField": "string"
+         */
+        setCookie("auth", "Zeiss")
+        setCookie("name", user["nameField"])
+        setCookie("account", user["accountField"])
+        // setCookie("name", "BLManager")
+        // var user = {
+        //   "_id":"BLManager"
+        // }
+        setCookie("user", JSON.stringify(user))
+      }
+      break
+  }
+  return false
+}
+$("#role").on('change', function(e) {
+  window.role = $("#role").val()
+})
+window.role = $("#role").val()
+
+
+$("#login_form").on("keydown", function(e) {
+  if (e.which === 13) {
+    console.log("Enter")
+    e.preventDefault()
+    login()
+  }
+})
 
 const tableStructures = {
   Admin: {

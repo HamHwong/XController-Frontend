@@ -75,7 +75,6 @@
 
             var edit = function(PRid) {
               PurchaseRequisition.view.edit(PRid)
-              // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
             }
 
             var deleteDraft = function(PRid) {
@@ -83,30 +82,29 @@
             }
 
             var search = function() {
-              //TODO search需要API根据不同情况来get
-              var keywrod = $("input.searchBox").val()
-              var li = $(".tabs").child("li.active") //正在显示的li tab
-              var tabname = li.child("a").attr("href").substring(1)
-              var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              var result = apiConfig.purchaserequisition.Search(keyword)
-              switch (tabname) {
-                case "draft":
-                  break
-                case "approving":
-                  templateOpts = tableStructures.Dealer.MyOrder.Approving
-                  result = apiConfig.purchaserequisition.Search(keyword)
-                  break
-                case "finished":
-                  break
-                case "reject":
-                  break
-              }
-              if ("" != keyword) {
-                keyword = filterXSS(keywrod.trim())
-                console.log(result)
-                new table().loadFromTemplateJson(result, templateOpts).to("#applying")
-              } else {
+              var keyword = filterXSS($("input#search_box").val().trim())
+              if ("" == keyword) {
                 table_init()
+                return
               }
+              var role = Enum.role.DEALEAR
+              var uid = getCookie('uid')
+              var status = Enum.prstatus.Progress
+              var startRow = 0
+              var endRow = 100
+              var templateOpts = tableStructures.Dealer.MyOrder.Approving
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
+              //草稿箱table初始化
+              var status = Enum.prstatus.Draft
+              var templateOpts = tableStructures.Dealer.MyOrder.Draft
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#draft")
+              //successtable初始化
+              var status = Enum.prstatus.Completed
+              var templateOpts = tableStructures.Dealer.MyOrder.Success
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
+              //拒绝table初始化
+              var status = Enum.prstatus.Rejected
+              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
+              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#rejected")
             }
           </script>

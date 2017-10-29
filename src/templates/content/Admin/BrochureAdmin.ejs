@@ -44,37 +44,37 @@
             //删除物品记录操作
             var del = function(rid) {
               window._target = apiConfig.brochure.Get(rid)
-              $("#Delete")
-                .modal()
+              BrochureAdmin.view.delete.show()
             }
             var deleteSubmit = function() {
               if (window._target) {
                 var id = window._target["_id"]
                 apiConfig.brochure.Delete(id)
-                $("#Delete").modal("hide")
+                BrochureAdmin.view.delete.hide()
               }
               table_init()
             }
             //补充物品数量操作
             var supply = function(rid) {
               window._target = apiConfig.brochure.Get(rid)
-              $("#Supply")
-                .modal()
+              BrochureAdmin.view.supply.show()
             }
             //查看出入库历史操作
             var History = function(rid) {
-              $("#History")
-                .modal()
+              BrochureAdmin.view.history.show()
             }
             //编辑操作
             var edit = function(rid) {
               window._target = apiConfig.brochure.Get(rid)
               autoComplateInfo(window._target, "#edit_Brochure")
-              $("#Edit")
-                .modal()
+              BrochureAdmin.view.edit.show()
             }
             var search = function() {
               var keyword = filterXSS($("input.searchBox").val().trim())
+              if ("" == keyword) {
+                table_init()
+                return
+              }
               var templateOpts = tableStructures.Admin.Bruchure.Inventory
               var result = apiConfig.brochure.Search(keyword)
               new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")

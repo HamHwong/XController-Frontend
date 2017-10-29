@@ -42,21 +42,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addDealer()">添加</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="DealerAdmin.event.add()">添加</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-function addDealer() {
-  var data = formToSet("#add_Dealer")
-  var dealerId = apiConfig.dealer.Add(data)
-  if (dealerId) {
-    $("#Add").modal("hide")
-    ClearInputs("#add_Dealer")
-    ClearSelecton("#add_Dealer")
-    ClearTextArea("#add_Dealer")
-  }
-  table_init()
-}
-</script>

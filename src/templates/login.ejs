@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>Login - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 </head>
 
 <body>
@@ -49,12 +50,7 @@
         </div>
       </form>
     </div>
-
 </body>
-<style media="screen">
-
-</style>
-
 </html>
 
 <!-- CSS -->
@@ -69,116 +65,8 @@
 <script type="text/javascript" src="./js/cookies.js"></script>
 <script type="text/javascript" src="./js/util/apimethod.js"></script>
 <script type="text/javascript" src="./js/util/API.js"></script>
+<script type="text/javascript" src="./js/util/login.js"></script>
 
 <!-- Favicon -->
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script type="text/javascript">
-  var e = elem => document.querySelector(elem)
-  var log = (e) => console.log.bind(console)(e)
-
-  // $(function() {
-  //   var slider = new SliderUnlock("#slider", {
-  //     labelTip: "滑动验证",
-  //     successLabelTip: "验证成功"
-  //   }, function() {
-  //     login()
-  //   }, function() {});
-  //   slider.init();
-  // })
-
-  function formToSet(form) {
-    form = $(form)
-    var formArr = form
-      .serializeArray()
-    var set = {}
-    for (var record of formArr) {
-      var key = record["name"]
-      var value = record["value"]
-      set[key] = value
-    }
-    return set
-  }
-
-  function login() {
-    var root = ""
-    var set = formToSet("#login_form")
-    var username = set["username"]
-    var password = set["password"]
-
-    switch (window.role) {
-      case 'admin':
-      case 'Admin':
-        var user = apiConfig.systemuser.Login(username, password)
-        if (user) { //BUG
-          window.location.href = "./admin-home.html"
-          setCookie("auth", "Admin")
-          setCookie("name", user["_accountname"])
-          setCookie("account", user["_accountname"])
-          setCookie("user", JSON.stringify(user))
-        }
-        break
-      case 'dealer':
-      case 'Dealer':
-        var user = apiConfig.dealer.Login(username, password)
-        if (user) {
-          window.location.href = "./dealer-home.html"
-          setCookie("auth", "Dealer")
-          setCookie("name", user["_accountname"])
-          setCookie("account", user["_accountname"])
-          setCookie("user", JSON.stringify(user))
-        }
-        break
-      case 'supplier':
-      case 'Supplier':
-        var user = apiConfig.supplier.Login(username, password)
-        if (user) {
-          window.location.href = "./supplier-home.html"
-          setCookie("auth", "Supplier")
-          setCookie("name", user["_accountname"])
-          setCookie("account", user["_accountname"])
-          setCookie("user", JSON.stringify(user))
-        }
-        break
-      case 'zeiss':
-      case 'Zeiss':
-        var user = apiConfig.employee.Login(username, password)
-        console.log(user)
-        // if ("zeiss" == username.toLowerCase()) {
-        if (user) {
-          window.location.href = "./zeiss-home.html"
-          /**
-           *   "statusField": 0,
-                "nameField": "string",
-                "eNNameField": "string",
-                "mobileField": "string",
-                "emailField": "string",
-                "accountField": "string"
-           */
-          setCookie("auth", "Zeiss")
-          setCookie("name", user["nameField"])
-          setCookie("account", user["accountField"])
-          // setCookie("name", "BLManager")
-          // var user = {
-          //   "_id":"BLManager"
-          // }
-          setCookie("user", JSON.stringify(user))
-        }
-        break
-    }
-    return false
-  }
-  $("#role").on('change', function(e) {
-    window.role = $("#role").val()
-  })
-  window.role = $("#role").val()
-
-
-  $("#login_form").on("keydown", function(e) {
-    if (e.which === 13) {
-      console.log("Enter")
-      e.preventDefault()
-      login()
-    }
-  })
-</script>

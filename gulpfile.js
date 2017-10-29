@@ -12,8 +12,10 @@ var pug = require('gulp-pug')
 var concat = require('gulp-concat')
 var cssmin = require('gulp-minify-css')
 var ejs = require('gulp-ejs')
-var babel = require("gulp-babel"); // 用于ES6转化ES5
-var uglify = require('gulp-uglify'); // 用于压缩 JS
+var babel = require("gulp-babel") // 用于ES6转化ES5
+var uglify = require('gulp-uglify') // 用于压缩 JS
+var babelpolyfill = require('babel-polyfill')
+var es2015 = require("babel-preset-es2015")
 
 var config = require('./config/ServerConfig.js')
 var __dist = config.path.dist
@@ -74,6 +76,9 @@ var cssSrc = config.path.css
 
 gulp.task('revJs', ['concat-conponent-js'], function() {
   return gulp.src([jsSrc + "/**/*.js"])
+    .pipe(babel({
+      presets: [es2015]
+    }))
     // .pipe(babel())
     // .pipe(uglify())
     .pipe(rev())

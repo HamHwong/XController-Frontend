@@ -35,25 +35,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="editBrochure()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="Brochure.event.edit()">完成</button>
       </div>
     </div>
   </div>
 </div>
-<script>
-  function editBrochure() {
-    var rawData = window._target
-    var data = formToSet("#edit_Brochure")
-    for(var i in data){
-      rawData[i] = data[i]
-    }
-    var brochureId = apiConfig.brochure.Edit(rawData['_id'],data)
-    if (brochureId) {
-      $("#Edit").modal("hide")
-      ClearInputs("#edit_Brochure")
-      ClearSelecton("#edit_Brochure")
-      ClearTextArea("#edit_Brochure")
-    }
-    table_init()
-  }
-</script>

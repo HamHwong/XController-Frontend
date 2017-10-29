@@ -41,31 +41,30 @@
 
         //删除代理商操作
         var del = function(rid) {
-          window._target = apiConfig.dealer.Get(rid)
-          $("#Delete")
-            .modal()
+          DealerAdmin.view.delete.show(rid)
         }
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
             apiConfig.dealer.Delete(id)
-            $("#Delete").modal("hide")
+            DealerAdmin.view.delete.hide()
           }
           table_init()
         }
-        var search=function() {}
         //编辑代理商操作
         var edit = function(rid) {
-          window._target = apiConfig.dealer.Get(rid)
-          autoComplateInfo(window._target, "#edit_Dealer")
-          $("#Edit")
-            .modal()
+          DealerAdmin.view.edit.show(rid)
         }
 
         var search = function() {
           var keyword = filterXSS($("input.searchBox").val().trim())
+          if ("" == keyword) {
+            table_init()
+            return
+          }
           var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
           var result = apiConfig.dealer.Search(keyword)
           new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
         }
+
       </script>

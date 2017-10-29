@@ -236,23 +236,35 @@ const PurchaseRequisition = {
   },
   event: {
     draft: function() {
-      var data = formToSet("#PurchaseRequisition_form")
-      data["_prcreated"] = new Date()
-      data["_processstatus"] = Enum.prstatus.Draft
-      data["_prnumber"] = generateUUID()
-      var PRid = apiConfig.purchaserequisition.Draft(data)
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      var arr = []
+      // if (items.length <= 0) {
+      //   throw "请购单item数量不能为0"
+      // }
+      var submitter = $("#submitter").val()
+      var data = formToSet("#PurchaseRequisition_form")
+      data["_prcreated"] = new Date()
+      data["_prstatus"] = Enum.prstatus.Draft
+
+      switch (getCookie('auth').toLowerCase()) {
+        case 'zeiss':
+          data["_submitteremployeefk"] = submitter
+          data["_requestordealerfk"] = null
+          break
+        case 'dealer':
+          data["_submitterdealerfk"] = submitter
+          break
+      }
+
+      var PRid = apiConfig.purchaserequisition.Draft(data)
+
       for (var i = 0; i < items.length; i++) {
         items[i]["_purchaserequisitionfk"] = PRid
-        // var itemID = apiConfig.purchaseitem.Add(items[i])
-        arr.push(item[i])
       }
-      apiConfig.purchaseitem.Add(arr)
-      ClearAllFields("#PurchaseRequisition")
+      apiConfig.purchaseitem.Add(items)
+      // apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
+      table_init() //更新
       PurchaseRequisition.hide()
-      table_init()
     },
     submit: function() {
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -267,6 +279,7 @@ const PurchaseRequisition = {
 
       if (window._operation == Enum.operation.Update) {
         data["_id"] = window._target.PR["_id"]
+        data["_prstatus"] = window._target.PR["_prstatus"]
       } //TODO
 
       switch (getCookie('auth').toLowerCase()) {
@@ -284,7 +297,7 @@ const PurchaseRequisition = {
           // data["_submitteremployee"] = submitter
           break
         case 'dealer':
-          data["_submitterdealerfk"] = submitter
+          data["_submitterdealerfk"] = JSON.parse(getCookie('user'))["_id"]
           break
       }
 

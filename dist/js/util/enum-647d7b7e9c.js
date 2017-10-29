@@ -1,4 +1,6 @@
-const Enum = {
+"use strict";
+
+var Enum = {
   role: {
     /// ZEISS员工
     EMPLOYEE: 0,
@@ -66,4 +68,4 @@ const Enum = {
     Delete: "Delete",
     Copy: "Copy"
   }
-}
+};

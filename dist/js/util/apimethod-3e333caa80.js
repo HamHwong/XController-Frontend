@@ -1,7 +1,9 @@
+"use strict";
+
 //PUT GET PUT DELETE
 
 function POST(url, data) {
-  var data = JSON.stringify(data)
+  var data = JSON.stringify(data);
   var c = $.ajax({
     "url": url,
     "contentType": "application/json; charset=utf-8",
@@ -9,9 +11,8 @@ function POST(url, data) {
     "data": data,
     "dataType": "json",
     "async": false
-  })
-  return c.responseJSON
-
+  });
+  return c.responseJSON;
 } //增
 function DELETE(url) {
   var c = $.ajax({
@@ -20,11 +21,11 @@ function DELETE(url) {
     "type": "DELETE",
     "dataType": "json",
     "async": false
-  })
-  return c.responseJSON
+  });
+  return c.responseJSON;
 } //删
 function PUT(url, data) {
-  var data = data?JSON.stringify(data):""
+  var data = data ? JSON.stringify(data) : "";
   var c = $.ajax({
     "url": url,
     "contentType": "application/json; charset=utf-8",
@@ -32,8 +33,8 @@ function PUT(url, data) {
     "data": data,
     "dataType": "json",
     "async": false
-  })
-  return c.responseJSON
+  });
+  return c.responseJSON;
 } //改
 function GET(url) {
   var c = $.ajax({
@@ -42,6 +43,6 @@ function GET(url) {
     "type": "GET",
     "dataType": "json",
     "async": false
-  })
-  return c.responseJSON
+  });
+  return c.responseJSON;
 } //查

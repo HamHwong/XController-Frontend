@@ -42,7 +42,7 @@
             window.__PurchaseRequisitionItem_Unsave_set = {}
             //申请中table初始化
             var role = Enum.role.SYSADMIN
-            var uid = JSON.parse(getCookie('user'))["_id"]
+            var uid = getCookie('acocunt')
             var status = Enum.prstatus.Progress
             var startRow = 0
             var endRow = 100
@@ -87,7 +87,7 @@
               return
             }
             var role = Enum.role.SYSADMIN
-            var uid = JSON.parse(getCookie('user'))["_id"]
+            var uid = getCookie("uid")
             var status = Enum.prstatus.Progress
             var startRow = 0
             var endRow = 100

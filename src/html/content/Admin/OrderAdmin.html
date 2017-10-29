@@ -59,7 +59,7 @@
               <label for="_dealerregion">区域:</label>
               <!--<select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
             </div>
 
             <div class="form-group col-md-3 search_box_warp">
@@ -288,7 +288,7 @@
             window.__PurchaseRequisitionItem_Unsave_set = {}
             //申请中table初始化
             var role = Enum.role.SYSADMIN
-            var uid = JSON.parse(getCookie('user'))["_id"]
+            var uid = getCookie('acocunt')
             var status = Enum.prstatus.Progress
             var startRow = 0
             var endRow = 100
@@ -333,7 +333,7 @@
               return
             }
             var role = Enum.role.SYSADMIN
-            var uid = JSON.parse(getCookie('user'))["_id"]
+            var uid = getCookie("uid")
             var status = Enum.prstatus.Progress
             var startRow = 0
             var endRow = 100

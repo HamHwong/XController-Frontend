@@ -10,8 +10,6 @@
         
         <li><a href=#finished>已完成</a></li>
         
-        <li><a href=#reject>已拒绝</a></li>
-        
   </ul>
 </div>
 
@@ -23,8 +21,7 @@
     </div>
     <div class="tab-pane" id="finished">
     </div>
-    <div class="tab-pane" id="reject">
-    </div>
+
     <nav style="text-align: center">
       <ul class="pagination">
         <li><a href="#">&laquo;</a></li>
@@ -70,7 +67,7 @@
               <label for="_dealerregion">区域:</label>
               <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion">
+              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
             </div>
             <!--for employee-->
             <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
@@ -131,8 +128,8 @@
       <div class="modal-body">
         <form id="PruchaseItem_form" class="form-horizontal" role="form">
           <div class="form-group">
-            <label for="brochure" class="col-md-3 control-label">申请种类 ：</label>
-            <div class="col-sm-8">
+            <label for="brochure" class="col-sm-3 control-label">申请种类 ：</label>
+            <div class="col-sm-8 search_box_warp">
               <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;">
               </select>
               <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
@@ -298,21 +295,10 @@
           //载入订单管理表操作
           var table_init = function() {
             var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("name"),false,0,100), templateOpts).to("#applying")
+            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),false,0,100), templateOpts).to("#applying")
+            var templateOpts = tableStructures.Admin.OrderAdmin.Success
+            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),true,0,100), templateOpts).to("#finished")
           }
-
-          // //删除订单操作
-          //   var del = function(rid) {
-          //     $("#Delete")
-          //       .modal()
-          //   }
-          //   var edit = function(rid) {
-          //     $("#EditBrochure")
-          //       .modal()
-          //   }
-
-          //订单详情操作
-
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }

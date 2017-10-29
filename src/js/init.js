@@ -59,7 +59,8 @@ var optionlist_init = function() {
     $(optionlist[i]).empty()
     var category = $(optionlist[i]).data('category')
     var optionArray = apiConfig.optionlist.GetByCategory(category)
-    for (var j of optionArray) {
+    for (var k = 0; k < optionArray.length; k++) {
+      var j = optionArray[k]
       var optionname = j["_optionname"]
       var optionvalue = j["_optionvalue"]
       var optionsequence = j["_sequence"]
