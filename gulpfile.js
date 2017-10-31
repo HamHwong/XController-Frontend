@@ -13,6 +13,7 @@ var concat = require('gulp-concat')
 var cssmin = require('gulp-minify-css')
 var ejs = require('gulp-ejs')
 var babel = require("gulp-babel") // 用于ES6转化ES5
+var removeUseStrict = require("gulp-remove-use-strict");//取消由于babel加上的严格模式
 var uglify = require('gulp-uglify') // 用于压缩 JS
 var babelpolyfill = require('babel-polyfill')
 var es2015 = require("babel-preset-es2015")
@@ -77,8 +78,9 @@ var cssSrc = config.path.css
 gulp.task('revJs', ['concat-conponent-js'], function() {
   return gulp.src([jsSrc + "/**/*.js"])
     .pipe(babel({
-      presets: [es2015]
+      presets: [es2015],
     }))
+    .pipe(removeUseStrict())
     // .pipe(babel())
     // .pipe(uglify())
     .pipe(rev())

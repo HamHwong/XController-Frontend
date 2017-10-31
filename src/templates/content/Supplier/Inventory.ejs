@@ -17,17 +17,6 @@
     <table class="table table-bordered table-hover">
     </table>
   </div>
-  <nav style="text-align: center">
-    <ul class="pagination">
-      <li><a href="#">&laquo;</a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">5</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
-  </nav>
 </div>
 <%-include('/components/modal/modal',{type:"Admin.Inventory.History"})%>
   <%-include('/components/modal/modal',{type:"Admin.BrochureAdmin.Add"})%>
@@ -35,8 +24,14 @@
       <script>
         //载入物品操作
         var table_init = function() {
-          var templateOpts = tableStructures.Supplier.Brochure
-          new table().loadFromTemplateJson("/api/brochure/top(100)", templateOpts).to("#Brochure-table-container")
+          generateTableWithPageHelper({
+            target: "#Brochure-table-container",
+            templateOpts: tableStructures.Supplier.Brochure,
+            counter: apiConfig.brochure.Count(),
+            datasourceAPI: apiConfig.brochure.Paging,
+            options: {
+            }
+          })
         }
         var Detail = function() {
           $("#History").modal()
@@ -80,9 +75,14 @@
             table_init()
             return
           }
-          var templateOpts = tableStructures.Supplier.Brochure
-          var result = apiConfig.brochure.Search(keyword)
-          new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
+          generateTableWithPageHelper({
+            target: "#Brochure-table-container",
+            templateOpts: tableStructures.Supplier.Brochure,
+            counter: apiConfig.brochure.Count(),
+            datasourceAPI: apiConfig.brochure.Search,
+            options: {
+              keyword:keyword
+            }
+          })
         }
-
       </script>

@@ -17,17 +17,6 @@
     <table class="table table-bordered table-hover">
     </table>
   </div>
-  <nav style="text-align: center">
-    <ul class="pagination">
-      <li><a href="#">&laquo;</a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">5</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
-  </nav>
 </div>
 
     <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -174,8 +163,15 @@
         // }
         //载入物品操作
         var table_init = function() {
-          var templateOpts = tableStructures.Admin.Dictionary
-          new table().loadFromTemplateJson(apiConfig.optionlist.Top(100), templateOpts).to("#Brochure-table-container")
+
+          generateTableWithPageHelper({
+            target: "#Brochure-table-container",
+            templateOpts: tableStructures.Admin.Dictionary,
+            counter: apiConfig.optionlist.Count(),
+            datasourceAPI: apiConfig.optionlist.Paging,
+            options: {}
+          })
+
         }
 
         //删除物品记录操作
@@ -205,8 +201,14 @@
             table_init()
             return
           }
-          var templateOpts = tableStructures.Admin.Dictionary
-          var result = apiConfig.optionlist.Search(keyword)
-          new table().loadFromTemplateJson(result, templateOpts).to("#Brochure-table-container")
+          generateTableWithPageHelper({
+            target: "#Brochure-table-container",
+            templateOpts: tableStructures.Admin.Dictionary,
+            counter: apiConfig.optionlist.Count(),
+            datasourceAPI: apiConfig.optionlist.Search,
+            options: {
+              keyword: keyword
+            }
+          })
         }
       </script>

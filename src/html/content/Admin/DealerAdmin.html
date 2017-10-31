@@ -17,17 +17,6 @@
     <table class="table table-bordered table-hover">
     </table>
   </div>
-  <nav style="text-align: center">
-    <ul class="pagination">
-      <li><a href="#">&laquo;</a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">5</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
-  </nav>
 </div>
 
     <div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -160,8 +149,13 @@
       <script>
         //载入代理商表操作
         var table_init = function() {
-          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
-          new table().loadFromTemplateJson(apiConfig.dealer.Top(100), templateOpts).to("#Dealer-table-container")
+          generateTableWithPageHelper({
+            target: "#Dealer-table-container",
+            templateOpts: tableStructures.Admin.DealerAdmin.Dealer,
+            counter: apiConfig.dealer.Count(),
+            datasourceAPI: apiConfig.dealer.Paging,
+            options: {}
+          })
         }
 
         //删除代理商操作
@@ -187,9 +181,14 @@
             table_init()
             return
           }
-          var templateOpts = tableStructures.Admin.DealerAdmin.Dealer
-          var result = apiConfig.dealer.Search(keyword)
-          new table().loadFromTemplateJson(result, templateOpts, dataOrder).to("#Dealer-table-container")
+          generateTableWithPageHelper({
+            target: "#Dealer-table-container",
+            templateOpts: tableStructures.Admin.DealerAdmin.Dealer,
+            counter: apiConfig.dealer.Count(),
+            datasourceAPI: apiConfig.dealer.Search,
+            options: {
+              keyword: keyword
+            }
+          })
         }
-
       </script>

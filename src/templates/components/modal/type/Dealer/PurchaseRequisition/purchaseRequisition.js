@@ -23,14 +23,8 @@ const PurchaseRequisition = {
     $("#requestoremployeefk").on("keyup", function(e) {
       bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
         var val = $("#requestoremployeefk").val()
-        // $("#_requestoremployeefk").val(val)
-        // var val = $("#_requestoremployeefk").val()
         var employee = apiConfig.employee.Search(val)
         $("#_requestoremployeefk").val(employee[0]["accountField"])
-        // $("#_dealerregion") //字段不见了
-        //   .val(employee["_dealerregion"])
-        // $("#_dealerregion")
-        //   .attr("disabled", "true")
       })
     })
 
@@ -38,13 +32,15 @@ const PurchaseRequisition = {
     $("#submitter").attr("disabled", "true")
 
     // //若为dealer，则自动填充名字和区域
-    if ("dealer" == (getCookie("auth").toLowerCase())) {
+    if (Enum.role.DEALEAR == getCookie("role")) {
       var dealer = JSON.parse(getCookie('user'))
       if (dealer) {
         $("#_requestordealerfk")
           .val(dealer["_id"])
+        $("#_submitterdealerfk")
+          .val(dealer["_id"])
         $("#requestordealerfk").val(dealer["_dealername"])
-        $("#requestoremployeefk").val(dealer["_dealername"])
+        $("#submitterdealerfk").val(dealer["_dealername"])
         $("#requestordealerfk")
           .attr("readonly", "readonly")
         $("#requestoremployeefk")
@@ -55,11 +51,12 @@ const PurchaseRequisition = {
           .attr("disabled", "true")
       }
       // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-    } else if ("zeiss" == (getCookie("auth").toLowerCase())) {
+    } else if (Enum.role.EMPLOYEE == getCookie("role")) {
+      debugger
       var employee = JSON.parse(getCookie('user'))
       if (employee) {
-
         $("#requestoremployeefk").val(employee["accountField"])
+        $("#_requestoremployeefk").val(employee["accountField"])
         $("#requestoremployeefk")
           .attr("readonly", "readonly")
 
@@ -238,21 +235,18 @@ const PurchaseRequisition = {
     draft: function() {
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      // if (items.length <= 0) {
-      //   throw "请购单item数量不能为0"
-      // }
       var submitter = $("#submitter").val()
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Draft
 
-      switch (getCookie('auth').toLowerCase()) {
-        case 'zeiss':
-          data["_submitteremployeefk"] = submitter
+      switch (getCookie('role')) {
+        case Enum.role.EMPLOYEE:
+          data["_submitteremployeefk"] = getCookie('account')
           data["_requestordealerfk"] = null
           break
-        case 'dealer':
-          data["_submitterdealerfk"] = submitter
+        case Enum.role.DEALEAR:
+          data["_submitterdealerfk"] = getCookie('uid')
           break
       }
 
@@ -282,22 +276,13 @@ const PurchaseRequisition = {
         data["_prstatus"] = window._target.PR["_prstatus"]
       } //TODO
 
-      switch (getCookie('auth').toLowerCase()) {
-        case 'zeiss':
+      switch (getCookie('role')) {
+        case Enum.role.EMPLOYEE:
           data["_submitteremployeefk"] = submitter
           data["_requestordealerfk"] = null
-          // if ("" != $("#_requestordealerfk").val()) {
-          //   if ($("#_requestoremployeefk").val() == submitter)
-          //     data["_submitteremployeefk"] = submitter
-          //   else
-          //     data["_submitteremployeefk"] = $("#_requestoremployeefk").val()
-          // } else if ("" != $("#_requestordealerfk").val()) {
-          //   data["_submitteremployeefk"] = submitter
-          // }_requestoremployeefk
-          // data["_submitteremployee"] = submitter
           break
-        case 'dealer':
-          data["_submitterdealerfk"] = JSON.parse(getCookie('user'))["_id"]
+        case Enum.role.DEALEAR:
+          data["_submitterdealerfk"] = getCookie('uid')
           break
       }
 

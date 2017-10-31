@@ -16,17 +16,6 @@
     </div>
     <div class="tab-pane" id="success">
     </div>
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
   <%-include('/components/modal/modal',{type:"Supplier.Express.Detail"})%>
     <%-include('/components/table/table.init.ejs')%>
@@ -34,15 +23,25 @@
         //载入我的订单的申请表操作
         var table_init = function() {
           // window.__PurchaseRequisitionItem_Unsave_set = {}
-          //申请中table初始化
-          var startRow = 0
-          var endRow = 100
-          var templateOpts = tableStructures.Supplier.MyOrder.Approving
-          new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(false, 0, 100), templateOpts).to("#applying")
-          //successtable初始化
-          var status = Enum.prstatus.Completed
-          var templateOpts = tableStructures.Supplier.MyOrder.Success
-          new table().loadFromTemplateJson(apiConfig.PRSupplierView.Paging(true, 0, 100), templateOpts).to("#success")
+
+          generateTableWithPageHelper({
+            target: "#applying",
+            templateOpts: tableStructures.Supplier.MyOrder.Approving,
+            counter: apiConfig.PRSupplierView.Count(false),
+            datasourceAPI: apiConfig.PRSupplierView.Paging,
+            options: {
+              isCompeleted:false
+            }
+          })
+          generateTableWithPageHelper({
+            target: "#success",
+            templateOpts: tableStructures.Supplier.MyOrder.Approving,
+            counter: apiConfig.PRSupplierView.Count(true),
+            datasourceAPI: apiConfig.PRSupplierView.Paging,
+            options: {
+              isCompeleted:true
+            }
+          })
 
         }
 
@@ -59,11 +58,25 @@
             table_init()
             return
           }
-          var templateOpts = tableStructures.Supplier.MyOrder.Approving
-          var result = apiConfig.PRSupplierView.Search(false, keyword, 0, 100)
-          new table().loadFromTemplateJson(result, templateOpts).to("#applying")
-          result = apiConfig.PRSupplierView.Search(true, keyword, 0, 100)
-          templateOpts = tableStructures.Supplier.MyOrder.Success
-          new table().loadFromTemplateJson(result, templateOpts).to("#success")
+          generateTableWithPageHelper({
+            target: "#applying",
+            templateOpts: tableStructures.Supplier.MyOrder.Approving,
+            counter: apiConfig.PRSupplierView.Count(),
+            datasourceAPI: apiConfig.PRSupplierView.Search,
+            options: {
+              keyword:keyword,
+              isCompeleted:false
+            }
+          })
+          generateTableWithPageHelper({
+            target: "#success",
+            templateOpts: tableStructures.Supplier.MyOrder.Approving,
+            counter: apiConfig.PRSupplierView.Count(),
+            datasourceAPI: apiConfig.PRSupplierView.Search,
+            options: {
+              keyword:keyword,
+              isCompeleted:true
+            }
+          })
         }
       </script>

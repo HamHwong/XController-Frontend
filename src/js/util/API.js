@@ -26,7 +26,9 @@ const apiConfig = {
       var api = root + `/api/brochure/count`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/brochure/search(${keyword})`
       return GET(api)
     },
@@ -34,7 +36,10 @@ const apiConfig = {
       var api = root + `/api/brochure/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/brochure/paging(${startIndex},${endIndex})`
       return GET(api)
     }
@@ -62,7 +67,11 @@ const apiConfig = {
       var api = root + `/api/brochurehistory/${id}/update`
       return PUT(api, data)
     },
-    Paging: function(brochureid, startIndex, endIndex) {
+    Paging: function({
+      brochureid,
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/brochurehistory/paging(${brochureid},${startIndex},${endIndex})`
       return GET(api)
     }
@@ -73,7 +82,9 @@ const apiConfig = {
       return GET(api)
     },
     GetByUserName: function(username) {
-      var resultset = this.Search(username)
+      var resultset = this.Search({
+        username
+      })
       for (var j = 0; j < resultset.length; j++) {
         var i = resultset[j]
         if (i["_dealername"] == username)
@@ -100,7 +111,9 @@ const apiConfig = {
       var api = root + `/api/dealer/count`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/dealer/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -108,7 +121,10 @@ const apiConfig = {
       var api = root + `/api/dealer/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/dealer/paging(${startIndex},${endIndex})`
       return GET(api)
     },
@@ -146,7 +162,10 @@ const apiConfig = {
       var api = root + `/api/optionlist/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/optionlist/paging(${startIndex},${endIndex})`
       return GET(api)
     },
@@ -187,7 +206,11 @@ const apiConfig = {
       var api = root + `/api/prprocess/top(${topcount})`
       return GET(api)
     },
-    Paging: function(purchaseRequisitionid, startIndex, endIndex) {
+    Paging: function(
+      purchaseRequisitionid,
+      startIndex,
+      endIndex
+    ) {
       var api = root + `/api/prprocess/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     },
@@ -284,7 +307,11 @@ const apiConfig = {
       var api = root + `/api/prprocesssetting/top(${topcount})`
       return GET(api)
     },
-    Paging: function(purchaseRequisitionid, startIndex, endIndex) {
+    Paging: function({
+      purchaseRequisitionid,
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/prprocesssetting/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     }
@@ -318,7 +345,11 @@ const apiConfig = {
       var api = root + `/api/purchaseitem/top(${topcount})`
       return GET(api)
     },
-    Paging: function(purchaseRequisitionid, startIndex, endIndex) {
+    Paging: function(
+      purchaseRequisitionid,
+      startIndex,
+      endIndex
+    ) {
       var api = root + `/api/purchaseitem/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     }
@@ -347,27 +378,50 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/count`
       return GET(api)
     },
-    CountByDealer:function(dealerID,status){
+    CountByDealer: function(dealerID, status) {
       var api = root + `/api/purchaserequisition/countbydealer(${dealerID},${status})`
+      return GET(api)
+    },
+    CountByEmployee: function(employeeAccount, status) {
+      var api = root + `/api/purchaserequisition/countbyemployee(${employeeAccount},${status})`
       return GET(api)
     },
     Search: function(keyword) {
       var api = root + `/api/purchaserequisition/search?keyWord=${keyword}`
       return GET(api)
     },
-    SearchByStatus: function(role, userID, Status, startIndex, endIndex) {
-      var api = root + `/api/purchaserequisition/search(${role},${userID},${Status},${startIndex},${endIndex})`
+    SearchByStatus: function({
+      role,
+      uid,
+      status,
+      startIndex,
+      endIndex
+    }) {
+      var api = root + `/api/purchaserequisition/search(${role},${uid},${status},${startIndex},${endIndex})`
       return GET(api)
     },
-    SearchByKeywordAndStatus: function(role, userID, status, keyword, startIndex, endIndex) {
-      var api = root + `/api/purchaserequisition/search(${role},${userID},${status},${keyword},${startIndex},${endIndex})`
+    SearchByKeywordAndStatus: function({
+      role,
+      uid,
+      status,
+      keyword,
+      startIndex,
+      endIndex
+    }) {
+      var api = root + `/api/purchaserequisition/search(${role},${uid},${status},${keyword},${startIndex},${endIndex})`
       return GET(api)
     },
     Top: function(topcount) {
       var api = root + `/api/purchaserequisition/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
+
+      var startIndex = startIndex
+      var endIndex = endIndex
       var api = root + `/api/purchaserequisition/paging(${startIndex},${endIndex})`
       return GET(api)
     },
@@ -413,15 +467,24 @@ const apiConfig = {
     },
   },
   PRSupplierView: {
-    Count: function() {
-      var api = root + `/api/PRSupplierView/count`
+    Count: function(completed) {
+      var api = root + `/api/PRSupplierView/count?completed=${completed}`
       return GET(api)
     },
-    Search: function(isCompeleted, keyword, startIndex, endIndex) {
+    Search: function({
+      isCompeleted,
+      keyword,
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/PRSupplierView/search(${isCompeleted},${keyword},${startIndex},${endIndex})`
       return GET(api)
     },
-    Paging: function(isCompeleted, startIndex, endIndex) {
+    Paging: function({
+      isCompeleted,
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/PRSupplierView/search(${isCompeleted},${startIndex},${endIndex})`
       return GET(api)
     }
@@ -450,7 +513,9 @@ const apiConfig = {
       var api = root + `/api/supplier/count`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/supplier/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -458,7 +523,10 @@ const apiConfig = {
       var api = root + `/api/supplier/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/supplier/paging(${startIndex},${endIndex})`
       return GET(api)
     },
@@ -491,7 +559,9 @@ const apiConfig = {
       var api = root + `/api/systemsetting/count`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/systemsetting/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -499,7 +569,10 @@ const apiConfig = {
       var api = root + `/api/systemsetting/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/systemsetting/paging(${startIndex},${endIndex})`
       return GET(api)
     }
@@ -528,7 +601,9 @@ const apiConfig = {
       var api = root + `/api/systemuser/count`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/systemuser/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -536,7 +611,10 @@ const apiConfig = {
       var api = root + `/api/systemuser/top(${topcount})`
       return GET(api)
     },
-    Paging: function(startIndex, endIndex) {
+    Paging: function({
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/systemuser/paging(${startIndex},${endIndex})`
       return GET(api)
     },
@@ -556,11 +634,16 @@ const apiConfig = {
     }
   },
   PRApproverView: {
-    Count: function() {
-      var api = root + `/api/PRApproverView/count`
+    Count: function(account, status) {
+      var api = root + `/api/PRApproverView/count?account=${account}&status=${status}`
       return GET(api)
     },
-    Paging: function(account, completed, startIndex, endIndex) {
+    Paging: function({
+      account,
+      completed,
+      startIndex,
+      endIndex
+    }) {
       var api = root + `/api/PRApproverView/paging(${account},${completed},${startIndex},${endIndex}`
       return GET(api)
     }

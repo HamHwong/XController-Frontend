@@ -6,7 +6,7 @@
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <script type="text/javascript" src="./js/plugs/jquery-cdaa455864.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-d4fb5b8162.js"></script>
 </head>
 
 <body>
@@ -86,18 +86,6 @@
     </div>
     <div class="tab-pane" id="reject">
     </div>
-
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
   
     <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -111,7 +99,7 @@
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
 
-            <div class="form-group col-md-4 col-xs-12">
+            <div class="form-group col-md-2 col-xs-12">
               <label for="requireAgent">代填:</label>
               <div class="checkbox">
                 <label for="requireAgent" class="checkbox-inline"><input type="checkbox" name="requireAgent" id="requireAgent"></label>
@@ -135,7 +123,7 @@
               <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
             </div>
             <!--for employee-->
-            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
+            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forEmployee">
               <label for="requestoremployeefk">申请人:</label>
               <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
               </select>
@@ -143,7 +131,7 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
             <!--for dealer-->
-            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forDealer">
+            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forDealer">
               <label for="requestordealerfk">申请人:</label>
               <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
@@ -151,7 +139,7 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-6 col-xs-12 search_box_warp">
+            <div class="form-group col-md-4 col-xs-12 search_box_warp">
               <label for="submitter">提交人:</label>
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
@@ -345,73 +333,126 @@
 </script>
 
             <script>
-            //载入我的订单的申请表操作
-            var table_init = function() {
-              window.__PurchaseRequisitionItem_Unsave_set = {}
-              //申请中table初始化
-              var role = Enum.role.EMPLOYEE
-              var uid = JSON.parse(getCookie('user'))["accountField"]
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Dealer.MyOrder.Approving
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#applying")
-              //草稿箱table初始化
-              var status = Enum.prstatus.Draft
-              var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#draft")
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Dealer.MyOrder.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#reject")
-            }
-
-            //订单详情操作
-            var Detail = function(PRid) {
-              PurchaseRequisition.detail(PRid)
-            }
-            //复制操作
-            var copy = function(PRid) {
-              PurchaseRequisition.view.copy(PRid)
-            }
-
-            var edit = function(PRid) {
-              PurchaseRequisition.view.edit(PRid)
-            }
-
-            var deleteDraft = function(PRid) {
-              PurchaseRequisition.view.delete(PRid)
-            }
-            var search = function() {
-              var keyword = filterXSS($("input#search_box").val().trim())
-              if ("" == keyword) {
-                table_init()
-                return
+              //载入我的订单的申请表操作
+              var table_init = function() {
+                window.__PurchaseRequisitionItem_Unsave_set = {}
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Dealer.MyOrder.Approving,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                  options: {
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Progress
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#draft",
+                  templateOpts: tableStructures.Dealer.MyOrder.Draft,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Draft),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                  options: {
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Draft
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Dealer.MyOrder.Success,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Completed),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                  options: {
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Completed
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#reject",
+                  templateOpts: tableStructures.Dealer.MyOrder.Rejected,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Rejected),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                  options: {
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Rejected
+                  }
+                })
               }
-              var role = Enum.role.EMPLOYEE
-              var uid = getCookie('uid')
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Dealer.MyOrder.Approving
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
-              //草稿箱table初始化
-              var status = Enum.prstatus.Draft
-              var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#draft")
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Dealer.MyOrder.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#reject")
-            }
+
+              //订单详情操作
+              var Detail = function(PRid) {
+                PurchaseRequisition.detail(PRid)
+              }
+              //复制操作
+              var copy = function(PRid) {
+                PurchaseRequisition.view.copy(PRid)
+              }
+
+              var edit = function(PRid) {
+                PurchaseRequisition.view.edit(PRid)
+              }
+
+              var deleteDraft = function(PRid) {
+                PurchaseRequisition.view.delete(PRid)
+              }
+              var search = function() {
+                var keyword = filterXSS($("input#search_box").val().trim())
+                if ("" == keyword) {
+                  table_init()
+                  return
+                }
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Dealer.MyOrder.Approving,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                  options: {
+                    keyword: keyword,
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Progress
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#draft",
+                  templateOpts: tableStructures.Dealer.MyOrder.Draft,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                  options: {
+                    keyword: keyword,
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Draft
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Dealer.MyOrder.Success,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                  options: {
+                    keyword: keyword,
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Completed
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#reject",
+                  templateOpts: tableStructures.Dealer.MyOrder.Rejected,
+                  counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
+                  datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                  options: {
+                    keyword: keyword,
+                    role: getCookie("role"),
+                    uid: getCookie('account'),
+                    status: Enum.prstatus.Rejected
+                  }
+                })
+              }
             </script>
 
     </div>
@@ -420,19 +461,19 @@
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
   <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
   <link rel="stylesheet" href="./css/content-2f97396e13.css">
-  <link rel="stylesheet" href="./css/components-c0f12552e7.css">
+  <link rel="stylesheet" href="./css/components-2b7f5edba8.css">
   <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
   <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
   <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
 
-  <script type="text/javascript" src="./js/plugs/bootstrap-46acda43f5.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-5c8f31eceb.js"></script>
-  <script type="text/javascript" src="./js/plugs/xss-43d1f73a05.js"></script>
-  <script type="text/javascript" src="./js/util/apimethod-3e333caa80.js"></script>
-  <script type="text/javascript" src="./js/components-48e2fc9b47.js"></script>
-  <script type="text/javascript" src="./js/init-1d7fd0032c.js"></script>
-  <script type="text/javascript" src="./js/content-697e621b58.js"></script>
-  <script type="text/javascript" src="./js/cookies-eaa5f5e365.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-b91bdbbd7a.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-25620eaebc.js"></script>
+  <script type="text/javascript" src="./js/plugs/xss-de407195fb.js"></script>
+  <script type="text/javascript" src="./js/util/apimethod-7884c16dc6.js"></script>
+  <script type="text/javascript" src="./js/components-0f9f4099c6.js"></script>
+  <script type="text/javascript" src="./js/init-935f1fceb1.js"></script>
+  <script type="text/javascript" src="./js/content-5d2d311ef3.js"></script>
+  <script type="text/javascript" src="./js/cookies-cb3705cb8c.js"></script>
 
 
   <script type="text/javascript">

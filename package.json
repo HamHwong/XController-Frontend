@@ -28,6 +28,7 @@
     "gulp-open": "^2.0.0",
     "gulp-postcss": "^7.0.0",
     "gulp-pug": "^3.3.0",
+    "gulp-remove-use-strict": "0.0.2",
     "gulp-rev": "^8.0.0",
     "gulp-rev-collector": "^1.2.2",
     "gulp-sequence": "^0.4.6",

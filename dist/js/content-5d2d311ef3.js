@@ -1,10 +1,8 @@
-"use strict";
-
+'use strict';
 //
 //===========================================================================================================================
 //模态配置
-
-$("#myModal").modal({
-  show: false,
-  backdrop: 'static'
+$('#myModal').modal({
+    show: false,
+    backdrop: 'static'
 });

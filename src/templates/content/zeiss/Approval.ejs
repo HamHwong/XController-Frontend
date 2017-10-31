@@ -11,18 +11,6 @@
     </div>
     <div class="tab-pane" id="finished">
     </div>
-
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
   <%-include('/components/modal/modal',{type:"Employee.PurchaseRequisition.PurchaseRequisition"})%>
     <%-include('/components/modal/modal',{type:"Common.Delete"})%>
@@ -30,13 +18,28 @@
         <script>
           //载入订单管理表操作
           var table_init = function() {
-            var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),false,0,100), templateOpts).to("#applying")
-            var templateOpts = tableStructures.Admin.OrderAdmin.Success
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),true,0,100), templateOpts).to("#finished")
+            generateTableWithPageHelper({
+              target: "#applying",
+              templateOpts: tableStructures.Admin.OrderAdmin.Order,
+              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Progress),
+              datasourceAPI: apiConfig.PRApproverView.Paging,
+              options: {
+                account: getCookie("account"),
+                completed: false
+              }
+            })
+            generateTableWithPageHelper({
+              target: "#finished",
+              templateOpts: tableStructures.Admin.OrderAdmin.Success,
+              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Completed),
+              datasourceAPI: apiConfig.PRApproverView.Paging,
+              options: {
+                account: getCookie("account"),
+                completed: true
+              }
+            })
           }
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }
-
         </script>

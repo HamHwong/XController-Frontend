@@ -21,18 +21,6 @@
     </div>
     <div class="tab-pane" id="finished">
     </div>
-
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
   
     <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -46,7 +34,7 @@
         <form class="form" method="post" id="PurchaseRequisition_form">
           <div class="modal-infopart baseInfomation form-group clearfix">
 
-            <div class="form-group col-md-4 col-xs-12">
+            <div class="form-group col-md-2 col-xs-12">
               <label for="requireAgent">代填:</label>
               <div class="checkbox">
                 <label for="requireAgent" class="checkbox-inline"><input type="checkbox" name="requireAgent" id="requireAgent"></label>
@@ -70,7 +58,7 @@
               <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
             </div>
             <!--for employee-->
-            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forEmployee">
+            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forEmployee">
               <label for="requestoremployeefk">申请人:</label>
               <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
               </select>
@@ -78,7 +66,7 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
             <!--for dealer-->
-            <div class="form-group col-md-4 col-xs-12 search_box_warp requestorInput" id="forDealer">
+            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forDealer">
               <label for="requestordealerfk">申请人:</label>
               <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
@@ -86,7 +74,7 @@
               <ul class="dropdown-menu keyhint"></ul>
             </div>
 
-            <div class="form-group col-md-6 col-xs-12 search_box_warp">
+            <div class="form-group col-md-4 col-xs-12 search_box_warp">
               <label for="submitter">提交人:</label>
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
@@ -294,13 +282,28 @@
         <script>
           //载入订单管理表操作
           var table_init = function() {
-            var templateOpts = tableStructures.Admin.OrderAdmin.Order
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),false,0,100), templateOpts).to("#applying")
-            var templateOpts = tableStructures.Admin.OrderAdmin.Success
-            new table().loadFromTemplateJson(apiConfig.PRApproverView.Paging(getCookie("account"),true,0,100), templateOpts).to("#finished")
+            generateTableWithPageHelper({
+              target: "#applying",
+              templateOpts: tableStructures.Admin.OrderAdmin.Order,
+              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Progress),
+              datasourceAPI: apiConfig.PRApproverView.Paging,
+              options: {
+                account: getCookie("account"),
+                completed: false
+              }
+            })
+            generateTableWithPageHelper({
+              target: "#finished",
+              templateOpts: tableStructures.Admin.OrderAdmin.Success,
+              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Completed),
+              datasourceAPI: apiConfig.PRApproverView.Paging,
+              options: {
+                account: getCookie("account"),
+                completed: true
+              }
+            })
           }
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }
-
         </script>

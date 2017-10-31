@@ -17,17 +17,6 @@
     <table class="table table-bordered table-hover">
     </table>
   </div>
-  <nav style="text-align: center">
-    <ul class="pagination">
-      <li><a href="#">&laquo;</a></li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li><a href="#">4</a></li>
-      <li><a href="#">5</a></li>
-      <li><a href="#">&raquo;</a></li>
-    </ul>
-  </nav>
 </div>
 <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Add"})%>
   <%-include('/components/modal/modal',{type:"Admin.SupplierAdmin.Edit"})%>
@@ -35,8 +24,14 @@
       <script>
         //载入供应商表操作
         var table_init = function() {
-          var templateOpts = tableStructures.Admin.SupplierAdmin.Supplier
-          new table().loadFromTemplateJson("/api/supplier/top(100)", templateOpts).to("#Supplier-table-container")
+          generateTableWithPageHelper({
+            target: "#Supplier-table-container",
+            templateOpts: tableStructures.Admin.SupplierAdmin.Supplier,
+            counter: apiConfig.supplier.Count(),
+            datasourceAPI: apiConfig.supplier.Paging,
+            options: {
+            }
+          })
         }
         //删除供应商操作
         var del = function(rid) {
@@ -66,9 +61,14 @@
             table_init()
             return
           }
-          var templateOpts = tableStructures.Admin.SupplierAdmin.Supplier
-          var result = apiConfig.supplier.Search(keyword)
-          console.log(result)
-          new table().loadFromTemplateJson(result, templateOpts).to("#Supplier-table-container")
+          generateTableWithPageHelper({
+            target: "#Supplier-table-container",
+            templateOpts: tableStructures.Admin.SupplierAdmin.Supplier,
+            counter: apiConfig.supplier.Count(),
+            datasourceAPI: apiConfig.supplier.Search,
+            options: {
+              keyword:keyword
+            }
+          })
         }
       </script>

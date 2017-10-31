@@ -38,6 +38,7 @@ function login() {
       if (user) { //BUG
         window.location.href = "./admin-home.html"
         setCookie("auth", "Admin")
+        setCookie("role", Enum.role.SYSADMIN)
         setCookie("name", user["_accountname"])
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
@@ -50,6 +51,7 @@ function login() {
       if (user) {
         window.location.href = "./dealer-home.html"
         setCookie("auth", "Dealer")
+        setCookie("role", Enum.role.DEALEAR)
         setCookie("name", user["_accountname"])
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
@@ -62,6 +64,7 @@ function login() {
       if (user) {
         window.location.href = "./supplier-home.html"
         setCookie("auth", "Supplier")
+        setCookie("role", Enum.role.SUPPLIER)
         setCookie("name", user["_accountname"])
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
@@ -84,6 +87,7 @@ function login() {
               "accountField": "string"
          */
         setCookie("auth", "Zeiss")
+        setCookie("role", Enum.role.EMPLOYEE)
         setCookie("name", user["nameField"])
         setCookie("account", user["accountField"])
         // setCookie("name", "BLManager")

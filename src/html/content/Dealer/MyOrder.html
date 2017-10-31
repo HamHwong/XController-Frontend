@@ -35,18 +35,6 @@
     </div>
     <div class="tab-pane" id="rejected">
     </div>
-
-    <nav style="text-align: center">
-      <ul class="pagination">
-        <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&raquo;</a></li>
-      </ul>
-    </nav>
   </div>
   
     <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -266,26 +254,50 @@
             //载入我的订单的申请表操作
             var table_init = function() {
               window.__PurchaseRequisitionItem_Unsave_set = {}
-              //申请中table初始化
-              var role = Enum.role.DEALEAR
-              var uid = JSON.parse(getCookie('user'))["_id"]
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Dealer.MyOrder.Approving
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#applying")
-              //草稿箱table初始化
-              var status = Enum.prstatus.Draft
-              var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#draft")
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Dealer.MyOrder.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByStatus(role,uid,status,0,100), templateOpts).to("#rejected")
+              generateTableWithPageHelper({
+                target: "#applying",
+                templateOpts: tableStructures.Dealer.MyOrder.Approving,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Progress),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                options: {
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Progress
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#draft",
+                templateOpts: tableStructures.Dealer.MyOrder.Draft,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Draft),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                options: {
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Draft
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#success",
+                templateOpts: tableStructures.Dealer.MyOrder.Success,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Completed),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                options: {
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Completed
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#rejected",
+                templateOpts: tableStructures.Dealer.MyOrder.Rejected,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Rejected),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByStatus,
+                options: {
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Rejected
+                }
+              })
             }
 
             //订单详情操作
@@ -311,24 +323,54 @@
                 table_init()
                 return
               }
-              var role = Enum.role.DEALEAR
-              var uid = getCookie('uid')
-              var status = Enum.prstatus.Progress
-              var startRow = 0
-              var endRow = 100
-              var templateOpts = tableStructures.Dealer.MyOrder.Approving
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#applying")
-              //草稿箱table初始化
-              var status = Enum.prstatus.Draft
-              var templateOpts = tableStructures.Dealer.MyOrder.Draft
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#draft")
-              //successtable初始化
-              var status = Enum.prstatus.Completed
-              var templateOpts = tableStructures.Dealer.MyOrder.Success
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#success")
-              //拒绝table初始化
-              var status = Enum.prstatus.Rejected
-              var templateOpts = tableStructures.Dealer.MyOrder.Rejected
-              new table().loadFromTemplateJson(apiConfig.purchaserequisition.SearchByKeywordAndStatus(role,uid,status,keyword,0,100), templateOpts).to("#rejected")
+
+              generateTableWithPageHelper({
+                target: "#draft",
+                templateOpts: tableStructures.Dealer.MyOrder.Draft,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Draft),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                options: {
+                  keyword: keyword,
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Draft
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#applying",
+                templateOpts: tableStructures.Dealer.MyOrder.Approving,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Progress),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                options: {
+                  keyword: keyword,
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Progress
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#success",
+                templateOpts: tableStructures.Dealer.MyOrder.Success,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Completed),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                options: {
+                  keyword: keyword,
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Completed
+                }
+              })
+              generateTableWithPageHelper({
+                target: "#reject",
+                templateOpts: tableStructures.Dealer.MyOrder.Rejected,
+                counter: apiConfig.purchaserequisition.CountByDealer(getCookie('uid'), Enum.prstatus.Rejected),
+                datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
+                options: {
+                  keyword: keyword,
+                  role: getCookie("role"),
+                  uid: getCookie('uid'),
+                  status: Enum.prstatus.Rejected
+                }
+              })
             }
           </script>
