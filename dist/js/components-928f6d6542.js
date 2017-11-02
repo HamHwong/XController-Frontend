@@ -17,7 +17,7 @@ var tab_init = function tab_init() {
     });
 };
 var MessageAlert = function MessageAlert(msg, status) {
-    this.status = status || 'success';
+    this.status = status || MessageAlert.Status.SUCCESS;
     this.msg = msg || 'Congratulation! Action performed!';
     this.statusCode = 0;
     this.html = null;
@@ -48,6 +48,7 @@ MessageAlert.prototype.destory = function () {
     }
 };
 MessageAlert.prototype.show = function (msg, status) {
+    //TODO
     this.new(msg, status).html.show(this.showoutTime);
     this.dropback.fadeIn(this.showoutTime);
     var self = this;
@@ -102,7 +103,8 @@ var queryKeyWords = function queryKeyWords(keys, dic) {
         raw: r
     };
 };
-var bindOptionData = function bindOptionData($select, datasource, innerTextName, valueName) {
+var bindOptionData = function bindOptionData(_ref) {
+    var $select = _ref.$select, datasource = _ref.datasource, innerTextName = _ref.innerTextName, valueName = _ref.valueName;
     //给类名为queryinput的select添加上option（真正提交的部分）
     $select = $($select);
     $select.empty();
@@ -137,24 +139,30 @@ var bindOptionData = function bindOptionData($select, datasource, innerTextName,
  * @param  {string}   valueName 单个数据对象的属性字段名，用于绑定option Value上的值
  * @param  {Function} callback 选择选项后执行的函数
  */
-var bindInputQuery = function bindInputQuery($input, datasource, innerTextName, valueName, callback) {
-    $input = $($input);
+var bindInputQuery = function bindInputQuery(_ref2) {
+    var input = _ref2.input, datasourceAPI = _ref2.datasourceAPI, searchObj = _ref2.searchObj, innerTextName = _ref2.innerTextName, valueName = _ref2.valueName, callback = _ref2.callback;
+    var $input = $(input);
     $input.unbind('keyup');
     var $select = $input.siblings('select.queryinput');
-    bindOptionData($select, datasource, innerTextName, valueName);
+    $input.after('<ul class=\'dropdown-menu keyhint\'>');
     //给input绑定上keyup事件
     $input.on('keyup', function (e) {
         e.preventDefault();
-        if ('string' == typeof datasource) {
-            datasource = GET(datasource);
-        } else {
-            datasource = datasource;
-        }
+        var keyword = this.value;
+        searchObj['keyword'] = keyword;
+        var datasource = datasourceAPI(searchObj);
+        bindOptionData({
+            $select: $select,
+            datasource: datasource,
+            innerTextName: innerTextName,
+            valueName: valueName
+        });
         var nameArray = getValueArrayFromObjectArray(datasource, innerTextName);
         var set = getValueSetFromObjectArray(datasource, innerTextName, valueName);
+        var objSet = arrayToSet(datasource, valueName);
         var droplist = $input.siblings('.keyhint');
         droplist.empty();
-        var data = queryKeyWords(this.value, nameArray);
+        var data = queryKeyWords(keyword, nameArray);
         //加载bootstrap下拉框
         for (var i = 0; i < data['raw'].length; i++) {
             var key = data['raw'][i];
@@ -166,7 +174,7 @@ var bindInputQuery = function bindInputQuery($input, datasource, innerTextName, 
             droplist.append(li);
         }
         //绑定下拉框点击事件
-        if (data['raw'].length > 0 && this.value != '') {
+        if (data['raw'].length > 0 && keyword != '') {
             $input.parent('.search_box_warp').addClass('open');
             $('.keywords').on('click', function (e) {
                 var val = $(this).attr('value');
@@ -175,8 +183,9 @@ var bindInputQuery = function bindInputQuery($input, datasource, innerTextName, 
                 $input.val(this.innerText);
                 droplist.empty();
                 $input.parent('.search_box_warp').removeClass('open');
+                var result = objSet[val];
                 if (callback) {
-                    callback();
+                    callback(result);
                 }
             });
         } else {
@@ -184,6 +193,56 @@ var bindInputQuery = function bindInputQuery($input, datasource, innerTextName, 
         }    //
     });
 };
+// const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {
+//   $input = $($input)
+//   $input.unbind("keyup")
+//   var $select = $input.siblings("select.queryinput")
+//   bindOptionData($select, datasource, innerTextName, valueName)
+//   //给input绑定上keyup事件
+//   $input.on('keyup', function(e) {
+//     e.preventDefault()
+//     if ("string" == typeof datasource) {
+//       datasource = GET(datasource)
+//     } else {
+//       datasource = datasource
+//     }
+//
+//     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
+//     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
+//
+//     var droplist = $input.siblings(".keyhint")
+//     droplist.empty()
+//
+//     var data = queryKeyWords(this.value, nameArray)
+//     //加载bootstrap下拉框
+//     for (var i = 0; i < data["raw"].length; i++) {
+//       var key = data["raw"][i]
+//       var value = set[key]
+//       var li = $("<li></li>")
+//       var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
+//       a.html(data["blod"][i])
+//       li.append(a)
+//       droplist.append(li)
+//     }
+//     //绑定下拉框点击事件
+//     if (data["raw"].length > 0 && this.value != "") {
+//       $input.parent(".search_box_warp").addClass("open")
+//       $(".keywords").on('click', function(e) {
+//         var val = $(this).attr("value") //获取到value值
+//         $select.val(val)
+//         $input.val(this.innerText)
+//         droplist.empty()
+//         $input.parent(".search_box_warp").removeClass("open")
+//         if (callback) {
+//           callback()
+//         }
+//       })
+//     } else {
+//       $input.parent(".search_box_warp").removeClass("open")
+//     }
+//     //
+//   })
+// }
 //多模态HACK
 var counter = 0;
 $(document).unbind('hidden.bs.modal').on('hidden.bs.modal', '.modal', function (e) {
@@ -752,7 +811,7 @@ var regxRule = {
                 result += ',' + max;
                 return '^.{' + result + '}$';
             },
-            msg: '\u81F3\u5C11'
+            msg: '\u8BF7\u8F93\u5165\u81F3\u5C11min,\u6700\u591Amax\u4F4D\u5B57\u7B26\uFF0C\u4E0D\u80FD\u8F93\u5165\u5E26\u6709#\uFFE5%_\u7B49\u7279\u6B8A\u7B26\u53F7\u3002'
         },
         account: {
             regx: '',
@@ -990,8 +1049,8 @@ var BrochureAdmin = {
                 }
             },
             history: {
-                show: function show() {
-                    $('#History').modal();
+                show: function show(bid) {
+                    BrochureHistory.show(bid);
                 },
                 hide: function hide() {
                     $('#History').modal('hide');
@@ -1089,6 +1148,24 @@ var DealerAdmin = {
                 }
                 table_init();
             }
+        }
+    };
+var BrochureHistory = {
+        show: function show(bid) {
+            BrochureHistory.init(bid);
+            $('#History').modal();
+        },
+        hide: function hide() {
+            $('#History').modal('hide');
+        },
+        init: function init(bid) {
+            generateTableWithPageHelper({
+                target: '.infomationTable',
+                templateOpts: tableStructures.Admin.Bruchure.History,
+                counter: apiConfig.brochurehistory.CountById(bid),
+                datasourceAPI: apiConfig.brochurehistory.Paging,
+                options: { brochureid: bid }
+            });
         }
     };
 var Optionlist = {
@@ -1218,6 +1295,7 @@ $('#Detail').on('hidden.bs.modal', function () {
 });
 var PurchaseItem = {
         show: function show() {
+            PurchaseItem.init();
             $('#PruchaseItem').modal();
         },
         hide: function hide() {
@@ -1228,6 +1306,18 @@ var PurchaseItem = {
             var PInfoSet = 'object' == (typeof PI === 'undefined' ? 'undefined' : _typeof(PI)) ? PI : apiConfig.purchaseitem.Get(PI);
             //查出改PI详情
             autoComplateInfo(PInfoSet, targetPRArea);    //将PR填充到表单
+        },
+        init: function init() {
+            bindInputQuery({
+                input: '#brochure',
+                datasourceAPI: apiConfig.brochure.Search,
+                searchObj: {},
+                innerTextName: '_brochurename',
+                valueName: '_brochurename',
+                callback: function callback(result) {
+                    console.log(result);    // $("#_requestoremployeefk").val(result["accountField"])
+                }
+            });
         },
         update: function update() {
             var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID];
@@ -1391,19 +1481,36 @@ var PurchaseRequisition = {
             $('#PurchaseRequisition').modal('hide');
         },
         init: function init() {
-            bindInputQuery('#requestordealerfk', apiConfig.dealer.Top(1000), '_dealername', '_id', function () {
-                var val = $('#_requestordealerfk').val();
-                var dealer = apiConfig.dealer.Get(val);
-                $('#_dealerregion').val(dealer['_dealerregion']);
-                $('#_dealerregion').attr('disabled', 'true');
+            bindInputQuery({
+                input: '#requestordealerfk',
+                datasourceAPI: apiConfig.dealer.Search,
+                searchObj: {},
+                innerTextName: '_dealername',
+                valueName: '_id',
+                callback: function callback(result) {
+                    console.log(result);
+                    var val = $('#_requestordealerfk').val();
+                    var dealer = apiConfig.dealer.Get(val);
+                    $('#_dealerregion').val(dealer['_dealerregion']);
+                }
             });
-            $('#requestoremployeefk').on('keyup', function (e) {
-                bindInputQuery('#requestoremployeefk', apiConfig.employee.Search(e.target.value), 'eNNameField', 'accountField', function () {
-                    var val = $('#requestoremployeefk').val();
-                    var employee = apiConfig.employee.Search(val);
-                    $('#_requestoremployeefk').val(employee[0]['accountField']);
-                });
+            bindInputQuery({
+                input: '#requestoremployeefk',
+                datasourceAPI: apiConfig.employee.Search,
+                searchObj: {},
+                innerTextName: 'eNNameField',
+                valueName: 'accountField',
+                callback: function callback(result) {
+                    $('#_requestoremployeefk').val(result['accountField']);
+                }
             });
+            // $("#requestoremployeefk").on("keyup", function(e) {
+            //   bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
+            //     var val = $("#requestoremployeefk").val()
+            //     var employee = apiConfig.employee.Search(val)
+            //     $("#_requestoremployeefk").val(employee[0]["accountField"])
+            //   })
+            // })
             $('#submitter').val(getCookie('account'));
             $('#submitter').attr('disabled', 'true');
             // //若为dealer，则自动填充名字和区域
@@ -1420,7 +1527,6 @@ var PurchaseRequisition = {
                     $('#_dealerregion').attr('disabled', 'true');
                 }    // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
             } else if (Enum.role.EMPLOYEE == getCookie('role')) {
-                debugger;
                 var employee = JSON.parse(getCookie('user'));
                 if (employee) {
                     $('#requestoremployeefk').val(employee['accountField']);
@@ -1430,6 +1536,7 @@ var PurchaseRequisition = {
                     $('#forEmployee').show();
                     $('#agentCheck').hide();
                     $('#requireAgent').on('click', function () {
+                        $('.requestorInput input').attr('disabled', 'true');
                         if ($(this).is(':checked')) {
                             $('#requestoremployeefk').val('');
                             $('#requestoremployeefk').removeAttr('readonly');
@@ -1454,17 +1561,14 @@ var PurchaseRequisition = {
                     $('#agentCheck input').on('click', function (e) {
                         // var t = $(e.target)
                         // debugger
+                        $('.requestorInput').hide();
                         var t = $('#agentCheck input[name=\'agent\']:checked');
                         if ('forEmp' == t.data('value')) {
-                            $('.requestorInput').attr('disabled', 'true');
-                            $('.requestorInput').hide();
-                            $('#forEmployee').removeAttr('disabled');
+                            $('#forEmployee input').removeAttr('disabled');
                             $('#forEmployee').show();
                         } else {
                             //for Dealer
-                            $('.requestorInput').attr('disabled', 'true');
-                            $('.requestorInput').hide();
-                            $('#forDealer').removeAttr('disabled');
+                            $('#forDealer input').removeAttr('disabled');
                             $('#forDealer').show();
                         }
                     });
@@ -1807,7 +1911,8 @@ var apiConfig = {
             },
             Edit: function Edit(id, data) {
                 //PUT
-                var api = root + ('/api/brochure/' + id + '/update');
+                var account = getCookie('account');
+                var api = root + ('/api/brochure/' + id + '/update?actionOwner=' + account);
                 return PUT(api, data);
             },
             Delete: function Delete(id, data) {
@@ -1819,8 +1924,8 @@ var apiConfig = {
                 var api = root + '/api/brochure/count';
                 return GET(api);
             },
-            Search: function Search(_ref) {
-                var keyword = _ref.keyword;
+            Search: function Search(_ref3) {
+                var keyword = _ref3.keyword;
                 var api = root + ('/api/brochure/search(' + keyword + ')');
                 return GET(api);
             },
@@ -1828,8 +1933,8 @@ var apiConfig = {
                 var api = root + ('/api/brochure/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref2) {
-                var startIndex = _ref2.startIndex, endIndex = _ref2.endIndex;
+            Paging: function Paging(_ref4) {
+                var startIndex = _ref4.startIndex, endIndex = _ref4.endIndex;
                 var api = root + ('/api/brochure/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -1845,7 +1950,11 @@ var apiConfig = {
                 return POST(api, data);
             },
             Count: function Count() {
-                var api = root + '/api/brochure/count';
+                var api = root + '/api/brochurehistory/count';
+                return GET(api);
+            },
+            CountById: function CountById(brochureid) {
+                var api = root + ('/api/brochurehistory/count(' + brochureid + ')');
                 return GET(api);
             },
             Top: function Top(topcount) {
@@ -1857,8 +1966,8 @@ var apiConfig = {
                 var api = root + ('/api/brochurehistory/' + id + '/update');
                 return PUT(api, data);
             },
-            Paging: function Paging(_ref3) {
-                var brochureid = _ref3.brochureid, startIndex = _ref3.startIndex, endIndex = _ref3.endIndex;
+            Paging: function Paging(_ref5) {
+                var brochureid = _ref5.brochureid, startIndex = _ref5.startIndex, endIndex = _ref5.endIndex;
                 var api = root + ('/api/brochurehistory/paging(' + brochureid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -1896,8 +2005,8 @@ var apiConfig = {
                 var api = root + '/api/dealer/count';
                 return GET(api);
             },
-            Search: function Search(_ref4) {
-                var keyword = _ref4.keyword;
+            Search: function Search(_ref6) {
+                var keyword = _ref6.keyword;
                 var api = root + ('/api/dealer/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -1905,8 +2014,8 @@ var apiConfig = {
                 var api = root + ('/api/dealer/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref5) {
-                var startIndex = _ref5.startIndex, endIndex = _ref5.endIndex;
+            Paging: function Paging(_ref7) {
+                var startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
                 var api = root + ('/api/dealer/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -1943,8 +2052,8 @@ var apiConfig = {
                 var api = root + ('/api/optionlist/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref6) {
-                var startIndex = _ref6.startIndex, endIndex = _ref6.endIndex;
+            Paging: function Paging(_ref8) {
+                var startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
                 var api = root + ('/api/optionlist/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -1989,7 +2098,9 @@ var apiConfig = {
                 var api = root + ('/api/prprocess/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Search: function Search(purchaseRequisitionid) {
+            Search: function Search(_ref9) {
+                var keyword = _ref9.keyword;
+                var purchaseRequisitionid = keyword;
                 var api = root + ('/api/prprocess/search(' + purchaseRequisitionid + ')');
                 return GET(api);
             },
@@ -2047,7 +2158,7 @@ var apiConfig = {
                 return result;
             },
             getCurrentStep: function getCurrentStep(prid) {
-                var steps = apiConfig.prprocess.Search(prid);
+                var steps = apiConfig.prprocess.Search({ keyword: prid });
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
                     if (Enum.enumApprovalResult.Ready == step['_result']) {
@@ -2080,8 +2191,8 @@ var apiConfig = {
                 var api = root + ('/api/prprocesssetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref7) {
-                var purchaseRequisitionid = _ref7.purchaseRequisitionid, startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
+            Paging: function Paging(_ref10) {
+                var purchaseRequisitionid = _ref10.purchaseRequisitionid, startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
                 var api = root + ('/api/prprocesssetting/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2152,17 +2263,18 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/countbyemployee(' + employeeAccount + ',' + status + ')');
                 return GET(api);
             },
-            Search: function Search(keyword) {
+            Search: function Search(_ref11) {
+                var keyword = _ref11.keyword;
                 var api = root + ('/api/purchaserequisition/search?keyWord=' + keyword);
                 return GET(api);
             },
-            SearchByStatus: function SearchByStatus(_ref8) {
-                var role = _ref8.role, uid = _ref8.uid, status = _ref8.status, startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
+            SearchByStatus: function SearchByStatus(_ref12) {
+                var role = _ref12.role, uid = _ref12.uid, status = _ref12.status, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref9) {
-                var role = _ref9.role, uid = _ref9.uid, status = _ref9.status, keyword = _ref9.keyword, startIndex = _ref9.startIndex, endIndex = _ref9.endIndex;
+            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref13) {
+                var role = _ref13.role, uid = _ref13.uid, status = _ref13.status, keyword = _ref13.keyword, startIndex = _ref13.startIndex, endIndex = _ref13.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2170,8 +2282,8 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref10) {
-                var startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
+            Paging: function Paging(_ref14) {
+                var startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
                 var startIndex = startIndex;
                 var endIndex = endIndex;
                 var api = root + ('/api/purchaserequisition/paging(' + startIndex + ',' + endIndex + ')');
@@ -2220,13 +2332,13 @@ var apiConfig = {
                 var api = root + ('/api/PRSupplierView/count?completed=' + completed);
                 return GET(api);
             },
-            Search: function Search(_ref11) {
-                var isCompeleted = _ref11.isCompeleted, keyword = _ref11.keyword, startIndex = _ref11.startIndex, endIndex = _ref11.endIndex;
+            Search: function Search(_ref15) {
+                var isCompeleted = _ref15.isCompeleted, keyword = _ref15.keyword, startIndex = _ref15.startIndex, endIndex = _ref15.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref12) {
-                var isCompeleted = _ref12.isCompeleted, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
+            Paging: function Paging(_ref16) {
+                var isCompeleted = _ref16.isCompeleted, startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2255,8 +2367,8 @@ var apiConfig = {
                 var api = root + '/api/supplier/count';
                 return GET(api);
             },
-            Search: function Search(_ref13) {
-                var keyword = _ref13.keyword;
+            Search: function Search(_ref17) {
+                var keyword = _ref17.keyword;
                 var api = root + ('/api/supplier/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2264,8 +2376,8 @@ var apiConfig = {
                 var api = root + ('/api/supplier/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref14) {
-                var startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
+            Paging: function Paging(_ref18) {
+                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
                 var api = root + ('/api/supplier/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2298,8 +2410,8 @@ var apiConfig = {
                 var api = root + '/api/systemsetting/count';
                 return GET(api);
             },
-            Search: function Search(_ref15) {
-                var keyword = _ref15.keyword;
+            Search: function Search(_ref19) {
+                var keyword = _ref19.keyword;
                 var api = root + ('/api/systemsetting/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2307,8 +2419,8 @@ var apiConfig = {
                 var api = root + ('/api/systemsetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref16) {
-                var startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
+            Paging: function Paging(_ref20) {
+                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
                 var api = root + ('/api/systemsetting/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2337,8 +2449,8 @@ var apiConfig = {
                 var api = root + '/api/systemuser/count';
                 return GET(api);
             },
-            Search: function Search(_ref17) {
-                var keyword = _ref17.keyword;
+            Search: function Search(_ref21) {
+                var keyword = _ref21.keyword;
                 var api = root + ('/api/systemuser/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2346,8 +2458,8 @@ var apiConfig = {
                 var api = root + ('/api/systemuser/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref18) {
-                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
+            Paging: function Paging(_ref22) {
+                var startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
                 var api = root + ('/api/systemuser/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2361,7 +2473,9 @@ var apiConfig = {
                 var api = root + ('/api/employee/login(' + username + ',' + password + ')');
                 return GET(api);
             },
-            Search: function Search(accountName) {
+            Search: function Search(_ref23) {
+                var keyword = _ref23.keyword;
+                var accountName = keyword;
                 var api = root + ('/api/employee/search(' + accountName + ')');
                 return GET(api);
             }
@@ -2371,8 +2485,8 @@ var apiConfig = {
                 var api = root + ('/api/PRApproverView/count?account=' + account + '&status=' + status);
                 return GET(api);
             },
-            Paging: function Paging(_ref19) {
-                var account = _ref19.account, completed = _ref19.completed, startIndex = _ref19.startIndex, endIndex = _ref19.endIndex;
+            Paging: function Paging(_ref24) {
+                var account = _ref24.account, completed = _ref24.completed, startIndex = _ref24.startIndex, endIndex = _ref24.endIndex;
                 var api = root + ('/api/PRApproverView/paging(' + account + ',' + completed + ',' + startIndex + ',' + endIndex);
                 return GET(api);
             }
@@ -2772,9 +2886,10 @@ var tableStructures = {
                 History: {
                     'tablename': 'History',
                     'hasHeader': true,
-                    'hasButton': true,
+                    'hasButton': false,
                     'keyArr': ["id", "key", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "物品编号", "物品名称", "物品数量", "创建人", "创建时间"]]
+                    'viewOrder': ["_id", "_direction", "_quantity", "_operator", "_created"],
+                    'data': [["序列", "操作", "物品数量", "操作人", "操作时间"]]
                 },
                 Inventory: {
                     'tablename': 'Inventory',
@@ -2961,7 +3076,7 @@ var tableStructures = {
                 'hasButton': true,
                 'buttonPool': ["supplyBtn"],
                 'viewOrder': ["_id", "_brochurecode", "_brochurename", "_quantity"],
-                'keyArr': ["prop", "id", "key", "prop"],
+                'keyArr': ["id", "prop", "key", "prop"],
                 'data': [["序列", "物品编号", "物品名称", "物品数量"]]
             }
         },

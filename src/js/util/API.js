@@ -14,7 +14,8 @@ const apiConfig = {
     },
     Edit: function(id, data) {
       //PUT
-      var api = root + `/api/brochure/${id}/update`
+      var account = getCookie("account")
+      var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
     Delete: function(id, data) {
@@ -55,7 +56,11 @@ const apiConfig = {
       return POST(api, data)
     },
     Count: function() {
-      var api = root + `/api/brochure/count`
+      var api = root + `/api/brochurehistory/count`
+      return GET(api)
+    },
+    CountById: function(brochureid) {
+      var api = root + `/api/brochurehistory/count(${brochureid})`
       return GET(api)
     },
     Top: function(topcount) {
@@ -214,7 +219,10 @@ const apiConfig = {
       var api = root + `/api/prprocess/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     },
-    Search: function(purchaseRequisitionid) {
+    Search: function({
+      keyword
+    }) {
+      var purchaseRequisitionid = keyword
       var api = root + `/api/prprocess/search(${purchaseRequisitionid})`
       return GET(api)
     },
@@ -274,7 +282,9 @@ const apiConfig = {
       return result
     },
     getCurrentStep: function(prid) {
-      var steps = apiConfig.prprocess.Search(prid)
+      var steps = apiConfig.prprocess.Search({
+        keyword: prid
+      })
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
@@ -386,7 +396,9 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/countbyemployee(${employeeAccount},${status})`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/purchaserequisition/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -628,7 +640,10 @@ const apiConfig = {
       var api = root + `/api/employee/login(${username},${password})`
       return GET(api)
     },
-    Search: function(accountName) {
+    Search: function({
+      keyword
+    }) {
+      var accountName = keyword
       var api = root + `/api/employee/search(${accountName})`
       return GET(api)
     }

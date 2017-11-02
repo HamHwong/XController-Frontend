@@ -1,4 +1,4 @@
-var validator = {
+const validator = {
   init: function () {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")

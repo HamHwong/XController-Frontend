@@ -49,10 +49,6 @@ var name_init = function() {
   }
 }
 
-var queryInput_init = function() {
-
-}
-
 var optionlist_init = function() {
   var optionlist = $("select.optionlist")
   for (var i = 0; i < optionlist.length; i++) {
@@ -74,9 +70,6 @@ var searchbox_init = function() {
   var input = $("input.searchBox")
   var btn = $("button.searchBtn")
   btn.on("click", function() {
-    search()
-  })
-  input.on("keyup", function() {
     search()
   })
   // var datasource = input.data('targetdata')
@@ -110,9 +103,6 @@ var init = {
     },
     searchbox: function() {
       searchbox_init()
-    },
-    queryInput: function() {
-      queryInput_init()
     }
   },
   sideNav: {

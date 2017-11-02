@@ -10,23 +10,39 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
-
-    bindInputQuery("#requestordealerfk", apiConfig.dealer.Top(1000), "_dealername", "_id", function() {
-      var val = $("#_requestordealerfk").val()
-      var dealer = apiConfig.dealer.Get(val)
-      $("#_dealerregion")
-        .val(dealer["_dealerregion"])
-      $("#_dealerregion")
-        .attr("disabled", "true")
+    bindInputQuery({
+      input: "#requestordealerfk",
+      datasourceAPI: apiConfig.dealer.Search,
+      searchObj: {},
+      innerTextName: "_dealername",
+      valueName: "_id",
+      callback: function(result) {
+        console.log(result)
+        var val = $("#_requestordealerfk").val()
+        var dealer = apiConfig.dealer.Get(val)
+        $("#_dealerregion")
+          .val(dealer["_dealerregion"])
+      }
     })
 
-    $("#requestoremployeefk").on("keyup", function(e) {
-      bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
-        var val = $("#requestoremployeefk").val()
-        var employee = apiConfig.employee.Search(val)
-        $("#_requestoremployeefk").val(employee[0]["accountField"])
-      })
+    bindInputQuery({
+      input: "#requestoremployeefk",
+      datasourceAPI: apiConfig.employee.Search,
+      searchObj: {},
+      innerTextName: "eNNameField",
+      valueName: "accountField",
+      callback: function(result) {
+        $("#_requestoremployeefk").val(result["accountField"])
+      }
     })
+
+    // $("#requestoremployeefk").on("keyup", function(e) {
+    //   bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
+    //     var val = $("#requestoremployeefk").val()
+    //     var employee = apiConfig.employee.Search(val)
+    //     $("#_requestoremployeefk").val(employee[0]["accountField"])
+    //   })
+    // })
 
     $("#submitter").val(getCookie('account'))
     $("#submitter").attr("disabled", "true")
@@ -52,7 +68,6 @@ const PurchaseRequisition = {
       }
       // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
     } else if (Enum.role.EMPLOYEE == getCookie("role")) {
-      debugger
       var employee = JSON.parse(getCookie('user'))
       if (employee) {
         $("#requestoremployeefk").val(employee["accountField"])
@@ -64,6 +79,7 @@ const PurchaseRequisition = {
         $("#forEmployee").show()
         $("#agentCheck").hide()
         $("#requireAgent").on("click", function() {
+          $(".requestorInput input").attr('disabled', 'true')
           if ($(this).is(":checked")) {
             $("#requestoremployeefk").val("")
             $("#requestoremployeefk")
@@ -94,17 +110,14 @@ const PurchaseRequisition = {
         $("#agentCheck input").on("click", function(e) {
           // var t = $(e.target)
           // debugger
+          $(".requestorInput").hide()
           var t = $("#agentCheck input[name='agent']:checked")
           if ("forEmp" == t.data("value")) {
-            $(".requestorInput").attr('disabled', 'true')
-            $(".requestorInput").hide()
-            $("#forEmployee").removeAttr('disabled')
+            $("#forEmployee input").removeAttr('disabled')
             $("#forEmployee").show()
           } else {
             //for Dealer
-            $(".requestorInput").attr('disabled', 'true')
-            $(".requestorInput").hide()
-            $("#forDealer").removeAttr('disabled')
+            $("#forDealer input").removeAttr('disabled')
             $("#forDealer").show()
           }
         })

@@ -1,5 +1,5 @@
-var MessageAlert = function(msg,status) {
-  this.status = status || "success"
+var MessageAlert = function(msg, status) {
+  this.status = status || MessageAlert.Status.SUCCESS
   this.msg = msg || "Congratulation! Action performed!"
   this.statusCode = 0
   this.html = null
@@ -8,7 +8,7 @@ var MessageAlert = function(msg,status) {
   this.showtime = 1000
   this.hideTime = 300
   this.mod =
-  `
+    `
   <div class="MassageAlert_Warp">
     <div class="MassageAlert">
       <label class="MassageAlert_Title">
@@ -48,7 +48,7 @@ MessageAlert.prototype.destory = function() {
 }
 
 MessageAlert.prototype.show = function(msg, status) {
-
+  //TODO
   this.new(msg, status).html
     .show(this.showoutTime)
   this.dropback.fadeIn(this.showoutTime)

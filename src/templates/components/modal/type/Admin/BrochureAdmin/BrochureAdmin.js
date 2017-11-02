@@ -42,9 +42,8 @@ const BrochureAdmin = {
       }
     },
     history: {
-      show: function() {
-        $("#History")
-          .modal()
+      show: function(bid) {
+        BrochureHistory.show(bid)
       },
       hide: function() {
         $("#History")

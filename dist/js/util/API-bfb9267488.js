@@ -15,7 +15,8 @@ var apiConfig = {
             },
             Edit: function Edit(id, data) {
                 //PUT
-                var api = root + ('/api/brochure/' + id + '/update');
+                var account = getCookie('account');
+                var api = root + ('/api/brochure/' + id + '/update?actionOwner=' + account);
                 return PUT(api, data);
             },
             Delete: function Delete(id, data) {
@@ -53,7 +54,11 @@ var apiConfig = {
                 return POST(api, data);
             },
             Count: function Count() {
-                var api = root + '/api/brochure/count';
+                var api = root + '/api/brochurehistory/count';
+                return GET(api);
+            },
+            CountById: function CountById(brochureid) {
+                var api = root + ('/api/brochurehistory/count(' + brochureid + ')');
                 return GET(api);
             },
             Top: function Top(topcount) {
@@ -197,7 +202,9 @@ var apiConfig = {
                 var api = root + ('/api/prprocess/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Search: function Search(purchaseRequisitionid) {
+            Search: function Search(_ref7) {
+                var keyword = _ref7.keyword;
+                var purchaseRequisitionid = keyword;
                 var api = root + ('/api/prprocess/search(' + purchaseRequisitionid + ')');
                 return GET(api);
             },
@@ -255,7 +262,7 @@ var apiConfig = {
                 return result;
             },
             getCurrentStep: function getCurrentStep(prid) {
-                var steps = apiConfig.prprocess.Search(prid);
+                var steps = apiConfig.prprocess.Search({ keyword: prid });
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
                     if (Enum.enumApprovalResult.Ready == step['_result']) {
@@ -288,8 +295,8 @@ var apiConfig = {
                 var api = root + ('/api/prprocesssetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref7) {
-                var purchaseRequisitionid = _ref7.purchaseRequisitionid, startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
+            Paging: function Paging(_ref8) {
+                var purchaseRequisitionid = _ref8.purchaseRequisitionid, startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
                 var api = root + ('/api/prprocesssetting/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -360,17 +367,18 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/countbyemployee(' + employeeAccount + ',' + status + ')');
                 return GET(api);
             },
-            Search: function Search(keyword) {
+            Search: function Search(_ref9) {
+                var keyword = _ref9.keyword;
                 var api = root + ('/api/purchaserequisition/search?keyWord=' + keyword);
                 return GET(api);
             },
-            SearchByStatus: function SearchByStatus(_ref8) {
-                var role = _ref8.role, uid = _ref8.uid, status = _ref8.status, startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
+            SearchByStatus: function SearchByStatus(_ref10) {
+                var role = _ref10.role, uid = _ref10.uid, status = _ref10.status, startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref9) {
-                var role = _ref9.role, uid = _ref9.uid, status = _ref9.status, keyword = _ref9.keyword, startIndex = _ref9.startIndex, endIndex = _ref9.endIndex;
+            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref11) {
+                var role = _ref11.role, uid = _ref11.uid, status = _ref11.status, keyword = _ref11.keyword, startIndex = _ref11.startIndex, endIndex = _ref11.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -378,8 +386,8 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref10) {
-                var startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
+            Paging: function Paging(_ref12) {
+                var startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
                 var startIndex = startIndex;
                 var endIndex = endIndex;
                 var api = root + ('/api/purchaserequisition/paging(' + startIndex + ',' + endIndex + ')');
@@ -428,13 +436,13 @@ var apiConfig = {
                 var api = root + ('/api/PRSupplierView/count?completed=' + completed);
                 return GET(api);
             },
-            Search: function Search(_ref11) {
-                var isCompeleted = _ref11.isCompeleted, keyword = _ref11.keyword, startIndex = _ref11.startIndex, endIndex = _ref11.endIndex;
+            Search: function Search(_ref13) {
+                var isCompeleted = _ref13.isCompeleted, keyword = _ref13.keyword, startIndex = _ref13.startIndex, endIndex = _ref13.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref12) {
-                var isCompeleted = _ref12.isCompeleted, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
+            Paging: function Paging(_ref14) {
+                var isCompeleted = _ref14.isCompeleted, startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -463,8 +471,8 @@ var apiConfig = {
                 var api = root + '/api/supplier/count';
                 return GET(api);
             },
-            Search: function Search(_ref13) {
-                var keyword = _ref13.keyword;
+            Search: function Search(_ref15) {
+                var keyword = _ref15.keyword;
                 var api = root + ('/api/supplier/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -472,8 +480,8 @@ var apiConfig = {
                 var api = root + ('/api/supplier/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref14) {
-                var startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
+            Paging: function Paging(_ref16) {
+                var startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
                 var api = root + ('/api/supplier/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -506,8 +514,8 @@ var apiConfig = {
                 var api = root + '/api/systemsetting/count';
                 return GET(api);
             },
-            Search: function Search(_ref15) {
-                var keyword = _ref15.keyword;
+            Search: function Search(_ref17) {
+                var keyword = _ref17.keyword;
                 var api = root + ('/api/systemsetting/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -515,8 +523,8 @@ var apiConfig = {
                 var api = root + ('/api/systemsetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref16) {
-                var startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
+            Paging: function Paging(_ref18) {
+                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
                 var api = root + ('/api/systemsetting/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -545,8 +553,8 @@ var apiConfig = {
                 var api = root + '/api/systemuser/count';
                 return GET(api);
             },
-            Search: function Search(_ref17) {
-                var keyword = _ref17.keyword;
+            Search: function Search(_ref19) {
+                var keyword = _ref19.keyword;
                 var api = root + ('/api/systemuser/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -554,8 +562,8 @@ var apiConfig = {
                 var api = root + ('/api/systemuser/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref18) {
-                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
+            Paging: function Paging(_ref20) {
+                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
                 var api = root + ('/api/systemuser/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -569,7 +577,9 @@ var apiConfig = {
                 var api = root + ('/api/employee/login(' + username + ',' + password + ')');
                 return GET(api);
             },
-            Search: function Search(accountName) {
+            Search: function Search(_ref21) {
+                var keyword = _ref21.keyword;
+                var accountName = keyword;
                 var api = root + ('/api/employee/search(' + accountName + ')');
                 return GET(api);
             }
@@ -579,8 +589,8 @@ var apiConfig = {
                 var api = root + ('/api/PRApproverView/count?account=' + account + '&status=' + status);
                 return GET(api);
             },
-            Paging: function Paging(_ref19) {
-                var account = _ref19.account, completed = _ref19.completed, startIndex = _ref19.startIndex, endIndex = _ref19.endIndex;
+            Paging: function Paging(_ref22) {
+                var account = _ref22.account, completed = _ref22.completed, startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
                 var api = root + ('/api/PRApproverView/paging(' + account + ',' + completed + ',' + startIndex + ',' + endIndex);
                 return GET(api);
             }

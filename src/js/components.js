@@ -11,8 +11,8 @@ var tab_init = function() {
   })
 }
 
-var MessageAlert = function(msg,status) {
-  this.status = status || "success"
+var MessageAlert = function(msg, status) {
+  this.status = status || MessageAlert.Status.SUCCESS
   this.msg = msg || "Congratulation! Action performed!"
   this.statusCode = 0
   this.html = null
@@ -21,7 +21,7 @@ var MessageAlert = function(msg,status) {
   this.showtime = 1000
   this.hideTime = 300
   this.mod =
-  `
+    `
   <div class="MassageAlert_Warp">
     <div class="MassageAlert">
       <label class="MassageAlert_Title">
@@ -61,7 +61,7 @@ MessageAlert.prototype.destory = function() {
 }
 
 MessageAlert.prototype.show = function(msg, status) {
-
+  //TODO
   this.new(msg, status).html
     .show(this.showoutTime)
   this.dropback.fadeIn(this.showoutTime)
@@ -127,7 +127,12 @@ const queryKeyWords = function(keys, dic) {
   }
 }
 
-const bindOptionData = function($select, datasource, innerTextName, valueName) {
+const bindOptionData = function({
+  $select,
+  datasource,
+  innerTextName,
+  valueName
+}) {
   //给类名为queryinput的select添加上option（真正提交的部分）
   $select = $($select)
   $select.empty()
@@ -136,7 +141,6 @@ const bindOptionData = function($select, datasource, innerTextName, valueName) {
   //datasource为数据源数组
   var optionkey = null
   var optionvalue = null
-
   // if ("zeiss" == category) {
   //   optiontext = "nameField"
   //   optionvalue = "accountField"
@@ -147,8 +151,6 @@ const bindOptionData = function($select, datasource, innerTextName, valueName) {
   //   optionvalue = "_id"
   //   optiontext = innerTextName
   // }
-
-
   for (var i = 0; i < datasource.length; i++) {
     var j = datasource[i]
     var value = j[optionvalue]
@@ -166,27 +168,40 @@ const bindOptionData = function($select, datasource, innerTextName, valueName) {
  * @param  {string}   valueName 单个数据对象的属性字段名，用于绑定option Value上的值
  * @param  {Function} callback 选择选项后执行的函数
  */
-const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {
-  $input = $($input)
+const bindInputQuery = function({
+  input,
+  datasourceAPI,
+  searchObj,
+  innerTextName,
+  valueName,
+  callback
+}) {
+  var $input = $(input)
   $input.unbind("keyup")
   var $select = $input.siblings("select.queryinput")
-  bindOptionData($select, datasource, innerTextName, valueName)
+  $input.after("<ul class='dropdown-menu keyhint'>")
+
   //给input绑定上keyup事件
   $input.on('keyup', function(e) {
     e.preventDefault()
-    if ("string" == typeof datasource) {
-      datasource = GET(datasource)
-    } else {
-      datasource = datasource
-    }
+    var keyword = this.value
+    searchObj["keyword"] = keyword
+    var datasource = datasourceAPI(searchObj)
+    bindOptionData({
+      $select,
+      datasource,
+      innerTextName,
+      valueName
+    })
 
     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
-
+    var objSet = arrayToSet(datasource, valueName)
     var droplist = $input.siblings(".keyhint")
     droplist.empty()
 
-    var data = queryKeyWords(this.value, nameArray)
+    var data = queryKeyWords(keyword, nameArray)
+
     //加载bootstrap下拉框
     for (var i = 0; i < data["raw"].length; i++) {
       var key = data["raw"][i]
@@ -198,7 +213,7 @@ const bindInputQuery = function($input, datasource, innerTextName, valueName, ca
       droplist.append(li)
     }
     //绑定下拉框点击事件
-    if (data["raw"].length > 0 && this.value != "") {
+    if (data["raw"].length > 0 && keyword != "") {
       $input.parent(".search_box_warp").addClass("open")
       $(".keywords").on('click', function(e) {
         var val = $(this).attr("value") //获取到value值
@@ -206,8 +221,9 @@ const bindInputQuery = function($input, datasource, innerTextName, valueName, ca
         $input.val(this.innerText)
         droplist.empty()
         $input.parent(".search_box_warp").removeClass("open")
+        var result = objSet[val]
         if (callback) {
-          callback()
+          callback(result)
         }
       })
     } else {
@@ -216,6 +232,56 @@ const bindInputQuery = function($input, datasource, innerTextName, valueName, ca
     //
   })
 }
+// const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {
+//   $input = $($input)
+//   $input.unbind("keyup")
+//   var $select = $input.siblings("select.queryinput")
+//   bindOptionData($select, datasource, innerTextName, valueName)
+//   //给input绑定上keyup事件
+//   $input.on('keyup', function(e) {
+//     e.preventDefault()
+//     if ("string" == typeof datasource) {
+//       datasource = GET(datasource)
+//     } else {
+//       datasource = datasource
+//     }
+//
+//     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
+//     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
+//
+//     var droplist = $input.siblings(".keyhint")
+//     droplist.empty()
+//
+//     var data = queryKeyWords(this.value, nameArray)
+//     //加载bootstrap下拉框
+//     for (var i = 0; i < data["raw"].length; i++) {
+//       var key = data["raw"][i]
+//       var value = set[key]
+//       var li = $("<li></li>")
+//       var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
+//       a.html(data["blod"][i])
+//       li.append(a)
+//       droplist.append(li)
+//     }
+//     //绑定下拉框点击事件
+//     if (data["raw"].length > 0 && this.value != "") {
+//       $input.parent(".search_box_warp").addClass("open")
+//       $(".keywords").on('click', function(e) {
+//         var val = $(this).attr("value") //获取到value值
+//         $select.val(val)
+//         $input.val(this.innerText)
+//         droplist.empty()
+//         $input.parent(".search_box_warp").removeClass("open")
+//         if (callback) {
+//           callback()
+//         }
+//       })
+//     } else {
+//       $input.parent(".search_box_warp").removeClass("open")
+//     }
+//     //
+//   })
+// }
 
 //多模态HACK
 var counter = 0;
@@ -872,13 +938,13 @@ table_row.prototype.onClick = function(callback) {
 const regxRule = {
 
   string: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       var result = min
       // if (max)
       result += "," + max
       return `^.{${result}}$`
     },
-    msg: `至少`
+    msg: `请输入至少min,最多max位字符，不能输入带有#￥%_等特殊符号。`
   },
 
   account: {
@@ -897,7 +963,7 @@ const regxRule = {
   },
 
   number: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       var result = min
       // if (max)
       result += "," + max
@@ -906,21 +972,25 @@ const regxRule = {
     },
     msg: `请输入至少min,最多不超过max位的数字！`
   },
+
   select: {},
+
   password: {},
+
   checkbox: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       //最少選min個，最多選max個
 
     }
   },
+
   radio: {},
 
 
 
 }
 
-var validator = {
+const validator = {
   init: function () {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")
@@ -1136,9 +1206,8 @@ const BrochureAdmin = {
       }
     },
     history: {
-      show: function() {
-        $("#History")
-          .modal()
+      show: function(bid) {
+        BrochureHistory.show(bid)
       },
       hide: function() {
         $("#History")
@@ -1239,6 +1308,27 @@ const DealerAdmin = {
       }
       table_init()
     }
+  }
+}
+
+const BrochureHistory = {
+  show: function(bid) {
+    BrochureHistory.init(bid)
+    $("#History").modal()
+  },
+  hide: function() {
+    $("#History").modal("hide")
+  },
+  init: function(bid) {
+    generateTableWithPageHelper({
+      target: ".infomationTable",
+      templateOpts: tableStructures.Admin.Bruchure.History,
+      counter: apiConfig.brochurehistory.CountById(bid),
+      datasourceAPI: apiConfig.brochurehistory.Paging,
+      options: {
+        brochureid: bid
+      }
+    })
   }
 }
 
@@ -1384,6 +1474,7 @@ $("#Detail")
 
 const PurchaseItem = {
   show: function() {
+    PurchaseItem.init()
     $("#PruchaseItem")
       .modal()
   },
@@ -1395,6 +1486,19 @@ const PurchaseItem = {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
+  },
+  init: function() {
+    bindInputQuery({
+      input: "#brochure",
+      datasourceAPI: apiConfig.brochure.Search,
+      searchObj: {},
+      innerTextName: "_brochurename",
+      valueName: "_brochurename",
+      callback: function(result) {
+        console.log(result)
+        // $("#_requestoremployeefk").val(result["accountField"])
+      }
+    })
   },
   update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -1460,7 +1564,7 @@ const PurchaseItem = {
     edit: function(PIid) {
       window._operation = Enum.operation.Update
       PurchaseItem.view.init()
-      if (PIid.search("[unsave]")>=0) {
+      if (PIid.search("[unsave]") >= 0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
       } else {
@@ -1486,7 +1590,7 @@ const PurchaseItem = {
       var set = formToSet("#PruchaseItem_form")
       set["_id"] = localid
       var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-      for (var i =0;i< order.length;i++) {
+      for (var i = 0; i < order.length; i++) {
         arr.push(set[order[i]])
       }
       if (window.__PurchaseRequisitionItem_table) {
@@ -1503,7 +1607,7 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().search("[unsave]")>=0) {
+      if (!targetid.toString().search("[unsave]") >= 0) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
       var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -1517,7 +1621,7 @@ const PurchaseItem = {
     delete: function(PIid) {
       var result = null;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!PIid.search("[unsave]")>=0) {
+      if (!PIid.search("[unsave]") >= 0) {
         result = apiConfig.purchaseitem.delete(PIid)
       }
       window.__PurchaseRequisitionItem_table.data[PIid].remove()
@@ -1569,23 +1673,39 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
-
-    bindInputQuery("#requestordealerfk", apiConfig.dealer.Top(1000), "_dealername", "_id", function() {
-      var val = $("#_requestordealerfk").val()
-      var dealer = apiConfig.dealer.Get(val)
-      $("#_dealerregion")
-        .val(dealer["_dealerregion"])
-      $("#_dealerregion")
-        .attr("disabled", "true")
+    bindInputQuery({
+      input: "#requestordealerfk",
+      datasourceAPI: apiConfig.dealer.Search,
+      searchObj: {},
+      innerTextName: "_dealername",
+      valueName: "_id",
+      callback: function(result) {
+        console.log(result)
+        var val = $("#_requestordealerfk").val()
+        var dealer = apiConfig.dealer.Get(val)
+        $("#_dealerregion")
+          .val(dealer["_dealerregion"])
+      }
     })
 
-    $("#requestoremployeefk").on("keyup", function(e) {
-      bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
-        var val = $("#requestoremployeefk").val()
-        var employee = apiConfig.employee.Search(val)
-        $("#_requestoremployeefk").val(employee[0]["accountField"])
-      })
+    bindInputQuery({
+      input: "#requestoremployeefk",
+      datasourceAPI: apiConfig.employee.Search,
+      searchObj: {},
+      innerTextName: "eNNameField",
+      valueName: "accountField",
+      callback: function(result) {
+        $("#_requestoremployeefk").val(result["accountField"])
+      }
     })
+
+    // $("#requestoremployeefk").on("keyup", function(e) {
+    //   bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
+    //     var val = $("#requestoremployeefk").val()
+    //     var employee = apiConfig.employee.Search(val)
+    //     $("#_requestoremployeefk").val(employee[0]["accountField"])
+    //   })
+    // })
 
     $("#submitter").val(getCookie('account'))
     $("#submitter").attr("disabled", "true")
@@ -1611,7 +1731,6 @@ const PurchaseRequisition = {
       }
       // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
     } else if (Enum.role.EMPLOYEE == getCookie("role")) {
-      debugger
       var employee = JSON.parse(getCookie('user'))
       if (employee) {
         $("#requestoremployeefk").val(employee["accountField"])
@@ -1623,6 +1742,7 @@ const PurchaseRequisition = {
         $("#forEmployee").show()
         $("#agentCheck").hide()
         $("#requireAgent").on("click", function() {
+          $(".requestorInput input").attr('disabled', 'true')
           if ($(this).is(":checked")) {
             $("#requestoremployeefk").val("")
             $("#requestoremployeefk")
@@ -1653,17 +1773,14 @@ const PurchaseRequisition = {
         $("#agentCheck input").on("click", function(e) {
           // var t = $(e.target)
           // debugger
+          $(".requestorInput").hide()
           var t = $("#agentCheck input[name='agent']:checked")
           if ("forEmp" == t.data("value")) {
-            $(".requestorInput").attr('disabled', 'true')
-            $(".requestorInput").hide()
-            $("#forEmployee").removeAttr('disabled')
+            $("#forEmployee input").removeAttr('disabled')
             $("#forEmployee").show()
           } else {
             //for Dealer
-            $(".requestorInput").attr('disabled', 'true')
-            $(".requestorInput").hide()
-            $("#forDealer").removeAttr('disabled')
+            $("#forDealer input").removeAttr('disabled')
             $("#forDealer").show()
           }
         })
@@ -2023,7 +2140,8 @@ const apiConfig = {
     },
     Edit: function(id, data) {
       //PUT
-      var api = root + `/api/brochure/${id}/update`
+      var account = getCookie("account")
+      var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
     Delete: function(id, data) {
@@ -2064,7 +2182,11 @@ const apiConfig = {
       return POST(api, data)
     },
     Count: function() {
-      var api = root + `/api/brochure/count`
+      var api = root + `/api/brochurehistory/count`
+      return GET(api)
+    },
+    CountById: function(brochureid) {
+      var api = root + `/api/brochurehistory/count(${brochureid})`
       return GET(api)
     },
     Top: function(topcount) {
@@ -2223,7 +2345,10 @@ const apiConfig = {
       var api = root + `/api/prprocess/paging(${purchaseRequisitionid},${startIndex},${endIndex})`
       return GET(api)
     },
-    Search: function(purchaseRequisitionid) {
+    Search: function({
+      keyword
+    }) {
+      var purchaseRequisitionid = keyword
       var api = root + `/api/prprocess/search(${purchaseRequisitionid})`
       return GET(api)
     },
@@ -2283,7 +2408,9 @@ const apiConfig = {
       return result
     },
     getCurrentStep: function(prid) {
-      var steps = apiConfig.prprocess.Search(prid)
+      var steps = apiConfig.prprocess.Search({
+        keyword: prid
+      })
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
@@ -2395,7 +2522,9 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/countbyemployee(${employeeAccount},${status})`
       return GET(api)
     },
-    Search: function(keyword) {
+    Search: function({
+      keyword
+    }) {
       var api = root + `/api/purchaserequisition/search?keyWord=${keyword}`
       return GET(api)
     },
@@ -2637,7 +2766,10 @@ const apiConfig = {
       var api = root + `/api/employee/login(${username},${password})`
       return GET(api)
     },
-    Search: function(accountName) {
+    Search: function({
+      keyword
+    }) {
+      var accountName = keyword
       var api = root + `/api/employee/search(${accountName})`
       return GET(api)
     }
@@ -3076,10 +3208,11 @@ const tableStructures = {
       History: {
         "tablename": "History",
         "hasHeader": true,
-        "hasButton": true,
+        "hasButton": false,
         "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_direction", "_quantity", "_operator", "_created"],
         "data": [
-          ["序列", "物品编号", "物品名称", "物品数量", "创建人", "创建时间"],
+          ["序列", "操作",  "物品数量", "操作人", "操作时间"],
         ]
       },
       Inventory: {
@@ -3114,7 +3247,7 @@ const tableStructures = {
         "hasButton": true,
         "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -3126,7 +3259,7 @@ const tableStructures = {
         "hasButton": true,
         "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -3305,7 +3438,7 @@ const tableStructures = {
       "hasButton": true,
       "buttonPool": ["supplyBtn"],
       "viewOrder": ["_id", "_brochurecode", "_brochurename", "_quantity"],
-      "keyArr": ["prop", "id", "key", "prop"],
+      "keyArr": ["id", "prop", "key", "prop"],
       "data": [
         ["序列", "物品编号", "物品名称", "物品数量"],
       ]

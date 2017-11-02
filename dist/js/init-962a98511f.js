@@ -45,8 +45,6 @@ var name_init = function name_init() {
         $('.uname').text(name);
     }
 };
-var queryInput_init = function queryInput_init() {
-};
 var optionlist_init = function optionlist_init() {
     var optionlist = $('select.optionlist');
     for (var i = 0; i < optionlist.length; i++) {
@@ -68,9 +66,6 @@ var searchbox_init = function searchbox_init() {
     var input = $('input.searchBox');
     var btn = $('button.searchBtn');
     btn.on('click', function () {
-        search();
-    });
-    input.on('keyup', function () {
         search();
     });    // var datasource = input.data('targetdata')
            // new table().loadFromTemplateJson(`/api/${datasource}/search(100)`, templateOpts, dataOrder).to("#Dealer-table-container")
@@ -102,9 +97,6 @@ var init = {
             },
             searchbox: function searchbox() {
                 searchbox_init();
-            },
-            queryInput: function queryInput() {
-                queryInput_init();
             }
         },
         sideNav: {

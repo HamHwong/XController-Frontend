@@ -1,5 +1,6 @@
 const PurchaseItem = {
   show: function() {
+    PurchaseItem.init()
     $("#PruchaseItem")
       .modal()
   },
@@ -11,6 +12,19 @@ const PurchaseItem = {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
+  },
+  init: function() {
+    bindInputQuery({
+      input: "#brochure",
+      datasourceAPI: apiConfig.brochure.Search,
+      searchObj: {},
+      innerTextName: "_brochurename",
+      valueName: "_brochurename",
+      callback: function(result) {
+        console.log(result)
+        // $("#_requestoremployeefk").val(result["accountField"])
+      }
+    })
   },
   update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
@@ -76,7 +90,7 @@ const PurchaseItem = {
     edit: function(PIid) {
       window._operation = Enum.operation.Update
       PurchaseItem.view.init()
-      if (PIid.search("[unsave]")>=0) {
+      if (PIid.search("[unsave]") >= 0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
         window._target.PI = PItems[PIid]
       } else {
@@ -102,7 +116,7 @@ const PurchaseItem = {
       var set = formToSet("#PruchaseItem_form")
       set["_id"] = localid
       var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
-      for (var i =0;i< order.length;i++) {
+      for (var i = 0; i < order.length; i++) {
         arr.push(set[order[i]])
       }
       if (window.__PurchaseRequisitionItem_table) {
@@ -119,7 +133,7 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().search("[unsave]")>=0) {
+      if (!targetid.toString().search("[unsave]") >= 0) {
         apiConfig.purchaseitem.Edit(targetid, target)
       }
       var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -133,7 +147,7 @@ const PurchaseItem = {
     delete: function(PIid) {
       var result = null;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!PIid.search("[unsave]")>=0) {
+      if (!PIid.search("[unsave]") >= 0) {
         result = apiConfig.purchaseitem.delete(PIid)
       }
       window.__PurchaseRequisitionItem_table.data[PIid].remove()

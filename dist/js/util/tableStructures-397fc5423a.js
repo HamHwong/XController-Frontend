@@ -5,9 +5,10 @@ var tableStructures = {
                 History: {
                     'tablename': 'History',
                     'hasHeader': true,
-                    'hasButton': true,
+                    'hasButton': false,
                     'keyArr': ["id", "key", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "物品编号", "物品名称", "物品数量", "创建人", "创建时间"]]
+                    'viewOrder': ["_id", "_direction", "_quantity", "_operator", "_created"],
+                    'data': [["序列", "操作", "物品数量", "操作人", "操作时间"]]
                 },
                 Inventory: {
                     'tablename': 'Inventory',
@@ -194,7 +195,7 @@ var tableStructures = {
                 'hasButton': true,
                 'buttonPool': ["supplyBtn"],
                 'viewOrder': ["_id", "_brochurecode", "_brochurename", "_quantity"],
-                'keyArr': ["prop", "id", "key", "prop"],
+                'keyArr': ["id", "prop", "key", "prop"],
                 'data': [["序列", "物品编号", "物品名称", "物品数量"]]
             }
         },

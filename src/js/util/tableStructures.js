@@ -4,10 +4,11 @@ const tableStructures = {
       History: {
         "tablename": "History",
         "hasHeader": true,
-        "hasButton": true,
+        "hasButton": false,
         "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_direction", "_quantity", "_operator", "_created"],
         "data": [
-          ["序列", "物品编号", "物品名称", "物品数量", "创建人", "创建时间"],
+          ["序列", "操作",  "物品数量", "操作人", "操作时间"],
         ]
       },
       Inventory: {
@@ -42,7 +43,7 @@ const tableStructures = {
         "hasButton": true,
         "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -54,7 +55,7 @@ const tableStructures = {
         "hasButton": true,
         "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id","prop",  "key", "prop", "prop", "prop"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
@@ -233,7 +234,7 @@ const tableStructures = {
       "hasButton": true,
       "buttonPool": ["supplyBtn"],
       "viewOrder": ["_id", "_brochurecode", "_brochurename", "_quantity"],
-      "keyArr": ["prop", "id", "key", "prop"],
+      "keyArr": ["id", "prop", "key", "prop"],
       "data": [
         ["序列", "物品编号", "物品名称", "物品数量"],
       ]

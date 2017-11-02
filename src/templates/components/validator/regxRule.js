@@ -1,13 +1,13 @@
 const regxRule = {
 
   string: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       var result = min
       // if (max)
       result += "," + max
       return `^.{${result}}$`
     },
-    msg: `至少`
+    msg: `请输入至少min,最多max位字符，不能输入带有#￥%_等特殊符号。`
   },
 
   account: {
@@ -26,7 +26,7 @@ const regxRule = {
   },
 
   number: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       var result = min
       // if (max)
       result += "," + max
@@ -35,14 +35,18 @@ const regxRule = {
     },
     msg: `请输入至少min,最多不超过max位的数字！`
   },
+
   select: {},
+
   password: {},
+
   checkbox: {
-    regx: function (min, max) {
+    regx: function(min, max) {
       //最少選min個，最多選max個
 
     }
   },
+
   radio: {},
 
 

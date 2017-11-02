@@ -29,12 +29,11 @@
             templateOpts: tableStructures.Supplier.Brochure,
             counter: apiConfig.brochure.Count(),
             datasourceAPI: apiConfig.brochure.Paging,
-            options: {
-            }
+            options: {}
           })
         }
-        var Detail = function() {
-          $("#History").modal()
+        var Detail = function(bid) {
+          BrochureHistory.show(bid)
         }
 
         //删除物品记录操作
@@ -57,11 +56,7 @@
           $("#Supply")
             .modal()
         }
-        //查看出入库历史操作
-        var History = function(rid) {
-          $("#History")
-            .modal()
-        }
+
         //编辑操作
         var edit = function(rid) {
           window._target = apiConfig.brochure.Get(rid)
@@ -81,7 +76,7 @@
             counter: apiConfig.brochure.Count(),
             datasourceAPI: apiConfig.brochure.Search,
             options: {
-              keyword:keyword
+              keyword: keyword
             }
           })
         }
