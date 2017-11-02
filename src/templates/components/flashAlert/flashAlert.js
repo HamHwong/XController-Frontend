@@ -1,4 +1,4 @@
-var MessageAlert = function(msg, status) {
+var MessageAlert = function (msg, status) {
   this.status = status || MessageAlert.Status.SUCCESS
   this.msg = msg || "Congratulation! Action performed!"
   this.statusCode = 0
@@ -7,38 +7,45 @@ var MessageAlert = function(msg, status) {
   this.showoutTime = 600
   this.showtime = 1000
   this.hideTime = 300
-  this.mod =
-    `
-  <div class="MassageAlert_Warp">
-    <div class="MassageAlert">
-      <label class="MassageAlert_Title">
-        <i class="Icon"></i>
-        <span class="Status">${this.status}</span>
-      </label>
-      <div class="MassageAlert_Body">
-        <span>${this.msg}</span>
-      </div>
-      <div class="MassageAlert_Footer"></div>
-    </div>
-  </div>
-  `
-  // this.show()
+  this.show(this.mse, this.status)
 }
 
-MessageAlert.prototype.new = function() {
-  if (!this.html) {
-    this.html = $(this.mod)
-    this.html.css("display", "none")
-    $("body").append(this.html)
-  }
+MessageAlert.prototype.new = function (msg, status) {
+  this.msg = msg || this.msg
+  this.status = status || this.status
+  if (this.html)
+    this.html.remove()
+  // if (!this.html) {
+  this.html = this.generateHTML(this.msg, this.status)
+  this.html.css("display", "none")
+  $("body").append(this.html)
+  // }
   if (!this.dropback) {
     this.dropback = $('<div class="MassageAlert_dropback"></div>')
     $("body").append(this.dropback)
   }
-  return this
+  return this.html
 }
 
-MessageAlert.prototype.destory = function() {
+MessageAlert.prototype.generateHTML = function (msg, status) {
+  var mod =
+    `
+      <div class="MassageAlert_Warp">
+        <div class="MassageAlert">
+          <label class="MassageAlert_Title">
+            <i class="Icon"></i>
+            <span class="Status">${status}</span>
+          </label>
+          <div class="MassageAlert_Body">
+            <span>${msg}</span>
+          </div>
+          <div class="MassageAlert_Footer"></div>
+        </div>
+      </div>
+      `
+  return $(mod)
+}
+MessageAlert.prototype.destory = function () {
   if (this.html) {
     this.html.remove()
   }
@@ -47,28 +54,32 @@ MessageAlert.prototype.destory = function() {
   }
 }
 
-MessageAlert.prototype.show = function(msg, status) {
-  //TODO
-  this.new(msg, status).html
+MessageAlert.prototype.show = function (msg, status) {
+  if (!this.inStatus(status))
+    throw "Error Status"
+  this.new(msg, status)
     .show(this.showoutTime)
   this.dropback.fadeIn(this.showoutTime)
 
   var self = this
-  setTimeout(function() {
+  setTimeout(function () {
     self.hide()
-  }, this.showoutTime + this.showtime)
+    setTimeout(function () {
+      self.destory()
+    }, self.hideTime)
+  }, self.showoutTime + self.showtime)
 
   return this
-
-};
+}
 // MessageAlert.show = function(msg, status){
 //   // this.incident
 //   // if(MessageAlert){}
 // }
 
-MessageAlert.prototype.hide = function() {
+MessageAlert.prototype.hide = function () {
   this.html.hide(this.hideTime)
   this.dropback.fadeOut(this.hideTime)
+  return this
 };
 
 MessageAlert.Status = {
@@ -77,15 +88,15 @@ MessageAlert.Status = {
   ERROR: "ERROR",
 }
 
-MessageAlert.prototype.inStatus = function(status) {
-  var isContain = true
+MessageAlert.prototype.inStatus = function (status) {
+  var isContain = false
   if ('string' != typeof status) {
     throw 'invalid status'
   }
-  for (var i in this.Status) {
-    isContain = isContain && (status.toUpperCase == this.Status[i])
+  for (var i in MessageAlert.Status) {
+    isContain = (status.toUpperCase() === MessageAlert.Status[i]) || isContain
   }
   return isContain
 }
 
-var messageAlert = new MessageAlert()
+// var messageAlert = new MessageAlert()
