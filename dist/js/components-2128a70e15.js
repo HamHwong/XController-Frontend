@@ -16,71 +16,6 @@ var tab_init = function tab_init() {
         var currentTab = $(this).attr('href');    //获取到当前tab,
     });
 };
-var MessageAlert = function MessageAlert(msg, status) {
-    this.status = status || MessageAlert.Status.SUCCESS;
-    this.msg = msg || 'Congratulation! Action performed!';
-    this.statusCode = 0;
-    this.html = null;
-    this.dropback = null;
-    this.showoutTime = 600;
-    this.showtime = 1000;
-    this.hideTime = 300;
-    this.mod = '\n  <div class="MassageAlert_Warp">\n    <div class="MassageAlert">\n      <label class="MassageAlert_Title">\n        <i class="Icon"></i>\n        <span class="Status">' + this.status + '</span>\n      </label>\n      <div class="MassageAlert_Body">\n        <span>' + this.msg + '</span>\n      </div>\n      <div class="MassageAlert_Footer"></div>\n    </div>\n  </div>\n  ';    // this.show()
-};
-MessageAlert.prototype.new = function () {
-    if (!this.html) {
-        this.html = $(this.mod);
-        this.html.css('display', 'none');
-        $('body').append(this.html);
-    }
-    if (!this.dropback) {
-        this.dropback = $('<div class="MassageAlert_dropback"></div>');
-        $('body').append(this.dropback);
-    }
-    return this;
-};
-MessageAlert.prototype.destory = function () {
-    if (this.html) {
-        this.html.remove();
-    }
-    if (this.dropback) {
-        this.dropback.remove();
-    }
-};
-MessageAlert.prototype.show = function (msg, status) {
-    //TODO
-    this.new(msg, status).html.show(this.showoutTime);
-    this.dropback.fadeIn(this.showoutTime);
-    var self = this;
-    setTimeout(function () {
-        self.hide();
-    }, this.showoutTime + this.showtime);
-    return this;
-};
-// MessageAlert.show = function(msg, status){
-//   // this.incident
-//   // if(MessageAlert){}
-// }
-MessageAlert.prototype.hide = function () {
-    this.html.hide(this.hideTime);
-    this.dropback.fadeOut(this.hideTime);
-};
-MessageAlert.Status = {
-    SUCCESS: 'SUCCESS',
-    EXCEPTION: 'EXCEPTION',
-    ERROR: 'ERROR'
-};
-MessageAlert.prototype.inStatus = function (status) {
-    var isContain = true;
-    if ('string' != typeof status) {
-        throw 'invalid status';
-    }
-    for (var i in this.Status) {
-        isContain = isContain && status.toUpperCase == this.Status[i];
-    }
-    return isContain;
-};
-var messageAlert = new MessageAlert();
 /**
  * @description 从字典数组中查询到
  * @param  {String} keys 输入的关键字字符串
@@ -91,8 +26,12 @@ var queryKeyWords = function queryKeyWords(keys, dic) {
     var b = [];
     var r = [];
     for (var i in dic) {
-        if (dic[i].search(keys) >= 0) {
-            var keywords = dic[i].match(keys);
+        var keysRegExp = new RegExp(keys, 'i');
+        var c = dic[i].search(keysRegExp);
+        if (c >= 0) {
+            // var keywords = c
+            // console.log(keywords)
+            var keywords = dic[i].match(keysRegExp);
             r.push(dic[i]);
             var blodKeyWord = dic[i].replace(keywords, '<b>' + keywords + '</b>');
             b.push(blodKeyWord);
@@ -123,6 +62,7 @@ var bindOptionData = function bindOptionData(_ref) {
     //   optionvalue = "_id"
     //   optiontext = innerTextName
     // }
+    $select.append('<option value="-1" selected="selected">\u8BF7\u9009\u62E9</option>');
     for (var i = 0; i < datasource.length; i++) {
         var j = datasource[i];
         var value = j[optionvalue];
@@ -148,15 +88,12 @@ var bindInputQuery = function bindInputQuery(_ref2) {
     //给input绑定上keyup事件
     $input.on('keyup', function (e) {
         e.preventDefault();
+        $select.empty();
+        $select.append('<option value="-1" selected="selected"></option>');
         var keyword = this.value;
         searchObj['keyword'] = keyword;
         var datasource = datasourceAPI(searchObj);
-        bindOptionData({
-            $select: $select,
-            datasource: datasource,
-            innerTextName: innerTextName,
-            valueName: valueName
-        });
+        //BUG 搜索与droplist不同步，原因：api以条目的任意属性为搜索条件，droplist只以brochurename为搜索条件
         var nameArray = getValueArrayFromObjectArray(datasource, innerTextName);
         var set = getValueSetFromObjectArray(datasource, innerTextName, valueName);
         var objSet = arrayToSet(datasource, valueName);
@@ -177,6 +114,12 @@ var bindInputQuery = function bindInputQuery(_ref2) {
         if (data['raw'].length > 0 && keyword != '') {
             $input.parent('.search_box_warp').addClass('open');
             $('.keywords').on('click', function (e) {
+                bindOptionData({
+                    $select: $select,
+                    datasource: datasource,
+                    innerTextName: innerTextName,
+                    valueName: valueName
+                });
                 var val = $(this).attr('value');
                 //获取到value值
                 $select.val(val);
@@ -243,6 +186,121 @@ var bindInputQuery = function bindInputQuery(_ref2) {
 //     //
 //   })
 // }
+var LoadingEmelement = function LoadingEmelement() {
+    this.html = $('<div class="loadingElement"></div>');
+    return this;
+};
+LoadingEmelement.prototype.jump = function (target, time) {
+    var tempDistance = 0;
+    var speed = target / time;
+    for (; tempDistance < target; tempDistance += speed) {
+        this.html.css('top', tempDistance);
+    }
+};
+var Loading = function Loading(_ref3) {
+    var count = _ref3.count, time = _ref3.time;
+    this.count = count;
+    this.time = time;
+    this.generate({
+        count: count,
+        time: time
+    });
+};
+Loading.prototype.generate = function (_ref4) {
+    var count = _ref4.count, time = _ref4.time;
+    if (!$('.Loading').length) {
+        $('body').append('<div class=\'Loading\'>');
+    } else {
+        $('.Loading').empty();
+    }
+    $('.Loading').append('<div class=\'loadingElements\'>');
+    var loadingContainer = $('.loadingElements');
+    for (var i = 0; i < count; i++) {
+        var c = new LoadingEmelement();
+        c.jump(100, 1000);
+        loadingContainer.append(c.html);
+    }
+};
+Loading.prototype.move = function () {
+};
+var MessageAlert = function MessageAlert(msg, status) {
+    this.status = status || MessageAlert.Status.SUCCESS;
+    this.msg = msg || 'Congratulation! Action performed!';
+    this.statusCode = 0;
+    this.html = null;
+    this.dropback = null;
+    this.showoutTime = 600;
+    this.showtime = 1000;
+    this.hideTime = 300;
+    this.show(this.mse, this.status);
+};
+MessageAlert.prototype.new = function (msg, status) {
+    this.msg = msg || this.msg;
+    this.status = status || this.status;
+    if (this.html)
+        this.html.remove();
+    // if (!this.html) {
+    this.html = this.generateHTML(this.msg, this.status);
+    this.html.css('display', 'none');
+    $('body').append(this.html);
+    // }
+    if (!this.dropback) {
+        this.dropback = $('<div class="MassageAlert_dropback"></div>');
+        $('body').append(this.dropback);
+    }
+    return this.html;
+};
+MessageAlert.prototype.generateHTML = function (msg, status) {
+    var mod = '\n      <div class="MassageAlert_Warp">\n        <div class="MassageAlert">\n          <label class="MassageAlert_Title">\n            <i class="Icon"></i>\n            <span class="Status">' + status + '</span>\n          </label>\n          <div class="MassageAlert_Body">\n            <span>' + msg + '</span>\n          </div>\n          <div class="MassageAlert_Footer"></div>\n        </div>\n      </div>\n      ';
+    return $(mod);
+};
+MessageAlert.prototype.destory = function () {
+    if (this.html) {
+        this.html.remove();
+    }
+    if (this.dropback) {
+        this.dropback.remove();
+    }
+};
+MessageAlert.prototype.show = function (msg, status) {
+    if (!this.inStatus(status))
+        throw 'Error Status';
+    this.new(msg, status).show(this.showoutTime);
+    this.dropback.fadeIn(this.showoutTime);
+    var self = this;
+    setTimeout(function () {
+        self.hide();
+        setTimeout(function () {
+            self.destory();
+        }, self.hideTime);
+    }, self.showoutTime + self.showtime);
+    return this;
+};
+// MessageAlert.show = function(msg, status){
+//   // this.incident
+//   // if(MessageAlert){}
+// }
+MessageAlert.prototype.hide = function () {
+    this.html.hide(this.hideTime);
+    this.dropback.fadeOut(this.hideTime);
+    return this;
+};
+MessageAlert.Status = {
+    SUCCESS: 'SUCCESS',
+    EXCEPTION: 'EXCEPTION',
+    ERROR: 'ERROR'
+};
+MessageAlert.prototype.inStatus = function (status) {
+    var isContain = false;
+    if ('string' != typeof status) {
+        throw 'invalid status';
+    }
+    for (var i in MessageAlert.Status) {
+        isContain = status.toUpperCase() === MessageAlert.Status[i] || isContain;
+    }
+    return isContain;
+};
+// var messageAlert = new MessageAlert()
 //多模态HACK
 var counter = 0;
 $(document).unbind('hidden.bs.modal').on('hidden.bs.modal', '.modal', function (e) {
@@ -548,6 +606,16 @@ table.prototype.bindEvents = function (callback) {
             callback.call(this, this.dataset.primarykey);    // eval(callback+""+(this.dataset.primarykey))
         });
     }
+    // for (var i in data) {
+    //   data[i].onClick(function() {
+    //     callback.call(this, this.dataset.primarykey)
+    //     // eval(callback+""+(this.dataset.primarykey))
+    //   })
+    //   data[i].onCardLongPress(500, function() {
+    //     callback.call(this, this.dataset.primarykey)
+    //     // eval(callback+""+(this.dataset.primarykey))
+    //   })
+    // }
     return this;
 };
 table.prototype.addInfoCard = function () {
@@ -634,7 +702,7 @@ var table_buttonPool = {
             editBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-primary edit\' onclick=\'edit(${PrimaryKey})\'>\u7F16\u8F91</button>',
             PIEditBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-primary edit\' onclick=\'PurchaseItem.view.edit(${PrimaryKey})\'>\u7F16\u8F91</button>',
             submitBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-primary submit\' onclick=\'submit(${PrimaryKey})\'>\u63D0\u4EA4</button>',
-            deleteBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-danger del\' onclick=\'delete(${PrimaryKey})\'>\u5220\u9664</button>',
+            deleteBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-danger del\' onclick=\'Delete(${PrimaryKey})\'>\u5220\u9664</button>',
             PIdeleteBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-danger del\' onclick=\'PurchaseItem.event.delete(${PrimaryKey})\'>\u5220\u9664</button>',
             updateBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-primary update\' onclick=\'update(${PrimaryKey})\'>\u66F4\u65B0</button>',
             supplyBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-success supply\' onclick=\'supply(${PrimaryKey})\'>\u5165\u5E93</button>',
@@ -648,7 +716,7 @@ var table_buttonPool = {
             deleteDraftBtn: '<button type=\'button\' name=\'button\' class=\'btn btn-danger del\' onclick=\'deleteDraft(${PrimaryKey})\'>\u5220\u9664</button>'
         },
         genetrate: function genetrate(PrimaryKey, btnName) {
-            var btnString = table_buttonPool.pool[btnName].replace('${PrimaryKey}', PrimaryKey);
+            var btnString = table_buttonPool.pool[btnName].replace('${PrimaryKey}', '"' + PrimaryKey + '"');
             return eval($(btnString));
         }
     };
@@ -753,7 +821,7 @@ table_row.prototype.buildCard = function () {
     var row = function row(propName, value) {
         var propName = propName;
         var value = value;
-        var m = '\n      <div class="row card_data_row">\n        <div class="col-xs-4 card_data_title">\n        ' + propName + ':\n        </div>\n        <div class="col-xs-8 card_data">\n        ' + value + '\n        </div>\n      </div>\n      ';
+        var m = '\n      <div class="row card_data_row" data-primaryKey="' + primaryKey + '">\n        <div class="col-xs-4 card_data_title" data-primaryKey="' + primaryKey + '">\n        ' + propName + ':\n        </div>\n        <div class="col-xs-8 card_data" data-primaryKey="' + primaryKey + '">\n        ' + value + '\n        </div>\n      </div>\n      ';
         return m;
     };
     var rows = [];
@@ -763,7 +831,7 @@ table_row.prototype.buildCard = function () {
         var r = row(k, v);
         rows.push(r);
     }
-    var template = '<tr class="info_card_row" data-primaryKey="' + primaryKey + '">\n        <td colspan="1">\n          <div class="card col-xs-12 row" style="border-color:' + bgcolor + '">\n            <div class="card_head row" style="background-color:' + bgcolor + '">\n              ' + headertext + '\n            </div>\n            <div class="card_body">\n              ' + rows.join('') + '\n            </div>\n            <div class="card_foot row">\n              <div class="date">\n                data:yyyy-mm-dd\n              </div>\n            </div>\n          </div>\n        </td>\n      </tr>';
+    var template = '<tr class="info_card_row" >\n        <td colspan="1">\n          <div class="card col-xs-12 row" style="border-color:' + bgcolor + '">\n            <div class="card_head row" style="background-color:' + bgcolor + '">\n              ' + headertext + '\n            </div>\n            <div class="card_body" data-primaryKey="' + primaryKey + '">\n              ' + rows.join('') + '\n            </div>\n            <div class="card_foot row">\n              <div class="date">\n                data:yyyy-mm-dd\n              </div>\n            </div>\n          </div>\n        </td>\n      </tr>';
     this.CardHTMLObj = $(template);
     this.CardHTMLObj.find('.card_head').siblings('div').hide();
     this.CardHTMLObj.find('.card_head').on('click', function () {
@@ -784,23 +852,27 @@ table_row.prototype.remove = function () {
 table_row.prototype.add = function () {
 };
 table_row.prototype.onCardLongPress = function (time, callback) {
-    console.log('longPress');
+    var timeOutEvent = null;
+    console.log('longPress binded!');
     $(this.CardHTMLObj).find('.card_body').on({
         touchstart: function touchstart(e) {
-            timeOutEvent = setTimeout(callback, time);
+            console.log('touch start!');
+            timeOutEvent = setTimeout(callback.bind(this), time);
         },
         touchmove: function touchmove() {
+            console.log('touch moving!');
             clearTimeout(timeOutEvent);
             timeOutEvent = 0;
         },
         touchend: function touchend() {
+            console.log('touch end!');
             clearTimeout(timeOutEvent);
             return false;
         }
     });
 };
 table_row.prototype.onClick = function (callback) {
-    console.log('click');
+    console.log('click binded');
     $(this.HTMLObj).find('td:not(\'.operation\')').on('click', callback);
 };
 var regxRule = {
@@ -821,21 +893,44 @@ var regxRule = {
             regx: '\\w[-\\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\\.)+[A-Za-z]{2,14}',
             msg: '\u8BF7\u8F93\u5165\u6B63\u5E38\u7684\u90AE\u7BB1'
         },
-        mobile: {
-            regx: '(13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}',
-            msg: ''
+        phone: {
+            regx: '(13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}|[0-9-()\uFF08\uFF09]{7,18}',
+            msg: '\u8BF7\u8F93\u5165\u6B63\u786E\u7684\u624B\u673A\u53F7\u7801\u6216\u8005\u5EA7\u673A\u53F7\u7801\uFF01'
         },
         number: {
             regx: function regx(min, max) {
-                var result = min;
-                // if (max)
-                result += ',' + max;
-                regxRule.number.msg = '\u8BF7\u8F93\u5165\u81F3\u5C11' + min + ',\u6700\u591A\u4E0D\u8D85\u8FC7' + max + '\u4F4D\u7684\u6570\u5B57\uFF01';
-                return '^\\d{' + result + '}$';
+                var msg = '';
+                var regxstr = '';
+                if (min != undefined) {
+                    var result = min;
+                    result += ',' + max;
+                    msg = '\u8BF7\u8F93\u5165\u81F3\u5C11' + min + ',\u6700\u591A\u4E0D\u8D85\u8FC7' + max + '\u4F4D\u7684\u6570\u5B57\uFF01';
+                    regxstr = '^\\d{' + result + '}$';
+                } else {
+                    msg = '\u8BF7\u8F93\u5165\u6570\u5B57\uFF01';
+                    regxstr = '^\\d{1,}$';
+                }
+                regxRule.number.msg = msg;
+                return regxstr;
             },
             msg: '\u8BF7\u8F93\u5165\u81F3\u5C11min,\u6700\u591A\u4E0D\u8D85\u8FC7max\u4F4D\u7684\u6570\u5B57\uFF01'
         },
-        select: {},
+        notnull: {
+            regx: '\\S{1,}',
+            msg: '\u4E0D\u80FD\u4E3A\u7A7A\uFF01'
+        },
+        select: {
+            regx: '[^-1]\\d*',
+            msg: '\u8BF7\u9009\u62E9\uFF01'
+        },
+        selectEmployee: {
+            regx: '[^-1]\\d*',
+            msg: '\u6CA1\u6709\u627E\u5230\u8BE5\u5458\u5DE5\uFF01\u8BF7\u786E\u8BA4\u540E\u67E5\u8BE2\uFF01'
+        },
+        selectDealer: {
+            regx: '[^-1]\\d*',
+            msg: '\u6CA1\u6709\u627E\u5230\u8BE5\u4EE3\u7406\u5546\uFF01\u8BF7\u786E\u8BA4\u540E\u67E5\u8BE2\uFF01'
+        },
         password: {},
         checkbox: {
             regx: function regx(min, max) {
@@ -859,53 +954,53 @@ var validator = {
                     case 'tel':
                     case 'url':
                     case 'search':
+                        control.unbind('keyup');
                         control.on('keyup', function (e) {
-                            // console.log($(e.target).data('regxrule'), 'onkeyup works')
                             var target = $(e.target);
                             var rule = target.data('regxrule');
-                            validator.validate(target, rule);    // var result = validate["result"]
-                                                                 // var msg = validate["msg"]
-                                                                 // if (!result) {
-                                                                 //   validator.addWarninig(target, validate)
-                                                                 // } else {
-                                                                 //   validator.removeWarning(target)
-                                                                 // }
+                            var result = validator.validate(target, rule);
+                            validator.displayResult(target, result);
                         });
                         break;
                     case 'radio':
                     case 'checkbox':
                     case 'hidden':
+                        control.unbind('change');
                         control.on('change', function (e) {
-                            // console.log($(e.target).data('regxrule'), 'onchange works')
                             var target = $(e.target);
                             var rule = target.data('regxrule');
-                            validator.validate(target, rule);
+                            var result = validator.validate(target, rule);
+                            validator.displayResult(target, result);
                         });
                         break;
                     default:
                         break;
                     }
                 } else if (control.is('select')) {
+                    control.unbind('change');
                     control.on('change', function (e) {
                         // console.log($(e.target).data('regxrule'), 'onchange works')
                         var target = $(e.target);
                         var rule = target.data('regxrule');
                         console.log(target);
-                        validator.validate(target, rule);
+                        var result = validator.validate(target, rule);
+                        validator.displayResult(target, result);
                     });
                 } else if (control.is('textarea')) {
+                    control.unbind('keyup');
                     control.on('keyup', function (e) {
                         // console.log($(e.target).data('regxrule'), 'onkeyup works')
                         var target = $(e.target);
                         var rule = target.data('regxrule');
-                        validator.validate(target, rule);
+                        var result = validator.validate(target, rule);
+                        validator.displayResult(target, result);
                     });
-                }    // console.log(control,control.data('regxrule'))
-                     //若是input text password，则绑定onkeyup
+                }    //若是input text password，则绑定onkeyup
                      //若是input checkbox radio 则绑定 onchange
             }
         },
         validate: function validate(target, rule) {
+            // && ||
             var result = {};
             var regStr = '';
             var regxResult = rule.split(/\(([^)]*)\)/);
@@ -944,7 +1039,7 @@ var validator = {
                         var max = '';
                         var MinAndMax = '';
                         if (limitList.length > 2)
-                            throw 'only two integers required,Max and Min';
+                            console.log('only two integers required,Max and Min');
                         else if (limitList.length == 2) {
                             try {
                                 var i1 = parseInt(limitList[0]);
@@ -952,7 +1047,7 @@ var validator = {
                                 max = i1 > i2 ? i1 : i2;
                                 min = i1 < i2 ? i1 : i2;    // MinAndMax = min + "," + max
                             } catch (e) {
-                                throw e;
+                                console.log(e);
                             }
                         } else {
                             min = parseInt(limitList[0]);
@@ -966,47 +1061,62 @@ var validator = {
                 }
                 // console.log(c["regx"])
                 var regexp = new RegExp(regStr);
-                var value = $(target).is('input') ? $(target).val() : $(target).text();
+                var value = $(target).is('input') || $(target).is('select') ? $(target).val() : $(target).text();
                 // console.log(value, regexp.test(value))
                 result['result'] = regexp.test(value);
                 result['msg'] = c['msg'];
             }
-            if (!result['result']) {
-                validator.addWarninig(target, result);
-            } else {
-                validator.removeWarning(target);
-            }
             // return result
-            return result['result'];
+            return result;
         },
-        addWarninig: function addWarninig(target, result) {
+        displayResult: function displayResult(target, result) {
+            if (!result['result']) {
+                validator.error(target, result);
+            } else {
+                validator.pass(target);
+            }
+        },
+        error: function error(target, result) {
             target = $(target);
             var RESULT = result['result'];
             var MSG = result['msg'];
             var PNode = target.parent('div');
-            target.attr('validate', true);
+            target.attr('validate', false);
             PNode.removeClass('has-success').addClass('has-error');
             PNode.find('i.validator_error').remove();
             PNode.append('<i class="validator_error text-danger">' + MSG + '</i>');
         },
-        removeWarning: function removeWarning(target) {
+        pass: function pass(target) {
             target = $(target);
             var PNode = target.parent('div');
-            target.attr('validate', false);
+            target.attr('validate', true);
             PNode.removeClass('has-error').addClass('has-success');
             PNode.find('i.validator_error').remove();
         },
-        validateResult: function validateResult() {
-            var form = $('form');
+        Restore: function Restore() {
+            var form = $('form[data-validator=true]');
+            var validatelist = form.find('*[data-regxRule]');
+            for (var i = 0; i < validatelist.length; i++) {
+                var target = $(validatelist[i]);
+                var PNode = target.parent('div');
+                target.attr('validate', false);
+                PNode.removeClass('has-error').removeClass('has-success');
+                PNode.find('i.validator_error').remove();
+            }
+        },
+        Result: function Result(form) {
+            var form = $(form);
             if (form.data('validator')) {
                 var validatelist = form.find('*[data-regxRule]');
-                var result = true;
+                var finalResult = true;
                 for (var i = 0; i < validatelist.length; i++) {
-                    var input = $(validatelist[i]);
-                    result = validator.validate(input, input.data('regxrule')) && result;
+                    var target = $(validatelist[i]);
+                    var result = validator.validate(target, target.data('regxrule'));
+                    validator.displayResult(target, validator.validate(target, target.data('regxrule')));
+                    finalResult = result['result'] && finalResult;
                 }
             }
-            return result;
+            return finalResult;
         }
     };
 var BrochureAdmin = {
@@ -1061,11 +1171,14 @@ var BrochureAdmin = {
             add: function add() {
                 var data = formToSet('#add_Brochure');
                 data['_createtime'] = new Date();
-                var brochureId = apiConfig.brochure.Add(data);
-                if (brochureId) {
-                    table_init();
+                var brochureId = apiConfig.brochure.Add(getCookie('account'), data);
+                if (brochureId > 0) {
+                    new MessageAlert('\u6DFB\u52A0\u6210\u529F', MessageAlert.Status.SUCCESS);
+                    BrochureAdmin.view.add.hide();
+                } else {
+                    new MessageAlert('\u6DFB\u52A0\u5931\u8D25', MessageAlert.Status.EXCEPTION);
                 }
-                BrochureAdmin.view.hide();
+                table_init();
             },
             edit: function edit() {
                 var rawData = window._target;
@@ -1074,11 +1187,14 @@ var BrochureAdmin = {
                     rawData[i] = data[i];
                 }
                 var brochureId = apiConfig.brochure.Edit(rawData['_id'], data);
-                if (brochureId) {
-                    $('#Edit').modal('hide');
+                if (brochureId > 0) {
+                    new MessageAlert('\u4FEE\u6539\u6210\u529F', MessageAlert.Status.SUCCESS);
+                    BrochureAdmin.view.edit.hide();
                     ClearInputs('#edit_Brochure');
-                    ClearSelecton('#edit_Brochure');
+                    ClearSelection('#edit_Brochure');
                     ClearTextArea('#edit_Brochure');
+                } else {
+                    new MessageAlert('\u4FEE\u6539\u5931\u8D25', MessageAlert.Status.EXCEPTION);
                 }
                 table_init();
             },
@@ -1086,7 +1202,14 @@ var BrochureAdmin = {
                 ClearAllFields('#Add');
             },
             init: function init() {
-                bindInputQuery('#supplierfk', apiConfig.supplier.Top(1000), '_suppliername', function () {
+                bindInputQuery({
+                    input: '#supplierfk',
+                    datasourceAPI: apiConfig.supplier.Search,
+                    searchObj: {},
+                    innerTextName: '_suppliername',
+                    valueName: '_id',
+                    callback: function callback(result) {
+                    }
                 });
             }
         }
@@ -1112,7 +1235,7 @@ var DealerAdmin = {
                 }
             },
             delete: {
-                show: function show() {
+                show: function show(rid) {
                     window._target = apiConfig.dealer.Get(rid);
                     $('#Delete').modal();
                 },
@@ -1125,11 +1248,14 @@ var DealerAdmin = {
             add: function add() {
                 var data = formToSet('#add_Dealer');
                 var dealerId = apiConfig.dealer.Add(data);
-                if (dealerId) {
-                    $('#Add').modal('hide');
+                if (dealerId > 0) {
+                    new MessageAlert('\u6DFB\u52A0\u6210\u529F', MessageAlert.Status.SUCCESS);
+                    DealerAdmin.view.add.hide();
                     ClearInputs('#add_Dealer');
-                    ClearSelecton('#add_Dealer');
+                    ClearSelection('#add_Dealer');
                     ClearTextArea('#add_Dealer');
+                } else {
+                    new MessageAlert('\u6DFB\u52A0\u5931\u8D25', MessageAlert.Status.EXCEPTION);
                 }
                 table_init();
             },
@@ -1140,11 +1266,14 @@ var DealerAdmin = {
                     rawData[i] = data[i];
                 }
                 var dealerId = apiConfig.dealer.Edit(rawData['_id'], data);
-                if (dealerId) {
-                    $('#Edit').modal('hide');
+                if (dealerId > 0) {
+                    DealerAdmin.view.edit.hide();
+                    new MessageAlert('\u4FEE\u6539\u6210\u529F', MessageAlert.Status.SUCCESS);
                     ClearInputs('#edit_Dealer');
-                    ClearSelecton('#edit_Dealer');
+                    ClearSelection('#edit_Dealer');
                     ClearTextArea('#edit_Dealer');
+                } else {
+                    new MessageAlert('\u4FEE\u6539\u5931\u8D25', MessageAlert.Status.EXCEPTION);
                 }
                 table_init();
             }
@@ -1166,31 +1295,35 @@ var BrochureHistory = {
                 datasourceAPI: apiConfig.brochurehistory.Paging,
                 options: { brochureid: bid }
             });
-        }
-    };
-var Optionlist = {
-        init: function init() {
-            Optionlist.__proto__ = baseModalShow.view;
-        },
-        view: {
-            show1: function show1() {
-            },
-            hide2: function hide2() {
-            }
-        },
-        event: {}
-    };
-var baseModalShow = {
-        view: {
-            show: function show() {
-                BrochureAdmin.event.init();
-                $('#Add').modal();
-            },
-            hide: function hide() {
-                BrochureAdmin.event.destory();
-                $('#Add').modal('hide');
-            }
-        }
+        }    // var Optionlist = {
+             //   init: function() {
+             //     Optionlist.__proto__ = baseModalShow.view
+             //   },
+             //   view: {
+             //     show1: function() {
+             //
+             //     },
+             //     hide2: function() {
+             //
+             //     }
+             //   },
+             //   event: {
+             //
+             //   }
+             // }
+             //
+             // var baseModalShow = {
+             //   view: {
+             //     show: function() {
+             //       BrochureAdmin.event.init()
+             //       $("#Add").modal()
+             //     },
+             //     hide: function() {
+             //       BrochureAdmin.event.destory()
+             //       $("#Add").modal("hide")
+             //     }
+             //   }
+             // }
     };
 var PRDetail = {
         show: function show(PRid) {
@@ -1198,6 +1331,9 @@ var PRDetail = {
                 PRDetail.init(PRid);
                 PRDetail.autoComplate(PRid);
             }
+            $('#Detail').on('hidden.bs.modal', function () {
+                PRDetail.destory();
+            });
             $('#Detail').modal();
         },
         hide: function hide() {
@@ -1205,7 +1341,9 @@ var PRDetail = {
             $('#Detail').modal('hide');
         },
         init: function init(PRid) {
+            var operationArea = $('#PRD_operation');
             $('#progressbar').empty();
+            operationArea.empty();
             if (!window.target)
                 window.target = {};
             if (!window.target.PR)
@@ -1213,14 +1351,35 @@ var PRDetail = {
             if (PRid) {
                 window.target.PR = apiConfig.purchaserequisition.Get(PRid);
             }
+            if (Enum.role.EMPLOYEE == getCookie('role') || Enum.role.SYSADMIN == getCookie('role')) {
+                if (Enum.prstatus.Progress == window.target.PR['_prstatus']) {
+                    if (apiConfig.prprocess.getStepByAccount(PRid, getCookie('account')).length != 0 || Enum.role.SYSADMIN == getCookie('role')) {
+                        $('#Detail textarea#PRD_approvalComments').attr('disabled', false);
+                        var approvelBtn = '<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">\u5BA1\u6838\u901A\u8FC7</button>';
+                        var rejectBtn = '<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">\u62D2\u7EDD\u901A\u8FC7</button>';
+                        operationArea.append(approvelBtn).append(rejectBtn);
+                    } else {
+                        //当前PR若不属于审核状态，或者当前PR审核人中没有该用户，则不给加审核按钮和审核评论框
+                        // console.log("您没有对该PR审查的许可。")
+                        $('#Detail textarea#PRD_approvalComments').attr('disabled', true);
+                        var closebtnlbtn = '<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">\u5173\u95ED</button>';
+                        operationArea.append(closebtnlbtn);
+                    }
+                } else {
+                    $('#Detail textarea#PRD_approvalComments').attr('disabled', true);
+                    var closebtnlbtn = '<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">\u5173\u95ED</button>';
+                    operationArea.append(closebtnlbtn);
+                }
+            }
         },
         destory: function destory() {
             $('#progressbar').empty();
             ClearAllFields('#Detail');
-            if (window.target.PR)
-                window.target.PR = null;
-            if (window.target)
+            if (window.target) {
+                if (window.target.PR)
+                    window.target.PR = null;
                 window.target = null;
+            }
         },
         autoComplate: function autoComplate(PRid) {
             var targetPRArea = '#Detail', targetPITableArea = '#InfomationArea', templateOpts = tableStructures.Dealer.MyOrder.orderDetail;
@@ -1228,6 +1387,21 @@ var PRDetail = {
                 //填充其他信息
                 var PRinfoSet = apiConfig.purchaserequisition.Get(PRid);
                 //查出改PR详情
+                //TODO
+                PRinfoSet['_demanderfk'] = PRinfoSet['_requestoremployeefk'] || PRinfoSet['_requestordealerfk'];
+                if (PRinfoSet['_requestoremployeefk']) {
+                    //Employee
+                    var employee = apiConfig.employee.Get(PRinfoSet['_requestoremployeefk'])[0];
+                    PRinfoSet['_phonenumber'] = employee['mobileField'] || '\u65E0';
+                    PRinfoSet['_email'] = employee['emailField'] || '\u65E0';
+                    PRinfoSet['_region'] = employee['regionField'] || '\u65E0';
+                } else if (PRinfoSet['_requestordealerfk']) {
+                    //Dealer
+                    var dealer = apiConfig.dealer.Get(PRinfoSet['_requestordealerfk']);
+                    PRinfoSet['_phonenumber'] = employee['_phonenumber'] || '\u65E0';
+                    PRinfoSet['_email'] = employee['_email'] || '\u65E0';
+                    PRinfoSet['_region'] = employee['_dealerregion'] || '\u65E0';
+                }
                 autoComplateInfo(PRinfoSet, targetPRArea, 'PRD');
                 //将PR填充到表单
                 //填充PI
@@ -1242,17 +1416,18 @@ var PRDetail = {
                 // var tasktitle = steps[i]["_tasktitle"]
                 var result = steps[i]['_result'];
                 var taskowner = steps[i]['_taskowner'];
+                var comment = steps[i]['_comments'];
                 var prprocessstep = steps[i]['_prprocessstep'];
-                var mod = '<li class="glyphicon"><span>' + prprocessstep + '</span><span class="small">' + taskowner + '<span><span class="operationtime">' + time + '</span></li>';
+                var mod = '<li class="glyphicon"><a title="' + comment + '">' + prprocessstep + '</a><span class="small">' + taskowner + '<span><span class="operationtime">' + time + '</span></li>';
                 var $mod = $(mod);
                 $mod.css('width', 100 / steps.length + '%');
                 if (result == Enum.enumApprovalResult.NoAction) {
                     $mod.addClass('noAction');
                 } else if (result == Enum.enumApprovalResult.Ready) {
                     $mod.addClass('processing');
-                } else if (result == Enum.enumApprovalResult.Success || Enum.enumApprovalResult.Approved) {
+                } else if (result == Enum.enumApprovalResult.Success || result == Enum.enumApprovalResult.Approved) {
                     $mod.addClass('approved');
-                } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
+                } else if (result == Enum.enumApprovalResult.Rejected || result == Enum.enumApprovalResult.Failure) {
                     $mod.addClass('rejected');
                 }
                 if (prprocessstep == Enum.processStatus.NotifiedParty) {
@@ -1273,29 +1448,42 @@ var PRDetail = {
             approve: function approve() {
                 if (window.target.PR) {
                     var PRid = window.target.PR['_id'];
-                    var comments = $('textarea#approvalComments').val();
-                    var c = apiConfig.prprocess.Approve(PRid, comments);
-                    PRDetail.hide();
+                    var comments = $('textarea#PRD_approvalComments').val();
+                    var isApproved = apiConfig.prprocess.Approve(PRid, comments);
+                    if (isApproved == true) {
+                        new MessageAlert('\u5BA1\u6838\u901A\u8FC7\uFF01', MessageAlert.Status.SUCCESS);
+                        PRDetail.hide();
+                    } else {
+                        new MessageAlert('\u5BA1\u6838\u5931\u8D25', MessageAlert.Status.EXCEPTION);
+                    }
                 }
                 table_init();
             },
             reject: function reject() {
                 if (window.target.PR) {
                     var PRid = window.target.PR['_id'];
-                    var comments = $('textarea#approvalComments').val();
-                    apiConfig.prprocess.Reject(PRid, comments);
-                    PRDetail.hide();
+                    var comments = $('textarea#PRD_approvalComments').val();
+                    var isRejected = apiConfig.prprocess.Reject(PRid, comments);
+                    if (isRejected == true) {
+                        new MessageAlert('\u5BA1\u6838\u901A\u8FC7\uFF01', MessageAlert.Status.SUCCESS);
+                        PRDetail.hide();
+                    } else {
+                        new MessageAlert('\u5BA1\u6838\u5931\u8D25', MessageAlert.Status.EXCEPTION);
+                    }
+                    table_init();
                 }
-                table_init();
             }
         }
     };
 $('#Detail').on('hidden.bs.modal', function () {
-    $('#progressbar').empty();
+    PRDetail.destory();
 });
 var PurchaseItem = {
         show: function show() {
             PurchaseItem.init();
+            $('#PruchaseItem').on('hidden.bs.modal', function () {
+                PurchaseItem.destory();
+            });
             $('#PruchaseItem').modal();
         },
         hide: function hide() {
@@ -1305,6 +1493,13 @@ var PurchaseItem = {
             var targetPRArea = '#PruchaseItem_form';
             var PInfoSet = 'object' == (typeof PI === 'undefined' ? 'undefined' : _typeof(PI)) ? PI : apiConfig.purchaseitem.Get(PI);
             //查出改PI详情
+            bindOptionData({
+                $select: '#_brochurename',
+                datasource: apiConfig.brochure.Search({ keyword: PInfoSet['_brochurename'] }),
+                innerTextName: '_brochurename',
+                valueName: '_brochurename'
+            });
+            PInfoSet['brochure'] = PInfoSet['_brochurename'];
             autoComplateInfo(PInfoSet, targetPRArea);    //将PR填充到表单
         },
         init: function init() {
@@ -1328,6 +1523,7 @@ var PurchaseItem = {
             }
             console.log(unsavePI);
             var count = apiConfig.purchaseitem.Add(unsavePI);
+            return count;
         },
         updatePITable: function updatePITable() {
             if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
@@ -1341,6 +1537,7 @@ var PurchaseItem = {
         },
         destory: function destory() {
             ClearInputs('#PruchaseItem');
+            validator.Restore();
             $('#PIOperation').empty();
             window._target.PI = null;
             window._operation = null;
@@ -1392,13 +1589,15 @@ var PurchaseItem = {
         },
         event: {
             add: function add() {
-                PurchaseItem.event.append();
-                PurchaseItem.hide();
+                if (PurchaseItem.event.append())
+                    PurchaseItem.hide();
             },
             append: function append() {
                 //是否fields全为空
-                if (isAllPRTypeFormFieldEmpty('#PruchaseItem_form'))
-                    return;
+                if (!validator.Result('#PruchaseItem_form')) {
+                    new MessageAlert('\u586B\u5199\u9519\u8BEF\uFF0C\u8BF7\u786E\u8BA4\u6570\u636E\uFF01', MessageAlert.Status.ERROR);
+                    return false;
+                }
                 //
                 var arr = [];
                 var localid = ++row_counter + '[unsave]';
@@ -1413,7 +1612,9 @@ var PurchaseItem = {
                     window.__PurchaseRequisitionItem_table.addRow(arr);
                     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set);
                 }
-                ClearInputs('#PruchaseItem_form', ["#_brochurename", "#_quantity"]);
+                ClearInputs('#PruchaseItem_form', ["brochure", "_quantity"]);
+                ClearSelection('#PruchaseItem_form');
+                return true;
             },
             edit: function edit() {
                 var target = window._target.PI;
@@ -1423,34 +1624,40 @@ var PurchaseItem = {
                     target[k] = set[k];
                 }
                 target['_id'] = targetid;
-                if (!targetid.toString().search('[unsave]') >= 0) {
-                    apiConfig.purchaseitem.Edit(targetid, target);
+                var EditRemoteData = true;
+                var re = targetid.toString().search('[unsave]');
+                if (!(targetid.toString().search('[unsave]') >= 0)) {
+                    EditRemoteData = apiConfig.purchaseitem.Edit(targetid, target);
+                } else {
+                    EditRemoteData = true;
                 }
-                var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], '_id');
-                for (var info in target) {
-                    localSource[targetid][info] = target[info];
+                if (EditRemoteData) {
+                    var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], '_id');
+                    for (var info in target) {
+                        localSource[targetid][info] = target[info];
+                    }
+                    new MessageAlert('\u4FEE\u6539\u6210\u529F', MessageAlert.Status.SUCCESS);
+                } else {
+                    new MessageAlert('\u66F4\u65B0\u5931\u8D25', MessageAlert.Status.EXCEPTION);
                 }
                 PurchaseItem.updatePITable();
                 ClearInputs('#PruchaseItem_form');
                 PurchaseItem.hide();
             },
             delete: function _delete(PIid) {
-                var result = null;
+                var DeleteRemoteData = true;
                 var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID];
                 if (!PIid.search('[unsave]') >= 0) {
-                    result = apiConfig.purchaseitem.delete(PIid);
+                    DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid);
+                } else {
+                    DeleteRemoteData = true;
                 }
-                window.__PurchaseRequisitionItem_table.data[PIid].remove();
-                // for (var i = 0; i < PItems.length; i++) {
-                //   if (PIid == PItems[i]["_id"]) {
-                //     var tempArr = PItems.splice(0, i - 1)
-                //     PItems.reverse()
-                //     PItems.pop()
-                //     PItems.reverse()
-                //     PItems = tempArr.concat(PItems)
-                //   }
-                // }
-                alertMessage.show();
+                if (DeleteRemoteData) {
+                    window.__PurchaseRequisitionItem_table.data[PIid].remove();
+                    new MessageAlert('\u5220\u9664\u6210\u529F', MessageAlert.Status.SUCCESS);
+                } else {
+                    new MessageAlert('\u5220\u9664\u5931\u8D25', MessageAlert.Status.EXCEPTION);
+                }
             }
         }    //绑定输入查询数据
              //绑定交付时间组件
@@ -1481,6 +1688,8 @@ var PurchaseRequisition = {
             $('#PurchaseRequisition').modal('hide');
         },
         init: function init() {
+            if (!window.__PurchaseRequisitionItem_Unsave_set)
+                window.__PurchaseRequisitionItem_Unsave_set = {};
             bindInputQuery({
                 input: '#requestordealerfk',
                 datasourceAPI: apiConfig.dealer.Search,
@@ -1488,10 +1697,9 @@ var PurchaseRequisition = {
                 innerTextName: '_dealername',
                 valueName: '_id',
                 callback: function callback(result) {
-                    console.log(result);
                     var val = $('#_requestordealerfk').val();
                     var dealer = apiConfig.dealer.Get(val);
-                    $('#_dealerregion').val(dealer['_dealerregion']);
+                    $('#_region').val(dealer['_dealerregion']);
                 }
             });
             bindInputQuery({
@@ -1502,19 +1710,14 @@ var PurchaseRequisition = {
                 valueName: 'accountField',
                 callback: function callback(result) {
                     $('#_requestoremployeefk').val(result['accountField']);
+                    $('#_region').val(result['regionField']);
                 }
             });
-            // $("#requestoremployeefk").on("keyup", function(e) {
-            //   bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
-            //     var val = $("#requestoremployeefk").val()
-            //     var employee = apiConfig.employee.Search(val)
-            //     $("#_requestoremployeefk").val(employee[0]["accountField"])
-            //   })
-            // })
             $('#submitter').val(getCookie('account'));
-            $('#submitter').attr('disabled', 'true');
+            $('#submitter').attr('readonly', 'readonly');
             // //若为dealer，则自动填充名字和区域
-            if (Enum.role.DEALEAR == getCookie('role')) {
+            switch (getCookie('role')) {
+            case Enum.role.DEALEAR:
                 var dealer = JSON.parse(getCookie('user'));
                 if (dealer) {
                     $('#_requestordealerfk').val(dealer['_id']);
@@ -1523,13 +1726,20 @@ var PurchaseRequisition = {
                     $('#submitterdealerfk').val(dealer['_dealername']);
                     $('#requestordealerfk').attr('readonly', 'readonly');
                     $('#requestoremployeefk').attr('readonly', 'readonly');
-                    $('#_dealerregion').val(dealer['_dealerregion']);
-                    $('#_dealerregion').attr('disabled', 'true');
-                }    // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-            } else if (Enum.role.EMPLOYEE == getCookie('role')) {
+                    $('#_region').val(dealer['_dealerregion']);
+                    $('#_region').attr('readonly', 'readonly');
+                }
+                break;
+            case Enum.role.EMPLOYEE:
                 var employee = JSON.parse(getCookie('user'));
                 if (employee) {
-                    $('#requestoremployeefk').val(employee['accountField']);
+                    bindOptionData({
+                        $select: '#_requestoremployeefk',
+                        datasource: apiConfig.employee.Search({ keyword: getCookie('name') }),
+                        innerTextName: 'eNNameField',
+                        valueName: 'accountField'
+                    });
+                    $('#requestoremployeefk').val(employee['eNNameField']);
                     $('#_requestoremployeefk').val(employee['accountField']);
                     $('#requestoremployeefk').attr('readonly', 'readonly');
                     $('.requestorInput').hide();
@@ -1538,19 +1748,23 @@ var PurchaseRequisition = {
                     $('#requireAgent').on('click', function () {
                         $('.requestorInput input').attr('disabled', 'true');
                         if ($(this).is(':checked')) {
+                            //如果需要到代填
                             $('#requestoremployeefk').val('');
                             $('#requestoremployeefk').removeAttr('readonly');
                             $('#agentCheck input').removeAttr('disabled');
                             $('#agentCheck').show();
                         } else {
+                            //如果不需要代填
                             $('.queryinput').val('');
                             $('.requestorInput').hide();
                             $('#forEmployee').show();
-                            var radio = $('#agentCheck input');
-                            for (var a = 0; a < radio.length; a++) {
-                                radio[a].checked = false;
-                            }
-                            $('#requestoremployeefk').val(employee['accountField']);
+                            // var radio = $("#agentCheck input")
+                            ClearRadio('#agentCheck');
+                            // for (var a = 0; a < radio.length; a++) {
+                            //   radio[a].checked = false
+                            // }
+                            $('#requestoremployeefk').val(employee['eNNameField']);
+                            $('#_requestoremployeefk').val(employee['accountField']);
                             $('#requestoremployeefk').attr('readonly', 'readonly');
                             $('#forEmployee').attr('readonly', 'readonly');
                             $('#agentCheck input').attr('checked', 'false');
@@ -1559,20 +1773,26 @@ var PurchaseRequisition = {
                         }
                     });
                     $('#agentCheck input').on('click', function (e) {
-                        // var t = $(e.target)
-                        // debugger
                         $('.requestorInput').hide();
                         var t = $('#agentCheck input[name=\'agent\']:checked');
+                        $('.requestorInput input').val('');
+                        $('.requestorInput input').removeAttr('data-regxRule');
                         if ('forEmp' == t.data('value')) {
                             $('#forEmployee input').removeAttr('disabled');
+                            $('#forEmployee select').attr('data-regxRule', 'selectEmployee');
                             $('#forEmployee').show();
                         } else {
                             //for Dealer
                             $('#forDealer input').removeAttr('disabled');
+                            $('#forDealer select').attr('data-regxRule', 'selectDealer');
                             $('#forDealer').show();
                         }
+                        validator.init();    //重新绑定validator
                     });
+                    $('#_region').val(employee['regionField']);
+                    $('#_region').attr('readonly', 'readonly');
                 }
+                break;
             }
         },
         autoComplate: function autoComplate(PRid) {
@@ -1590,6 +1810,18 @@ var PurchaseRequisition = {
         loadPITable: function loadPITable(PRid) {
             //填充PI
             var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100);
+            //HACK api Paging单独给了view比较好绑定数据，但是因为编辑什么的都需要使用paging方法，所以可能会导致取下来填充的紧急程度变成中文而无法提交
+            for (var i in PIinfoSet) {
+                switch (PIinfoSet[i]['_deliverypriorityfk']) {
+                case '\u4E00\u822C\u5FEB\u9012':
+                    PIinfoSet[i]['_deliverypriorityfk'] = 15;
+                    break;
+                case '\u7D27\u6025\u5FEB\u9012':
+                    PIinfoSet[i]['_deliverypriorityfk'] = 16;
+                    break;
+                }
+            }
+            //HACK
             window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PIinfoSet;
             var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable;
             var tmp = PIinfoSet.slice(0);
@@ -1706,52 +1938,76 @@ var PurchaseRequisition = {
                     break;
                 case Enum.role.DEALEAR:
                     data['_submitterdealerfk'] = getCookie('uid');
+                    data['_requestordealerfk'] = getCookie('uid');
                     break;
                 }
                 var PRid = apiConfig.purchaserequisition.Draft(data);
-                for (var i = 0; i < items.length; i++) {
-                    items[i]['_purchaserequisitionfk'] = PRid;
+                if (PRid > 0) {
+                    for (var i = 0; i < items.length; i++) {
+                        items[i]['_purchaserequisitionfk'] = PRid;
+                    }
+                    var successCount = apiConfig.purchaseitem.Add(items);
+                    new MessageAlert('\u8BE5\u6761\u8BB0\u5F55\u5DF2\u52A0\u5165\u8349\u7A3F\u7BB1\uFF01', MessageAlert.Status.SUCCESS);
+                } else {
+                    new MessageAlert('\u672A\u77E5\u9519\u8BEF\uFF0C\u8BF7\u68C0\u67E5\u6570\u636E\uFF01', MessageAlert.Status.SUCCESS);
                 }
-                apiConfig.purchaseitem.Add(items);
-                // apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
                 table_init();
                 //更新
                 PurchaseRequisition.hide();
             },
             submit: function submit() {
+                debugger;
                 var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID];
                 items = items ? items : [];
-                // if (items.length <= 0) {
-                //   throw "请购单item数量不能为0"
-                // }
-                var submitter = $('#submitter').val();
-                var data = formToSet('#PurchaseRequisition_form');
-                data['_prcreated'] = new Date();
-                data['_prstatus'] = Enum.prstatus.Progress;
-                if (window._operation == Enum.operation.Update) {
-                    data['_id'] = window._target.PR['_id'];
-                    data['_prstatus'] = window._target.PR['_prstatus'];
+                if (items.length <= 0) {
+                    new MessageAlert('\u8BF7\u8D2D\u5355item\u6570\u91CF\u4E0D\u80FD\u4E3A0', MessageAlert.Status.ERROR);
+                    return;    // throw "请购单item数量不能为0"
                 }
-                //TODO
-                switch (getCookie('role')) {
-                case Enum.role.EMPLOYEE:
-                    data['_submitteremployeefk'] = submitter;
-                    data['_requestordealerfk'] = null;
-                    break;
-                case Enum.role.DEALEAR:
-                    data['_submitterdealerfk'] = getCookie('uid');
-                    break;
+                if (validator.Result('#PurchaseRequisition_form')) {
+                    var submitter = $('#submitter').val();
+                    var data = formToSet('#PurchaseRequisition_form');
+                    data['_prcreated'] = new Date();
+                    data['_prstatus'] = Enum.prstatus.Progress;
+                    //如果是Draft转Submit
+                    if (window._operation == Enum.operation.Update) {
+                        data['_id'] = window._target.PR['_id'];
+                        data['_prstatus'] = window._target.PR['_prstatus'];
+                    }
+                    //TODO
+                    switch (getCookie('role')) {
+                    case Enum.role.EMPLOYEE:
+                        data['_submitteremployeefk'] = submitter;
+                        data['_requestordealerfk'] = null;
+                        break;
+                    case Enum.role.DEALEAR:
+                        data['_submitterdealerfk'] = getCookie('uid');
+                        data['_requestordealerfk'] = getCookie('uid');
+                        break;
+                    }
+                    var PRid = apiConfig.purchaserequisition.Add(data);
+                    if (PRid > 0) {
+                        for (var i = 0; i < items.length; i++) {
+                            items[i]['_purchaserequisitionfk'] = PRid;
+                            items[i]['_logistics'] = null;
+                            items[i]['_contactnumber'] = null;
+                        }
+                        var picount = apiConfig.purchaseitem.Add(items);
+                        if (picount > 0) {
+                            apiConfig.prprocess.GenerateAll(PRid);
+                            //获取所有steps
+                            new MessageAlert('\u63D0\u4EA4\u6210\u529F\uFF01', MessageAlert.Status.SUCCESS);
+                            PurchaseRequisition.hide();
+                            validator.Restore();
+                        } else {
+                            new MessageAlert('\u91C7\u8D2D\u7269\u54C1\u4FE1\u606F\u6709\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
+                        }
+                    } else {
+                        new MessageAlert('\u63D0\u4EA4\u5931\u8D25!\u8BF7\u68C0\u67E5\u8868\u5355\u6570\u636E\uFF01', MessageAlert.Status.EXCEPTION);
+                    }
+                } else {
+                    new MessageAlert('\u63D0\u4EA4\u5931\u8D25!\u8BF7\u68C0\u67E5\u8868\u5355\u6570\u636E\uFF01', MessageAlert.Status.EXCEPTION);
                 }
-                var PRid = apiConfig.purchaserequisition.Add(data);
-                for (var i = 0; i < items.length; i++) {
-                    items[i]['_purchaserequisitionfk'] = PRid;
-                }
-                apiConfig.purchaseitem.Add(items);
-                apiConfig.prprocess.GenerateAll(PRid);
-                //获取所有steps
-                table_init();
-                //更新
-                PurchaseRequisition.hide();
+                table_init();    //更新
             },
             edit: function edit() {
                 $('#saver').val(getCookie('name'));
@@ -1759,8 +2015,13 @@ var PurchaseRequisition = {
                 for (var v in data) {
                     window._target.PR[v] = data[v];
                 }
-                apiConfig.purchaserequisition.Edit(window._target.PR['_id'], window._target.PR);
-                PurchaseItem.update();
+                var EditRemoteData = apiConfig.purchaserequisition.Edit(window._target.PR['_id'], window._target.PR);
+                if (EditRemoteData) {
+                    var picount = PurchaseItem.update();
+                    new MessageAlert('\u4FEE\u6539\u6210\u529F\uFF01', MessageAlert.Status.SUCCESS);
+                } else {
+                    new MessageAlert('\u4FEE\u6539\u5931\u8D25\uFF01', MessageAlert.Status.EXCEPTION);
+                }
                 PurchaseRequisition.hide();
                 table_init();    //更新
             }
@@ -1856,18 +2117,39 @@ var SupplierPRDetail = {
                 update: function update() {
                     var piid = window._target.PI['_id'];
                     var prid = window._target.PR['_id'];
+                    SupplierPRDetail.autoComplate(prid);
                     window._target.PI['_logistics'] = formToSet('#update_Express')['_logistics'];
-                    apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI);
+                    var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI);
+                    if (isUpdate == true) {
+                        new MessageAlert('\u7269\u6D41\u4FE1\u606F\u66F4\u65B0\u6210\u529F\uFF01', MessageAlert.Status.SUCCESS);
+                    } else {
+                        new MessageAlert('\u7269\u6D41\u4FE1\u606F\u66F4\u65B0\u5931\u8D25\uFF01', MessageAlert.Status.EXCEPTION);
+                    }
                     SupplierPRDetail.autoComplate(prid);
                     SupplierPRDetail.view.Express.destory();
                     SupplierPRDetail.view.Express.hide();
                 }
             },
             finish: function finish() {
-                // window._target.PR["_prstatus"] = Enum.prstatus.Delivered
-                // apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
                 var prid = window._target.PR['_id'];
-                apiConfig.purchaserequisition.SupplierComplete(prid);
+                // var prprocesses = apiConfig.prprocess.Search({keyword:prid})
+                var pi = apiConfig.purchaseitem.Paging(prid, 0, 1000);
+                var isAllLogisticsFilled = true;
+                for (var i = 0; i < pi.length; i++) {
+                    if (isStringEmpty(pi[i]['_logistics'])) {
+                        isAllLogisticsFilled = false;
+                    }
+                }
+                if (!isAllLogisticsFilled) {
+                    new MessageAlert('\u6709\u8BA2\u5355\u7269\u6D41\u4FE1\u606F\u672A\u586B\u5199\uFF0C\u4E0D\u80FD\u5B8C\u6210\u8BE5\u8BA2\u5355', MessageAlert.Status.EXCEPTION);
+                    return;
+                }
+                var isFinished = apiConfig.purchaserequisition.SupplierComplete(prid);
+                if (isFinished == true) {
+                    new MessageAlert('\u60A8\u5DF2\u5B8C\u6210\u8BE5\u8BA2\u5355', MessageAlert.Status.SUCCESS);
+                } else {
+                    new MessageAlert('\u8BA2\u5355\u5B8C\u6210\u5931\u8D25', MessageAlert.Status.EXCEPTION);
+                }
                 SupplierPRDetail.destory();
                 SupplierPRDetail.hide();
                 table_init();
@@ -1904,14 +2186,14 @@ var apiConfig = {
                 var api = root + ('/api/brochure/' + id);
                 return GET(api);
             },
-            Add: function Add(data) {
+            Add: function Add(actionOwner, data) {
                 //POST
-                var api = root + '/api/brochure/new';
+                var api = root + ('/api/brochure/new?actionOwner=' + actionOwner);
                 return POST(api, data);
             },
             Edit: function Edit(id, data) {
                 //PUT
-                var account = getCookie('account');
+                var account = getCookie('account').toLowerCase();
                 var api = root + ('/api/brochure/' + id + '/update?actionOwner=' + account);
                 return PUT(api, data);
             },
@@ -1924,8 +2206,8 @@ var apiConfig = {
                 var api = root + '/api/brochure/count';
                 return GET(api);
             },
-            Search: function Search(_ref3) {
-                var keyword = _ref3.keyword;
+            Search: function Search(_ref5) {
+                var keyword = _ref5.keyword;
                 var api = root + ('/api/brochure/search(' + keyword + ')');
                 return GET(api);
             },
@@ -1933,8 +2215,8 @@ var apiConfig = {
                 var api = root + ('/api/brochure/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref4) {
-                var startIndex = _ref4.startIndex, endIndex = _ref4.endIndex;
+            Paging: function Paging(_ref6) {
+                var startIndex = _ref6.startIndex, endIndex = _ref6.endIndex;
                 var api = root + ('/api/brochure/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -1966,8 +2248,8 @@ var apiConfig = {
                 var api = root + ('/api/brochurehistory/' + id + '/update');
                 return PUT(api, data);
             },
-            Paging: function Paging(_ref5) {
-                var brochureid = _ref5.brochureid, startIndex = _ref5.startIndex, endIndex = _ref5.endIndex;
+            Paging: function Paging(_ref7) {
+                var brochureid = _ref7.brochureid, startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
                 var api = root + ('/api/brochurehistory/paging(' + brochureid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2005,8 +2287,8 @@ var apiConfig = {
                 var api = root + '/api/dealer/count';
                 return GET(api);
             },
-            Search: function Search(_ref6) {
-                var keyword = _ref6.keyword;
+            Search: function Search(_ref8) {
+                var keyword = _ref8.keyword;
                 var api = root + ('/api/dealer/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2014,8 +2296,8 @@ var apiConfig = {
                 var api = root + ('/api/dealer/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref7) {
-                var startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
+            Paging: function Paging(_ref9) {
+                var startIndex = _ref9.startIndex, endIndex = _ref9.endIndex;
                 var api = root + ('/api/dealer/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2052,8 +2334,8 @@ var apiConfig = {
                 var api = root + ('/api/optionlist/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref8) {
-                var startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
+            Paging: function Paging(_ref10) {
+                var startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
                 var api = root + ('/api/optionlist/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2098,58 +2380,39 @@ var apiConfig = {
                 var api = root + ('/api/prprocess/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Search: function Search(_ref9) {
-                var keyword = _ref9.keyword;
+            Search: function Search(_ref11) {
+                var keyword = _ref11.keyword;
                 var purchaseRequisitionid = keyword;
                 var api = root + ('/api/prprocess/search(' + purchaseRequisitionid + ')');
                 return GET(api);
             },
-            Approving: function Approving(id, processEnum) {
-                var pr = this.Get(id);
-                //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
-                pr['_prprocessstep'] = processEnum;
-                this.Edit(id, pr);
-            },
+            // Approving: function(id, processEnum) {
+            //   var pr = this.Get(id)
+            //   //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
+            //   pr["_prprocessstep"] = processEnum
+            //   this.Edit(id, pr)
+            // },
             Approve: function Approve(prid, comments) {
-                var currentStep = this.getCurrentStep(prid);
+                var currentStep = apiConfig.prprocess.getCurrentStep(prid);
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('auth').toLowerCase() == 'zeiss' && getCookie('name') == taskOwner || getCookie('auth').toLowerCase() == 'admin') {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Approve?comments=' + comments);
                         result = PUT(api);
-                    } else {
-                        throw 'Permission Denied';
                     }
                 }
                 return result;
             },
             Reject: function Reject(prid, comments) {
-                var currentStep = this.getCurrentStep(prid);
+                var currentStep = apiConfig.prprocess.getCurrentStep(prid);
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('auth').toLowerCase() == 'zeiss' && getCookie('name') == taskOwner || getCookie('auth').toLowerCase() == 'admin') {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Reject?comments=' + comments);
-                        result = PUT(api);
-                    } else {
-                        throw 'Permission Denied';
-                    }
-                }
-                return result;
-            },
-            SupplierComplete: function SupplierComplete(prid) {
-                var currentStep = this.getCurrentStep(prid);
-                if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep['_prprocessstep'])
-                    return;
-                var taskOwner = currentStep['_taskowner'];
-                var result = null;
-                if (currentStep) {
-                    if (getCookie('auth').toLowerCase() == 'supplier' && getCookie('name') == taskOwner || getCookie('auth').toLowerCase() == 'admin') {
-                        var id = currentStep['_id'];
-                        var api = root + ('/api/prprocess/' + id + '/SupplierComplete');
                         result = PUT(api);
                     } else {
                         throw 'Permission Denied';
@@ -2165,6 +2428,34 @@ var apiConfig = {
                         return step;
                     }
                 }
+                console.log('\u5F53\u524DPR\u5DF2\u5B8C\u6210\uFF01');
+            },
+            getStepByAccount: function getStepByAccount(prid, account) {
+                var steps = apiConfig.prprocess.Search({ keyword: prid });
+                var stepArr = [];
+                for (var i = 0; i < steps.length; i++) {
+                    var step = steps[i];
+                    if (account.toLowerCase() == step['_taskowner']) {
+                        stepArr.push(step);
+                    }
+                }
+                return stepArr;
+            },
+            getPrStepCommentsByAccount: function getPrStepCommentsByAccount(prid, account) {
+                var array = this.getStepByAccount(prid, account);
+                var comments = [];
+                if (array.length > 0) {
+                    for (var i = 0; i < array.length; i++) {
+                        var date = array[i]['_lastmodified'];
+                        var comment = array[i]['_comments'];
+                        var obj = {
+                                date: date,
+                                comment: comment
+                            };
+                        comments.push(obj);
+                    }
+                }
+                return comments;
             }
         },
         prprocesssetting: {
@@ -2191,8 +2482,8 @@ var apiConfig = {
                 var api = root + ('/api/prprocesssetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref10) {
-                var purchaseRequisitionid = _ref10.purchaseRequisitionid, startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
+            Paging: function Paging(_ref12) {
+                var purchaseRequisitionid = _ref12.purchaseRequisitionid, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
                 var api = root + ('/api/prprocesssetting/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2263,18 +2554,18 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/countbyemployee(' + employeeAccount + ',' + status + ')');
                 return GET(api);
             },
-            Search: function Search(_ref11) {
-                var keyword = _ref11.keyword;
+            Search: function Search(_ref13) {
+                var keyword = _ref13.keyword;
                 var api = root + ('/api/purchaserequisition/search?keyWord=' + keyword);
                 return GET(api);
             },
-            SearchByStatus: function SearchByStatus(_ref12) {
-                var role = _ref12.role, uid = _ref12.uid, status = _ref12.status, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
+            SearchByStatus: function SearchByStatus(_ref14) {
+                var role = _ref14.role, uid = _ref14.uid, status = _ref14.status, startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref13) {
-                var role = _ref13.role, uid = _ref13.uid, status = _ref13.status, keyword = _ref13.keyword, startIndex = _ref13.startIndex, endIndex = _ref13.endIndex;
+            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref15) {
+                var role = _ref15.role, uid = _ref15.uid, status = _ref15.status, keyword = _ref15.keyword, startIndex = _ref15.startIndex, endIndex = _ref15.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2282,8 +2573,8 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref14) {
-                var startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
+            Paging: function Paging(_ref16) {
+                var startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
                 var startIndex = startIndex;
                 var endIndex = endIndex;
                 var api = root + ('/api/purchaserequisition/paging(' + startIndex + ',' + endIndex + ')');
@@ -2305,26 +2596,20 @@ var apiConfig = {
                 var api = root + '/api/purchaserequisition/submit';
                 return POST(api, data);
             },
-            Finish: function Finish() {
-            },
             SupplierComplete: function SupplierComplete(prid) {
-                // var currentStep = this.getCurrentStep(prid)
-                //
-                // if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
-                //   return
-                //
-                // var taskOwner = currentStep["_taskowner"]
-                // var result = null
-                // if (currentStep) {
-                //   if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
-                // var id = currentStep["_id"]
-                var api = root + ('/api/purchaserequisition/' + prid + '/SupplierComplete');
-                // result = PUT(api)
-                //   } else {
-                //     throw `Permission Denied`
-                //   }
-                // }
-                return PUT(api);
+                var currentStep = apiConfig.prprocess.getCurrentStep(prid);
+                if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep['_prprocessstep'])
+                    return false;
+                // var taskOwner = currentStep["_taskowner"]//supplier暂时不用规定权限
+                var result = false;
+                if (currentStep) {
+                    if (getCookie('role') == Enum.role.SUPPLIER || getCookie('role') === Enum.role.SYSADMIN) {
+                        // var id = currentStep["_id"]
+                        var api = root + ('/api/purchaserequisition/' + prid + '/SupplierComplete');
+                        result = PUT(api);
+                    }
+                }
+                return result;
             }
         },
         PRSupplierView: {
@@ -2332,13 +2617,13 @@ var apiConfig = {
                 var api = root + ('/api/PRSupplierView/count?completed=' + completed);
                 return GET(api);
             },
-            Search: function Search(_ref15) {
-                var isCompeleted = _ref15.isCompeleted, keyword = _ref15.keyword, startIndex = _ref15.startIndex, endIndex = _ref15.endIndex;
+            Search: function Search(_ref17) {
+                var isCompeleted = _ref17.isCompeleted, keyword = _ref17.keyword, startIndex = _ref17.startIndex, endIndex = _ref17.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref16) {
-                var isCompeleted = _ref16.isCompeleted, startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
+            Paging: function Paging(_ref18) {
+                var isCompeleted = _ref18.isCompeleted, startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2367,8 +2652,8 @@ var apiConfig = {
                 var api = root + '/api/supplier/count';
                 return GET(api);
             },
-            Search: function Search(_ref17) {
-                var keyword = _ref17.keyword;
+            Search: function Search(_ref19) {
+                var keyword = _ref19.keyword;
                 var api = root + ('/api/supplier/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2376,8 +2661,8 @@ var apiConfig = {
                 var api = root + ('/api/supplier/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref18) {
-                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
+            Paging: function Paging(_ref20) {
+                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
                 var api = root + ('/api/supplier/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2410,8 +2695,8 @@ var apiConfig = {
                 var api = root + '/api/systemsetting/count';
                 return GET(api);
             },
-            Search: function Search(_ref19) {
-                var keyword = _ref19.keyword;
+            Search: function Search(_ref21) {
+                var keyword = _ref21.keyword;
                 var api = root + ('/api/systemsetting/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2419,8 +2704,8 @@ var apiConfig = {
                 var api = root + ('/api/systemsetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref20) {
-                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
+            Paging: function Paging(_ref22) {
+                var startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
                 var api = root + ('/api/systemsetting/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2449,8 +2734,8 @@ var apiConfig = {
                 var api = root + '/api/systemuser/count';
                 return GET(api);
             },
-            Search: function Search(_ref21) {
-                var keyword = _ref21.keyword;
+            Search: function Search(_ref23) {
+                var keyword = _ref23.keyword;
                 var api = root + ('/api/systemuser/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2458,8 +2743,8 @@ var apiConfig = {
                 var api = root + ('/api/systemuser/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref22) {
-                var startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
+            Paging: function Paging(_ref24) {
+                var startIndex = _ref24.startIndex, endIndex = _ref24.endIndex;
                 var api = root + ('/api/systemuser/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2469,14 +2754,18 @@ var apiConfig = {
             }
         },
         employee: {
+            Get: function Get(accountName) {
+                var api = root + ('/api/employee/GetEmployee(' + accountName + ')');
+                return GET(api);
+            },
             Login: function Login(username, password) {
                 var api = root + ('/api/employee/login(' + username + ',' + password + ')');
                 return GET(api);
             },
-            Search: function Search(_ref23) {
-                var keyword = _ref23.keyword;
-                var accountName = keyword;
-                var api = root + ('/api/employee/search(' + accountName + ')');
+            Search: function Search(_ref25) {
+                var keyword = _ref25.keyword;
+                var name = keyword;
+                var api = root + ('/api/employee/search(' + name + ')');
                 return GET(api);
             }
         },
@@ -2485,8 +2774,8 @@ var apiConfig = {
                 var api = root + ('/api/PRApproverView/count?account=' + account + '&status=' + status);
                 return GET(api);
             },
-            Paging: function Paging(_ref24) {
-                var account = _ref24.account, completed = _ref24.completed, startIndex = _ref24.startIndex, endIndex = _ref24.endIndex;
+            Paging: function Paging(_ref26) {
+                var account = _ref26.account, completed = _ref26.completed, startIndex = _ref26.startIndex, endIndex = _ref26.endIndex;
                 var api = root + ('/api/PRApproverView/paging(' + account + ',' + completed + ',' + startIndex + ',' + endIndex);
                 return GET(api);
             }
@@ -2541,24 +2830,29 @@ function GET(url) {
 }
 //查
 function ClearInputs(form, idList) {
+    // idList = idList ? idList : []
     form = $(form);
     var inputs = form.find('input');
     var a = inputs;
     for (var i = 0; i < a.length; i++) {
-        if (!idList)
-            $(a[i]).val('');    //若idList有值则只将这几个input的值去掉
-        else {
-            for (var j = 0; j < idList.length; j++) {
-                if ('#' + idList[j] == a[i]) {
-                    $(a[i]).val('');
-                }
-            }
-        }    // else if (idList && idList.search(("#" + a[i].id)) >= 0) {
-             //   $(a[i])
-             //     .val("")
-             // } else {
-             //   continue
-             // }
+        // var c= $.inArray($(a[i]).attr("id"), idList)
+        // console.log(c)
+        if (idList) {
+            if ($.inArray($(a[i]).attr('id'), idList) > -1)
+                $(a[i]).val('');
+        } else {
+            $(a[i]).val('');
+        }
+    }
+}
+function ClearInputsBut(form, idList) {
+    idList = idList ? idList : [];
+    form = $(form);
+    var inputs = form.find('input');
+    var a = inputs;
+    for (var i = 0; i < a.length; i++) {
+        if ($.inArray($(a[i]).attr('id'), idList) == -1)
+            $(a[i]).val('');
     }
 }
 function ClearTextArea(form) {
@@ -2569,7 +2863,7 @@ function ClearTextArea(form) {
         $(a[i]).val('');
     }
 }
-function ClearSelecton(form) {
+function ClearSelection(form) {
     form = $(form);
     var selection = form.find('select');
     var a = selection;
@@ -2577,13 +2871,21 @@ function ClearSelecton(form) {
         $(a[i]).val('-1');
     }
 }
+function ClearRadio(form) {
+    form = $(form);
+    var radios = form.find('input:radio');
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].checked = false;
+    }
+}
 function ClearAllFields(form) {
     ClearAllFieldsBut(form);
 }
 function ClearAllFieldsBut(form, idList) {
-    ClearInputs(form, idList);
+    ClearInputsBut(form, idList);
     ClearTextArea(form);
-    ClearSelecton(form);
+    ClearSelection(form);
+    ClearRadio(form);
 }
 //检测，如果所有input都为空，则直接关闭不保存
 function isAllPRTypeFormFieldEmpty(form) {
@@ -2699,16 +3001,23 @@ function getValueSetFromObjectArray(Array, keyName, valueName) {
     }
     return resultSet;
 }
+function isStringEmpty(str) {
+    if ('' === str || undefined == str || null == str) {
+        return true;
+    } else {
+        return false;
+    }
+}
 var Enum = {
         role: {
             /// ZEISS员工
-            EMPLOYEE: 0,
+            EMPLOYEE: '0',
             /// 代理商
-            DEALEAR: 1,
+            DEALEAR: '1',
             /// 供应商
-            SUPPLIER: 2,
+            SUPPLIER: '2',
             /// 系统管理员
-            SYSADMIN: 3
+            SYSADMIN: '3'
         },
         prstatus: {
             /// 草稿状态
@@ -2754,6 +3063,7 @@ var Enum = {
             /// </summary>
             Success: 'Success',
             Approved: 'Approved',
+            Failure: 'Failure',
             /// <summary>
             /// 审批拒绝
             /// </summary>
@@ -2812,6 +3122,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'dealer':
@@ -2825,6 +3137,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'supplier':
@@ -2838,6 +3152,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'zeiss':
@@ -2845,7 +3161,8 @@ function login() {
         var user = apiConfig.employee.Login(username, password);
         console.log(user);
         // if ("zeiss" == username.toLowerCase()) {
-        if (user) {
+        if (user['accountField']) {
+            //BUG 这里的login API任意账号密码都能获取返回值，到底以什么来确定该用户是否正确？
             window.location.href = './zeiss-home.html';
             /**
          *   "statusField": 0,
@@ -2864,6 +3181,8 @@ function login() {
             //   "_id":"BLManager"
             // }
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     }
@@ -3063,10 +3382,10 @@ var tableStructures = {
                     'hasHeader': true,
                     'hasButton': true,
                     'hasDetail': false,
-                    'viewOrder': ["_id", "_brochurename", "_quantity", "_purchaserequisitionfk", "_logistics", "_deliverydate"],
+                    'viewOrder': ["_id", "_brochurename", "_quantity", "_logistics", "_deliverydate"],
                     'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
                     'buttonPool': ["updateBtn"],
-                    'data': [["序列", "物品名字", "物品数量", "PurchaseItemID(不显示)", "物流信息", "交付时间"]]
+                    'data': [["序列", "物品名字", "物品数量", "物流信息", "交付时间"]]
                 }
             },
             Brochure: {
@@ -3107,9 +3426,9 @@ var tableStructures = {
                     'hasHeader': true,
                     'hasDetail': true,
                     'hasButton': false,
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "当前审批人"]]
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_prcreated"],
+                    'keyArr': ["id", "prop", "key", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交时间"]]
                 },
                 Rejected: {
                     'tablename': 'rejected',
@@ -3139,6 +3458,26 @@ var tableStructures = {
                     'keyArr': ["id", "key", "prop", "prop", "prop", "prop", "prop", "prop", "key"],
                     // "buttonPool": ["expressViewBtn"],
                     'data': [["序列", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址", "紧急程度", "物流信息"]]
+                }
+            },
+            Approval: {
+                Applying: {
+                    'tablename': 'order',
+                    'hasHeader': true,
+                    'hasDetail': true,
+                    'hasButton': false,
+                    'viewOrder': ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交人", "提交时间"]]
+                },
+                Success: {
+                    'tablename': 'success',
+                    'hasHeader': true,
+                    'hasDetail': true,
+                    'hasButton': false,
+                    'viewOrder': ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated", "_prcompleted"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
                 }
             }
         }

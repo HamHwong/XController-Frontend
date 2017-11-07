@@ -41,16 +41,19 @@
   function editOptionList() {
     var rawData = window._target
     var data = formToSet("#edit_Option")
-    for(var i in data){
+    for (var i in data) {
       rawData[i] = data[i]
     }
-    var optionId = apiConfig.optionlist.Edit(rawData['_id'],data)
-    if (optionId) {
+    var optionId = apiConfig.optionlist.Edit(rawData['_id'], data)
+    if (optionId > 0) {
+      new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
       $("#Add").modal("hide")
       ClearInputs("#edit_Option")
-      ClearSelecton("#edit_Option")
+      ClearSelection("#edit_Option")
       ClearTextArea("#edit_Option")
       $("#Edit").modal('hide')
+    } else {
+      new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
     }
     table_init()
   }

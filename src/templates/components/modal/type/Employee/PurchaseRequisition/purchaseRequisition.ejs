@@ -6,7 +6,7 @@
         <h4 class="modal-title" id="myModalLabel">订单申请</h4>
       </div>
       <div class="modal-body">
-        <form class="form" method="post" id="PurchaseRequisition_form">
+        <form class="form" method="post" id="PurchaseRequisition_form" data-validator="true">
           <div class="modal-infopart baseInfomation form-group clearfix">
 
             <div class="form-group col-md-2 col-xs-12">
@@ -31,10 +31,10 @@
             </div>
 
             <div class="form-group col-md-4 col-xs-12">
-              <label for="_dealerregion">区域:</label>
+              <label for="_region">区域:</label>
               <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
+              <input type="text" class="form-control" name="_region" id="_region" readonly>
             </div>
             <!--for employee-->
             <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forEmployee">
@@ -42,7 +42,6 @@
               <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
               </select>
               <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
             <!--for dealer-->
             <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forDealer">
@@ -50,7 +49,6 @@
               <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
               <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
             <div class="form-group col-md-4 col-xs-12 search_box_warp">
@@ -58,13 +56,12 @@
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
               <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
 
             <div class="form-group col-md-6 col-xs-12">
               <label for="_purposefk">用途:</label>
-              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" data-regxRule="select"></select>
             </div>
 
 

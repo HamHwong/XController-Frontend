@@ -1,5 +1,5 @@
 $("#Detail")
   .on("hidden.bs.modal", function() {
-      $("#progressbar").empty()
+      PRDetail.destory()
     }
 )

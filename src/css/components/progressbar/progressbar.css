@@ -22,6 +22,14 @@
   display: block;
   width: 100%;
   text-align: center;
+  line-height: 1.5rem;
+}
+#progressbar li a {
+  color: #000;
+  font-size: 1.2rem;
+  display: block;
+  width: 100%;
+  text-align: center;
   line-height: 2rem;
 }
 #progressbar li::before {
@@ -96,6 +104,7 @@
   background-color: #36908d;
 }
 #progressbar li.rejected::before {
+  content: '\e014';
   background-color: #de4747;
 }
 #progressbar li.infomation::before {

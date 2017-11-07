@@ -16,7 +16,7 @@
         <div class="modal-infopart baseInfomation">
           <ul>
             <li>申请人：<span id="PRD_demanderfk"></span></li>
-            <li>区 域：<span id="PRD_dealerregion"></span></li>
+            <li>区 域：<span id="PRD_region"></span></li>
             <li>手机号：<span id="PRD_phonenumber"></span></li>
             <li>邮 箱：<span id="PRD_email"></span></li>
             <li>用 途：<span id="PRD_purposefk"></span></li>
@@ -31,11 +31,10 @@
           </div>
         </div>
         <div class="modal-infopart Approval">
-          <textarea name="approvalComments" id="approvalComments" rows="4" cols="80" placeholder="审核意见"></textarea>
+          <textarea name="approvalComments" id="PRD_approvalComments" rows="4" cols="80" placeholder="审核意见"></textarea>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button><button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>
+      <div class="modal-footer" id="PRD_operation">
       </div>
     </div>
   </div>

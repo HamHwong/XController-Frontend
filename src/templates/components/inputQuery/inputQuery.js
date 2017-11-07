@@ -8,8 +8,12 @@ const queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
-    if (dic[i].search(keys) >= 0) {
-      var keywords = dic[i].match(keys)
+    var keysRegExp = new RegExp(keys, "i")
+    var c = dic[i].search(keysRegExp)
+    if (c >= 0) {
+      // var keywords = c
+      // console.log(keywords)
+      var keywords = dic[i].match(keysRegExp)
       r.push(dic[i])
       var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
       b.push(blodKeyWord)
@@ -45,6 +49,7 @@ const bindOptionData = function({
   //   optionvalue = "_id"
   //   optiontext = innerTextName
   // }
+  $select.append(`<option value="-1" selected="selected">请选择</option>`)
   for (var i = 0; i < datasource.length; i++) {
     var j = datasource[i]
     var value = j[optionvalue]
@@ -78,16 +83,12 @@ const bindInputQuery = function({
   //给input绑定上keyup事件
   $input.on('keyup', function(e) {
     e.preventDefault()
+    $select.empty()
+    $select.append(`<option value="-1" selected="selected"></option>`)
     var keyword = this.value
     searchObj["keyword"] = keyword
     var datasource = datasourceAPI(searchObj)
-    bindOptionData({
-      $select,
-      datasource,
-      innerTextName,
-      valueName
-    })
-
+    //BUG 搜索与droplist不同步，原因：api以条目的任意属性为搜索条件，droplist只以brochurename为搜索条件
     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
     var objSet = arrayToSet(datasource, valueName)
@@ -110,6 +111,13 @@ const bindInputQuery = function({
     if (data["raw"].length > 0 && keyword != "") {
       $input.parent(".search_box_warp").addClass("open")
       $(".keywords").on('click', function(e) {
+        bindOptionData({
+          $select,
+          datasource,
+          innerTextName,
+          valueName
+        })
+
         var val = $(this).attr("value") //获取到value值
         $select.val(val)
         $input.val(this.innerText)

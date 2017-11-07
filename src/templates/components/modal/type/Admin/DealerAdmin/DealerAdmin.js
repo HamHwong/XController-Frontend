@@ -19,7 +19,7 @@ const DealerAdmin = {
       },
     },
     delete: {
-      show: function() {
+      show: function(rid) {
         window._target = apiConfig.dealer.Get(rid)
         $("#Delete")
           .modal()
@@ -34,11 +34,14 @@ const DealerAdmin = {
     add: function() {
       var data = formToSet("#add_Dealer")
       var dealerId = apiConfig.dealer.Add(data)
-      if (dealerId) {
-        $("#Add").modal("hide")
+      if (dealerId>0) {
+        new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+        DealerAdmin.view.add.hide()
         ClearInputs("#add_Dealer")
-        ClearSelecton("#add_Dealer")
+        ClearSelection("#add_Dealer")
         ClearTextArea("#add_Dealer")
+      }else{
+        new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     },
@@ -49,11 +52,14 @@ const DealerAdmin = {
         rawData[i] = data[i]
       }
       var dealerId = apiConfig.dealer.Edit(rawData['_id'], data)
-      if (dealerId) {
-        $("#Edit").modal("hide")
+      if (dealerId>0) {
+        DealerAdmin.view.edit.hide()
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
         ClearInputs("#edit_Dealer")
-        ClearSelecton("#edit_Dealer")
+        ClearSelection("#edit_Dealer")
         ClearTextArea("#edit_Dealer")
+      }else{
+        new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     }

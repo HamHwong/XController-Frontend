@@ -44,6 +44,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'dealer':
@@ -57,6 +59,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'supplier':
@@ -70,6 +74,8 @@ function login() {
             setCookie('account', user['_accountname']);
             setCookie('uid', user['_id']);
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     case 'zeiss':
@@ -77,7 +83,8 @@ function login() {
         var user = apiConfig.employee.Login(username, password);
         console.log(user);
         // if ("zeiss" == username.toLowerCase()) {
-        if (user) {
+        if (user['accountField']) {
+            //BUG 这里的login API任意账号密码都能获取返回值，到底以什么来确定该用户是否正确？
             window.location.href = './zeiss-home.html';
             /**
          *   "statusField": 0,
@@ -96,6 +103,8 @@ function login() {
             //   "_id":"BLManager"
             // }
             setCookie('user', JSON.stringify(user));
+        } else {
+            new MessageAlert('\u767B\u9646\u5931\u8D25\uFF0C\u8BF7\u68C0\u67E5\u7528\u6237\u540D\u5BC6\u7801\u662F\u5426\u9519\u8BEF\uFF01', MessageAlert.Status.EXCEPTION);
         }
         break;
     }

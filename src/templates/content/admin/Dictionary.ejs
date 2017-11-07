@@ -22,12 +22,8 @@
   <%-include('/components/modal/modal',{type:"Admin.Optionlist.Edit"})%>
     <%-include('/components/modal/modal',{type:"Common.Delete"})%>
       <script>
-        // var CurrentTableList = {
-        //   "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
-        // }
         //载入物品操作
         var table_init = function() {
-
           generateTableWithPageHelper({
             target: "#Brochure-table-container",
             templateOpts: tableStructures.Admin.Dictionary,
@@ -35,19 +31,24 @@
             datasourceAPI: apiConfig.optionlist.Paging,
             options: {}
           })
-
         }
 
         //删除物品记录操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           window._target = apiConfig.optionlist.Get(rid)
           $("#Delete")
             .modal()
         }
+        
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
-            apiConfig.optionlist.Delete(id)
+            var result = apiConfig.optionlist.Delete(id)
+            if (result == true) {
+              new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+            } else {
+              new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+            }
             $("#Delete").modal("hide")
           }
           table_init()

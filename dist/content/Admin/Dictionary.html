@@ -62,11 +62,14 @@
   function addOptionList() {
     var data = formToSet("#add_Option")
     var dealerId = apiConfig.optionlist.Add(data)
-    if (dealerId) {
+    if (dealerId>0) {
+      new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
       $("#Add").modal("hide")
       ClearInputs("#add_Option")
-      ClearSelecton("#add_Option")
+      ClearSelection("#add_Option")
       ClearTextArea("#add_Option")
+    }else{
+      new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
     }
     table_init()
   }
@@ -118,16 +121,19 @@
   function editOptionList() {
     var rawData = window._target
     var data = formToSet("#edit_Option")
-    for(var i in data){
+    for (var i in data) {
       rawData[i] = data[i]
     }
-    var optionId = apiConfig.optionlist.Edit(rawData['_id'],data)
-    if (optionId) {
+    var optionId = apiConfig.optionlist.Edit(rawData['_id'], data)
+    if (optionId > 0) {
+      new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
       $("#Add").modal("hide")
       ClearInputs("#edit_Option")
-      ClearSelecton("#edit_Option")
+      ClearSelection("#edit_Option")
       ClearTextArea("#edit_Option")
       $("#Edit").modal('hide')
+    } else {
+      new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
     }
     table_init()
   }
@@ -158,12 +164,8 @@
   
 
       <script>
-        // var CurrentTableList = {
-        //   "#Brochure-table-container": "./test/admin/Brochure/Inventory.json"
-        // }
         //载入物品操作
         var table_init = function() {
-
           generateTableWithPageHelper({
             target: "#Brochure-table-container",
             templateOpts: tableStructures.Admin.Dictionary,
@@ -171,19 +173,24 @@
             datasourceAPI: apiConfig.optionlist.Paging,
             options: {}
           })
-
         }
 
         //删除物品记录操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           window._target = apiConfig.optionlist.Get(rid)
           $("#Delete")
             .modal()
         }
+        
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
-            apiConfig.optionlist.Delete(id)
+            var result = apiConfig.optionlist.Delete(id)
+            if (result == true) {
+              new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+            } else {
+              new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+            }
             $("#Delete").modal("hide")
           }
           table_init()

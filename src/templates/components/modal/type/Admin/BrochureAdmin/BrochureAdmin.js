@@ -55,11 +55,14 @@ const BrochureAdmin = {
     add: function() {
       var data = formToSet("#add_Brochure")
       data["_createtime"] = new Date()
-      var brochureId = apiConfig.brochure.Add(data)
-      if (brochureId) {
-        table_init()
+      var brochureId = apiConfig.brochure.Add(getCookie("account"),data)
+      if (brochureId > 0) {
+        new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+        BrochureAdmin.view.add.hide()
+      } else {
+        new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
       }
-      BrochureAdmin.view.hide()
+      table_init()
     },
     edit: function() {
       var rawData = window._target
@@ -68,11 +71,14 @@ const BrochureAdmin = {
         rawData[i] = data[i]
       }
       var brochureId = apiConfig.brochure.Edit(rawData['_id'], data)
-      if (brochureId) {
-        $("#Edit").modal("hide")
+      if (brochureId > 0) {
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
+        BrochureAdmin.view.edit.hide()
         ClearInputs("#edit_Brochure")
-        ClearSelecton("#edit_Brochure")
+        ClearSelection("#edit_Brochure")
         ClearTextArea("#edit_Brochure")
+      } else {
+        new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     },
@@ -80,7 +86,14 @@ const BrochureAdmin = {
       ClearAllFields("#Add")
     },
     init: function() {
-      bindInputQuery("#supplierfk", apiConfig.supplier.Top(1000), "_suppliername", function() {})
+      bindInputQuery({
+        input: "#supplierfk",
+        datasourceAPI: apiConfig.supplier.Search,
+        searchObj: {},
+        innerTextName: "_suppliername",
+        valueName: "_id",
+        callback: function(result) {}
+      })
     },
   }
 }

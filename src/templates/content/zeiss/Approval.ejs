@@ -2,44 +2,43 @@
   <h3>审批</h3>
 </div>
 
-<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"待审批",finished:"已完成"}})%>
+<%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"待审批",completed:"已完成"}})%>
   <div class="operation-menu">
 
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
     </div>
-    <div class="tab-pane" id="finished">
+    <div class="tab-pane" id="completed">
     </div>
   </div>
-  <%-include('/components/modal/modal',{type:"Employee.PurchaseRequisition.PurchaseRequisition"})%>
-    <%-include('/components/modal/modal',{type:"Common.Delete"})%>
-      <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
-        <script>
-          //载入订单管理表操作
-          var table_init = function() {
-            generateTableWithPageHelper({
-              target: "#applying",
-              templateOpts: tableStructures.Admin.OrderAdmin.Order,
-              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Progress),
-              datasourceAPI: apiConfig.PRApproverView.Paging,
-              options: {
-                account: getCookie("account"),
-                completed: false
-              }
-            })
-            generateTableWithPageHelper({
-              target: "#finished",
-              templateOpts: tableStructures.Admin.OrderAdmin.Success,
-              counter: apiConfig.PRApproverView.Count(getCookie('account'),Enum.prstatus.Completed),
-              datasourceAPI: apiConfig.PRApproverView.Paging,
-              options: {
-                account: getCookie("account"),
-                completed: true
-              }
-            })
-          }
-          var Detail = function(PRid) {
-            PurchaseRequisition.detail(PRid)
-          }
-        </script>
+  <%-include('/components/modal/modal',{type:"Common.Delete"})%>
+    <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
+      <script>
+        //载入订单管理表操作
+        var table_init = function() {
+          generateTableWithPageHelper({
+            target: "#applying",
+            templateOpts: tableStructures.Employee.Approval.Applying,
+            counter: apiConfig.PRApproverView.Count(getCookie('account'), Enum.prstatus.Progress),
+            datasourceAPI: apiConfig.PRApproverView.Paging,
+            options: {
+              account: getCookie("account"),
+              completed: false
+            }
+          })
+          generateTableWithPageHelper({
+            target: "#completed",
+            templateOpts: tableStructures.Employee.Approval.Success,
+            counter: apiConfig.PRApproverView.Count(getCookie('account'), Enum.prstatus.Completed),
+            datasourceAPI: apiConfig.PRApproverView.Paging,
+            options: {
+              account: getCookie("account"),
+              completed: true
+            }
+          })
+        }
+        var Detail = function(PRid) {
+          PurchaseRequisition.detail(PRid)
+        }
+      </script>

@@ -8,7 +8,7 @@ const tableStructures = {
         "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
         "viewOrder": ["_id", "_direction", "_quantity", "_operator", "_created"],
         "data": [
-          ["序列", "操作",  "物品数量", "操作人", "操作时间"],
+          ["序列", "操作", "物品数量", "操作人", "操作时间"],
         ]
       },
       Inventory: {
@@ -112,7 +112,6 @@ const tableStructures = {
         ["ID", "选项名", "选项值", "排序值", "描述", "分类"],
       ]
     },
-
   },
   Dealer: {
     MyOrder: {
@@ -218,11 +217,11 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "viewOrder": ["_id", "_brochurename", "_quantity", "_purchaserequisitionfk", "_logistics", "_deliverydate"],
+        "viewOrder": ["_id", "_brochurename", "_quantity", "_logistics", "_deliverydate"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "buttonPool": ["updateBtn"],
         "data": [
-          ["序列", "物品名字", "物品数量", "PurchaseItemID(不显示)", "物流信息", "交付时间"],
+          ["序列", "物品名字", "物品数量", "物流信息", "交付时间"],
         ]
       }
 
@@ -271,10 +270,10 @@ const tableStructures = {
         "hasHeader": true,
         "hasDetail": true,
         "hasButton": false,
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated"],
+        "keyArr": ["id", "prop", "key", "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "提交时间", "当前审批人"],
+          ["序列", "订单号", "用途", "提交时间"],
         ]
       },
       Rejected: {
@@ -310,6 +309,30 @@ const tableStructures = {
         // "buttonPool": ["expressViewBtn"],
         "data": [
           ["序列", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址", "紧急程度", "物流信息"],
+        ]
+      }
+    },
+    Approval: {
+      Applying: {
+        "tablename": "order",
+        "hasHeader": true,
+        "hasDetail": true,
+        "hasButton": false,
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated"],
+        "keyArr": ["id", "prop", "key", "prop", "prop"],
+        "data": [
+          ["序列", "订单号", "用途", "提交人", "提交时间"],
+        ]
+      },
+      Success: {
+        "tablename": "success",
+        "hasHeader": true,
+        "hasDetail": true,
+        "hasButton": false,
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated", "_prcompleted"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "data": [
+          ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
       }
     }

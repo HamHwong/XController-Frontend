@@ -58,7 +58,6 @@ var SupplierPRDetail = {
       },
       destory: function() {
         ClearTextArea("#Update")
-
       }
     }
   },
@@ -67,18 +66,42 @@ var SupplierPRDetail = {
       update: function() {
         var piid = window._target.PI["_id"]
         var prid = window._target.PR["_id"]
+        SupplierPRDetail.autoComplate(prid)
         window._target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
-        apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+        var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+        if (isUpdate == true) {
+          new MessageAlert("物流信息更新成功！", MessageAlert.Status.SUCCESS)
+        }else{
+          new MessageAlert("物流信息更新失败！", MessageAlert.Status.EXCEPTION)
+        }
         SupplierPRDetail.autoComplate(prid)
         SupplierPRDetail.view.Express.destory()
         SupplierPRDetail.view.Express.hide()
       }
     },
     finish: function() {
-      // window._target.PR["_prstatus"] = Enum.prstatus.Delivered
-      // apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
       var prid = window._target.PR["_id"]
-      apiConfig.purchaserequisition.SupplierComplete(prid)
+      // var prprocesses = apiConfig.prprocess.Search({keyword:prid})
+      var pi = apiConfig.purchaseitem.Paging(prid, 0, 1000)
+      var isAllLogisticsFilled = true
+
+      for (var i = 0; i < pi.length; i++) {
+        if (isStringEmpty(pi[i]["_logistics"])) {
+          isAllLogisticsFilled = false
+        }
+      }
+
+      if (!isAllLogisticsFilled) {
+        new MessageAlert("有订单物流信息未填写，不能完成该订单", MessageAlert.Status.EXCEPTION)
+        return
+      }
+
+      var isFinished = apiConfig.purchaserequisition.SupplierComplete(prid)
+      if (isFinished == true) {
+        new MessageAlert("您已完成该订单", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("订单完成失败", MessageAlert.Status.EXCEPTION)
+      }
       SupplierPRDetail.destory()
       SupplierPRDetail.hide()
       table_init()

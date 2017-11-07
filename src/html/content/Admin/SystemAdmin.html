@@ -142,11 +142,14 @@
 function addSupplier() {
   var data = formToSet("#add_Supplier")
   var dealerId = apiConfig.supplier.Add(data)
-  if(dealerId){
+  if(dealerId>0){
+    new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
     $("#Add").modal("hide")
     ClearInputs("#add_Supplier")
     ClearSelecton("#add_Supplier")
     ClearTextArea("#add_Supplier")
+  }else{
+    new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
   }
   table_init()
 }
@@ -197,11 +200,14 @@ function editSupplier() {
     rawData[i] = data[i]
   }
   var dealerId = apiConfig.supplier.Edit(rawData['_id'],data)
-  if (dealerId) {
+  if (dealerId>0) {
+    new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
     $("#Edit").modal("hide")
     ClearInputs("#edit_Supplier")
     ClearSelecton("#edit_Supplier")
     ClearTextArea("#edit_Supplier")
+  }else{
+    new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
   }
   table_init()
 }
@@ -239,20 +245,32 @@ function editSupplier() {
             templateOpts: tableStructures.Admin.SystemAdmin.SystemUser,
             counter: apiConfig.systemuser.Count(),
             datasourceAPI: apiConfig.systemuser.Paging,
-            options: {
-            }
+            options: {}
           })
         }
         //删除供应商操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           $("#Delete")
             .modal()
         }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            var result = apiConfig.systemuser.Delete(id)
+            if (result == true) {
+              new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+            } else {
+              new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+            }
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
         //编辑供应商操作
         var edit = function(rid) {
-          window._target = apiConfig.supplier.Get(rid)
+          window._target = apiConfig.systemuser.Get(rid)
           autoComplateInfo(window._target, "#edit_Supplier")
-          var search=function() {}
+          var search = function() {}
           $("#Edit")
             .modal()
         }
@@ -268,7 +286,7 @@ function editSupplier() {
             counter: apiConfig.systemuser.Count(),
             datasourceAPI: apiConfig.systemuser.Search,
             options: {
-              keyword:keyword
+              keyword: keyword
             }
           })
         }

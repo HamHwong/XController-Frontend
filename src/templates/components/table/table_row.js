@@ -37,7 +37,7 @@ table_row.prototype.init = function() {
 
     for (var i in this.buttonPool) {
       // var button = eval(this.buttonPool[i])
-      var button = table_buttonPool.genetrate(this.PrimaryKeyValue,this.buttonPool[i])
+      var button = table_buttonPool.genetrate(this.PrimaryKeyValue, this.buttonPool[i])
       button.prop("parentTable", this.ParentTable)
       button.prop("parentRow", this)
       buttonPool.push(button)
@@ -106,11 +106,11 @@ table_row.prototype.buildCard = function() {
     var value = value
     var m =
       `
-      <div class="row card_data_row">
-        <div class="col-xs-4 card_data_title">
+      <div class="row card_data_row" data-primaryKey="${primaryKey}">
+        <div class="col-xs-4 card_data_title" data-primaryKey="${primaryKey}">
         ${propName}:
         </div>
-        <div class="col-xs-8 card_data">
+        <div class="col-xs-8 card_data" data-primaryKey="${primaryKey}">
         ${value}
         </div>
       </div>
@@ -126,13 +126,13 @@ table_row.prototype.buildCard = function() {
   }
 
   var template =
-    `<tr class="info_card_row" data-primaryKey="${primaryKey}">
+    `<tr class="info_card_row" >
         <td colspan="1">
           <div class="card col-xs-12 row" style="border-color:${bgcolor}">
             <div class="card_head row" style="background-color:${bgcolor}">
               ${headertext}
             </div>
-            <div class="card_body">
+            <div class="card_body" data-primaryKey="${primaryKey}">
               ${rows.join("")}
             </div>
             <div class="card_foot row">
@@ -169,25 +169,29 @@ table_row.prototype.add = function() {
 
 }
 table_row.prototype.onCardLongPress = function(time, callback) {
-  console.log("longPress");
+  var timeOutEvent = null
+  console.log("longPress binded!");
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
       touchstart: function(e) {
-        timeOutEvent = setTimeout(callback, time);
+        console.log("touch start!");
+        timeOutEvent = setTimeout(callback.bind(this), time);
       },
       touchmove: function() {
+        console.log("touch moving!");
         clearTimeout(timeOutEvent);
         timeOutEvent = 0;
       },
       touchend: function() {
+        console.log("touch end!");
         clearTimeout(timeOutEvent);
         return false;
       }
     })
 }
 table_row.prototype.onClick = function(callback) {
-  console.log("click");
+  console.log("click binded");
   $(this.HTMLObj)
     .find("td:not('.operation')")
     .on("click", callback)

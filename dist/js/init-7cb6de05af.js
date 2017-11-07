@@ -48,17 +48,23 @@ var name_init = function name_init() {
 var optionlist_init = function optionlist_init() {
     var optionlist = $('select.optionlist');
     for (var i = 0; i < optionlist.length; i++) {
-        $(optionlist[i]).empty();
+        // $(optionlist[i]).empty()
         var category = $(optionlist[i]).data('category');
-        var optionArray = apiConfig.optionlist.GetByCategory(category);
-        for (var k = 0; k < optionArray.length; k++) {
-            var j = optionArray[k];
-            var optionname = j['_optionname'];
-            var optionvalue = j['_optionvalue'];
-            var optionsequence = j['_sequence'];
-            var option = '<option value="' + optionvalue + '">' + optionname + '</option>';
-            $(optionlist[i]).append($(option));
-        }
+        // var optionArray = apiConfig.optionlist.GetByCategory(category)
+        // for (var k = 0; k < optionArray.length; k++) {
+        //   var j = optionArray[k]
+        //   var optionname = j["_optionname"]
+        //   var optionvalue = j["_optionvalue"]
+        //   var optionsequence = j["_sequence"]
+        //   var option = `<option value="${optionvalue}">${optionname}</option>`
+        //   $(optionlist[i]).append($(option))
+        // }
+        bindOptionData({
+            $select: optionlist[i],
+            datasource: apiConfig.optionlist.GetByCategory(category),
+            innerTextName: '_optionname',
+            valueName: '_optionvalue'
+        });
     }
 };
 //给搜索按钮绑定搜索函数
@@ -69,6 +75,9 @@ var searchbox_init = function searchbox_init() {
         search();
     });    // var datasource = input.data('targetdata')
            // new table().loadFromTemplateJson(`/api/${datasource}/search(100)`, templateOpts, dataOrder).to("#Dealer-table-container")
+};
+var validator_init = function validator_init() {
+    validator.init();
 };
 var init = {
         home: {},
@@ -97,6 +106,9 @@ var init = {
             },
             searchbox: function searchbox() {
                 searchbox_init();
+            },
+            validator: function validator() {
+                validator_init();
             }
         },
         sideNav: {

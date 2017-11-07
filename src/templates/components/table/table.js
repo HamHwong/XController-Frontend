@@ -149,6 +149,16 @@ table.prototype.bindEvents = function(callback) {
       // eval(callback+""+(this.dataset.primarykey))
     })
   }
+  // for (var i in data) {
+  //   data[i].onClick(function() {
+  //     callback.call(this, this.dataset.primarykey)
+  //     // eval(callback+""+(this.dataset.primarykey))
+  //   })
+  //   data[i].onCardLongPress(500, function() {
+  //     callback.call(this, this.dataset.primarykey)
+  //     // eval(callback+""+(this.dataset.primarykey))
+  //   })
+  // }
   return this
 }
 

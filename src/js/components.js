@@ -11,98 +11,6 @@ var tab_init = function() {
   })
 }
 
-var MessageAlert = function(msg, status) {
-  this.status = status || MessageAlert.Status.SUCCESS
-  this.msg = msg || "Congratulation! Action performed!"
-  this.statusCode = 0
-  this.html = null
-  this.dropback = null
-  this.showoutTime = 600
-  this.showtime = 1000
-  this.hideTime = 300
-  this.mod =
-    `
-  <div class="MassageAlert_Warp">
-    <div class="MassageAlert">
-      <label class="MassageAlert_Title">
-        <i class="Icon"></i>
-        <span class="Status">${this.status}</span>
-      </label>
-      <div class="MassageAlert_Body">
-        <span>${this.msg}</span>
-      </div>
-      <div class="MassageAlert_Footer"></div>
-    </div>
-  </div>
-  `
-  // this.show()
-}
-
-MessageAlert.prototype.new = function() {
-  if (!this.html) {
-    this.html = $(this.mod)
-    this.html.css("display", "none")
-    $("body").append(this.html)
-  }
-  if (!this.dropback) {
-    this.dropback = $('<div class="MassageAlert_dropback"></div>')
-    $("body").append(this.dropback)
-  }
-  return this
-}
-
-MessageAlert.prototype.destory = function() {
-  if (this.html) {
-    this.html.remove()
-  }
-  if (this.dropback) {
-    this.dropback.remove()
-  }
-}
-
-MessageAlert.prototype.show = function(msg, status) {
-  //TODO
-  this.new(msg, status).html
-    .show(this.showoutTime)
-  this.dropback.fadeIn(this.showoutTime)
-
-  var self = this
-  setTimeout(function() {
-    self.hide()
-  }, this.showoutTime + this.showtime)
-
-  return this
-
-};
-// MessageAlert.show = function(msg, status){
-//   // this.incident
-//   // if(MessageAlert){}
-// }
-
-MessageAlert.prototype.hide = function() {
-  this.html.hide(this.hideTime)
-  this.dropback.fadeOut(this.hideTime)
-};
-
-MessageAlert.Status = {
-  SUCCESS: "SUCCESS",
-  EXCEPTION: "EXCEPTION",
-  ERROR: "ERROR",
-}
-
-MessageAlert.prototype.inStatus = function(status) {
-  var isContain = true
-  if ('string' != typeof status) {
-    throw 'invalid status'
-  }
-  for (var i in this.Status) {
-    isContain = isContain && (status.toUpperCase == this.Status[i])
-  }
-  return isContain
-}
-
-var messageAlert = new MessageAlert()
-
 
 /**
  * @description 从字典数组中查询到
@@ -114,8 +22,12 @@ const queryKeyWords = function(keys, dic) {
   var b = []
   var r = []
   for (var i in dic) {
-    if (dic[i].search(keys) >= 0) {
-      var keywords = dic[i].match(keys)
+    var keysRegExp = new RegExp(keys, "i")
+    var c = dic[i].search(keysRegExp)
+    if (c >= 0) {
+      // var keywords = c
+      // console.log(keywords)
+      var keywords = dic[i].match(keysRegExp)
       r.push(dic[i])
       var blodKeyWord = dic[i].replace(keywords, "<b>" + keywords + "</b>")
       b.push(blodKeyWord)
@@ -151,6 +63,7 @@ const bindOptionData = function({
   //   optionvalue = "_id"
   //   optiontext = innerTextName
   // }
+  $select.append(`<option value="-1" selected="selected">请选择</option>`)
   for (var i = 0; i < datasource.length; i++) {
     var j = datasource[i]
     var value = j[optionvalue]
@@ -184,16 +97,12 @@ const bindInputQuery = function({
   //给input绑定上keyup事件
   $input.on('keyup', function(e) {
     e.preventDefault()
+    $select.empty()
+    $select.append(`<option value="-1" selected="selected"></option>`)
     var keyword = this.value
     searchObj["keyword"] = keyword
     var datasource = datasourceAPI(searchObj)
-    bindOptionData({
-      $select,
-      datasource,
-      innerTextName,
-      valueName
-    })
-
+    //BUG 搜索与droplist不同步，原因：api以条目的任意属性为搜索条件，droplist只以brochurename为搜索条件
     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
     var objSet = arrayToSet(datasource, valueName)
@@ -216,6 +125,13 @@ const bindInputQuery = function({
     if (data["raw"].length > 0 && keyword != "") {
       $input.parent(".search_box_warp").addClass("open")
       $(".keywords").on('click', function(e) {
+        bindOptionData({
+          $select,
+          datasource,
+          innerTextName,
+          valueName
+        })
+
         var val = $(this).attr("value") //获取到value值
         $select.val(val)
         $input.val(this.innerText)
@@ -282,6 +198,153 @@ const bindInputQuery = function({
 //     //
 //   })
 // }
+
+var LoadingEmelement = function() {
+  this.html = $(`<div class="loadingElement"></div>`)
+  return this
+}
+LoadingEmelement.prototype.jump = function(target, time) {
+  var tempDistance = 0
+  var speed = target / time
+  for (; tempDistance < target; tempDistance += speed) {
+    this.html.css("top", tempDistance)
+  }
+}
+var Loading = function({
+  count,
+  time
+}) {
+  this.count = count
+  this.time = time
+  this.generate({
+    count: count,
+    time: time
+  })
+}
+Loading.prototype.generate = function({
+  count,
+  time
+}) {
+  if (!$(".Loading").length) {
+    $("body").append("<div class='Loading'>")
+  } else {
+    $(".Loading").empty()
+  }
+  $(".Loading").append("<div class='loadingElements'>")
+
+  var loadingContainer = $(".loadingElements")
+  for (var i = 0; i < count; i++) {
+    var c = new LoadingEmelement()
+    c.jump(100, 1000)
+    loadingContainer.append(c.html)
+  }
+}
+Loading.prototype.move = function() {
+
+}
+
+var MessageAlert = function (msg, status) {
+  this.status = status || MessageAlert.Status.SUCCESS
+  this.msg = msg || "Congratulation! Action performed!"
+  this.statusCode = 0
+  this.html = null
+  this.dropback = null
+  this.showoutTime = 600
+  this.showtime = 1000
+  this.hideTime = 300
+  this.show(this.mse, this.status)
+}
+
+MessageAlert.prototype.new = function (msg, status) {
+  this.msg = msg || this.msg
+  this.status = status || this.status
+  if (this.html)
+    this.html.remove()
+  // if (!this.html) {
+  this.html = this.generateHTML(this.msg, this.status)
+  this.html.css("display", "none")
+  $("body").append(this.html)
+  // }
+  if (!this.dropback) {
+    this.dropback = $('<div class="MassageAlert_dropback"></div>')
+    $("body").append(this.dropback)
+  }
+  return this.html
+}
+
+MessageAlert.prototype.generateHTML = function (msg, status) {
+  var mod =
+    `
+      <div class="MassageAlert_Warp">
+        <div class="MassageAlert">
+          <label class="MassageAlert_Title">
+            <i class="Icon"></i>
+            <span class="Status">${status}</span>
+          </label>
+          <div class="MassageAlert_Body">
+            <span>${msg}</span>
+          </div>
+          <div class="MassageAlert_Footer"></div>
+        </div>
+      </div>
+      `
+  return $(mod)
+}
+MessageAlert.prototype.destory = function () {
+  if (this.html) {
+    this.html.remove()
+  }
+  if (this.dropback) {
+    this.dropback.remove()
+  }
+}
+
+MessageAlert.prototype.show = function (msg, status) {
+  if (!this.inStatus(status))
+    throw "Error Status"
+  this.new(msg, status)
+    .show(this.showoutTime)
+  this.dropback.fadeIn(this.showoutTime)
+
+  var self = this
+  setTimeout(function () {
+    self.hide()
+    setTimeout(function () {
+      self.destory()
+    }, self.hideTime)
+  }, self.showoutTime + self.showtime)
+
+  return this
+}
+// MessageAlert.show = function(msg, status){
+//   // this.incident
+//   // if(MessageAlert){}
+// }
+
+MessageAlert.prototype.hide = function () {
+  this.html.hide(this.hideTime)
+  this.dropback.fadeOut(this.hideTime)
+  return this
+};
+
+MessageAlert.Status = {
+  SUCCESS: "SUCCESS",
+  EXCEPTION: "EXCEPTION",
+  ERROR: "ERROR",
+}
+
+MessageAlert.prototype.inStatus = function (status) {
+  var isContain = false
+  if ('string' != typeof status) {
+    throw 'invalid status'
+  }
+  for (var i in MessageAlert.Status) {
+    isContain = (status.toUpperCase() === MessageAlert.Status[i]) || isContain
+  }
+  return isContain
+}
+
+// var messageAlert = new MessageAlert()
 
 //多模态HACK
 var counter = 0;
@@ -623,6 +686,16 @@ table.prototype.bindEvents = function(callback) {
       // eval(callback+""+(this.dataset.primarykey))
     })
   }
+  // for (var i in data) {
+  //   data[i].onClick(function() {
+  //     callback.call(this, this.dataset.primarykey)
+  //     // eval(callback+""+(this.dataset.primarykey))
+  //   })
+  //   data[i].onCardLongPress(500, function() {
+  //     callback.call(this, this.dataset.primarykey)
+  //     // eval(callback+""+(this.dataset.primarykey))
+  //   })
+  // }
   return this
 }
 
@@ -721,7 +794,7 @@ const table_buttonPool = {
     editBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='edit(${PrimaryKey})'>编辑</button>",
     PIEditBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='PurchaseItem.view.edit(${PrimaryKey})'>编辑</button>",
     submitBtn: "<button type='button' name='button' class='btn btn-primary submit' onclick='submit(${PrimaryKey})'>提交</button>",
-    deleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='delete(${PrimaryKey})'>删除</button>",
+    deleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='Delete(${PrimaryKey})'>删除</button>",
     PIdeleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='PurchaseItem.event.delete(${PrimaryKey})'>删除</button>",
     updateBtn: "<button type='button' name='button' class='btn btn-primary update' onclick='update(${PrimaryKey})'>更新</button>",
     supplyBtn: "<button type='button' name='button' class='btn btn-success supply' onclick='supply(${PrimaryKey})'>入库</button>",
@@ -735,7 +808,7 @@ const table_buttonPool = {
     deleteDraftBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='deleteDraft(${PrimaryKey})'>删除</button>"
   },
   genetrate(PrimaryKey, btnName) {
-    var btnString = table_buttonPool.pool[btnName].replace("${PrimaryKey}", PrimaryKey)
+    var btnString = table_buttonPool.pool[btnName].replace("${PrimaryKey}","\""+PrimaryKey+"\"")
     return eval($(btnString))
   }
 }
@@ -779,7 +852,7 @@ table_row.prototype.init = function() {
 
     for (var i in this.buttonPool) {
       // var button = eval(this.buttonPool[i])
-      var button = table_buttonPool.genetrate(this.PrimaryKeyValue,this.buttonPool[i])
+      var button = table_buttonPool.genetrate(this.PrimaryKeyValue, this.buttonPool[i])
       button.prop("parentTable", this.ParentTable)
       button.prop("parentRow", this)
       buttonPool.push(button)
@@ -848,11 +921,11 @@ table_row.prototype.buildCard = function() {
     var value = value
     var m =
       `
-      <div class="row card_data_row">
-        <div class="col-xs-4 card_data_title">
+      <div class="row card_data_row" data-primaryKey="${primaryKey}">
+        <div class="col-xs-4 card_data_title" data-primaryKey="${primaryKey}">
         ${propName}:
         </div>
-        <div class="col-xs-8 card_data">
+        <div class="col-xs-8 card_data" data-primaryKey="${primaryKey}">
         ${value}
         </div>
       </div>
@@ -868,13 +941,13 @@ table_row.prototype.buildCard = function() {
   }
 
   var template =
-    `<tr class="info_card_row" data-primaryKey="${primaryKey}">
+    `<tr class="info_card_row" >
         <td colspan="1">
           <div class="card col-xs-12 row" style="border-color:${bgcolor}">
             <div class="card_head row" style="background-color:${bgcolor}">
               ${headertext}
             </div>
-            <div class="card_body">
+            <div class="card_body" data-primaryKey="${primaryKey}">
               ${rows.join("")}
             </div>
             <div class="card_foot row">
@@ -911,25 +984,29 @@ table_row.prototype.add = function() {
 
 }
 table_row.prototype.onCardLongPress = function(time, callback) {
-  console.log("longPress");
+  var timeOutEvent = null
+  console.log("longPress binded!");
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
       touchstart: function(e) {
-        timeOutEvent = setTimeout(callback, time);
+        console.log("touch start!");
+        timeOutEvent = setTimeout(callback.bind(this), time);
       },
       touchmove: function() {
+        console.log("touch moving!");
         clearTimeout(timeOutEvent);
         timeOutEvent = 0;
       },
       touchend: function() {
+        console.log("touch end!");
         clearTimeout(timeOutEvent);
         return false;
       }
     })
 }
 table_row.prototype.onClick = function(callback) {
-  console.log("click");
+  console.log("click binded");
   $(this.HTMLObj)
     .find("td:not('.operation')")
     .on("click", callback)
@@ -957,23 +1034,45 @@ const regxRule = {
     msg: "请输入正常的邮箱"
   },
 
-  mobile: {
-    regx: "(13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}",
-    msg: ""
+  phone: {
+    regx: "(13\\d|14[57]|15[^4,\\D]|17[13678]|18\\d)\\d{8}|170[0589]\\d{7}|[0-9-()（）]{7,18}",
+    msg: "请输入正确的手机号码或者座机号码！"
   },
 
   number: {
     regx: function(min, max) {
-      var result = min
-      // if (max)
-      result += "," + max
-      regxRule.number.msg = `请输入至少${min},最多不超过${max}位的数字！`
-      return `^\\d{${result}}$`
+      var msg = ""
+      var regxstr = ""
+      if (min != undefined) {
+        var result = min
+        result += "," + max
+        msg = `请输入至少${min},最多不超过${max}位的数字！`
+        regxstr = `^\\d{${result}}$`
+      } else {
+        msg = `请输入数字！`
+        regxstr = `^\\d{1,}$`
+      }
+      regxRule.number.msg = msg
+      return regxstr
     },
     msg: `请输入至少min,最多不超过max位的数字！`
   },
-
-  select: {},
+  notnull: {
+    regx: "\\S{1,}",
+    msg: "不能为空！"
+  },
+  select: {
+    regx: "[^-1]\\d*",
+    msg: "请选择！"
+  },
+  selectEmployee:{
+    regx: "[^-1]\\d*",
+    msg: "没有找到该员工！请确认后查询！"
+  },
+  selectDealer:{
+    regx: "[^-1]\\d*",
+    msg: "没有找到该代理商！请确认后查询！"
+  },
 
   password: {},
 
@@ -991,7 +1090,7 @@ const regxRule = {
 }
 
 const validator = {
-  init: function () {
+  init: function() {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")
     for (var i = 0; i < validatelist.length; i++) {
@@ -1000,62 +1099,60 @@ const validator = {
       if (control.is("input")) {
         var type = control.attr('type') || 'text'
         switch (type) {
-        case 'password':
-        case 'text':
-        case 'email':
-        case 'tel':
-        case 'url':
-        case 'search':
-          control.on('keyup', function (e) {
-            // console.log($(e.target).data('regxrule'), 'onkeyup works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-            // var result = validate["result"]
-            // var msg = validate["msg"]
-            // if (!result) {
-            //   validator.addWarninig(target, validate)
-            // } else {
-            //   validator.removeWarning(target)
-            // }
-          })
-          break
-        case 'radio':
-        case 'checkbox':
-        case 'hidden':
-          control.on('change', function (e) {
-            // console.log($(e.target).data('regxrule'), 'onchange works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-          })
-          break
-        default:
-          break
+          case 'password':
+          case 'text':
+          case 'email':
+          case 'tel':
+          case 'url':
+          case 'search':
+            control.unbind("keyup")
+            control.on('keyup', function(e) {
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              var result = validator.validate(target, rule)
+              validator.displayResult(target, result)
+            })
+            break
+          case 'radio':
+          case 'checkbox':
+          case 'hidden':
+            control.unbind("change")
+            control.on('change', function(e) {
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              var result = validator.validate(target, rule)
+              validator.displayResult(target, result)
+            })
+            break
+          default:
+            break
         }
       } else if (control.is("select")) {
-        control.on('change', function (e) {
+        control.unbind("change")
+        control.on('change', function(e) {
           // console.log($(e.target).data('regxrule'), 'onchange works')
           var target = $(e.target)
           var rule = target.data('regxrule')
           console.log(target);
-          validator.validate(target, rule)
+          var result = validator.validate(target, rule)
+          validator.displayResult(target, result)
         })
       } else if (control.is("textarea")) {
-        control.on('keyup', function (e) {
+        control.unbind("keyup")
+        control.on('keyup', function(e) {
           // console.log($(e.target).data('regxrule'), 'onkeyup works')
           var target = $(e.target)
           var rule = target.data('regxrule')
-          validator.validate(target, rule)
+          var result = validator.validate(target, rule)
+          validator.displayResult(target, result)
         })
       }
-
-      // console.log(control,control.data('regxrule'))
       //若是input text password，则绑定onkeyup
       //若是input checkbox radio 则绑定 onchange
     }
   },
-  validate: function (target, rule) {
+  validate: function(target, rule) {
+    // && ||
     var result = {}
     var regStr = ""
     var regxResult = rule.split(/\(([^)]*)\)/) //匹配括号里的内容
@@ -1094,7 +1191,7 @@ const validator = {
           var max = ""
           var MinAndMax = ""
           if (limitList.length > 2)
-            throw ('only two integers required,Max and Min')
+            console.log('only two integers required,Max and Min')
           else if (limitList.length == 2) {
             try {
               var i1 = parseInt(limitList[0])
@@ -1103,7 +1200,7 @@ const validator = {
               min = i1 < i2 ? i1 : i2
               // MinAndMax = min + "," + max
             } catch (e) {
-              throw e
+              console.log(e)
             }
           } else {
             min = parseInt(limitList[0])
@@ -1117,48 +1214,62 @@ const validator = {
       }
       // console.log(c["regx"])
       var regexp = new RegExp(regStr)
-      var value = $(target).is("input") ? $(target).val() : $(target).text()
+      var value = ($(target).is("input") || $(target).is("select")) ? $(target).val() : $(target).text()
       // console.log(value, regexp.test(value))
       result['result'] = regexp.test(value)
       result['msg'] = c['msg']
     }
-
-    if (!result['result']) {
-      validator.addWarninig(target, result)
-    } else {
-      validator.removeWarning(target)
-    }
     // return result
-    return result['result']
+    return result
   },
-  addWarninig: function (target, result) {
+  displayResult: function(target, result) {
+    if (!result['result']) {
+      validator.error(target, result)
+    } else {
+      validator.pass(target)
+    }
+  },
+  error: function(target, result) {
     target = $(target)
     var RESULT = result["result"]
     var MSG = result["msg"]
     var PNode = target.parent('div')
-    target.attr("validate", true)
+    target.attr("validate", false)
     PNode.removeClass("has-success").addClass("has-error")
     PNode.find("i.validator_error").remove()
     PNode.append(`<i class="validator_error text-danger">${MSG}</i>`)
   },
-  removeWarning: function (target) {
+  pass: function(target) {
     target = $(target)
     var PNode = target.parent('div')
-    target.attr("validate", false)
+    target.attr("validate", true)
     PNode.removeClass("has-error").addClass("has-success")
     PNode.find("i.validator_error").remove()
   },
-  validateResult: function () {
-    var form = $("form")
+  Restore: function() {
+    var form = $("form[data-validator=true]")
+    var validatelist = form.find("*[data-regxRule]")
+    for (var i = 0; i < validatelist.length; i++) {
+      var target = $(validatelist[i])
+      var PNode = target.parent('div')
+      target.attr("validate", false)
+      PNode.removeClass("has-error").removeClass("has-success")
+      PNode.find("i.validator_error").remove()
+    }
+  },
+  Result: function(form) {
+    var form = $(form)
     if (form.data("validator")) {
       var validatelist = form.find("*[data-regxRule]")
-      var result = true
+      var finalResult = true
       for (var i = 0; i < validatelist.length; i++) {
-        var input = $(validatelist[i])
-        result = validator.validate(input, input.data("regxrule")) && result
+        var target = $(validatelist[i])
+        var result = validator.validate(target, target.data("regxrule"))
+        validator.displayResult(target, validator.validate(target, target.data("regxrule")))
+        finalResult = result["result"] && finalResult
       }
     }
-    return result
+    return finalResult
   }
 }
 
@@ -1219,11 +1330,14 @@ const BrochureAdmin = {
     add: function() {
       var data = formToSet("#add_Brochure")
       data["_createtime"] = new Date()
-      var brochureId = apiConfig.brochure.Add(data)
-      if (brochureId) {
-        table_init()
+      var brochureId = apiConfig.brochure.Add(getCookie("account"),data)
+      if (brochureId > 0) {
+        new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+        BrochureAdmin.view.add.hide()
+      } else {
+        new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
       }
-      BrochureAdmin.view.hide()
+      table_init()
     },
     edit: function() {
       var rawData = window._target
@@ -1232,11 +1346,14 @@ const BrochureAdmin = {
         rawData[i] = data[i]
       }
       var brochureId = apiConfig.brochure.Edit(rawData['_id'], data)
-      if (brochureId) {
-        $("#Edit").modal("hide")
+      if (brochureId > 0) {
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
+        BrochureAdmin.view.edit.hide()
         ClearInputs("#edit_Brochure")
-        ClearSelecton("#edit_Brochure")
+        ClearSelection("#edit_Brochure")
         ClearTextArea("#edit_Brochure")
+      } else {
+        new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     },
@@ -1244,7 +1361,14 @@ const BrochureAdmin = {
       ClearAllFields("#Add")
     },
     init: function() {
-      bindInputQuery("#supplierfk", apiConfig.supplier.Top(1000), "_suppliername", function() {})
+      bindInputQuery({
+        input: "#supplierfk",
+        datasourceAPI: apiConfig.supplier.Search,
+        searchObj: {},
+        innerTextName: "_suppliername",
+        valueName: "_id",
+        callback: function(result) {}
+      })
     },
   }
 }
@@ -1270,7 +1394,7 @@ const DealerAdmin = {
       },
     },
     delete: {
-      show: function() {
+      show: function(rid) {
         window._target = apiConfig.dealer.Get(rid)
         $("#Delete")
           .modal()
@@ -1285,11 +1409,14 @@ const DealerAdmin = {
     add: function() {
       var data = formToSet("#add_Dealer")
       var dealerId = apiConfig.dealer.Add(data)
-      if (dealerId) {
-        $("#Add").modal("hide")
+      if (dealerId>0) {
+        new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+        DealerAdmin.view.add.hide()
         ClearInputs("#add_Dealer")
-        ClearSelecton("#add_Dealer")
+        ClearSelection("#add_Dealer")
         ClearTextArea("#add_Dealer")
+      }else{
+        new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     },
@@ -1300,11 +1427,14 @@ const DealerAdmin = {
         rawData[i] = data[i]
       }
       var dealerId = apiConfig.dealer.Edit(rawData['_id'], data)
-      if (dealerId) {
-        $("#Edit").modal("hide")
+      if (dealerId>0) {
+        DealerAdmin.view.edit.hide()
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
         ClearInputs("#edit_Dealer")
-        ClearSelecton("#edit_Dealer")
+        ClearSelection("#edit_Dealer")
         ClearTextArea("#edit_Dealer")
+      }else{
+        new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
       }
       table_init()
     }
@@ -1332,35 +1462,35 @@ const BrochureHistory = {
   }
 }
 
-var Optionlist = {
-  init: function() {
-    Optionlist.__proto__ = baseModalShow.view
-  },
-  view: {
-    show1: function() {
-
-    },
-    hide2: function() {
-
-    }
-  },
-  event: {
-
-  }
-}
-
-var baseModalShow = {
-  view: {
-    show: function() {
-      BrochureAdmin.event.init()
-      $("#Add").modal()
-    },
-    hide: function() {
-      BrochureAdmin.event.destory()
-      $("#Add").modal("hide")
-    }
-  }
-}
+// var Optionlist = {
+//   init: function() {
+//     Optionlist.__proto__ = baseModalShow.view
+//   },
+//   view: {
+//     show1: function() {
+//
+//     },
+//     hide2: function() {
+//
+//     }
+//   },
+//   event: {
+//
+//   }
+// }
+//
+// var baseModalShow = {
+//   view: {
+//     show: function() {
+//       BrochureAdmin.event.init()
+//       $("#Add").modal()
+//     },
+//     hide: function() {
+//       BrochureAdmin.event.destory()
+//       $("#Add").modal("hide")
+//     }
+//   }
+// }
 
 const PRDetail = {
   show: function(PRid) {
@@ -1368,6 +1498,12 @@ const PRDetail = {
       PRDetail.init(PRid)
       PRDetail.autoComplate(PRid)
     }
+
+    $("#Detail")
+      .on("hidden.bs.modal", function() {
+        PRDetail.destory()
+      })
+
     $("#Detail").modal()
   },
   hide: function() {
@@ -1375,7 +1511,9 @@ const PRDetail = {
     $("#Detail").modal('hide')
   },
   init: function(PRid) {
+    var operationArea = $("#PRD_operation")
     $("#progressbar").empty()
+    operationArea.empty()
     if (!window.target)
       window.target = {}
     if (!window.target.PR)
@@ -1383,23 +1521,62 @@ const PRDetail = {
     if (PRid) {
       window.target.PR = apiConfig.purchaserequisition.Get(PRid)
     }
+    if (Enum.role.EMPLOYEE == getCookie("role") || Enum.role.SYSADMIN == getCookie("role")) {
+      if (Enum.prstatus.Progress == window.target.PR["_prstatus"]) {
+        if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
+          $("#Detail textarea#PRD_approvalComments").attr("disabled", false)
+          var approvelBtn = `<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button>`
+          var rejectBtn = `<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>`
+          operationArea.append(approvelBtn).append(rejectBtn)
+        } else {
+          //当前PR若不属于审核状态，或者当前PR审核人中没有该用户，则不给加审核按钮和审核评论框
+          // console.log("您没有对该PR审查的许可。")
+          $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
+          var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+          operationArea.append(closebtnlbtn)
+        }
+      } else {
+        $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
+        var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+        operationArea.append(closebtnlbtn)
+
+      }
+    }
   },
   destory: function() {
     $("#progressbar").empty()
     ClearAllFields("#Detail")
-    if (window.target.PR)
-      window.target.PR = null
-    if (window.target)
+
+    if (window.target) {
+      if (window.target.PR)
+        window.target.PR = null
       window.target = null
+    }
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#Detail",
       targetPITableArea = "#InfomationArea",
       templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-      
+
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
+      //TODO
+      PRinfoSet["_demanderfk"] = PRinfoSet["_requestoremployeefk"] || PRinfoSet["_requestordealerfk"]
+      if (PRinfoSet["_requestoremployeefk"]) {
+        //Employee
+        var employee = apiConfig.employee.Get(PRinfoSet["_requestoremployeefk"])[0]
+        PRinfoSet["_phonenumber"] = employee["mobileField"] || "无"
+        PRinfoSet["_email"] = employee["emailField"] || "无"
+        PRinfoSet["_region"] = employee["regionField"] || "无"
+      } else if (PRinfoSet["_requestordealerfk"]) {
+        //Dealer
+        var dealer = apiConfig.dealer.Get(PRinfoSet["_requestordealerfk"])
+        PRinfoSet["_phonenumber"] = employee["_phonenumber"] || "无"
+        PRinfoSet["_email"] = employee["_email"] || "无"
+        PRinfoSet["_region"] = employee["_dealerregion"] || "无"
+      }
+
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
       //填充PI
       var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
@@ -1414,8 +1591,9 @@ const PRDetail = {
       // var tasktitle = steps[i]["_tasktitle"]
       var result = steps[i]["_result"]
       var taskowner = steps[i]["_taskowner"]
+      var comment = steps[i]["_comments"]
       var prprocessstep = steps[i]["_prprocessstep"]
-      var mod = `<li class="glyphicon"><span>${prprocessstep}</span><span class="small">${taskowner}<span><span class="operationtime">${time}</span></li>`
+      var mod = `<li class="glyphicon"><a title="${comment}">${prprocessstep}</a><span class="small">${taskowner}<span><span class="operationtime">${time}</span></li>`
       var $mod = $(mod)
       $mod.css("width", (100 / steps.length) + '%')
 
@@ -1423,9 +1601,9 @@ const PRDetail = {
         $mod.addClass('noAction')
       } else if (result == Enum.enumApprovalResult.Ready) {
         $mod.addClass('processing')
-      } else if (result == Enum.enumApprovalResult.Success || Enum.enumApprovalResult.Approved) {
+      } else if (result == Enum.enumApprovalResult.Success || result == Enum.enumApprovalResult.Approved) {
         $mod.addClass('approved')
-      } else if (result == Enum.enumApprovalResult.Rejected || Enum.enumApprovalResult.Failure) {
+      } else if (result == Enum.enumApprovalResult.Rejected || result == Enum.enumApprovalResult.Failure) {
         $mod.addClass('rejected')
       }
 
@@ -1448,33 +1626,48 @@ const PRDetail = {
     approve: function() {
       if (window.target.PR) {
         var PRid = window.target.PR["_id"]
-        var comments = $("textarea#approvalComments").val()
-        var c = apiConfig.prprocess.Approve(PRid, comments)
-        PRDetail.hide()
+        var comments = $("textarea#PRD_approvalComments").val()
+        var isApproved = apiConfig.prprocess.Approve(PRid, comments)
+        if (isApproved == true) {
+          new MessageAlert("审核通过！", MessageAlert.Status.SUCCESS)
+          PRDetail.hide()
+        } else {
+          new MessageAlert("审核失败", MessageAlert.Status.EXCEPTION)
+        }
+
       }
       table_init()
     },
     reject: function() {
       if (window.target.PR) {
         var PRid = window.target.PR["_id"]
-        var comments = $("textarea#approvalComments").val()
-        apiConfig.prprocess.Reject(PRid, comments)
-        PRDetail.hide()
+        var comments = $("textarea#PRD_approvalComments").val()
+        var isRejected = apiConfig.prprocess.Reject(PRid, comments)
+        if (isRejected == true) {
+          new MessageAlert("审核通过！", MessageAlert.Status.SUCCESS)
+          PRDetail.hide()
+        } else {
+          new MessageAlert("审核失败", MessageAlert.Status.EXCEPTION)
+        }
+        table_init()
       }
-      table_init()
     }
   }
 }
 
 $("#Detail")
   .on("hidden.bs.modal", function() {
-      $("#progressbar").empty()
+      PRDetail.destory()
     }
 )
 
 const PurchaseItem = {
   show: function() {
     PurchaseItem.init()
+    $("#PruchaseItem")
+      .on("hidden.bs.modal", function() {
+        PurchaseItem.destory()
+      })
     $("#PruchaseItem")
       .modal()
   },
@@ -1485,6 +1678,17 @@ const PurchaseItem = {
   autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
+
+    bindOptionData({
+      $select: "#_brochurename",
+      datasource: apiConfig.brochure.Search({
+        keyword: PInfoSet["_brochurename"]
+      }),
+      innerTextName: "_brochurename",
+      valueName: "_brochurename"
+    })
+
+    PInfoSet["brochure"] = PInfoSet["_brochurename"]
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
   init: function() {
@@ -1509,6 +1713,7 @@ const PurchaseItem = {
     }
     console.log(unsavePI)
     var count = apiConfig.purchaseitem.Add(unsavePI)
+    return count
   },
   updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
@@ -1522,6 +1727,7 @@ const PurchaseItem = {
   },
   destory: function() {
     ClearInputs("#PruchaseItem")
+    validator.Restore()
     $("#PIOperation").empty()
     window._target.PI = null
     window._operation = null
@@ -1576,13 +1782,15 @@ const PurchaseItem = {
   },
   event: {
     add: function() {
-      PurchaseItem.event.append()
-      PurchaseItem.hide()
+      if (PurchaseItem.event.append())
+        PurchaseItem.hide()
     },
     append: function() {
       //是否fields全为空
-      if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
-        return
+      if (!validator.Result("#PruchaseItem_form")) {
+        new MessageAlert("填写错误，请确认数据！", MessageAlert.Status.ERROR)
+        return false
+      }
       //
       var arr = []
       var localid = ++row_counter + '[unsave]'
@@ -1597,7 +1805,10 @@ const PurchaseItem = {
         window.__PurchaseRequisitionItem_table.addRow(arr)
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
       }
-      ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
+
+      ClearInputs("#PruchaseItem_form", ["brochure", "_quantity"])
+      ClearSelection("#PruchaseItem_form")
+      return true
     },
     edit: function() {
       var target = window._target.PI
@@ -1607,34 +1818,41 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().search("[unsave]") >= 0) {
-        apiConfig.purchaseitem.Edit(targetid, target)
+      var EditRemoteData = true
+      var re = targetid.toString().search("[unsave]")
+      if (!(targetid.toString().search("[unsave]") >= 0)) {
+        EditRemoteData = apiConfig.purchaseitem.Edit(targetid, target)
+      } else {
+        EditRemoteData = true
       }
-      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
-      for (var info in target) {
-        localSource[targetid][info] = target[info]
+      if (EditRemoteData) {
+        var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
+        for (var info in target) {
+          localSource[targetid][info] = target[info]
+        }
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("更新失败", MessageAlert.Status.EXCEPTION)
       }
       PurchaseItem.updatePITable()
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
     delete: function(PIid) {
-      var result = null;
+      var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       if (!PIid.search("[unsave]") >= 0) {
-        result = apiConfig.purchaseitem.delete(PIid)
+        DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid)
+      } else {
+        DeleteRemoteData = true
       }
-      window.__PurchaseRequisitionItem_table.data[PIid].remove()
-      // for (var i = 0; i < PItems.length; i++) {
-      //   if (PIid == PItems[i]["_id"]) {
-      //     var tempArr = PItems.splice(0, i - 1)
-      //     PItems.reverse()
-      //     PItems.pop()
-      //     PItems.reverse()
-      //     PItems = tempArr.concat(PItems)
-      //   }
-      // }
-      alertMessage.show()
+      if (DeleteRemoteData) {
+        window.__PurchaseRequisitionItem_table.data[PIid].remove()
+        new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("删除失败", MessageAlert.Status.EXCEPTION)
+
+      }
     }
   }
 }
@@ -1673,6 +1891,9 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
+    if (!window.__PurchaseRequisitionItem_Unsave_set)
+      window.__PurchaseRequisitionItem_Unsave_set = {}
+
     bindInputQuery({
       input: "#requestordealerfk",
       datasourceAPI: apiConfig.dealer.Search,
@@ -1680,10 +1901,9 @@ const PurchaseRequisition = {
       innerTextName: "_dealername",
       valueName: "_id",
       callback: function(result) {
-        console.log(result)
         var val = $("#_requestordealerfk").val()
         var dealer = apiConfig.dealer.Get(val)
-        $("#_dealerregion")
+        $("#_region")
           .val(dealer["_dealerregion"])
       }
     })
@@ -1696,99 +1916,135 @@ const PurchaseRequisition = {
       valueName: "accountField",
       callback: function(result) {
         $("#_requestoremployeefk").val(result["accountField"])
+        $("#_region")
+          .val(result["regionField"])
       }
     })
 
-    // $("#requestoremployeefk").on("keyup", function(e) {
-    //   bindInputQuery("#requestoremployeefk", apiConfig.employee.Search(e.target.value), "eNNameField", "accountField", function() {
-    //     var val = $("#requestoremployeefk").val()
-    //     var employee = apiConfig.employee.Search(val)
-    //     $("#_requestoremployeefk").val(employee[0]["accountField"])
-    //   })
-    // })
-
     $("#submitter").val(getCookie('account'))
-    $("#submitter").attr("disabled", "true")
+    $("#submitter").attr("readonly", "readonly")
 
     // //若为dealer，则自动填充名字和区域
-    if (Enum.role.DEALEAR == getCookie("role")) {
-      var dealer = JSON.parse(getCookie('user'))
-      if (dealer) {
-        $("#_requestordealerfk")
-          .val(dealer["_id"])
-        $("#_submitterdealerfk")
-          .val(dealer["_id"])
-        $("#requestordealerfk").val(dealer["_dealername"])
-        $("#submitterdealerfk").val(dealer["_dealername"])
-        $("#requestordealerfk")
-          .attr("readonly", "readonly")
-        $("#requestoremployeefk")
-          .attr("readonly", "readonly")
-        $("#_dealerregion")
-          .val(dealer["_dealerregion"])
-        $("#_dealerregion")
-          .attr("disabled", "true")
-      }
-      // autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
-    } else if (Enum.role.EMPLOYEE == getCookie("role")) {
-      var employee = JSON.parse(getCookie('user'))
-      if (employee) {
-        $("#requestoremployeefk").val(employee["accountField"])
-        $("#_requestoremployeefk").val(employee["accountField"])
-        $("#requestoremployeefk")
-          .attr("readonly", "readonly")
+    switch (getCookie("role")) {
+      case Enum.role.DEALEAR:
+        var dealer = JSON.parse(getCookie('user'))
+        if (dealer) {
 
-        $(".requestorInput").hide()
-        $("#forEmployee").show()
-        $("#agentCheck").hide()
-        $("#requireAgent").on("click", function() {
-          $(".requestorInput input").attr('disabled', 'true')
-          if ($(this).is(":checked")) {
-            $("#requestoremployeefk").val("")
-            $("#requestoremployeefk")
-              .removeAttr("readonly")
+          $("#_requestordealerfk")
+            .val(dealer["_id"])
+          $("#_submitterdealerfk")
+            .val(dealer["_id"])
 
-            $("#agentCheck input").removeAttr('disabled')
-            $("#agentCheck").show()
-          } else {
-            $(".queryinput").val("")
-            $(".requestorInput").hide()
-            $("#forEmployee").show()
+          $("#requestordealerfk").val(dealer["_dealername"])
+          $("#submitterdealerfk").val(dealer["_dealername"])
 
-            var radio = $("#agentCheck input")
-            for (var a = 0; a < radio.length; a++) {
-              radio[a].checked = false
+          $("#requestordealerfk")
+            .attr("readonly", "readonly")
+          $("#requestoremployeefk")
+            .attr("readonly", "readonly")
+
+          $("#_region")
+            .val(dealer["_dealerregion"])
+          $("#_region")
+            .attr("readonly", "readonly")
+
+        }
+        break
+      case Enum.role.EMPLOYEE:
+        var employee = JSON.parse(getCookie('user'))
+        if (employee) {
+          bindOptionData({
+            $select: "#_requestoremployeefk",
+            datasource: apiConfig.employee.Search({
+              keyword: getCookie("name")
+            }),
+            innerTextName: "eNNameField",
+            valueName: "accountField"
+          })
+
+          $("#requestoremployeefk").val(employee["eNNameField"])
+          $("#_requestoremployeefk").val(employee["accountField"])
+
+          $("#requestoremployeefk")
+            .attr("readonly", "readonly")
+
+          $(".requestorInput").hide()
+          $("#forEmployee").show()
+          $("#agentCheck").hide()
+
+          $("#requireAgent").on("click", function() {
+
+            $(".requestorInput input").attr('disabled', 'true')
+
+            if ($(this).is(":checked")) {
+              //如果需要到代填
+              $("#requestoremployeefk").val("")
+              $("#requestoremployeefk")
+                .removeAttr("readonly")
+
+              $("#agentCheck input").removeAttr('disabled')
+              $("#agentCheck").show()
+
+            } else {
+              //如果不需要代填
+              $(".queryinput").val("")
+              $(".requestorInput").hide()
+              $("#forEmployee").show()
+
+              // var radio = $("#agentCheck input")
+              ClearRadio("#agentCheck")
+              // for (var a = 0; a < radio.length; a++) {
+              //   radio[a].checked = false
+              // }
+
+              $("#requestoremployeefk").val(employee["eNNameField"])
+              $("#_requestoremployeefk").val(employee["accountField"])
+
+              $("#requestoremployeefk")
+                .attr("readonly", "readonly")
+
+              $("#forEmployee").attr("readonly", "readonly")
+              $("#agentCheck input").attr("checked", "false")
+              $("#agentCheck input").attr('disabled', 'true')
+              $("#agentCheck").hide()
             }
 
-            $("#requestoremployeefk").val(employee["accountField"])
-            $("#requestoremployeefk")
-              .attr("readonly", "readonly")
+          })
 
-            $("#forEmployee").attr("readonly", "readonly")
-            $("#agentCheck input").attr("checked", "false")
-            $("#agentCheck input").attr('disabled', 'true')
-            $("#agentCheck").hide()
-          }
-        })
-        $("#agentCheck input").on("click", function(e) {
-          // var t = $(e.target)
-          // debugger
-          $(".requestorInput").hide()
-          var t = $("#agentCheck input[name='agent']:checked")
-          if ("forEmp" == t.data("value")) {
-            $("#forEmployee input").removeAttr('disabled')
-            $("#forEmployee").show()
-          } else {
-            //for Dealer
-            $("#forDealer input").removeAttr('disabled')
-            $("#forDealer").show()
-          }
-        })
-      }
+          $("#agentCheck input").on("click", function(e) {
+            $(".requestorInput").hide()
+            var t = $("#agentCheck input[name='agent']:checked")
+            $(".requestorInput input").val("")
+            $(".requestorInput input").removeAttr("data-regxRule")
+
+            if ("forEmp" == t.data("value")) {
+
+              $("#forEmployee input").removeAttr('disabled')
+              $("#forEmployee select").attr("data-regxRule", "selectEmployee")
+              $("#forEmployee").show()
+
+            } else {
+              //for Dealer
+
+              $("#forDealer input").removeAttr('disabled')
+              $("#forDealer select").attr("data-regxRule", "selectDealer")
+              $("#forDealer").show()
+            }
+
+            validator.init() //重新绑定validator
+          })
+
+          $("#_region")
+            .val(employee["regionField"])
+          $("#_region")
+            .attr("readonly", "readonly")
+        }
+        break
     }
 
   },
   autoComplate: function(PRid) {
+
     var targetPRArea = "#PurchaseRequisition_form"
     window._targetPITableArea = "#InfomationAddArea"
     if (PRid) {
@@ -1802,6 +2058,18 @@ const PurchaseRequisition = {
   loadPITable: function(PRid) {
     //填充PI
     var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+    //HACK api Paging单独给了view比较好绑定数据，但是因为编辑什么的都需要使用paging方法，所以可能会导致取下来填充的紧急程度变成中文而无法提交
+    for (var i in PIinfoSet) {
+      switch (PIinfoSet[i]["_deliverypriorityfk"]) {
+        case "一般快递":
+          PIinfoSet[i]["_deliverypriorityfk"] = 15
+          break
+        case "紧急快递":
+          PIinfoSet[i]["_deliverypriorityfk"] = 16
+          break
+      }
+    }
+    //HACK
     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PIinfoSet
     var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
     var tmp = PIinfoSet.slice(0)
@@ -1923,54 +2191,80 @@ const PurchaseRequisition = {
           break
         case Enum.role.DEALEAR:
           data["_submitterdealerfk"] = getCookie('uid')
+          data["_requestordealerfk"] = getCookie('uid')
           break
       }
 
       var PRid = apiConfig.purchaserequisition.Draft(data)
 
-      for (var i = 0; i < items.length; i++) {
-        items[i]["_purchaserequisitionfk"] = PRid
+      if (PRid > 0) {
+        for (var i = 0; i < items.length; i++) {
+          items[i]["_purchaserequisitionfk"] = PRid
+        }
+        var successCount = apiConfig.purchaseitem.Add(items)
+        new MessageAlert("该条记录已加入草稿箱！", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("未知错误，请检查数据！", MessageAlert.Status.SUCCESS)
       }
-      apiConfig.purchaseitem.Add(items)
-      // apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
+
       table_init() //更新
       PurchaseRequisition.hide()
     },
     submit: function() {
+      debugger
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      // if (items.length <= 0) {
-      //   throw "请购单item数量不能为0"
-      // }
-      var submitter = $("#submitter").val()
-      var data = formToSet("#PurchaseRequisition_form")
-      data["_prcreated"] = new Date()
-      data["_prstatus"] = Enum.prstatus.Progress
-
-      if (window._operation == Enum.operation.Update) {
-        data["_id"] = window._target.PR["_id"]
-        data["_prstatus"] = window._target.PR["_prstatus"]
-      } //TODO
-
-      switch (getCookie('role')) {
-        case Enum.role.EMPLOYEE:
-          data["_submitteremployeefk"] = submitter
-          data["_requestordealerfk"] = null
-          break
-        case Enum.role.DEALEAR:
-          data["_submitterdealerfk"] = getCookie('uid')
-          break
+      if (items.length <= 0) {
+        new MessageAlert("请购单item数量不能为0", MessageAlert.Status.ERROR)
+        return
+        // throw "请购单item数量不能为0"
       }
+      if (validator.Result("#PurchaseRequisition_form")) {
+        var submitter = $("#submitter").val()
+        var data = formToSet("#PurchaseRequisition_form")
+        data["_prcreated"] = new Date()
+        data["_prstatus"] = Enum.prstatus.Progress
+        //如果是Draft转Submit
+        if (window._operation == Enum.operation.Update) {
+          data["_id"] = window._target.PR["_id"]
+          data["_prstatus"] = window._target.PR["_prstatus"]
+        } //TODO
 
-      var PRid = apiConfig.purchaserequisition.Add(data)
 
-      for (var i = 0; i < items.length; i++) {
-        items[i]["_purchaserequisitionfk"] = PRid
+        switch (getCookie('role')) {
+          case Enum.role.EMPLOYEE:
+            data["_submitteremployeefk"] = submitter
+            data["_requestordealerfk"] = null
+            break
+          case Enum.role.DEALEAR:
+            data["_submitterdealerfk"] = getCookie('uid')
+            data["_requestordealerfk"] = getCookie('uid')
+            break
+        }
+        var PRid = apiConfig.purchaserequisition.Add(data)
+        if (PRid > 0) {
+          for (var i = 0; i < items.length; i++) {
+            items[i]["_purchaserequisitionfk"] = PRid
+            items[i]["_logistics"] = null
+            items[i]["_contactnumber"] = null
+          }
+          var picount = apiConfig.purchaseitem.Add(items)
+
+          if (picount > 0) {
+            apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
+            new MessageAlert("提交成功！", MessageAlert.Status.SUCCESS)
+            PurchaseRequisition.hide()
+            validator.Restore()
+          } else {
+            new MessageAlert("采购物品信息有误！", MessageAlert.Status.EXCEPTION)
+          }
+        } else {
+          new MessageAlert("提交失败!请检查表单数据！", MessageAlert.Status.EXCEPTION)
+        }
+      } else {
+        new MessageAlert("提交失败!请检查表单数据！", MessageAlert.Status.EXCEPTION)
       }
-      apiConfig.purchaseitem.Add(items)
-      apiConfig.prprocess.GenerateAll(PRid) //获取所有steps
       table_init() //更新
-      PurchaseRequisition.hide()
     },
     edit: function() {
       $("#saver").val(getCookie("name"))
@@ -1978,8 +2272,13 @@ const PurchaseRequisition = {
       for (var v in data) {
         window._target.PR[v] = data[v]
       }
-      apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
-      PurchaseItem.update()
+      var EditRemoteData = apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
+      if (EditRemoteData) {
+        var picount = PurchaseItem.update()
+        new MessageAlert("修改成功！", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("修改失败！", MessageAlert.Status.EXCEPTION)
+      }
       PurchaseRequisition.hide()
       table_init() //更新
     }
@@ -2072,7 +2371,6 @@ var SupplierPRDetail = {
       },
       destory: function() {
         ClearTextArea("#Update")
-
       }
     }
   },
@@ -2081,18 +2379,42 @@ var SupplierPRDetail = {
       update: function() {
         var piid = window._target.PI["_id"]
         var prid = window._target.PR["_id"]
+        SupplierPRDetail.autoComplate(prid)
         window._target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
-        apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+        var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+        if (isUpdate == true) {
+          new MessageAlert("物流信息更新成功！", MessageAlert.Status.SUCCESS)
+        }else{
+          new MessageAlert("物流信息更新失败！", MessageAlert.Status.EXCEPTION)
+        }
         SupplierPRDetail.autoComplate(prid)
         SupplierPRDetail.view.Express.destory()
         SupplierPRDetail.view.Express.hide()
       }
     },
     finish: function() {
-      // window._target.PR["_prstatus"] = Enum.prstatus.Delivered
-      // apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
       var prid = window._target.PR["_id"]
-      apiConfig.purchaserequisition.SupplierComplete(prid)
+      // var prprocesses = apiConfig.prprocess.Search({keyword:prid})
+      var pi = apiConfig.purchaseitem.Paging(prid, 0, 1000)
+      var isAllLogisticsFilled = true
+
+      for (var i = 0; i < pi.length; i++) {
+        if (isStringEmpty(pi[i]["_logistics"])) {
+          isAllLogisticsFilled = false
+        }
+      }
+
+      if (!isAllLogisticsFilled) {
+        new MessageAlert("有订单物流信息未填写，不能完成该订单", MessageAlert.Status.EXCEPTION)
+        return
+      }
+
+      var isFinished = apiConfig.purchaserequisition.SupplierComplete(prid)
+      if (isFinished == true) {
+        new MessageAlert("您已完成该订单", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("订单完成失败", MessageAlert.Status.EXCEPTION)
+      }
       SupplierPRDetail.destory()
       SupplierPRDetail.hide()
       table_init()
@@ -2133,14 +2455,14 @@ const apiConfig = {
       var api = root + `/api/brochure/${id}`
       return GET(api)
     },
-    Add: function(data) {
+    Add: function(actionOwner, data) {
       //POST
-      var api = root + `/api/brochure/new`
+      var api = root + `/api/brochure/new?actionOwner=${actionOwner}`
       return POST(api, data)
     },
     Edit: function(id, data) {
       //PUT
-      var account = getCookie("account")
+      var account = getCookie("account").toLowerCase()
       var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
@@ -2352,54 +2674,33 @@ const apiConfig = {
       var api = root + `/api/prprocess/search(${purchaseRequisitionid})`
       return GET(api)
     },
-    Approving: function(id, processEnum) {
-      var pr = this.Get(id)
-      //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
-      pr["_prprocessstep"] = processEnum
-      this.Edit(id, pr)
-    },
+    // Approving: function(id, processEnum) {
+    //   var pr = this.Get(id)
+    //   //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
+    //   pr["_prprocessstep"] = processEnum
+    //   this.Edit(id, pr)
+    // },
     Approve: function(prid, comments) {
-      var currentStep = this.getCurrentStep(prid)
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "zeiss" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Approve?comments=${comments}`
           result = PUT(api)
-        } else {
-          throw `Permission Denied`
         }
       }
       return result
     },
     Reject: function(prid, comments) {
-      var currentStep = this.getCurrentStep(prid)
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "zeiss" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Reject?comments=${comments}`
-          result = PUT(api)
-        } else {
-          throw `Permission Denied`
-        }
-      }
-      return result
-    },
-    SupplierComplete: function(prid) {
-      var currentStep = this.getCurrentStep(prid)
-
-      if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
-        return
-
-      var taskOwner = currentStep["_taskowner"]
-      var result = null
-      if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
-          var id = currentStep["_id"]
-          var api = root + `/api/prprocess/${id}/SupplierComplete`
           result = PUT(api)
         } else {
           throw `Permission Denied`
@@ -2417,6 +2718,36 @@ const apiConfig = {
           return step
         }
       }
+      console.log("当前PR已完成！")
+    },
+    getStepByAccount: function(prid, account) {
+      var steps = apiConfig.prprocess.Search({
+        keyword: prid
+      })
+      var stepArr = []
+      for (var i = 0; i < steps.length; i++) {
+        var step = steps[i]
+        if (account.toLowerCase() == step["_taskowner"]) {
+          stepArr.push(step)
+        }
+      }
+      return stepArr
+    },
+    getPrStepCommentsByAccount: function(prid, account) {
+      var array = this.getStepByAccount(prid, account)
+      var comments = []
+      if (array.length > 0) {
+        for (var i = 0; i < array.length; i++) {
+          var date = array[i]["_lastmodified"]
+          var comment = array[i]["_comments"]
+          var obj = {
+            date: date,
+            comment: comment
+          }
+          comments.push(obj)
+        }
+      }
+      return comments
     }
   },
   prprocesssetting: {
@@ -2581,27 +2912,23 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/submit`
       return POST(api, data)
     },
-    Finish: function() {
-
-    },
     SupplierComplete: function(prid) {
-      // var currentStep = this.getCurrentStep(prid)
-      //
-      // if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
-      //   return
-      //
-      // var taskOwner = currentStep["_taskowner"]
-      // var result = null
-      // if (currentStep) {
-      //   if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
-      // var id = currentStep["_id"]
-      var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
-      // result = PUT(api)
-      //   } else {
-      //     throw `Permission Denied`
-      //   }
-      // }
-      return PUT(api)
+
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
+
+      if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
+        return false
+
+      // var taskOwner = currentStep["_taskowner"]//supplier暂时不用规定权限
+      var result = false
+      if (currentStep) {
+        if ((getCookie('role') == Enum.role.SUPPLIER) || (getCookie('role') === Enum.role.SYSADMIN)) {
+          // var id = currentStep["_id"]
+          var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
+          result = PUT(api)
+        }
+      }
+      return result
     },
   },
   PRSupplierView: {
@@ -2762,6 +3089,10 @@ const apiConfig = {
     }
   },
   employee: {
+    Get: function(accountName) {
+      var api = root + `/api/employee/GetEmployee(${accountName})`
+      return GET(api)
+    },
     Login: function(username, password) {
       var api = root + `/api/employee/login(${username},${password})`
       return GET(api)
@@ -2769,8 +3100,8 @@ const apiConfig = {
     Search: function({
       keyword
     }) {
-      var accountName = keyword
-      var api = root + `/api/employee/search(${accountName})`
+      var name = keyword
+      var api = root + `/api/employee/search(${name})`
       return GET(api)
     }
   },
@@ -2840,27 +3171,33 @@ function GET(url) {
 } //查
 
 function ClearInputs(form, idList) {
+  // idList = idList ? idList : []
   form = $(form)
   var inputs = form.find("input")
   var a = inputs
   for (var i = 0; i < a.length; i++) {
-    if (!idList)
+    // var c= $.inArray($(a[i]).attr("id"), idList)
+    // console.log(c)
+    if (idList) {
+      if ($.inArray($(a[i]).attr("id"), idList) > -1)
+        $(a[i])
+        .val("")
+    } else {
+      $(a[i])
+        .val("")
+    }
+  }
+}
+
+function ClearInputsBut(form, idList) {
+  idList = idList ? idList : []
+  form = $(form)
+  var inputs = form.find("input")
+  var a = inputs
+  for (var i = 0; i < a.length; i++) {
+    if (($.inArray($(a[i]).attr("id"), idList)) == -1)
       $(a[i])
       .val("")
-    //若idList有值则只将这几个input的值去掉
-    else {
-      for (var j = 0; j < idList.length; j++) {
-        if ("#" + idList[j] == a[i]) {
-          $(a[i]).val("")
-        }
-      }
-    }
-    // else if (idList && idList.search(("#" + a[i].id)) >= 0) {
-    //   $(a[i])
-    //     .val("")
-    // } else {
-    //   continue
-    // }
   }
 }
 
@@ -2874,7 +3211,7 @@ function ClearTextArea(form) {
   }
 }
 
-function ClearSelecton(form) {
+function ClearSelection(form) {
   form = $(form)
   var selection = form.find("select")
   var a = selection
@@ -2884,14 +3221,23 @@ function ClearSelecton(form) {
   }
 }
 
+function ClearRadio(form) {
+  form = $(form)
+  var radios = form.find("input:radio")
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].checked = false
+  }
+}
+
 function ClearAllFields(form) {
   ClearAllFieldsBut(form)
 }
 
 function ClearAllFieldsBut(form, idList) {
-  ClearInputs(form, idList)
+  ClearInputsBut(form, idList)
   ClearTextArea(form)
-  ClearSelecton(form)
+  ClearSelection(form)
+  ClearRadio(form)
 }
 
 //检测，如果所有input都为空，则直接关闭不保存
@@ -3016,16 +3362,24 @@ function getValueSetFromObjectArray(Array, keyName, valueName) {
   return resultSet
 }
 
+function isStringEmpty(str) {
+  if ("" === str || undefined == str || null == str) {
+    return true
+  } else {
+    return false
+  }
+}
+
 const Enum = {
   role: {
     /// ZEISS员工
-    EMPLOYEE: 0,
+    EMPLOYEE: "0",
     /// 代理商
-    DEALEAR: 1,
+    DEALEAR: "1",
     /// 供应商
-    SUPPLIER: 2,
+    SUPPLIER: "2",
     /// 系统管理员
-    SYSADMIN: 3
+    SYSADMIN: "3"
   },
   prstatus: {
     /// 草稿状态
@@ -3071,6 +3425,7 @@ const Enum = {
     /// </summary>
     Success: "Success",
     Approved: "Approved",
+    Failure:"Failure",
     /// <summary>
     /// 审批拒绝
     /// </summary>
@@ -3131,6 +3486,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'dealer':
@@ -3144,6 +3501,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'supplier':
@@ -3157,6 +3516,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'zeiss':
@@ -3164,7 +3525,8 @@ function login() {
       var user = apiConfig.employee.Login(username, password)
       console.log(user)
       // if ("zeiss" == username.toLowerCase()) {
-      if (user) {
+      if (user["accountField"]) {
+        //BUG 这里的login API任意账号密码都能获取返回值，到底以什么来确定该用户是否正确？
         window.location.href = "./zeiss-home.html"
         /**
          *   "statusField": 0,
@@ -3183,6 +3545,8 @@ function login() {
         //   "_id":"BLManager"
         // }
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
   }
@@ -3212,7 +3576,7 @@ const tableStructures = {
         "keyArr": ["id", "key", "key", "prop", "prop", "prop"],
         "viewOrder": ["_id", "_direction", "_quantity", "_operator", "_created"],
         "data": [
-          ["序列", "操作",  "物品数量", "操作人", "操作时间"],
+          ["序列", "操作", "物品数量", "操作人", "操作时间"],
         ]
       },
       Inventory: {
@@ -3316,7 +3680,6 @@ const tableStructures = {
         ["ID", "选项名", "选项值", "排序值", "描述", "分类"],
       ]
     },
-
   },
   Dealer: {
     MyOrder: {
@@ -3422,11 +3785,11 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": true,
         "hasDetail": false,
-        "viewOrder": ["_id", "_brochurename", "_quantity", "_purchaserequisitionfk", "_logistics", "_deliverydate"],
+        "viewOrder": ["_id", "_brochurename", "_quantity", "_logistics", "_deliverydate"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "buttonPool": ["updateBtn"],
         "data": [
-          ["序列", "物品名字", "物品数量", "PurchaseItemID(不显示)", "物流信息", "交付时间"],
+          ["序列", "物品名字", "物品数量", "物流信息", "交付时间"],
         ]
       }
 
@@ -3475,10 +3838,10 @@ const tableStructures = {
         "hasHeader": true,
         "hasDetail": true,
         "hasButton": false,
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated"],
+        "keyArr": ["id", "prop", "key", "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "提交时间", "当前审批人"],
+          ["序列", "订单号", "用途", "提交时间"],
         ]
       },
       Rejected: {
@@ -3514,6 +3877,30 @@ const tableStructures = {
         // "buttonPool": ["expressViewBtn"],
         "data": [
           ["序列", "申请种类", "申请数量", "收货人", "收货电话", "交付时间", "收货地址", "紧急程度", "物流信息"],
+        ]
+      }
+    },
+    Approval: {
+      Applying: {
+        "tablename": "order",
+        "hasHeader": true,
+        "hasDetail": true,
+        "hasButton": false,
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated"],
+        "keyArr": ["id", "prop", "key", "prop", "prop"],
+        "data": [
+          ["序列", "订单号", "用途", "提交人", "提交时间"],
+        ]
+      },
+      Success: {
+        "tablename": "success",
+        "hasHeader": true,
+        "hasDetail": true,
+        "hasButton": false,
+        "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated", "_prcompleted"],
+        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "data": [
+          ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
         ]
       }
     }

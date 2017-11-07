@@ -31,12 +31,17 @@
     window._target["_operator"] = getCookie("account")
     console.log(window._target);
     // PUT('/api/brochure/' + window._target["_id"] + '/update', window._target)
-    apiConfig.brochure.Edit(window._target["_id"],window._target)
-    window._target = null
-    $("#Supply").modal('hide')
-    ClearInputs("#Supply")
-    ClearSelecton("#Supply")
-    ClearTextArea("#Supply")
+    var EditRemoteData = apiConfig.brochure.Edit(window._target["_id"], window._target)
+    if (EditRemoteData) {
+      new MessageAlert("入库成功，已入库" + $("#quantitySupply").val() + "件" + window._target["_brochurename"], MessageAlert.Status.SUCCESS)
+      window._target = null
+      $("#Supply").modal('hide')
+      ClearInputs("#Supply")
+      ClearSelection("#Supply")
+      ClearTextArea("#Supply")
+    } else {
+      new MessageAlert("入库失败", MessageAlert.Status.EXCEPTION)
+    }
     table_init()
   }
 </script>

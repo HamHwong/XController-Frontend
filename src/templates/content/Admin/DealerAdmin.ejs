@@ -34,13 +34,14 @@
         }
 
         //删除代理商操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           DealerAdmin.view.delete.show(rid)
         }
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
-            apiConfig.dealer.Delete(id)
+            var result = apiConfig.dealer.Delete(id)
+if(result == true){new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)}else{new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)}
             DealerAdmin.view.delete.hide()
           }
           table_init()

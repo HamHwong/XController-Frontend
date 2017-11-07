@@ -6,13 +6,11 @@
         <h4 class="modal-title" id="myModalLabel">订单申请</h4>
       </div>
       <div class="modal-body">
-        <form class="form" method="post" id="PurchaseRequisition_form">
+        <form class="form" method="post" id="PurchaseRequisition_form" data-validator="true">
           <div class="modal-infopart baseInfomation form-group clearfix">
             <div class="form-group col-md-3">
-              <label for="_dealerregion">区域:</label>
-              <!--<select class="form-control optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
+              <label for="_region">区域:</label>
+              <input type="text" class="form-control" name="_region" id="_region" readonly>
             </div>
 
             <div class="form-group col-md-3 search_box_warp">
@@ -31,7 +29,7 @@
 
             <div class="form-group col-md-3 col-xs-12">
               <label for="_purposefk">用途:</label>
-              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" data-regxRule="select"></select>
             </div>
 
             <div class="Comments editable col-xs-12">

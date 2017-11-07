@@ -34,7 +34,7 @@
           })
         }
         //删除供应商操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           window._target = apiConfig.supplier.Get(rid)
           $("#Delete")
             .modal()
@@ -42,7 +42,8 @@
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
-            apiConfig.supplier.Delete(id)
+            var result = apiConfig.supplier.Delete(id)
+            if(result == true){new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)}else{new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)}
             $("#Delete").modal("hide")
           }
           table_init()

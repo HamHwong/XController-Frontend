@@ -7,14 +7,14 @@ const apiConfig = {
       var api = root + `/api/brochure/${id}`
       return GET(api)
     },
-    Add: function(data) {
+    Add: function(actionOwner, data) {
       //POST
-      var api = root + `/api/brochure/new`
+      var api = root + `/api/brochure/new?actionOwner=${actionOwner}`
       return POST(api, data)
     },
     Edit: function(id, data) {
       //PUT
-      var account = getCookie("account")
+      var account = getCookie("account").toLowerCase()
       var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
@@ -226,54 +226,33 @@ const apiConfig = {
       var api = root + `/api/prprocess/search(${purchaseRequisitionid})`
       return GET(api)
     },
-    Approving: function(id, processEnum) {
-      var pr = this.Get(id)
-      //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
-      pr["_prprocessstep"] = processEnum
-      this.Edit(id, pr)
-    },
+    // Approving: function(id, processEnum) {
+    //   var pr = this.Get(id)
+    //   //GET /api/prprocess/paging({purchaseRequisitionid},{startIndex},{endIndex})
+    //   pr["_prprocessstep"] = processEnum
+    //   this.Edit(id, pr)
+    // },
     Approve: function(prid, comments) {
-      var currentStep = this.getCurrentStep(prid)
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "zeiss" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Approve?comments=${comments}`
           result = PUT(api)
-        } else {
-          throw `Permission Denied`
         }
       }
       return result
     },
     Reject: function(prid, comments) {
-      var currentStep = this.getCurrentStep(prid)
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "zeiss" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Reject?comments=${comments}`
-          result = PUT(api)
-        } else {
-          throw `Permission Denied`
-        }
-      }
-      return result
-    },
-    SupplierComplete: function(prid) {
-      var currentStep = this.getCurrentStep(prid)
-
-      if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
-        return
-
-      var taskOwner = currentStep["_taskowner"]
-      var result = null
-      if (currentStep) {
-        if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
-          var id = currentStep["_id"]
-          var api = root + `/api/prprocess/${id}/SupplierComplete`
           result = PUT(api)
         } else {
           throw `Permission Denied`
@@ -291,6 +270,36 @@ const apiConfig = {
           return step
         }
       }
+      console.log("当前PR已完成！")
+    },
+    getStepByAccount: function(prid, account) {
+      var steps = apiConfig.prprocess.Search({
+        keyword: prid
+      })
+      var stepArr = []
+      for (var i = 0; i < steps.length; i++) {
+        var step = steps[i]
+        if (account.toLowerCase() == step["_taskowner"]) {
+          stepArr.push(step)
+        }
+      }
+      return stepArr
+    },
+    getPrStepCommentsByAccount: function(prid, account) {
+      var array = this.getStepByAccount(prid, account)
+      var comments = []
+      if (array.length > 0) {
+        for (var i = 0; i < array.length; i++) {
+          var date = array[i]["_lastmodified"]
+          var comment = array[i]["_comments"]
+          var obj = {
+            date: date,
+            comment: comment
+          }
+          comments.push(obj)
+        }
+      }
+      return comments
     }
   },
   prprocesssetting: {
@@ -455,27 +464,23 @@ const apiConfig = {
       var api = root + `/api/purchaserequisition/submit`
       return POST(api, data)
     },
-    Finish: function() {
-
-    },
     SupplierComplete: function(prid) {
-      // var currentStep = this.getCurrentStep(prid)
-      //
-      // if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
-      //   return
-      //
-      // var taskOwner = currentStep["_taskowner"]
-      // var result = null
-      // if (currentStep) {
-      //   if ((getCookie('auth').toLowerCase() == "supplier" && getCookie("name") == taskOwner) || getCookie('auth').toLowerCase() == "admin") {
-      // var id = currentStep["_id"]
-      var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
-      // result = PUT(api)
-      //   } else {
-      //     throw `Permission Denied`
-      //   }
-      // }
-      return PUT(api)
+
+      var currentStep = apiConfig.prprocess.getCurrentStep(prid)
+
+      if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
+        return false
+
+      // var taskOwner = currentStep["_taskowner"]//supplier暂时不用规定权限
+      var result = false
+      if (currentStep) {
+        if ((getCookie('role') == Enum.role.SUPPLIER) || (getCookie('role') === Enum.role.SYSADMIN)) {
+          // var id = currentStep["_id"]
+          var api = root + `/api/purchaserequisition/${prid}/SupplierComplete`
+          result = PUT(api)
+        }
+      }
+      return result
     },
   },
   PRSupplierView: {
@@ -636,6 +641,10 @@ const apiConfig = {
     }
   },
   employee: {
+    Get: function(accountName) {
+      var api = root + `/api/employee/GetEmployee(${accountName})`
+      return GET(api)
+    },
     Login: function(username, password) {
       var api = root + `/api/employee/login(${username},${password})`
       return GET(api)
@@ -643,8 +652,8 @@ const apiConfig = {
     Search: function({
       keyword
     }) {
-      var accountName = keyword
-      var api = root + `/api/employee/search(${accountName})`
+      var name = keyword
+      var api = root + `/api/employee/search(${name})`
       return GET(api)
     }
   },

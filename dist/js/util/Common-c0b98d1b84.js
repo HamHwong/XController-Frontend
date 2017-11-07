@@ -1,23 +1,28 @@
 'use strict';
 function ClearInputs(form, idList) {
+    // idList = idList ? idList : []
     form = $(form);
     var inputs = form.find('input');
     var a = inputs;
     for (var i = 0; i < a.length; i++) {
-        if (!idList)
-            $(a[i]).val('');    //若idList有值则只将这几个input的值去掉
-        else {
-            for (var j = 0; j < idList.length; j++) {
-                if ('#' + idList[j] == a[i]) {
-                    $(a[i]).val('');
-                }
-            }
-        }    // else if (idList && idList.search(("#" + a[i].id)) >= 0) {
-             //   $(a[i])
-             //     .val("")
-             // } else {
-             //   continue
-             // }
+        // var c= $.inArray($(a[i]).attr("id"), idList)
+        // console.log(c)
+        if (idList) {
+            if ($.inArray($(a[i]).attr('id'), idList) > -1)
+                $(a[i]).val('');
+        } else {
+            $(a[i]).val('');
+        }
+    }
+}
+function ClearInputsBut(form, idList) {
+    idList = idList ? idList : [];
+    form = $(form);
+    var inputs = form.find('input');
+    var a = inputs;
+    for (var i = 0; i < a.length; i++) {
+        if ($.inArray($(a[i]).attr('id'), idList) == -1)
+            $(a[i]).val('');
     }
 }
 function ClearTextArea(form) {
@@ -28,7 +33,7 @@ function ClearTextArea(form) {
         $(a[i]).val('');
     }
 }
-function ClearSelecton(form) {
+function ClearSelection(form) {
     form = $(form);
     var selection = form.find('select');
     var a = selection;
@@ -36,13 +41,21 @@ function ClearSelecton(form) {
         $(a[i]).val('-1');
     }
 }
+function ClearRadio(form) {
+    form = $(form);
+    var radios = form.find('input:radio');
+    for (var i = 0; i < radios.length; i++) {
+        radios[i].checked = false;
+    }
+}
 function ClearAllFields(form) {
     ClearAllFieldsBut(form);
 }
 function ClearAllFieldsBut(form, idList) {
-    ClearInputs(form, idList);
+    ClearInputsBut(form, idList);
     ClearTextArea(form);
-    ClearSelecton(form);
+    ClearSelection(form);
+    ClearRadio(form);
 }
 //检测，如果所有input都为空，则直接关闭不保存
 function isAllPRTypeFormFieldEmpty(form) {
@@ -157,4 +170,11 @@ function getValueSetFromObjectArray(Array, keyName, valueName) {
         resultSet[Array[i][keyName]] = Array[i][valueName];
     }
     return resultSet;
+}
+function isStringEmpty(str) {
+    if ('' === str || undefined == str || null == str) {
+        return true;
+    } else {
+        return false;
+    }
 }

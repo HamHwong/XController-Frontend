@@ -40,11 +40,14 @@ function editSupplier() {
     rawData[i] = data[i]
   }
   var dealerId = apiConfig.supplier.Edit(rawData['_id'],data)
-  if (dealerId) {
+  if (dealerId>0) {
+    new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
     $("#Edit").modal("hide")
     ClearInputs("#edit_Supplier")
     ClearSelecton("#edit_Supplier")
     ClearTextArea("#edit_Supplier")
+  }else{
+    new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
   }
   table_init()
 }

@@ -3,7 +3,7 @@ const table_buttonPool = {
     editBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='edit(${PrimaryKey})'>编辑</button>",
     PIEditBtn: "<button type='button' name='button' class='btn btn-primary edit' onclick='PurchaseItem.view.edit(${PrimaryKey})'>编辑</button>",
     submitBtn: "<button type='button' name='button' class='btn btn-primary submit' onclick='submit(${PrimaryKey})'>提交</button>",
-    deleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='delete(${PrimaryKey})'>删除</button>",
+    deleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='Delete(${PrimaryKey})'>删除</button>",
     PIdeleteBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='PurchaseItem.event.delete(${PrimaryKey})'>删除</button>",
     updateBtn: "<button type='button' name='button' class='btn btn-primary update' onclick='update(${PrimaryKey})'>更新</button>",
     supplyBtn: "<button type='button' name='button' class='btn btn-success supply' onclick='supply(${PrimaryKey})'>入库</button>",
@@ -17,7 +17,7 @@ const table_buttonPool = {
     deleteDraftBtn: "<button type='button' name='button' class='btn btn-danger del' onclick='deleteDraft(${PrimaryKey})'>删除</button>"
   },
   genetrate(PrimaryKey, btnName) {
-    var btnString = table_buttonPool.pool[btnName].replace("${PrimaryKey}", PrimaryKey)
+    var btnString = table_buttonPool.pool[btnName].replace("${PrimaryKey}","\""+PrimaryKey+"\"")
     return eval($(btnString))
   }
 }

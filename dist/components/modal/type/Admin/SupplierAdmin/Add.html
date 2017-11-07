@@ -38,15 +38,18 @@
   </div>
 </div>
 <script>
-function addSupplier() {
-  var data = formToSet("#add_Supplier")
-  var dealerId = apiConfig.supplier.Add(data)
-  if(dealerId){
-    $("#Add").modal("hide")
-    ClearInputs("#add_Supplier")
-    ClearSelecton("#add_Supplier")
-    ClearTextArea("#add_Supplier")
+  function addSupplier() {
+    var data = formToSet("#add_Supplier")
+    var dealerId = apiConfig.supplier.Add(data)
+    if (dealerId > 0) {
+      new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+      $("#Add").modal("hide")
+      ClearInputs("#add_Supplier")
+      ClearSelection("#add_Supplier")
+      ClearTextArea("#add_Supplier")
+    } else {
+      new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+    }
+    table_init()
   }
-  table_init()
-}
 </script>

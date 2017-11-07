@@ -9,7 +9,7 @@
 </div>
 
 <div class="operation-menu">
-  <button type="button" class="btn btn-primary" onclick="AddBrochure.view.show()">添加物品</button>
+  <button type="button" class="btn btn-primary" onclick="BrochureAdmin.view.add.show()">添加物品</button>
 </div>
 
 <div class="table-content tab-content">
@@ -38,14 +38,19 @@
             }
 
             //删除物品记录操作
-            var del = function(rid) {
+            var Delete = function(rid) {
               window._target = apiConfig.brochure.Get(rid)
               BrochureAdmin.view.delete.show()
             }
             var deleteSubmit = function() {
               if (window._target) {
                 var id = window._target["_id"]
-                apiConfig.brochure.Delete(id)
+                var result = apiConfig.brochure.Delete(id)
+                if (result == true) {
+                  new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+                } else {
+                  new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+                }
                 BrochureAdmin.view.delete.hide()
               }
               table_init()

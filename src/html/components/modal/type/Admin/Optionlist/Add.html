@@ -41,11 +41,14 @@
   function addOptionList() {
     var data = formToSet("#add_Option")
     var dealerId = apiConfig.optionlist.Add(data)
-    if (dealerId) {
+    if (dealerId>0) {
+      new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
       $("#Add").modal("hide")
       ClearInputs("#add_Option")
-      ClearSelecton("#add_Option")
+      ClearSelection("#add_Option")
       ClearTextArea("#add_Option")
+    }else{
+      new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
     }
     table_init()
   }

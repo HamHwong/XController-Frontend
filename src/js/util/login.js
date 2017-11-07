@@ -43,6 +43,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'dealer':
@@ -56,6 +58,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'supplier':
@@ -69,6 +73,8 @@ function login() {
         setCookie("account", user["_accountname"])
         setCookie("uid", user["_id"])
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
     case 'zeiss':
@@ -76,7 +82,8 @@ function login() {
       var user = apiConfig.employee.Login(username, password)
       console.log(user)
       // if ("zeiss" == username.toLowerCase()) {
-      if (user) {
+      if (user["accountField"]) {
+        //BUG 这里的login API任意账号密码都能获取返回值，到底以什么来确定该用户是否正确？
         window.location.href = "./zeiss-home.html"
         /**
          *   "statusField": 0,
@@ -95,6 +102,8 @@ function login() {
         //   "_id":"BLManager"
         // }
         setCookie("user", JSON.stringify(user))
+      } else {
+        new MessageAlert("登陆失败，请检查用户名密码是否错误！", MessageAlert.Status.EXCEPTION)
       }
       break
   }

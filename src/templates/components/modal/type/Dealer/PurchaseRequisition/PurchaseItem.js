@@ -2,6 +2,10 @@ const PurchaseItem = {
   show: function() {
     PurchaseItem.init()
     $("#PruchaseItem")
+      .on("hidden.bs.modal", function() {
+        PurchaseItem.destory()
+      })
+    $("#PruchaseItem")
       .modal()
   },
   hide: function() {
@@ -11,6 +15,17 @@ const PurchaseItem = {
   autoComplate: function(PI) {
     var targetPRArea = "#PruchaseItem_form"
     var PInfoSet = 'object' == typeof PI ? PI : apiConfig.purchaseitem.Get(PI) //查出改PI详情
+
+    bindOptionData({
+      $select: "#_brochurename",
+      datasource: apiConfig.brochure.Search({
+        keyword: PInfoSet["_brochurename"]
+      }),
+      innerTextName: "_brochurename",
+      valueName: "_brochurename"
+    })
+
+    PInfoSet["brochure"] = PInfoSet["_brochurename"]
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
   init: function() {
@@ -35,6 +50,7 @@ const PurchaseItem = {
     }
     console.log(unsavePI)
     var count = apiConfig.purchaseitem.Add(unsavePI)
+    return count
   },
   updatePITable: function() {
     if (window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]) {
@@ -48,6 +64,7 @@ const PurchaseItem = {
   },
   destory: function() {
     ClearInputs("#PruchaseItem")
+    validator.Restore()
     $("#PIOperation").empty()
     window._target.PI = null
     window._operation = null
@@ -102,13 +119,15 @@ const PurchaseItem = {
   },
   event: {
     add: function() {
-      PurchaseItem.event.append()
-      PurchaseItem.hide()
+      if (PurchaseItem.event.append())
+        PurchaseItem.hide()
     },
     append: function() {
       //是否fields全为空
-      if (isAllPRTypeFormFieldEmpty("#PruchaseItem_form"))
-        return
+      if (!validator.Result("#PruchaseItem_form")) {
+        new MessageAlert("填写错误，请确认数据！", MessageAlert.Status.ERROR)
+        return false
+      }
       //
       var arr = []
       var localid = ++row_counter + '[unsave]'
@@ -123,7 +142,10 @@ const PurchaseItem = {
         window.__PurchaseRequisitionItem_table.addRow(arr)
         window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID].push(set)
       }
-      ClearInputs("#PruchaseItem_form", ["#_brochurename", "#_quantity"])
+
+      ClearInputs("#PruchaseItem_form", ["brochure", "_quantity"])
+      ClearSelection("#PruchaseItem_form")
+      return true
     },
     edit: function() {
       var target = window._target.PI
@@ -133,34 +155,41 @@ const PurchaseItem = {
         target[k] = set[k]
       }
       target["_id"] = targetid
-      if (!targetid.toString().search("[unsave]") >= 0) {
-        apiConfig.purchaseitem.Edit(targetid, target)
+      var EditRemoteData = true
+      var re = targetid.toString().search("[unsave]")
+      if (!(targetid.toString().search("[unsave]") >= 0)) {
+        EditRemoteData = apiConfig.purchaseitem.Edit(targetid, target)
+      } else {
+        EditRemoteData = true
       }
-      var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
-      for (var info in target) {
-        localSource[targetid][info] = target[info]
+      if (EditRemoteData) {
+        var localSource = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
+        for (var info in target) {
+          localSource[targetid][info] = target[info]
+        }
+        new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("更新失败", MessageAlert.Status.EXCEPTION)
       }
       PurchaseItem.updatePITable()
       ClearInputs("#PruchaseItem_form")
       PurchaseItem.hide()
     },
     delete: function(PIid) {
-      var result = null;
+      var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       if (!PIid.search("[unsave]") >= 0) {
-        result = apiConfig.purchaseitem.delete(PIid)
+        DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid)
+      } else {
+        DeleteRemoteData = true
       }
-      window.__PurchaseRequisitionItem_table.data[PIid].remove()
-      // for (var i = 0; i < PItems.length; i++) {
-      //   if (PIid == PItems[i]["_id"]) {
-      //     var tempArr = PItems.splice(0, i - 1)
-      //     PItems.reverse()
-      //     PItems.pop()
-      //     PItems.reverse()
-      //     PItems = tempArr.concat(PItems)
-      //   }
-      // }
-      alertMessage.show()
+      if (DeleteRemoteData) {
+        window.__PurchaseRequisitionItem_table.data[PIid].remove()
+        new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+      } else {
+        new MessageAlert("删除失败", MessageAlert.Status.EXCEPTION)
+
+      }
     }
   }
 }

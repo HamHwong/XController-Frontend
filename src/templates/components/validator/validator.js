@@ -1,5 +1,5 @@
 const validator = {
-  init: function () {
+  init: function() {
     var form = $("form[data-validator=true]")
     var validatelist = form.find("*[data-regxRule]")
     for (var i = 0; i < validatelist.length; i++) {
@@ -8,62 +8,60 @@ const validator = {
       if (control.is("input")) {
         var type = control.attr('type') || 'text'
         switch (type) {
-        case 'password':
-        case 'text':
-        case 'email':
-        case 'tel':
-        case 'url':
-        case 'search':
-          control.on('keyup', function (e) {
-            // console.log($(e.target).data('regxrule'), 'onkeyup works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-            // var result = validate["result"]
-            // var msg = validate["msg"]
-            // if (!result) {
-            //   validator.addWarninig(target, validate)
-            // } else {
-            //   validator.removeWarning(target)
-            // }
-          })
-          break
-        case 'radio':
-        case 'checkbox':
-        case 'hidden':
-          control.on('change', function (e) {
-            // console.log($(e.target).data('regxrule'), 'onchange works')
-            var target = $(e.target)
-            var rule = target.data('regxrule')
-            validator.validate(target, rule)
-          })
-          break
-        default:
-          break
+          case 'password':
+          case 'text':
+          case 'email':
+          case 'tel':
+          case 'url':
+          case 'search':
+            control.unbind("keyup")
+            control.on('keyup', function(e) {
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              var result = validator.validate(target, rule)
+              validator.displayResult(target, result)
+            })
+            break
+          case 'radio':
+          case 'checkbox':
+          case 'hidden':
+            control.unbind("change")
+            control.on('change', function(e) {
+              var target = $(e.target)
+              var rule = target.data('regxrule')
+              var result = validator.validate(target, rule)
+              validator.displayResult(target, result)
+            })
+            break
+          default:
+            break
         }
       } else if (control.is("select")) {
-        control.on('change', function (e) {
+        control.unbind("change")
+        control.on('change', function(e) {
           // console.log($(e.target).data('regxrule'), 'onchange works')
           var target = $(e.target)
           var rule = target.data('regxrule')
           console.log(target);
-          validator.validate(target, rule)
+          var result = validator.validate(target, rule)
+          validator.displayResult(target, result)
         })
       } else if (control.is("textarea")) {
-        control.on('keyup', function (e) {
+        control.unbind("keyup")
+        control.on('keyup', function(e) {
           // console.log($(e.target).data('regxrule'), 'onkeyup works')
           var target = $(e.target)
           var rule = target.data('regxrule')
-          validator.validate(target, rule)
+          var result = validator.validate(target, rule)
+          validator.displayResult(target, result)
         })
       }
-
-      // console.log(control,control.data('regxrule'))
       //若是input text password，则绑定onkeyup
       //若是input checkbox radio 则绑定 onchange
     }
   },
-  validate: function (target, rule) {
+  validate: function(target, rule) {
+    // && ||
     var result = {}
     var regStr = ""
     var regxResult = rule.split(/\(([^)]*)\)/) //匹配括号里的内容
@@ -102,7 +100,7 @@ const validator = {
           var max = ""
           var MinAndMax = ""
           if (limitList.length > 2)
-            throw ('only two integers required,Max and Min')
+            console.log('only two integers required,Max and Min')
           else if (limitList.length == 2) {
             try {
               var i1 = parseInt(limitList[0])
@@ -111,7 +109,7 @@ const validator = {
               min = i1 < i2 ? i1 : i2
               // MinAndMax = min + "," + max
             } catch (e) {
-              throw e
+              console.log(e)
             }
           } else {
             min = parseInt(limitList[0])
@@ -125,47 +123,61 @@ const validator = {
       }
       // console.log(c["regx"])
       var regexp = new RegExp(regStr)
-      var value = $(target).is("input") ? $(target).val() : $(target).text()
+      var value = ($(target).is("input") || $(target).is("select")) ? $(target).val() : $(target).text()
       // console.log(value, regexp.test(value))
       result['result'] = regexp.test(value)
       result['msg'] = c['msg']
     }
-
-    if (!result['result']) {
-      validator.addWarninig(target, result)
-    } else {
-      validator.removeWarning(target)
-    }
     // return result
-    return result['result']
+    return result
   },
-  addWarninig: function (target, result) {
+  displayResult: function(target, result) {
+    if (!result['result']) {
+      validator.error(target, result)
+    } else {
+      validator.pass(target)
+    }
+  },
+  error: function(target, result) {
     target = $(target)
     var RESULT = result["result"]
     var MSG = result["msg"]
     var PNode = target.parent('div')
-    target.attr("validate", true)
+    target.attr("validate", false)
     PNode.removeClass("has-success").addClass("has-error")
     PNode.find("i.validator_error").remove()
     PNode.append(`<i class="validator_error text-danger">${MSG}</i>`)
   },
-  removeWarning: function (target) {
+  pass: function(target) {
     target = $(target)
     var PNode = target.parent('div')
-    target.attr("validate", false)
+    target.attr("validate", true)
     PNode.removeClass("has-error").addClass("has-success")
     PNode.find("i.validator_error").remove()
   },
-  validateResult: function () {
-    var form = $("form")
+  Restore: function() {
+    var form = $("form[data-validator=true]")
+    var validatelist = form.find("*[data-regxRule]")
+    for (var i = 0; i < validatelist.length; i++) {
+      var target = $(validatelist[i])
+      var PNode = target.parent('div')
+      target.attr("validate", false)
+      PNode.removeClass("has-error").removeClass("has-success")
+      PNode.find("i.validator_error").remove()
+    }
+  },
+  Result: function(form) {
+    var form = $(form)
     if (form.data("validator")) {
       var validatelist = form.find("*[data-regxRule]")
-      var result = true
+      var finalResult = true
       for (var i = 0; i < validatelist.length; i++) {
-        var input = $(validatelist[i])
-        result = validator.validate(input, input.data("regxrule")) && result
+        var target = $(validatelist[i])
+        var result = validator.validate(target, target.data("regxrule"))
+        validator.displayResult(target, validator.validate(target, target.data("regxrule")))
+        finalResult = result["result"] && finalResult
       }
     }
-    return result
+    return finalResult
   }
 }

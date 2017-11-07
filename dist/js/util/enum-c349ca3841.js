@@ -2,13 +2,13 @@
 var Enum = {
         role: {
             /// ZEISS员工
-            EMPLOYEE: 0,
+            EMPLOYEE: '0',
             /// 代理商
-            DEALEAR: 1,
+            DEALEAR: '1',
             /// 供应商
-            SUPPLIER: 2,
+            SUPPLIER: '2',
             /// 系统管理员
-            SYSADMIN: 3
+            SYSADMIN: '3'
         },
         prstatus: {
             /// 草稿状态
@@ -54,6 +54,7 @@ var Enum = {
             /// </summary>
             Success: 'Success',
             Approved: 'Approved',
+            Failure: 'Failure',
             /// <summary>
             /// 审批拒绝
             /// </summary>

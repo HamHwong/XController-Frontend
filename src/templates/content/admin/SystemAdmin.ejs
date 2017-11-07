@@ -29,20 +29,32 @@
             templateOpts: tableStructures.Admin.SystemAdmin.SystemUser,
             counter: apiConfig.systemuser.Count(),
             datasourceAPI: apiConfig.systemuser.Paging,
-            options: {
-            }
+            options: {}
           })
         }
         //删除供应商操作
-        var del = function(rid) {
+        var Delete = function(rid) {
           $("#Delete")
             .modal()
         }
+        var deleteSubmit = function() {
+          if (window._target) {
+            var id = window._target["_id"]
+            var result = apiConfig.systemuser.Delete(id)
+            if (result == true) {
+              new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
+            } else {
+              new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+            }
+            $("#Delete").modal("hide")
+          }
+          table_init()
+        }
         //编辑供应商操作
         var edit = function(rid) {
-          window._target = apiConfig.supplier.Get(rid)
+          window._target = apiConfig.systemuser.Get(rid)
           autoComplateInfo(window._target, "#edit_Supplier")
-          var search=function() {}
+          var search = function() {}
           $("#Edit")
             .modal()
         }
@@ -58,7 +70,7 @@
             counter: apiConfig.systemuser.Count(),
             datasourceAPI: apiConfig.systemuser.Search,
             options: {
-              keyword:keyword
+              keyword: keyword
             }
           })
         }

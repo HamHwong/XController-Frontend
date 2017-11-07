@@ -6,7 +6,7 @@
         <h4 class="modal-title" id="myModalLabel">订单申请</h4>
       </div>
       <div class="modal-body">
-        <form class="form" method="post" id="PurchaseRequisition_form">
+        <form class="form" method="post" id="PurchaseRequisition_form" data-validator="true">
           <div class="modal-infopart baseInfomation form-group clearfix">
 
             <div class="form-group col-md-2 col-xs-12">
@@ -29,10 +29,10 @@
             </div>
 
             <div class="form-group col-md-4 col-xs-12">
-              <label for="_dealerregion">区域:</label>
+              <label for="_region">区域:</label>
               <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
               </select>-->
-              <input type="text" class="form-control" name="_dealerregion" id="_dealerregion" readonly>
+              <input type="text" class="form-control" name="_region" id="_region" readonly>
             </div>
             <!--for employee-->
             <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forEmployee">
@@ -40,7 +40,6 @@
               <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
               </select>
               <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
             <!--for dealer-->
             <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forDealer">
@@ -48,7 +47,6 @@
               <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
               <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
             <div class="form-group col-md-4 col-xs-12 search_box_warp">
@@ -56,13 +54,12 @@
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
               <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
 
 
             <div class="form-group col-md-6 col-xs-12">
               <label for="_purposefk">用途:</label>
-              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途"></select>
+              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" data-regxRule="select"></select>
             </div>
 
 
@@ -91,45 +88,51 @@
         <h4 class="modal-title" id="myModalLabel">添加物品</h4>
       </div>
       <div class="modal-body">
-        <form id="PruchaseItem_form" class="form-horizontal" role="form">
+        <form id="PruchaseItem_form" class="form-horizontal" role="form" data-validator="true">
           <div class="form-group">
             <label for="brochure" class="col-sm-3 control-label">申请种类 ：</label>
             <div class="col-sm-8 search_box_warp">
               <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;">
               </select>
               <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
-              <ul class="dropdown-menu keyhint"></ul>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">申请数量 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_quantity" id="_quantity" placeholder="申请数量" required />
+              <input type="text" class="form-control" name="_quantity" id="_quantity" placeholder="申请数量" data-regxRule="number" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">交付时间 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" />
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" data-regxRule="notnull" readonly/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">紧急程度 ：</label>
+            <div class="col-sm-8">
+              <select class="form-control optionlist" data-category="邮寄时限" name="_deliverypriorityfk" id="_deliverypriorityfk">
+              </select>
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">收货人 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" required />
+              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" data-regxRule="notnull" />
             </div>
           </div>
           <div class="form-group">
             <label class="col-sm-3 control-label">收货电话 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" required />
+              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" data-regxRule="phone" />
             </div>
           </div>
 
           <div class="form-group">
             <label class="col-sm-3 control-label">收货地址 ：</label>
             <div class="col-sm-8">
-              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" required />
+              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" data-regxRule="notnull" />
             </div>
           </div>
         </form>
