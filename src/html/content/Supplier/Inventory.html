@@ -191,7 +191,7 @@
           generateTableWithPageHelper({
             target: "#Brochure-table-container",
             templateOpts: tableStructures.Supplier.Brochure,
-            counter: apiConfig.brochure.Count(),
+            counter: apiConfig.brochure.Search({keyword: keyword}).length,
             datasourceAPI: apiConfig.brochure.Search,
             options: {
               keyword: keyword

@@ -1,12 +1,12 @@
 var SupplierPRDetail = {
   show: function() {
-    $("#Detail").modal()
+    $("#SupplierPRDetail").modal()
   },
   hide: function() {
-    $("#Detail").modal('hide')
+    $("#SupplierPRDetail").modal('hide')
   },
   autoComplate: function(PRid) {
-    var targetPRITableArea = "#Detail .goodsInfomation",
+    var targetPRITableArea = "#SupplierPRDetail .goodsInfomation",
       templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail
     if (PRid) {
       var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)

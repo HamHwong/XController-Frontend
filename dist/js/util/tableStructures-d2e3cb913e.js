@@ -36,7 +36,7 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
                     'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
                 },
@@ -46,7 +46,7 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
                     'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
                 }
@@ -171,10 +171,10 @@ var tableStructures = {
                 Success: {
                     'tablename': 'success',
                     'hasHeader': true,
-                    'hasDetail': false,
+                    'hasDetail': true,
                     'hasButton': false,
                     'viewOrder': ["_id", "_prnumber", "_purpose", "_requestor", "_prCompleted"],
-                    'keyArr': ["id", "prop", "key", "prop",, "prop"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "申请人", "结束时间"]]
                 },
                 ExpressUpdateDetail: {
@@ -236,9 +236,9 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交时间", "结束时间"]]
                 },
                 Success: {
                     'tablename': 'success',
@@ -246,9 +246,9 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交时间", "结束时间"]]
                 },
                 orderDetail: {
                     'name': 'orderDetail',

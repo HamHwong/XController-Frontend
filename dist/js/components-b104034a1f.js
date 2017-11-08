@@ -16,12 +16,30 @@ var tab_init = function tab_init() {
         var currentTab = $(this).attr('href');    //获取到当前tab,
     });
 };
-/**
- * @description 从字典数组中查询到
- * @param  {String} keys 输入的关键字字符串
- * @param  {StringArray} dic  Dictionary字符串字典数组
- * @return {StringArray}      返回一个装有所有搜索结果的字符数组
- */
+var Loading = {
+        show: function show() {
+            if (!window.LoadingMarker) {
+                var container = $('<div class=\'Loading\'>');
+                var loading = $('<div class="wrapper"><div class="loadingspan"><div class="help"></div></div></div>');
+                container.append(loading);
+                window.LoadingMarker = container;
+                $('body').append(window.LoadingMarker);
+            } else {
+                // $(".Loading").css("display", "block")
+                window.LoadingMarker.show();
+            }
+        },
+        hide: function hide() {
+            if (window.LoadingMarker) {
+                window.LoadingMarker.hide();
+            }
+        }    /**
+   * @description 从字典数组中查询到
+   * @param  {String} keys 输入的关键字字符串
+   * @param  {StringArray} dic  Dictionary字符串字典数组
+   * @return {StringArray}      返回一个装有所有搜索结果的字符数组
+   */
+    };
 var queryKeyWords = function queryKeyWords(keys, dic) {
     var b = [];
     var r = [];
@@ -186,43 +204,6 @@ var bindInputQuery = function bindInputQuery(_ref2) {
 //     //
 //   })
 // }
-var LoadingEmelement = function LoadingEmelement() {
-    this.html = $('<div class="loadingElement"></div>');
-    return this;
-};
-LoadingEmelement.prototype.jump = function (target, time) {
-    var tempDistance = 0;
-    var speed = target / time;
-    for (; tempDistance < target; tempDistance += speed) {
-        this.html.css('top', tempDistance);
-    }
-};
-var Loading = function Loading(_ref3) {
-    var count = _ref3.count, time = _ref3.time;
-    this.count = count;
-    this.time = time;
-    this.generate({
-        count: count,
-        time: time
-    });
-};
-Loading.prototype.generate = function (_ref4) {
-    var count = _ref4.count, time = _ref4.time;
-    if (!$('.Loading').length) {
-        $('body').append('<div class=\'Loading\'>');
-    } else {
-        $('.Loading').empty();
-    }
-    $('.Loading').append('<div class=\'loadingElements\'>');
-    var loadingContainer = $('.loadingElements');
-    for (var i = 0; i < count; i++) {
-        var c = new LoadingEmelement();
-        c.jump(100, 1000);
-        loadingContainer.append(c.html);
-    }
-};
-Loading.prototype.move = function () {
-};
 var MessageAlert = function MessageAlert(msg, status) {
     this.status = status || MessageAlert.Status.SUCCESS;
     this.msg = msg || 'Congratulation! Action performed!';
@@ -1351,25 +1332,40 @@ var PRDetail = {
             if (PRid) {
                 window.target.PR = apiConfig.purchaserequisition.Get(PRid);
             }
+            //四种情况，
+            //1、当前角色为Employee，当前PR属于Progress状态，且当前PR不是该账号审批，则只显示关闭按钮。
+            //2、当前角色为Employee，当前PR属于Progress状态，当前PR是该用户审批，则显示审批按钮
+            //3、当前角色为ADMIN，当前PR属于Progress状态，则显示审批按钮
+            //4、当前PR不属于Progress状态，显示关闭按钮
+            //5、new 当前角色为Supplier，则
             if (Enum.role.EMPLOYEE == getCookie('role') || Enum.role.SYSADMIN == getCookie('role')) {
                 if (Enum.prstatus.Progress == window.target.PR['_prstatus']) {
-                    if (apiConfig.prprocess.getStepByAccount(PRid, getCookie('account')).length != 0 || Enum.role.SYSADMIN == getCookie('role')) {
+                    // if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
+                    if (getCookie('account') == apiConfig.prprocess.getCurrentStep(PRid)['_taskowner'] || Enum.role.SYSADMIN == getCookie('role')) {
                         $('#Detail textarea#PRD_approvalComments').attr('disabled', false);
                         var approvelBtn = '<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">\u5BA1\u6838\u901A\u8FC7</button>';
                         var rejectBtn = '<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">\u62D2\u7EDD\u901A\u8FC7</button>';
                         operationArea.append(approvelBtn).append(rejectBtn);
                     } else {
+                        //TODO
                         //当前PR若不属于审核状态，或者当前PR审核人中没有该用户，则不给加审核按钮和审核评论框
                         // console.log("您没有对该PR审查的许可。")
+                        $('.modal-infopart.Approval').hide();
                         $('#Detail textarea#PRD_approvalComments').attr('disabled', true);
                         var closebtnlbtn = '<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">\u5173\u95ED</button>';
                         operationArea.append(closebtnlbtn);
                     }
                 } else {
+                    $('.modal-infopart.Approval').hide();
                     $('#Detail textarea#PRD_approvalComments').attr('disabled', true);
                     var closebtnlbtn = '<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">\u5173\u95ED</button>';
                     operationArea.append(closebtnlbtn);
                 }
+            } else {
+                $('.modal-infopart.Approval').hide();
+                $('#Detail textarea#PRD_approvalComments').attr('disabled', true);
+                var closebtnlbtn = '<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">\u5173\u95ED</button>';
+                operationArea.append(closebtnlbtn);
             }
         },
         destory: function destory() {
@@ -1409,7 +1405,7 @@ var PRDetail = {
                 // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
                 new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea);
             }
-            var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse();
+            var steps = apiConfig.prprocess.Search({ keyword: PRid });
             for (var i = 0; i < steps.length; i++) {
                 var result = steps[i]['_result'];
                 var time = steps[i]['_lastmodified'];
@@ -1956,7 +1952,6 @@ var PurchaseRequisition = {
                 PurchaseRequisition.hide();
             },
             submit: function submit() {
-                debugger;
                 var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID];
                 items = items ? items : [];
                 if (items.length <= 0) {
@@ -1988,8 +1983,7 @@ var PurchaseRequisition = {
                     if (PRid > 0) {
                         for (var i = 0; i < items.length; i++) {
                             items[i]['_purchaserequisitionfk'] = PRid;
-                            items[i]['_logistics'] = null;
-                            items[i]['_contactnumber'] = null;
+                            items[i]['_logistics'] = null;    // items[i]["_contactnumber"] = null
                         }
                         var picount = apiConfig.purchaseitem.Add(items);
                         if (picount > 0) {
@@ -2052,13 +2046,13 @@ var PurchaseRequisition = {
     };
 var SupplierPRDetail = {
         show: function show() {
-            $('#Detail').modal();
+            $('#SupplierPRDetail').modal();
         },
         hide: function hide() {
-            $('#Detail').modal('hide');
+            $('#SupplierPRDetail').modal('hide');
         },
         autoComplate: function autoComplate(PRid) {
-            var targetPRITableArea = '#Detail .goodsInfomation', templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail;
+            var targetPRITableArea = '#SupplierPRDetail .goodsInfomation', templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail;
             if (PRid) {
                 var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100);
                 new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea);
@@ -2193,7 +2187,7 @@ var apiConfig = {
             },
             Edit: function Edit(id, data) {
                 //PUT
-                var account = getCookie('account').toLowerCase();
+                var account = getCookie('account');
                 var api = root + ('/api/brochure/' + id + '/update?actionOwner=' + account);
                 return PUT(api, data);
             },
@@ -2206,17 +2200,17 @@ var apiConfig = {
                 var api = root + '/api/brochure/count';
                 return GET(api);
             },
-            Search: function Search(_ref5) {
-                var keyword = _ref5.keyword;
-                var api = root + ('/api/brochure/search(' + keyword + ')');
+            Search: function Search(_ref3) {
+                var keyword = _ref3.keyword, startIndex = _ref3.startIndex, endIndex = _ref3.endIndex;
+                var api = root + ('/api/brochure/search(' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
             Top: function Top(topcount) {
                 var api = root + ('/api/brochure/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref6) {
-                var startIndex = _ref6.startIndex, endIndex = _ref6.endIndex;
+            Paging: function Paging(_ref4) {
+                var startIndex = _ref4.startIndex, endIndex = _ref4.endIndex;
                 var api = root + ('/api/brochure/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2248,8 +2242,8 @@ var apiConfig = {
                 var api = root + ('/api/brochurehistory/' + id + '/update');
                 return PUT(api, data);
             },
-            Paging: function Paging(_ref7) {
-                var brochureid = _ref7.brochureid, startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
+            Paging: function Paging(_ref5) {
+                var brochureid = _ref5.brochureid, startIndex = _ref5.startIndex, endIndex = _ref5.endIndex;
                 var api = root + ('/api/brochurehistory/paging(' + brochureid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2287,8 +2281,8 @@ var apiConfig = {
                 var api = root + '/api/dealer/count';
                 return GET(api);
             },
-            Search: function Search(_ref8) {
-                var keyword = _ref8.keyword;
+            Search: function Search(_ref6) {
+                var keyword = _ref6.keyword;
                 var api = root + ('/api/dealer/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2296,8 +2290,8 @@ var apiConfig = {
                 var api = root + ('/api/dealer/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref9) {
-                var startIndex = _ref9.startIndex, endIndex = _ref9.endIndex;
+            Paging: function Paging(_ref7) {
+                var startIndex = _ref7.startIndex, endIndex = _ref7.endIndex;
                 var api = root + ('/api/dealer/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2334,8 +2328,8 @@ var apiConfig = {
                 var api = root + ('/api/optionlist/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref10) {
-                var startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
+            Paging: function Paging(_ref8) {
+                var startIndex = _ref8.startIndex, endIndex = _ref8.endIndex;
                 var api = root + ('/api/optionlist/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2380,8 +2374,8 @@ var apiConfig = {
                 var api = root + ('/api/prprocess/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Search: function Search(_ref11) {
-                var keyword = _ref11.keyword;
+            Search: function Search(_ref9) {
+                var keyword = _ref9.keyword;
                 var purchaseRequisitionid = keyword;
                 var api = root + ('/api/prprocess/search(' + purchaseRequisitionid + ')');
                 return GET(api);
@@ -2397,7 +2391,7 @@ var apiConfig = {
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account') == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Approve?comments=' + comments);
                         result = PUT(api);
@@ -2410,7 +2404,7 @@ var apiConfig = {
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account') == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Reject?comments=' + comments);
                         result = PUT(api);
@@ -2421,7 +2415,7 @@ var apiConfig = {
                 return result;
             },
             getCurrentStep: function getCurrentStep(prid) {
-                var steps = apiConfig.prprocess.Search({ keyword: prid });
+                var steps = apiConfig.prprocess.Paging(prid, 0, 1000);
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
                     if (Enum.enumApprovalResult.Ready == step['_result']) {
@@ -2429,13 +2423,14 @@ var apiConfig = {
                     }
                 }
                 console.log('\u5F53\u524DPR\u5DF2\u5B8C\u6210\uFF01');
+                return { '_taskowner': '' };
             },
             getStepByAccount: function getStepByAccount(prid, account) {
-                var steps = apiConfig.prprocess.Search({ keyword: prid });
+                var steps = apiConfig.prprocess.Paging(prid, 0, 1000);
                 var stepArr = [];
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
-                    if (account.toLowerCase() == step['_taskowner']) {
+                    if (account == step['_taskowner']) {
                         stepArr.push(step);
                     }
                 }
@@ -2482,8 +2477,8 @@ var apiConfig = {
                 var api = root + ('/api/prprocesssetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref12) {
-                var purchaseRequisitionid = _ref12.purchaseRequisitionid, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
+            Paging: function Paging(_ref10) {
+                var purchaseRequisitionid = _ref10.purchaseRequisitionid, startIndex = _ref10.startIndex, endIndex = _ref10.endIndex;
                 var api = root + ('/api/prprocesssetting/paging(' + purchaseRequisitionid + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2554,18 +2549,18 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/countbyemployee(' + employeeAccount + ',' + status + ')');
                 return GET(api);
             },
-            Search: function Search(_ref13) {
-                var keyword = _ref13.keyword;
+            Search: function Search(_ref11) {
+                var keyword = _ref11.keyword;
                 var api = root + ('/api/purchaserequisition/search?keyWord=' + keyword);
                 return GET(api);
             },
-            SearchByStatus: function SearchByStatus(_ref14) {
-                var role = _ref14.role, uid = _ref14.uid, status = _ref14.status, startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
+            SearchByStatus: function SearchByStatus(_ref12) {
+                var role = _ref12.role, uid = _ref12.uid, status = _ref12.status, startIndex = _ref12.startIndex, endIndex = _ref12.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref15) {
-                var role = _ref15.role, uid = _ref15.uid, status = _ref15.status, keyword = _ref15.keyword, startIndex = _ref15.startIndex, endIndex = _ref15.endIndex;
+            SearchByKeywordAndStatus: function SearchByKeywordAndStatus(_ref13) {
+                var role = _ref13.role, uid = _ref13.uid, status = _ref13.status, keyword = _ref13.keyword, startIndex = _ref13.startIndex, endIndex = _ref13.endIndex;
                 var api = root + ('/api/purchaserequisition/search(' + role + ',' + uid + ',' + status + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2573,8 +2568,8 @@ var apiConfig = {
                 var api = root + ('/api/purchaserequisition/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref16) {
-                var startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
+            Paging: function Paging(_ref14) {
+                var startIndex = _ref14.startIndex, endIndex = _ref14.endIndex;
                 var startIndex = startIndex;
                 var endIndex = endIndex;
                 var api = root + ('/api/purchaserequisition/paging(' + startIndex + ',' + endIndex + ')');
@@ -2597,6 +2592,7 @@ var apiConfig = {
                 return POST(api, data);
             },
             SupplierComplete: function SupplierComplete(prid) {
+                //TODO
                 var currentStep = apiConfig.prprocess.getCurrentStep(prid);
                 if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep['_prprocessstep'])
                     return false;
@@ -2617,13 +2613,13 @@ var apiConfig = {
                 var api = root + ('/api/PRSupplierView/count?completed=' + completed);
                 return GET(api);
             },
-            Search: function Search(_ref17) {
-                var isCompeleted = _ref17.isCompeleted, keyword = _ref17.keyword, startIndex = _ref17.startIndex, endIndex = _ref17.endIndex;
+            Search: function Search(_ref15) {
+                var isCompeleted = _ref15.isCompeleted, keyword = _ref15.keyword, startIndex = _ref15.startIndex, endIndex = _ref15.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref18) {
-                var isCompeleted = _ref18.isCompeleted, startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
+            Paging: function Paging(_ref16) {
+                var isCompeleted = _ref16.isCompeleted, startIndex = _ref16.startIndex, endIndex = _ref16.endIndex;
                 var api = root + ('/api/PRSupplierView/search(' + isCompeleted + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2652,8 +2648,8 @@ var apiConfig = {
                 var api = root + '/api/supplier/count';
                 return GET(api);
             },
-            Search: function Search(_ref19) {
-                var keyword = _ref19.keyword;
+            Search: function Search(_ref17) {
+                var keyword = _ref17.keyword;
                 var api = root + ('/api/supplier/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2661,8 +2657,8 @@ var apiConfig = {
                 var api = root + ('/api/supplier/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref20) {
-                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
+            Paging: function Paging(_ref18) {
+                var startIndex = _ref18.startIndex, endIndex = _ref18.endIndex;
                 var api = root + ('/api/supplier/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2695,8 +2691,8 @@ var apiConfig = {
                 var api = root + '/api/systemsetting/count';
                 return GET(api);
             },
-            Search: function Search(_ref21) {
-                var keyword = _ref21.keyword;
+            Search: function Search(_ref19) {
+                var keyword = _ref19.keyword;
                 var api = root + ('/api/systemsetting/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2704,8 +2700,8 @@ var apiConfig = {
                 var api = root + ('/api/systemsetting/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref22) {
-                var startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
+            Paging: function Paging(_ref20) {
+                var startIndex = _ref20.startIndex, endIndex = _ref20.endIndex;
                 var api = root + ('/api/systemsetting/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             }
@@ -2734,8 +2730,8 @@ var apiConfig = {
                 var api = root + '/api/systemuser/count';
                 return GET(api);
             },
-            Search: function Search(_ref23) {
-                var keyword = _ref23.keyword;
+            Search: function Search(_ref21) {
+                var keyword = _ref21.keyword;
                 var api = root + ('/api/systemuser/search?keyWord=' + keyword);
                 return GET(api);
             },
@@ -2743,8 +2739,8 @@ var apiConfig = {
                 var api = root + ('/api/systemuser/top(' + topcount + ')');
                 return GET(api);
             },
-            Paging: function Paging(_ref24) {
-                var startIndex = _ref24.startIndex, endIndex = _ref24.endIndex;
+            Paging: function Paging(_ref22) {
+                var startIndex = _ref22.startIndex, endIndex = _ref22.endIndex;
                 var api = root + ('/api/systemuser/paging(' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
@@ -2762,8 +2758,8 @@ var apiConfig = {
                 var api = root + ('/api/employee/login(' + username + ',' + password + ')');
                 return GET(api);
             },
-            Search: function Search(_ref25) {
-                var keyword = _ref25.keyword;
+            Search: function Search(_ref23) {
+                var keyword = _ref23.keyword;
                 var name = keyword;
                 var api = root + ('/api/employee/search(' + name + ')');
                 return GET(api);
@@ -2774,8 +2770,8 @@ var apiConfig = {
                 var api = root + ('/api/PRApproverView/count?account=' + account + '&status=' + status);
                 return GET(api);
             },
-            Paging: function Paging(_ref26) {
-                var account = _ref26.account, completed = _ref26.completed, startIndex = _ref26.startIndex, endIndex = _ref26.endIndex;
+            Paging: function Paging(_ref24) {
+                var account = _ref24.account, completed = _ref24.completed, startIndex = _ref24.startIndex, endIndex = _ref24.endIndex;
                 var api = root + ('/api/PRApproverView/paging(' + account + ',' + completed + ',' + startIndex + ',' + endIndex);
                 return GET(api);
             }
@@ -2963,7 +2959,8 @@ function autoComplateInfo(infoSet, form, prefix) {
         var val = infoSet[i];
         if ('' != prefix && undefined != prefix)
             i = prefix + i;
-        var target = form.find('#' + i);
+        // var target = form.find("#" + i)
+        var target = form.find('*[name=' + i + ']');
         if (target.is('input') || target.is('select') || target.is('option') || target.is('textarea')) {
             target.val(val);
         } else {
@@ -3236,7 +3233,7 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
                     'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
                 },
@@ -3246,7 +3243,7 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
                     'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
                 }
@@ -3371,10 +3368,10 @@ var tableStructures = {
                 Success: {
                     'tablename': 'success',
                     'hasHeader': true,
-                    'hasDetail': false,
+                    'hasDetail': true,
                     'hasButton': false,
                     'viewOrder': ["_id", "_prnumber", "_purpose", "_requestor", "_prCompleted"],
-                    'keyArr': ["id", "prop", "key", "prop",, "prop"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
                     'data': [["序列", "订单号", "用途", "申请人", "结束时间"]]
                 },
                 ExpressUpdateDetail: {
@@ -3436,9 +3433,9 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交时间", "结束时间"]]
                 },
                 Success: {
                     'tablename': 'success',
@@ -3446,9 +3443,9 @@ var tableStructures = {
                     'hasDetail': true,
                     'hasButton': true,
                     'buttonPool': ["copyBtn"],
-                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-                    'keyArr': ["id", "prop", "key", "prop", "prop", "prop"],
-                    'data': [["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"]]
+                    'viewOrder': ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+                    'keyArr': ["id", "prop", "key", "prop", "prop"],
+                    'data': [["序列", "订单号", "用途", "提交时间", "结束时间"]]
                 },
                 orderDetail: {
                     'name': 'orderDetail',

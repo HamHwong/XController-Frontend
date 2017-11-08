@@ -330,7 +330,6 @@ const PurchaseRequisition = {
       PurchaseRequisition.hide()
     },
     submit: function() {
-      debugger
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       if (items.length <= 0) {
@@ -365,7 +364,7 @@ const PurchaseRequisition = {
           for (var i = 0; i < items.length; i++) {
             items[i]["_purchaserequisitionfk"] = PRid
             items[i]["_logistics"] = null
-            items[i]["_contactnumber"] = null
+            // items[i]["_contactnumber"] = null
           }
           var picount = apiConfig.purchaseitem.Add(items)
 

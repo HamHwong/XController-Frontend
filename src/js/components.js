@@ -12,6 +12,26 @@ var tab_init = function() {
 }
 
 
+var Loading = {
+  show: function() {
+    if (!window.LoadingMarker) {
+      var container = $("<div class='Loading'>")
+      var loading = $('<div class="wrapper"><div class="loadingspan"><div class="help"></div></div></div>')
+      container.append(loading)
+      window.LoadingMarker = container
+      $("body").append(window.LoadingMarker)
+    } else {
+      // $(".Loading").css("display", "block")
+      window.LoadingMarker.show()
+    }
+  },
+  hide: function() {
+    if (window.LoadingMarker) {
+      window.LoadingMarker.hide()
+    }
+  }
+}
+
 /**
  * @description 从字典数组中查询到
  * @param  {String} keys 输入的关键字字符串
@@ -198,50 +218,6 @@ const bindInputQuery = function({
 //     //
 //   })
 // }
-
-var LoadingEmelement = function() {
-  this.html = $(`<div class="loadingElement"></div>`)
-  return this
-}
-LoadingEmelement.prototype.jump = function(target, time) {
-  var tempDistance = 0
-  var speed = target / time
-  for (; tempDistance < target; tempDistance += speed) {
-    this.html.css("top", tempDistance)
-  }
-}
-var Loading = function({
-  count,
-  time
-}) {
-  this.count = count
-  this.time = time
-  this.generate({
-    count: count,
-    time: time
-  })
-}
-Loading.prototype.generate = function({
-  count,
-  time
-}) {
-  if (!$(".Loading").length) {
-    $("body").append("<div class='Loading'>")
-  } else {
-    $(".Loading").empty()
-  }
-  $(".Loading").append("<div class='loadingElements'>")
-
-  var loadingContainer = $(".loadingElements")
-  for (var i = 0; i < count; i++) {
-    var c = new LoadingEmelement()
-    c.jump(100, 1000)
-    loadingContainer.append(c.html)
-  }
-}
-Loading.prototype.move = function() {
-
-}
 
 var MessageAlert = function (msg, status) {
   this.status = status || MessageAlert.Status.SUCCESS
@@ -1521,26 +1497,41 @@ const PRDetail = {
     if (PRid) {
       window.target.PR = apiConfig.purchaserequisition.Get(PRid)
     }
+
+    //四种情况，
+    //1、当前角色为Employee，当前PR属于Progress状态，且当前PR不是该账号审批，则只显示关闭按钮。
+    //2、当前角色为Employee，当前PR属于Progress状态，当前PR是该用户审批，则显示审批按钮
+    //3、当前角色为ADMIN，当前PR属于Progress状态，则显示审批按钮
+    //4、当前PR不属于Progress状态，显示关闭按钮
+    //5、new 当前角色为Supplier，则
     if (Enum.role.EMPLOYEE == getCookie("role") || Enum.role.SYSADMIN == getCookie("role")) {
       if (Enum.prstatus.Progress == window.target.PR["_prstatus"]) {
-        if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
+        // if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
+        if ((getCookie("account") == apiConfig.prprocess.getCurrentStep(PRid)["_taskowner"]) || Enum.role.SYSADMIN == getCookie("role")) {
           $("#Detail textarea#PRD_approvalComments").attr("disabled", false)
           var approvelBtn = `<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button>`
           var rejectBtn = `<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>`
           operationArea.append(approvelBtn).append(rejectBtn)
         } else {
+          //TODO
           //当前PR若不属于审核状态，或者当前PR审核人中没有该用户，则不给加审核按钮和审核评论框
           // console.log("您没有对该PR审查的许可。")
+          $(".modal-infopart.Approval").hide()
           $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
           var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
           operationArea.append(closebtnlbtn)
         }
       } else {
+        $(".modal-infopart.Approval").hide()
         $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
         var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
         operationArea.append(closebtnlbtn)
-
       }
+    } else {
+      $(".modal-infopart.Approval").hide()
+      $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
+      var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+      operationArea.append(closebtnlbtn)
     }
   },
   destory: function() {
@@ -1557,7 +1548,6 @@ const PRDetail = {
     var targetPRArea = "#Detail",
       targetPITableArea = "#InfomationArea",
       templateOpts = tableStructures.Dealer.MyOrder.orderDetail
-
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
@@ -1584,7 +1574,9 @@ const PRDetail = {
       new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
     }
 
-    var steps = apiConfig.prprocess.Paging(PRid, 0, 100).reverse()
+    var steps = apiConfig.prprocess.Search({
+      keyword: PRid
+    })
     for (var i = 0; i < steps.length; i++) {
       var result = steps[i]["_result"]
       var time = steps[i]["_lastmodified"]
@@ -2211,7 +2203,6 @@ const PurchaseRequisition = {
       PurchaseRequisition.hide()
     },
     submit: function() {
-      debugger
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
       if (items.length <= 0) {
@@ -2246,7 +2237,7 @@ const PurchaseRequisition = {
           for (var i = 0; i < items.length; i++) {
             items[i]["_purchaserequisitionfk"] = PRid
             items[i]["_logistics"] = null
-            items[i]["_contactnumber"] = null
+            // items[i]["_contactnumber"] = null
           }
           var picount = apiConfig.purchaseitem.Add(items)
 
@@ -2313,13 +2304,13 @@ const PurchaseRequisition = {
 
 var SupplierPRDetail = {
   show: function() {
-    $("#Detail").modal()
+    $("#SupplierPRDetail").modal()
   },
   hide: function() {
-    $("#Detail").modal('hide')
+    $("#SupplierPRDetail").modal('hide')
   },
   autoComplate: function(PRid) {
-    var targetPRITableArea = "#Detail .goodsInfomation",
+    var targetPRITableArea = "#SupplierPRDetail .goodsInfomation",
       templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail
     if (PRid) {
       var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
@@ -2462,7 +2453,7 @@ const apiConfig = {
     },
     Edit: function(id, data) {
       //PUT
-      var account = getCookie("account").toLowerCase()
+      var account = getCookie("account")
       var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
@@ -2476,9 +2467,11 @@ const apiConfig = {
       return GET(api)
     },
     Search: function({
-      keyword
+      keyword,
+      startIndex,
+      endIndex
     }) {
-      var api = root + `/api/brochure/search(${keyword})`
+      var api = root + `/api/brochure/search(${keyword},${startIndex},${endIndex})`
       return GET(api)
     },
     Top: function(topcount) {
@@ -2685,7 +2678,7 @@ const apiConfig = {
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account") == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Approve?comments=${comments}`
           result = PUT(api)
@@ -2698,7 +2691,7 @@ const apiConfig = {
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account") == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Reject?comments=${comments}`
           result = PUT(api)
@@ -2709,9 +2702,7 @@ const apiConfig = {
       return result
     },
     getCurrentStep: function(prid) {
-      var steps = apiConfig.prprocess.Search({
-        keyword: prid
-      })
+      var steps = apiConfig.prprocess.Paging(prid, 0, 1000)
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
@@ -2719,15 +2710,17 @@ const apiConfig = {
         }
       }
       console.log("当前PR已完成！")
+      return {
+        "_taskowner": ""
+      }
+
     },
     getStepByAccount: function(prid, account) {
-      var steps = apiConfig.prprocess.Search({
-        keyword: prid
-      })
+      var steps = apiConfig.prprocess.Paging(prid, 0, 1000)
       var stepArr = []
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
-        if (account.toLowerCase() == step["_taskowner"]) {
+        if (account == step["_taskowner"]) {
           stepArr.push(step)
         }
       }
@@ -2913,7 +2906,7 @@ const apiConfig = {
       return POST(api, data)
     },
     SupplierComplete: function(prid) {
-
+//TODO
       var currentStep = apiConfig.prprocess.getCurrentStep(prid)
 
       if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
@@ -3321,7 +3314,8 @@ function autoComplateInfo(infoSet, form, prefix) {
     var val = infoSet[i]
     if ("" != prefix && undefined != prefix)
       i = prefix + i
-    var target = form.find("#" + i)
+    // var target = form.find("#" + i)
+    var target = form.find("*[name=" + i + "]")
     if (target.is('input') || target.is('select') || target.is('option') || target.is('textarea')) {
       target.val(val)
     } else {
@@ -3610,7 +3604,7 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
@@ -3622,7 +3616,7 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_processstatus"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
@@ -3772,10 +3766,10 @@ const tableStructures = {
       Success: {
         "tablename": "success",
         "hasHeader": true,
-        "hasDetail": false,
+        "hasDetail": true,
         "hasButton": false,
         "viewOrder": ["_id", "_prnumber", "_purpose", "_requestor", "_prCompleted"],
-        "keyArr": ["id", "prop", "key", "prop", , "prop"],
+        "keyArr": ["id", "prop", "key", "prop", "prop"],
         "data": [
           ["序列", "订单号", "用途", "申请人", "结束时间"],
         ]
@@ -3850,10 +3844,10 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+        "keyArr": ["id", "prop", "key", "prop", "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
+          ["序列", "订单号", "用途", "提交时间", "结束时间"],
         ]
       },
       Success: {
@@ -3862,10 +3856,10 @@ const tableStructures = {
         "hasDetail": true,
         "hasButton": true,
         "buttonPool": ["copyBtn"],
-        "viewOrder": ["_id", "_prnumber", "_purposefk", "_requestorfk", "_prcreated", "_prcompleted"],
-        "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
+        "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated", "_prcompleted"],
+        "keyArr": ["id", "prop", "key", "prop", "prop"],
         "data": [
-          ["序列", "订单号", "用途", "提交人", "提交时间", "结束时间"],
+          ["序列", "订单号", "用途", "提交时间", "结束时间"],
         ]
       },
       orderDetail: {

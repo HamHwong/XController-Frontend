@@ -80,7 +80,7 @@
     </div>
   </div>
   
-    <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade lg-modal" id="SupplierPRDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -157,7 +157,6 @@
   <script>
     var update = function(PRid) {
       SupplierPRDetail.view.Express.update(PRid)
-      // SupplierPRDetail.view.Express.show()
     }
 
     function finish(primarykey) {
@@ -167,7 +166,48 @@
 
   
 
-    <script type="text/javascript">
+  
+    <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">订单详情</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix" id="steps">
+            <ul id="progressbar" class="clearfix">
+              <ul>
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <ul>
+            <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
+          </ul>
+          <div class="comment">
+            <span>备注：</span>
+            <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+          </div>
+        </div>
+        <div class="modal-infopart goodsInfomation">
+          <div id="InfomationArea">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="center-block">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+      <script type="text/javascript">
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
@@ -178,67 +218,70 @@
    }
 </script>
 
-      <script>
-        //载入我的订单的申请表操作
-        var table_init = function() {
-          // window.__PurchaseRequisitionItem_Unsave_set = {}
+        <script>
+          //载入我的订单的申请表操作
+          var table_init = function() {
+            // window.__PurchaseRequisitionItem_Unsave_set = {}
 
-          generateTableWithPageHelper({
-            target: "#applying",
-            templateOpts: tableStructures.Supplier.MyOrder.Approving,
-            counter: apiConfig.PRSupplierView.Count(false),
-            datasourceAPI: apiConfig.PRSupplierView.Paging,
-            options: {
-              isCompeleted:false
-            }
-          })
-          generateTableWithPageHelper({
-            target: "#success",
-            templateOpts: tableStructures.Supplier.MyOrder.Success,
-            counter: apiConfig.PRSupplierView.Count(true),
-            datasourceAPI: apiConfig.PRSupplierView.Paging,
-            options: {
-              isCompeleted:true
-            }
-          })
+            generateTableWithPageHelper({
+              target: "#applying",
+              templateOpts: tableStructures.Supplier.MyOrder.Approving,
+              counter: apiConfig.PRSupplierView.Count(false),
+              datasourceAPI: apiConfig.PRSupplierView.Paging,
+              options: {
+                isCompeleted: false
+              }
+            })
+            generateTableWithPageHelper({
+              target: "#success",
+              templateOpts: tableStructures.Supplier.MyOrder.Success,
+              counter: apiConfig.PRSupplierView.Count(true),
+              datasourceAPI: apiConfig.PRSupplierView.Paging,
+              options: {
+                isCompeleted: true
+              }
+            })
 
-        }
-
-        var supply = function(rid) {
-          // console.log(rid);
-          window._target = apiConfig.brochure.Get(rid)
-          $("#Supply")
-            .modal()
-        }
-
-        var search = function() {
-          var keyword = filterXSS($("input#search_box").val().trim())
-          if ("" == keyword) {
-            table_init()
-            return
           }
-          generateTableWithPageHelper({
-            target: "#applying",
-            templateOpts: tableStructures.Supplier.MyOrder.Approving,
-            counter: apiConfig.PRSupplierView.Count(),
-            datasourceAPI: apiConfig.PRSupplierView.Search,
-            options: {
-              keyword:keyword,
-              isCompeleted:false
+          //订单详情操作
+          var Detail = function(PRid) {
+            PurchaseRequisition.detail(PRid)
+          }
+          var supply = function(rid) {
+            // console.log(rid);
+            window._target = apiConfig.brochure.Get(rid)
+            $("#Supply")
+              .modal()
+          }
+
+          var search = function() {
+            var keyword = filterXSS($("input#search_box").val().trim())
+            if ("" == keyword) {
+              table_init()
+              return
             }
-          })
-          generateTableWithPageHelper({
-            target: "#success",
-            templateOpts: tableStructures.Supplier.MyOrder.Approving,
-            counter: apiConfig.PRSupplierView.Count(),
-            datasourceAPI: apiConfig.PRSupplierView.Search,
-            options: {
-              keyword:keyword,
-              isCompeleted:true
-            }
-          })
-        }
-      </script>
+            generateTableWithPageHelper({
+              target: "#applying",
+              templateOpts: tableStructures.Supplier.MyOrder.Approving,
+              counter: apiConfig.PRSupplierView.Count(),
+              datasourceAPI: apiConfig.PRSupplierView.Search,
+              options: {
+                keyword: keyword,
+                isCompeleted: false
+              }
+            })
+            generateTableWithPageHelper({
+              target: "#success",
+              templateOpts: tableStructures.Supplier.MyOrder.Approving,
+              counter: apiConfig.PRSupplierView.Count(),
+              datasourceAPI: apiConfig.PRSupplierView.Search,
+              options: {
+                keyword: keyword,
+                isCompeleted: true
+              }
+            })
+          }
+        </script>
 
     </div>
   </div>

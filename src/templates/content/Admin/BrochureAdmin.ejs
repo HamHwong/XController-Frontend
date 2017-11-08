@@ -79,7 +79,7 @@
               generateTableWithPageHelper({
                 target: "#Brochure-table-container",
                 templateOpts: tableStructures.Admin.Bruchure.Inventory,
-                counter: apiConfig.brochure.Count(),
+                counter: apiConfig.brochure.Search({keyword:keyword}).length,//TODO
                 datasourceAPI: apiConfig.brochure.Search,
                 options: {
                   keyword: keyword

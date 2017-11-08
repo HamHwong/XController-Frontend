@@ -120,7 +120,7 @@
           </div>
           <div class="Comments editable col-md-12" id="_description">
             <span>描述：</span>
-            <textarea name="_description" rows="4"></textarea>
+            <textarea name="_description" rows="4">asasas</textarea>
           </div>
         </form>
       </div>
@@ -263,7 +263,7 @@
               generateTableWithPageHelper({
                 target: "#Brochure-table-container",
                 templateOpts: tableStructures.Admin.Bruchure.Inventory,
-                counter: apiConfig.brochure.Count(),
+                counter: apiConfig.brochure.Search({keyword:keyword}).length,//TODO
                 datasourceAPI: apiConfig.brochure.Search,
                 options: {
                   keyword: keyword

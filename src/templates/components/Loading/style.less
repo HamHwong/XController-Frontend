@@ -1,0 +1,95 @@
+.Loading {
+  position: fixed;
+  top: 0;
+  background-color: rgba(0,0,0,0.7);
+  height: 100%;
+  width: 100%;
+}
+// .loadingElements {
+//   position: absolute;
+//   left: calc(50% - 40px);
+//   top: 50%;
+// }
+//
+// .loadingElement {
+//   float: left;
+//   position: relative;
+//   background-color: #fff;
+//   width: 6px;
+//   height: 16px;
+//   border-radius: 1px;
+//   margin-left: 2px;
+// }
+
+.wrapper {
+  position: fixed;
+  // position: absolute;
+  // top:calc(50% - 100px);
+  width: 100px;
+  margin: 0 auto;
+  top: 50%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.loadingspan {
+  float: left;
+  width: 100px;
+  height: 100px;
+  vertical-align: middle;
+  border-radius: 1px;
+  margin-right: 100px;
+}
+
+.loadingspan:last-child {
+  margin-right: 0;
+}
+/*help*/
+
+.help {
+  width: 30px;
+  height: 30px;
+  border: 1px #fff solid;
+  border-radius: 50%;
+  -webkit-animation: rotation 1s ease-in-out infinite;
+  -moz-animation: rotation 1s ease-in-out infinite;
+  animation: rotation 1s ease-in-out infinite;
+  margin: 30px auto;
+}
+
+.help:after {
+  width: 5px;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 100%;
+  position: absolute;
+  content: "";
+}
+@-webkit-keyframes rotation {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotation {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

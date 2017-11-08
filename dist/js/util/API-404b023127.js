@@ -15,7 +15,7 @@ var apiConfig = {
             },
             Edit: function Edit(id, data) {
                 //PUT
-                var account = getCookie('account').toLowerCase();
+                var account = getCookie('account');
                 var api = root + ('/api/brochure/' + id + '/update?actionOwner=' + account);
                 return PUT(api, data);
             },
@@ -29,8 +29,8 @@ var apiConfig = {
                 return GET(api);
             },
             Search: function Search(_ref) {
-                var keyword = _ref.keyword;
-                var api = root + ('/api/brochure/search(' + keyword + ')');
+                var keyword = _ref.keyword, startIndex = _ref.startIndex, endIndex = _ref.endIndex;
+                var api = root + ('/api/brochure/search(' + keyword + ',' + startIndex + ',' + endIndex + ')');
                 return GET(api);
             },
             Top: function Top(topcount) {
@@ -219,7 +219,7 @@ var apiConfig = {
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account') == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Approve?comments=' + comments);
                         result = PUT(api);
@@ -232,7 +232,7 @@ var apiConfig = {
                 var taskOwner = currentStep['_taskowner'];
                 var result = null;
                 if (currentStep) {
-                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account').toLowerCase() == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
+                    if (getCookie('role') == Enum.role.EMPLOYEE && getCookie('account') == taskOwner || getCookie('role') == Enum.role.SYSADMIN) {
                         var id = currentStep['_id'];
                         var api = root + ('/api/prprocess/' + id + '/Reject?comments=' + comments);
                         result = PUT(api);
@@ -243,7 +243,7 @@ var apiConfig = {
                 return result;
             },
             getCurrentStep: function getCurrentStep(prid) {
-                var steps = apiConfig.prprocess.Search({ keyword: prid });
+                var steps = apiConfig.prprocess.Paging(prid, 0, 1000);
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
                     if (Enum.enumApprovalResult.Ready == step['_result']) {
@@ -251,13 +251,14 @@ var apiConfig = {
                     }
                 }
                 console.log('\u5F53\u524DPR\u5DF2\u5B8C\u6210\uFF01');
+                return { '_taskowner': '' };
             },
             getStepByAccount: function getStepByAccount(prid, account) {
-                var steps = apiConfig.prprocess.Search({ keyword: prid });
+                var steps = apiConfig.prprocess.Paging(prid, 0, 1000);
                 var stepArr = [];
                 for (var i = 0; i < steps.length; i++) {
                     var step = steps[i];
-                    if (account.toLowerCase() == step['_taskowner']) {
+                    if (account == step['_taskowner']) {
                         stepArr.push(step);
                     }
                 }
@@ -419,6 +420,7 @@ var apiConfig = {
                 return POST(api, data);
             },
             SupplierComplete: function SupplierComplete(prid) {
+                //TODO
                 var currentStep = apiConfig.prprocess.getCurrentStep(prid);
                 if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep['_prprocessstep'])
                     return false;

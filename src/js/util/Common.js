@@ -149,7 +149,8 @@ function autoComplateInfo(infoSet, form, prefix) {
     var val = infoSet[i]
     if ("" != prefix && undefined != prefix)
       i = prefix + i
-    var target = form.find("#" + i)
+    // var target = form.find("#" + i)
+    var target = form.find("*[name=" + i + "]")
     if (target.is('input') || target.is('select') || target.is('option') || target.is('textarea')) {
       target.val(val)
     } else {

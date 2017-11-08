@@ -14,7 +14,7 @@ const apiConfig = {
     },
     Edit: function(id, data) {
       //PUT
-      var account = getCookie("account").toLowerCase()
+      var account = getCookie("account")
       var api = root + `/api/brochure/${id}/update?actionOwner=${account}`
       return PUT(api, data)
     },
@@ -28,9 +28,11 @@ const apiConfig = {
       return GET(api)
     },
     Search: function({
-      keyword
+      keyword,
+      startIndex,
+      endIndex
     }) {
-      var api = root + `/api/brochure/search(${keyword})`
+      var api = root + `/api/brochure/search(${keyword},${startIndex},${endIndex})`
       return GET(api)
     },
     Top: function(topcount) {
@@ -237,7 +239,7 @@ const apiConfig = {
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account") == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Approve?comments=${comments}`
           result = PUT(api)
@@ -250,7 +252,7 @@ const apiConfig = {
       var taskOwner = currentStep["_taskowner"]
       var result = null
       if (currentStep) {
-        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account").toLowerCase() == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
+        if ((getCookie('role') == Enum.role.EMPLOYEE && getCookie("account") == taskOwner) || getCookie('role') == Enum.role.SYSADMIN) {
           var id = currentStep["_id"]
           var api = root + `/api/prprocess/${id}/Reject?comments=${comments}`
           result = PUT(api)
@@ -261,9 +263,7 @@ const apiConfig = {
       return result
     },
     getCurrentStep: function(prid) {
-      var steps = apiConfig.prprocess.Search({
-        keyword: prid
-      })
+      var steps = apiConfig.prprocess.Paging(prid, 0, 1000)
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
         if (Enum.enumApprovalResult.Ready == step["_result"]) {
@@ -271,15 +271,17 @@ const apiConfig = {
         }
       }
       console.log("当前PR已完成！")
+      return {
+        "_taskowner": ""
+      }
+
     },
     getStepByAccount: function(prid, account) {
-      var steps = apiConfig.prprocess.Search({
-        keyword: prid
-      })
+      var steps = apiConfig.prprocess.Paging(prid, 0, 1000)
       var stepArr = []
       for (var i = 0; i < steps.length; i++) {
         var step = steps[i]
-        if (account.toLowerCase() == step["_taskowner"]) {
+        if (account == step["_taskowner"]) {
           stepArr.push(step)
         }
       }
@@ -465,7 +467,7 @@ const apiConfig = {
       return POST(api, data)
     },
     SupplierComplete: function(prid) {
-
+//TODO
       var currentStep = apiConfig.prprocess.getCurrentStep(prid)
 
       if (!currentStep || Enum.processStatus.SupplierUpdate != currentStep["_prprocessstep"])
