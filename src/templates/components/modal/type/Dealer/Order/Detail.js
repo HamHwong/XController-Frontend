@@ -27,7 +27,6 @@ const PRDetail = {
     if (PRid) {
       window.target.PR = apiConfig.purchaserequisition.Get(PRid)
     }
-
     //四种情况，
     //1、当前角色为Employee，当前PR属于Progress状态，且当前PR不是该账号审批，则只显示关闭按钮。
     //2、当前角色为Employee，当前PR属于Progress状态，当前PR是该用户审批，则显示审批按钮
@@ -37,7 +36,7 @@ const PRDetail = {
     if (Enum.role.EMPLOYEE == getCookie("role") || Enum.role.SYSADMIN == getCookie("role")) {
       if (Enum.prstatus.Progress == window.target.PR["_prstatus"]) {
         // if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
-        if ((getCookie("account") == apiConfig.prprocess.getCurrentStep(PRid)["_taskowner"]) || Enum.role.SYSADMIN == getCookie("role")) {
+        if ((getCookie("account").toLocaleLowerCase() == apiConfig.prprocess.getCurrentStep(PRid)["_taskowner"]) || Enum.role.SYSADMIN == getCookie("role")) {
           $("#Detail textarea#PRD_approvalComments").attr("disabled", false)
           var approvelBtn = `<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button>`
           var rejectBtn = `<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>`
@@ -48,19 +47,19 @@ const PRDetail = {
           // console.log("您没有对该PR审查的许可。")
           $(".modal-infopart.Approval").hide()
           $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-          var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+          var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
           operationArea.append(closebtnlbtn)
         }
       } else {
         $(".modal-infopart.Approval").hide()
         $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-        var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+        var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
         operationArea.append(closebtnlbtn)
       }
     } else {
       $(".modal-infopart.Approval").hide()
       $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-      var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
+      var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
       operationArea.append(closebtnlbtn)
     }
   },
@@ -83,6 +82,10 @@ const PRDetail = {
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
       //TODO
       PRinfoSet["_demanderfk"] = PRinfoSet["_requestoremployeefk"] || PRinfoSet["_requestordealerfk"]
+      PRinfoSet["_logistics"] = PRinfoSet["_logistics"] || "暂无物流信息"
+      PRinfoSet["_deliverydate"] = PRinfoSet["_deliverydate"] || "无"
+      PRinfoSet["_deliveryaddress"] = PRinfoSet["_deliveryaddress"] || "无"
+      PRinfoSet["_consignee"] = PRinfoSet["_consignee"] || "无"
       if (PRinfoSet["_requestoremployeefk"]) {
         //Employee
         var employee = apiConfig.employee.Get(PRinfoSet["_requestoremployeefk"])[0]
@@ -92,9 +95,9 @@ const PRDetail = {
       } else if (PRinfoSet["_requestordealerfk"]) {
         //Dealer
         var dealer = apiConfig.dealer.Get(PRinfoSet["_requestordealerfk"])
-        PRinfoSet["_phonenumber"] = employee["_phonenumber"] || "无"
-        PRinfoSet["_email"] = employee["_email"] || "无"
-        PRinfoSet["_region"] = employee["_dealerregion"] || "无"
+        PRinfoSet["_phonenumber"] = dealer["_phonenumber"] || "无"
+        PRinfoSet["_email"] = dealer["_email"] || "无"
+        PRinfoSet["_region"] = dealer["_dealerregion"] || "无"
       }
 
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
@@ -150,13 +153,12 @@ const PRDetail = {
         var PRid = window.target.PR["_id"]
         var comments = $("textarea#PRD_approvalComments").val()
         var isApproved = apiConfig.prprocess.Approve(PRid, comments)
-        if (isApproved == true) {
+        if (isApproved) {
           new MessageAlert("审核通过！", MessageAlert.Status.SUCCESS)
           PRDetail.hide()
         } else {
           new MessageAlert("审核失败", MessageAlert.Status.EXCEPTION)
         }
-
       }
       table_init()
     },

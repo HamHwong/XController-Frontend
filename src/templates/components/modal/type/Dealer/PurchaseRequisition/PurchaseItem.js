@@ -9,6 +9,7 @@ const PurchaseItem = {
       .modal()
   },
   hide: function() {
+    PurchaseItem.destory()
     $("#PruchaseItem")
       .modal('hide')
   },
@@ -134,7 +135,7 @@ const PurchaseItem = {
       arr.push(localid)
       var set = formToSet("#PruchaseItem_form")
       set["_id"] = localid
-      var order = ["_brochurename", "_deliverydate", "_quantity", "_consignee", "_contactnumber", "_deliveryaddress"]
+      var order = ["_brochurename", "_quantity", "_deliverypriorityfk"]
       for (var i = 0; i < order.length; i++) {
         arr.push(set[order[i]])
       }
@@ -178,12 +179,23 @@ const PurchaseItem = {
     delete: function(PIid) {
       var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!PIid.search("[unsave]") >= 0) {
+      if (!(PIid.search("[unsave]") >= 0)) {
         DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid)
       } else {
         DeleteRemoteData = true
       }
       if (DeleteRemoteData) {
+        var newArray = deleteFromObjectArray(PItems, "_id", PIid)
+        // var pos = -1
+        // for (var i = 0; i < PItems.length; i++) {
+        //   if (PItems[i]["_id"] == PIid) {
+        //     pos = i
+        //     break
+        //   }
+        // }
+        // if (pos > 0)
+        //   PItems.splice(pos, 1)
+        window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = newArray
         window.__PurchaseRequisitionItem_table.data[PIid].remove()
         new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
       } else {

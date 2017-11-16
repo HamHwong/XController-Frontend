@@ -7,14 +7,16 @@ html {
     background-color: #F7F9FA;
   }
 }
-button.btn-primary{
+
+button.btn-primary {
   background-color: #748192;
 }
 
 #login-wapper {
   position: relative;
   width: 100%;
-  .system-name{
+
+  .system-name {
     color: #fff;
     right: 1rem;
     top: 1rem;
@@ -26,37 +28,59 @@ button.btn-primary{
       font-size: 1rem;
     }
   }
+
   .bg {
     color: #fff;
     background: #CCCCCC;
     // background: linear-gradient(to bottom,#141e8c 60%,#101975 100%);
     text-align: center;
     height: 28rem;
+
     .logo {
-      background: url('./../img/zeiss.svg') no-repeat;
+      background: url('./../img/zeiss-logo.svg') no-repeat;
       // background-size: 100% auto;
-      width: 10%;
-      min-width:10rem;
+      // width: 10%;
+      min-width: 10rem;
       margin: 0 auto;
-      margin-top: 10rem;
-      animation: popOut 0.5s forwards;
+      background-size: 100% 8rem;
+      height: 100%;
       @media(min-width:768px) {
         font-size: 3rem;
+        margin-top: 10rem;
         line-height: 5rem;
-        width:16rem;
-        height:3.868rem ;
+        width: 16rem;
       }
       @media (max-width:768px) {
         font-size: 4rem;
+        margin-top: 6rem;
         line-height: 3rem;
-        width:10rem;
-        height:2.418rem ;
+        width: 10rem;
       }
     }
-
+    // .logo {
+    //   background: url('./../img/zeiss-logo.svg') no-repeat;
+    //   // background-size: 100% auto;
+    //   width: 10%;
+    //   min-width:10rem;
+    //   margin: 0 auto;
+    //   margin-top: 10rem;
+    //   animation: popOut 0.5s forwards;
+    //   @media(min-width:768px) {
+    //     font-size: 3rem;
+    //     line-height: 5rem;
+    //     width:16rem;
+    //     height:3.868rem ;
+    //   }
+    //   @media (max-width:768px) {
+    //     font-size: 4rem;
+    //     line-height: 3rem;
+    //     width:10rem;
+    //     height:2.418rem ;
+    //   }
+    // }
     .logo::before {
       content: "";
-       display: block;
+      display: block;
     }
   }
 

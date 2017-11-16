@@ -30,7 +30,6 @@
             <script>
               //载入我的订单的申请表操作
               var table_init = function() {
-                // window.__PurchaseRequisitionItem_Unsave_set = {}
                 generateTableWithPageHelper({
                   target: "#applying",
                   templateOpts: tableStructures.Employee.MyOrder.Approving,
@@ -101,7 +100,7 @@
                 }
                 generateTableWithPageHelper({
                   target: "#applying",
-                  templateOpts: tableStructures.Dealer.MyOrder.Approving,
+                  templateOpts: tableStructures.Employee.MyOrder.Approving,
                   counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
                   datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
                   options: {
@@ -113,7 +112,7 @@
                 })
                 generateTableWithPageHelper({
                   target: "#draft",
-                  templateOpts: tableStructures.Dealer.MyOrder.Draft,
+                  templateOpts: tableStructures.Employee.MyOrder.Draft,
                   counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
                   datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
                   options: {
@@ -125,7 +124,7 @@
                 })
                 generateTableWithPageHelper({
                   target: "#success",
-                  templateOpts: tableStructures.Dealer.MyOrder.Success,
+                  templateOpts: tableStructures.Employee.MyOrder.Success,
                   counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
                   datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
                   options: {
@@ -137,7 +136,7 @@
                 })
                 generateTableWithPageHelper({
                   target: "#reject",
-                  templateOpts: tableStructures.Dealer.MyOrder.Rejected,
+                  templateOpts: tableStructures.Employee.MyOrder.Rejected,
                   counter: apiConfig.purchaserequisition.CountByEmployee(getCookie('account'), Enum.prstatus.Progress),
                   datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
                   options: {

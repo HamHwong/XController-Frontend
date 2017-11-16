@@ -37,27 +37,45 @@
               <input type="text" class="form-control" name="_region" id="_region" readonly>
             </div>
             <!--for employee-->
-            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forEmployee">
+            <div class="form-group col-md-3 col-xs-12 search_box_warp requestorInput" id="forEmployee">
               <label for="requestoremployeefk">申请人:</label>
               <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
               </select>
               <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
             </div>
             <!--for dealer-->
-            <div class="form-group col-md-6 col-xs-12 search_box_warp requestorInput" id="forDealer">
+            <div class="form-group col-md-3 col-xs-12 search_box_warp requestorInput" id="forDealer">
               <label for="requestordealerfk">申请人:</label>
               <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
               </select>
               <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
             </div>
 
-            <div class="form-group col-md-4 col-xs-12 search_box_warp">
+            <div class="form-group col-md-3 col-xs-12 search_box_warp">
               <label for="submitter">提交人:</label>
               <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
               </select>
               <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
             </div>
 
+            <div class="form-group col-md-4 col-xs-12">
+              <label for="_deliverydate">交付时间 ：</label>
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" readonly/>
+            </div>
+
+            <div class="form-group col-md-3 col-xs-12">
+              <label for="_consignee">收货人 ：</label>
+              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" data-regxRule="notnull" />
+            </div>
+            <div class="form-group col-md-3 col-xs-12">
+              <label for="_contactnumber">收货电话 ：</label>
+              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" data-regxRule="phone" />
+            </div>
+
+            <div class="form-group col-md-6 col-xs-12">
+              <label for="_deliveryaddress">收货地址 ：</label>
+              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" data-regxRule="notnull" />
+            </div>
 
             <div class="form-group col-md-6 col-xs-12">
               <label for="_purposefk">用途:</label>
@@ -82,4 +100,4 @@
     </div>
   </div>
 </div>
-<%-include('./PurchaseItem')%>
+<%-include('/components/modal/modal',{type:"Dealer.PurchaseRequisition.PurchaseItem"})%>

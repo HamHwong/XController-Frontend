@@ -1,21 +1,15 @@
 //绑定输入查询数据
 //绑定交付时间组件
-$('#_deliverydate')
-  .datetimepicker({
-    format: 'yyyy-mm-dd',
-    weekStart: 1,
-    startDate: new Date(),
-    autoclose: true,
-    startView: 2,
-    minView: 2,
-    forceParse: false,
-    language: 'zh-CN'
-  });
+$('#_deliverydate').on("hidden.bs.modal", function(e) {
+  console.log("_deliverydate",e)
+  e.stopPropagation()
+})
 $("#PruchaseItem")
-  .on("hidden.bs.modal", function() {
+  .on("hidden.bs.modal", function(e) {
+    console.log("PruchaseItem",e)
     PurchaseItem.destory()
   })
-$("#PruchaseItem").on("shown.bs.modal", function() {
+$("#PruchaseItem").on("shown.bs.modal", function(e) {
 
 })
 var row_counter = 0

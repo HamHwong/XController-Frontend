@@ -26,7 +26,24 @@
               </select>
               <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
             </div>
+            <div class="form-group col-md-3">
+              <label for="_deliverydate">交付时间 ：</label>
+              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" readonly/>
+            </div>
 
+            <div class="form-group col-md-3">
+              <label for="_consignee">收货人 ：</label>
+              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" data-regxRule="notnull" />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="_contactnumber">收货电话 ：</label>
+              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" data-regxRule="phone" />
+            </div>
+
+            <div class="form-group col-md-3">
+              <label for="_deliveryaddress">收货地址 ：</label>
+              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" data-regxRule="notnull" />
+            </div>
             <div class="form-group col-md-3 col-xs-12">
               <label for="_purposefk">用途:</label>
               <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" data-regxRule="select"></select>

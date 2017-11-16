@@ -7,28 +7,46 @@
       </div>
 
       <div class="modal-body">
+        <div class="modal-infopart expressInfomation">
+          <form id="Express_form" class="form-horizontal" role="form">
+            <input type="text" name="_logistics" id="_logistics" value="" hidden>
 
+            <div class="form-group col-xs-11 expressRow">
+              <label for="expressid" class="col-xs-4 col-md-2 control-label">物流单号 ：</label>
+              <div class="col-xs-8 col-md-10">
+                <input name="expressid" placeholder="请输入物流单号" class="form-control" autocomplete="off" onkeyup="SupplierPRDetail.event.Express.save(this)" />
+                <button type="button" name="button" class="btn btn-inverse">-</button>
+              </div>
+            </div>
+
+            <div class="col-xs-1 col-md-1 col-sm-1 col-lg-1 " id="ExpressAppendBtn">
+              <button type="button" name="button" class="btn mb10 mt10" onclick="SupplierPRDetail.event.Express.appendExpress()">+</button>
+            </div>
+
+          </form>
+        </div>
         <div class="modal-infopart goodsInfomation">
         </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
+          <button type="button" class="btn btn-success" onclick="SupplierPRDetail.event.Express.save()">保存物流信息</button>
+          <button type="button" class="btn btn-primary" onclick="finish()">完成该订单</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
-          <button type="button" class="btn btn-success" onclick="finish()">完成该订单</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<%-include('./Update')%>
-<%-include('./Finish')%>
-  <script>
-    var update = function(PRid) {
-      SupplierPRDetail.view.Express.update(PRid)
-    }
+<!--<%-include('./Update')%>-->
+  <%-include('./Finish')%>
+    <script>
+      // var update = function(PRid) {
+      //   SupplierPRDetail.view.Express.update(PRid)
+      // }
 
-    function finish(primarykey) {
-      $("#Finish").modal()
-    }
-  </script>
+      function finish(primarykey) {
+        $("#Finish").modal()
+      }
+    </script>

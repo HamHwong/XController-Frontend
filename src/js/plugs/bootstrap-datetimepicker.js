@@ -603,7 +603,7 @@
             index_highest = index_current;
           }
         });
-        this.zIndex = index_highest + 10;
+        this.zIndex = index_highest + 99999;//HACK
       }
 
       var offset, top, left, containerOffset;
@@ -1857,7 +1857,7 @@
                 '</tr>' +
       '</thead>',
     contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
-    footTemplate: '<tfoot>' + 
+    footTemplate: '<tfoot>' +
                     '<tr><th colspan="7" class="today"></th></tr>' +
                     '<tr><th colspan="7" class="clear"></th></tr>' +
                   '</tfoot>'

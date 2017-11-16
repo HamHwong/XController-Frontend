@@ -19,24 +19,8 @@
       <%-include("/content/Zeiss/MyOrder")%>
     </div>
   </div>
-
-  <link rel="stylesheet" href="./css/plugs/bootstrap.css">
-  <link rel="stylesheet" href="./css/main.css">
-  <link rel="stylesheet" href="./css/content.css">
-  <link rel="stylesheet" href="./css/components.css">
-  <link rel="stylesheet" href="./css/plugs/buttons.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/plugs/datetimepicker.css">
-
-  <script type="text/javascript" src="./js/plugs/bootstrap.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker.js"></script>
-  <script type="text/javascript" src="./js/plugs/xss.js"></script>
-  <script type="text/javascript" src="./js/util/apimethod.js"></script>
-  <script type="text/javascript" src="./js/components.js"></script>
-  <script type="text/javascript" src="./js/init.js"></script>
-  <script type="text/javascript" src="./js/content.js"></script>
-  <script type="text/javascript" src="./js/cookies.js"></script>
-
+  <%-include("../../config/CSSRequire")%>
+  <%-include("../../config/JSRequire")%>
 
   <script type="text/javascript">
     $(document).ready(function() {

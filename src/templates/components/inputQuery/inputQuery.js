@@ -131,7 +131,6 @@ const bindInputQuery = function({
     } else {
       $input.parent(".search_box_warp").removeClass("open")
     }
-    //
   })
 }
 // const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {

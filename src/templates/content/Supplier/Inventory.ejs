@@ -32,7 +32,7 @@
             options: {}
           })
         }
-        var Detail = function(bid) {
+        var History = function(bid) {
           BrochureHistory.show(bid)
         }
 
@@ -74,7 +74,7 @@
             target: "#Brochure-table-container",
             templateOpts: tableStructures.Supplier.Brochure,
             counter: apiConfig.brochure.Search({keyword: keyword}).length,
-            datasourceAPI: apiConfig.brochure.Search,
+            datasourceAPI: apiConfig.brochure.Paging,
             options: {
               keyword: keyword
             }

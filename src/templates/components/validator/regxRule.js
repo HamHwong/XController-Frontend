@@ -51,6 +51,10 @@ const regxRule = {
     regx: "[^-1]\\d*",
     msg: "请选择！"
   },
+  selectBrochure: {
+    regx: "[^-1]\\d*",
+    msg: "没有找到该物品！请确认后提交！"
+  },
   selectEmployee:{
     regx: "[^-1]\\d*",
     msg: "没有找到该员工！请确认后查询！"

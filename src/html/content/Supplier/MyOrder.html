@@ -37,21 +37,39 @@
       </div>
 
       <div class="modal-body">
+        <div class="modal-infopart expressInfomation">
+          <form id="Express_form" class="form-horizontal" role="form">
+            <input type="text" name="_logistics" id="_logistics" value="" hidden>
 
+            <div class="form-group col-xs-11 expressRow">
+              <label for="expressid" class="col-xs-4 col-md-2 control-label">物流单号 ：</label>
+              <div class="col-xs-8 col-md-10">
+                <input name="expressid" placeholder="请输入物流单号" class="form-control" autocomplete="off" onkeyup="SupplierPRDetail.event.Express.save(this)" />
+                <button type="button" name="button" class="btn btn-inverse">-</button>
+              </div>
+            </div>
+
+            <div class="col-xs-1 col-md-1 col-sm-1 col-lg-1 " id="ExpressAppendBtn">
+              <button type="button" name="button" class="btn mb10 mt10" onclick="SupplierPRDetail.event.Express.appendExpress()">+</button>
+            </div>
+
+          </form>
+        </div>
         <div class="modal-infopart goodsInfomation">
         </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
+          <button type="button" class="btn btn-success" onclick="SupplierPRDetail.event.Express.save()">保存物流信息</button>
+          <button type="button" class="btn btn-primary" onclick="finish()">完成该订单</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
-          <button type="button" class="btn btn-success" onclick="finish()">完成该订单</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -65,7 +83,6 @@
             <label class="col-sm-3 control-label">物流信息 ：</label>
             <div class="col-sm-8">
               <textarea name="_logistics" id="_logistics" class="form-control" placeholder="输入最新信息"></textarea>
-              
             </div>
           </div>
         </form>
@@ -78,8 +95,8 @@
     </div>
   </div>
 </div>
-
-<!-- 信息删除确认 -->
+-->
+  <!-- 信息删除确认 -->
 <div class="modal fade" id="Finish">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -102,15 +119,15 @@
 </div>
 <!-- /.modal -->
 
-  <script>
-    var update = function(PRid) {
-      SupplierPRDetail.view.Express.update(PRid)
-    }
+    <script>
+      // var update = function(PRid) {
+      //   SupplierPRDetail.view.Express.update(PRid)
+      // }
 
-    function finish(primarykey) {
-      $("#Finish").modal()
-    }
-  </script>
+      function finish(primarykey) {
+        $("#Finish").modal()
+      }
+    </script>
 
   
 
@@ -134,9 +151,25 @@
           <ul>
             <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
           </ul>
+          <ul>
+            <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
+            <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+            <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+          </ul>
+          <ul>
+            <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
+          </ul>
+          <ul>
+            <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
+          </ul>
+
           <div class="comment">
             <span>备注：</span>
             <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+          </div>
+
+          <div id="logistics">
+
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
@@ -169,8 +202,6 @@
         <script>
           //载入我的订单的申请表操作
           var table_init = function() {
-            // window.__PurchaseRequisitionItem_Unsave_set = {}
-
             generateTableWithPageHelper({
               target: "#applying",
               templateOpts: tableStructures.Supplier.MyOrder.Approving,
@@ -195,12 +226,6 @@
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }
-          var supply = function(rid) {
-            // console.log(rid);
-            window._target = apiConfig.brochure.Get(rid)
-            $("#Supply")
-              .modal()
-          }
 
           var search = function() {
             var keyword = filterXSS($("input#search_box").val().trim())
@@ -211,7 +236,7 @@
             generateTableWithPageHelper({
               target: "#applying",
               templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(),
+              counter: apiConfig.PRSupplierView.Count(false),
               datasourceAPI: apiConfig.PRSupplierView.Search,
               options: {
                 keyword: keyword,
@@ -220,8 +245,8 @@
             })
             generateTableWithPageHelper({
               target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(),
+              templateOpts: tableStructures.Supplier.MyOrder.Success,
+              counter: apiConfig.PRSupplierView.Count(true),
               datasourceAPI: apiConfig.PRSupplierView.Search,
               options: {
                 keyword: keyword,

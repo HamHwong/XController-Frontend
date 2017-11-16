@@ -10,6 +10,9 @@
 
 <div class="operation-menu">
   <button type="button" class="btn btn-primary" onclick="BrochureAdmin.view.add.show()">添加物品</button>
+  <div class="pull-right">
+    <a href="#">Export History</a>
+  </div>
 </div>
 
 <div class="table-content tab-content">
@@ -79,7 +82,9 @@
               generateTableWithPageHelper({
                 target: "#Brochure-table-container",
                 templateOpts: tableStructures.Admin.Bruchure.Inventory,
-                counter: apiConfig.brochure.Search({keyword:keyword}).length,//TODO
+                counter: apiConfig.brochure.Search({
+                  keyword: keyword
+                }).length, //TODO
                 datasourceAPI: apiConfig.brochure.Search,
                 options: {
                   keyword: keyword

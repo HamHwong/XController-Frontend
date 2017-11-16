@@ -6,7 +6,7 @@
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <script type="text/javascript" src="./js/plugs/jquery-d4fb5b8162.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
 </head>
 
 <body>
@@ -30,7 +30,7 @@
   <nav class="topNav" id="sidebar-wrapper">
     <ul class="nav sidebar-nav section-group">
       <li class="section"><a href="#MyOrder"><span class="glyphicon glyphicon-th-list"></span>我的订单</a></li>
-      <li class="section"><a href="#Inventory"><span class="glyphicon glyphicon-th-list"></span>入库管理</a></li>
+      <li class="section"><a href="#Inventory"><span class="glyphicon glyphicon-th-list"></span>库存管理</a></li>
     </ul>
     <div class="sideavatar">
       <div class="greet clearfix">
@@ -89,21 +89,39 @@
       </div>
 
       <div class="modal-body">
+        <div class="modal-infopart expressInfomation">
+          <form id="Express_form" class="form-horizontal" role="form">
+            <input type="text" name="_logistics" id="_logistics" value="" hidden>
 
+            <div class="form-group col-xs-11 expressRow">
+              <label for="expressid" class="col-xs-4 col-md-2 control-label">物流单号 ：</label>
+              <div class="col-xs-8 col-md-10">
+                <input name="expressid" placeholder="请输入物流单号" class="form-control" autocomplete="off" onkeyup="SupplierPRDetail.event.Express.save(this)" />
+                <button type="button" name="button" class="btn btn-inverse">-</button>
+              </div>
+            </div>
+
+            <div class="col-xs-1 col-md-1 col-sm-1 col-lg-1 " id="ExpressAppendBtn">
+              <button type="button" name="button" class="btn mb10 mt10" onclick="SupplierPRDetail.event.Express.appendExpress()">+</button>
+            </div>
+
+          </form>
+        </div>
         <div class="modal-infopart goodsInfomation">
         </div>
       </div>
       <div class="modal-footer">
         <div class="center-block">
+          <button type="button" class="btn btn-success" onclick="SupplierPRDetail.event.Express.save()">保存物流信息</button>
+          <button type="button" class="btn btn-primary" onclick="finish()">完成该订单</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
-          <button type="button" class="btn btn-success" onclick="finish()">完成该订单</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -117,7 +135,6 @@
             <label class="col-sm-3 control-label">物流信息 ：</label>
             <div class="col-sm-8">
               <textarea name="_logistics" id="_logistics" class="form-control" placeholder="输入最新信息"></textarea>
-              
             </div>
           </div>
         </form>
@@ -130,8 +147,8 @@
     </div>
   </div>
 </div>
-
-<!-- 信息删除确认 -->
+-->
+  <!-- 信息删除确认 -->
 <div class="modal fade" id="Finish">
   <div class="modal-dialog">
     <div class="modal-content message_align">
@@ -154,15 +171,15 @@
 </div>
 <!-- /.modal -->
 
-  <script>
-    var update = function(PRid) {
-      SupplierPRDetail.view.Express.update(PRid)
-    }
+    <script>
+      // var update = function(PRid) {
+      //   SupplierPRDetail.view.Express.update(PRid)
+      // }
 
-    function finish(primarykey) {
-      $("#Finish").modal()
-    }
-  </script>
+      function finish(primarykey) {
+        $("#Finish").modal()
+      }
+    </script>
 
   
 
@@ -186,9 +203,25 @@
           <ul>
             <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
           </ul>
+          <ul>
+            <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
+            <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+            <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+          </ul>
+          <ul>
+            <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
+          </ul>
+          <ul>
+            <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
+          </ul>
+
           <div class="comment">
             <span>备注：</span>
             <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+          </div>
+
+          <div id="logistics">
+
           </div>
         </div>
         <div class="modal-infopart goodsInfomation">
@@ -221,8 +254,6 @@
         <script>
           //载入我的订单的申请表操作
           var table_init = function() {
-            // window.__PurchaseRequisitionItem_Unsave_set = {}
-
             generateTableWithPageHelper({
               target: "#applying",
               templateOpts: tableStructures.Supplier.MyOrder.Approving,
@@ -247,12 +278,6 @@
           var Detail = function(PRid) {
             PurchaseRequisition.detail(PRid)
           }
-          var supply = function(rid) {
-            // console.log(rid);
-            window._target = apiConfig.brochure.Get(rid)
-            $("#Supply")
-              .modal()
-          }
 
           var search = function() {
             var keyword = filterXSS($("input#search_box").val().trim())
@@ -263,7 +288,7 @@
             generateTableWithPageHelper({
               target: "#applying",
               templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(),
+              counter: apiConfig.PRSupplierView.Count(false),
               datasourceAPI: apiConfig.PRSupplierView.Search,
               options: {
                 keyword: keyword,
@@ -272,8 +297,8 @@
             })
             generateTableWithPageHelper({
               target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(),
+              templateOpts: tableStructures.Supplier.MyOrder.Success,
+              counter: apiConfig.PRSupplierView.Count(true),
               datasourceAPI: apiConfig.PRSupplierView.Search,
               options: {
                 keyword: keyword,
@@ -285,21 +310,24 @@
 
     </div>
   </div>
+
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
-  <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
-  <link rel="stylesheet" href="./css/content-2f97396e13.css">
-  <link rel="stylesheet" href="./css/components-c7ef13d0c5.css">
-  <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
-  <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
-  <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
-  <script type="text/javascript" src="./js/plugs/bootstrap-b91bdbbd7a.js"></script>
-  <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-25620eaebc.js"></script>
-  <script type="text/javascript" src="./js/plugs/xss-de407195fb.js"></script>
-  <script type="text/javascript" src="./js/util/apimethod-7884c16dc6.js"></script>
-  <script type="text/javascript" src="./js/components-b104034a1f.js"></script>
-  <script type="text/javascript" src="./js/init-7cb6de05af.js"></script>
-  <script type="text/javascript" src="./js/content-5d2d311ef3.js"></script>
-  <script type="text/javascript" src="./js/cookies-cb3705cb8c.js"></script>
+<link rel="stylesheet" href="./css/main-8c511f7ad2.css">
+<link rel="stylesheet" href="./css/content-2f97396e13.css">
+<link rel="stylesheet" href="./css/components-546b19e0f1.css">
+<link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
+<link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
+<link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
+
+  <script type="text/javascript" src="./js/plugs/bootstrap-5869c96cc8.min.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-fc7104849e.min.js"></script>
+<script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
+<script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
+<script type="text/javascript" src="./js/components-83dbb635f4.js"></script>
+<script type="text/javascript" src="./js/init-89afa2bf0b.js"></script>
+<script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
+<script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
+
   <script type="text/javascript">
     $(document).ready(function() {
       for (var i in init) {

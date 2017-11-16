@@ -2,9 +2,7 @@
   <h3>数据字典</h3>
   <div class="form-group pull-right col-xs-12 col-sm-6 col-md-4" id="tableQuery">
     <div class="form-group col-xs-9">
-      <input type="text" class="form-control searchBox" name="search_box" id="search_box" placeholder="在这里输入关键字" />
     </div>
-    <button type="submit" class="btn btn-primary col-xs-3 searchBtn">查询</button>
   </div>
 </div>
 
@@ -39,7 +37,7 @@
           $("#Delete")
             .modal()
         }
-        
+
         var deleteSubmit = function() {
           if (window._target) {
             var id = window._target["_id"]
@@ -60,20 +58,5 @@
           $("#Edit")
             .modal()
         }
-        var search = function() {
-          var keyword = filterXSS($("input.searchBox").val().trim())
-          if ("" == keyword) {
-            table_init()
-            return
-          }
-          generateTableWithPageHelper({
-            target: "#Brochure-table-container",
-            templateOpts: tableStructures.Admin.Dictionary,
-            counter: apiConfig.optionlist.Count(),
-            datasourceAPI: apiConfig.optionlist.Search,
-            options: {
-              keyword: keyword
-            }
-          })
-        }
+
       </script>

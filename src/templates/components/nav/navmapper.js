@@ -29,7 +29,6 @@ var hyperlink_init = function () {
             .empty()
           $("#content_wapper")
             .append(Obj.trim())
-          // window.currentPos = getCookie("auth") + "." + position //HACK Button
           initPageByName("content")
           sideclose()
         }

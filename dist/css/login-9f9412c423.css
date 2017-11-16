@@ -36,30 +36,29 @@ button.btn-primary {
   height: 28rem;
 }
 #login-wapper .bg .logo {
-  background: url('../img/zeiss.svg') no-repeat;
-  width: 10%;
+  background: url('../img/zeiss-logo.svg') no-repeat;
   min-width: 10rem;
   margin: 0 auto;
-  margin-top: 10rem;
-  -webkit-animation: popOut 0.5s forwards;
-  -moz-animation: popOut 0.5s forwards;
-  -o-animation: popOut 0.5s forwards;
-  animation: popOut 0.5s forwards;
+  -webkit-background-size: 100% 8rem;
+  -moz-background-size: 100% 8rem;
+  -o-background-size: 100% 8rem;
+  background-size: 100% 8rem;
+  height: 100%;
 }
 @media (min-width: 768px) {
   #login-wapper .bg .logo {
     font-size: 3rem;
+    margin-top: 10rem;
     line-height: 5rem;
     width: 16rem;
-    height: 3.868rem ;
   }
 }
 @media (max-width: 768px) {
   #login-wapper .bg .logo {
     font-size: 4rem;
+    margin-top: 6rem;
     line-height: 3rem;
     width: 10rem;
-    height: 2.418rem ;
   }
 }
 #login-wapper .bg .logo::before {
