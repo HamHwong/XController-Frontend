@@ -1,10 +1,10 @@
 const PurchaseItem = {
   show: function() {
     PurchaseItem.init()
-    $("#PruchaseItem")
-      .on("hidden.bs.modal", function() {
-        PurchaseItem.destory()
-      })
+    // $("#PruchaseItem")
+    //   .on("hidden.bs.modal", function() {
+    //     PurchaseItem.destory()
+    //   })
     $("#PruchaseItem")
       .modal()
   },
@@ -30,6 +30,11 @@ const PurchaseItem = {
     autoComplateInfo(PInfoSet, targetPRArea) //将PR填充到表单
   },
   init: function() {
+    $("#PruchaseItem").unbind("hidden.bs.modal")
+    $("#PruchaseItem")
+      .on("hidden.bs.modal", function(e) {
+        PurchaseItem.destory()
+      })
     bindInputQuery({
       input: "#brochure",
       datasourceAPI: apiConfig.brochure.Search,

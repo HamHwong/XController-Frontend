@@ -77,11 +77,11 @@ var cssSrc = config.path.css
 
 gulp.task('revJs', ['concat-conponent-js'], function() {
   return gulp.src([jsSrc + "/**/*.js"])
-    // .pipe(babel({
-    //   presets: [es2015],
-    // }))
-    // .pipe(removeUseStrict())
-    // .pipe(uglify())
+    .pipe(babel({
+      presets: [es2015],
+    }))
+    .pipe(removeUseStrict())
+    .pipe(uglify())
     .pipe(rev())
     .pipe(gulp.dest(__dist + "/js"))
     .pipe(rev.manifest({

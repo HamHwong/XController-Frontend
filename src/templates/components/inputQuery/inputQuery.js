@@ -73,113 +73,71 @@ const bindInputQuery = function({
   searchObj,
   innerTextName,
   valueName,
+  delay,
   callback
 }) {
   var $input = $(input)
   $input.unbind("keyup")
   var $select = $input.siblings("select.queryinput")
   $input.after("<ul class='dropdown-menu keyhint'>")
-
+  var delay = delay || 600
   //给input绑定上keyup事件
   $input.on('keyup', function(e) {
     e.preventDefault()
+    if (window.timer) {
+      clearTimeout(window.timer)
+    }
     $select.empty()
     $select.append(`<option value="-1" selected="selected"></option>`)
-    var keyword = this.value
-    searchObj["keyword"] = keyword
-    var datasource = datasourceAPI(searchObj)
-    //BUG 搜索与droplist不同步，原因：api以条目的任意属性为搜索条件，droplist只以brochurename为搜索条件
-    var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
-    var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
-    var objSet = arrayToSet(datasource, valueName)
-    var droplist = $input.siblings(".keyhint")
-    droplist.empty()
+    var that = this
+    window.timer = setTimeout(function() {
+      var keyword = that.value
+      searchObj["keyword"] = keyword
+      var datasource = datasourceAPI(searchObj)
+      //BUG 搜索与droplist不同步，原因：api以条目的任意属性为搜索条件，droplist只以brochurename为搜索条件
+      var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
+      var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
+      var objSet = arrayToSet(datasource, valueName)
+      var droplist = $input.siblings(".keyhint")
+      droplist.empty()
 
-    var data = queryKeyWords(keyword, nameArray)
+      var data = queryKeyWords(keyword, nameArray)
 
-    //加载bootstrap下拉框
-    for (var i = 0; i < data["raw"].length; i++) {
-      var key = data["raw"][i]
-      var value = set[key]
-      var li = $("<li></li>")
-      var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
-      a.html(data["blod"][i])
-      li.append(a)
-      droplist.append(li)
-    }
-    //绑定下拉框点击事件
-    if (data["raw"].length > 0 && keyword != "") {
-      $input.parent(".search_box_warp").addClass("open")
-      $(".keywords").on('click', function(e) {
-        bindOptionData({
-          $select,
-          datasource,
-          innerTextName,
-          valueName
+      //加载bootstrap下拉框
+      for (var i = 0; i < data["raw"].length; i++) {
+        var key = data["raw"][i]
+        var value = set[key]
+        var li = $("<li></li>")
+        var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
+        a.html(data["blod"][i])
+        li.append(a)
+        droplist.append(li)
+      }
+      //绑定下拉框点击事件
+      if (data["raw"].length > 0 && keyword != "") {
+        $input.parent(".search_box_warp").addClass("open")
+        $(".keywords").on('click', function(e) {
+          bindOptionData({
+            $select,
+            datasource,
+            innerTextName,
+            valueName
+          })
+
+          var val = $(this).attr("value") //获取到value值
+          $select.val(val)
+          $input.val(this.innerText)
+          droplist.empty()
+          $input.parent(".search_box_warp").removeClass("open")
+          var result = objSet[val]
+          if (callback) {
+            callback(result)
+          }
         })
-
-        var val = $(this).attr("value") //获取到value值
-        $select.val(val)
-        $input.val(this.innerText)
-        droplist.empty()
+      } else {
         $input.parent(".search_box_warp").removeClass("open")
-        var result = objSet[val]
-        if (callback) {
-          callback(result)
-        }
-      })
-    } else {
-      $input.parent(".search_box_warp").removeClass("open")
-    }
+      }
+
+    }, delay)
   })
 }
-// const bindInputQuery = function($input, datasource, innerTextName, valueName, callback) {
-//   $input = $($input)
-//   $input.unbind("keyup")
-//   var $select = $input.siblings("select.queryinput")
-//   bindOptionData($select, datasource, innerTextName, valueName)
-//   //给input绑定上keyup事件
-//   $input.on('keyup', function(e) {
-//     e.preventDefault()
-//     if ("string" == typeof datasource) {
-//       datasource = GET(datasource)
-//     } else {
-//       datasource = datasource
-//     }
-//
-//     var nameArray = getValueArrayFromObjectArray(datasource, innerTextName)
-//     var set = getValueSetFromObjectArray(datasource, innerTextName, valueName)
-//
-//     var droplist = $input.siblings(".keyhint")
-//     droplist.empty()
-//
-//     var data = queryKeyWords(this.value, nameArray)
-//     //加载bootstrap下拉框
-//     for (var i = 0; i < data["raw"].length; i++) {
-//       var key = data["raw"][i]
-//       var value = set[key]
-//       var li = $("<li></li>")
-//       var a = $(`<a href=\"#\" class='keywords' value='${value}'></a>`)
-//       a.html(data["blod"][i])
-//       li.append(a)
-//       droplist.append(li)
-//     }
-//     //绑定下拉框点击事件
-//     if (data["raw"].length > 0 && this.value != "") {
-//       $input.parent(".search_box_warp").addClass("open")
-//       $(".keywords").on('click', function(e) {
-//         var val = $(this).attr("value") //获取到value值
-//         $select.val(val)
-//         $input.val(this.innerText)
-//         droplist.empty()
-//         $input.parent(".search_box_warp").removeClass("open")
-//         if (callback) {
-//           callback()
-//         }
-//       })
-//     } else {
-//       $input.parent(".search_box_warp").removeClass("open")
-//     }
-//     //
-//   })
-// }

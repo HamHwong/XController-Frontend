@@ -10,6 +10,12 @@ const PurchaseRequisition = {
       .modal('hide')
   },
   init: function() {
+    $("#PurchaseRequisition")
+      .unbind("hidden.bs.modal")
+    $("#PurchaseRequisition")
+      .on("hidden.bs.modal", function() {
+        PurchaseRequisition.destory()
+      })
     if (!window.__PurchaseRequisitionItem_Unsave_set)
       window.__PurchaseRequisitionItem_Unsave_set = {}
     $('#_deliverydate')
@@ -454,11 +460,11 @@ const PurchaseRequisition = {
       if (window._target.PR) {
         var id = window._target.PR["_id"]
         var result = apiConfig.purchaserequisition.Delete(id)
-        if(result){
-          new MessageAlert("成功删除该草稿！",MessageAlert.SUCCESS)
+        if (result) {
+          new MessageAlert("成功删除该草稿！", MessageAlert.SUCCESS)
           $("#Delete").modal("hide")
-        }else{
-          new MessageAlert("删除草稿失败！请重试！",MessageAlert.EXCEPTION)
+        } else {
+          new MessageAlert("删除草稿失败！请重试！", MessageAlert.EXCEPTION)
         }
         table_init()
       }

@@ -14,17 +14,8 @@
           </div>
         </div>
         <div class="modal-infopart baseInfomation">
-          <ul>
-            <li>申请人：<span name="PRD_demanderfk"></span></li>
-            <li>区 域：<span name="PRD_region"></span></li>
-            <li>手机号：<span name="PRD_phonenumber"></span></li>
-            <li>邮 箱：<span name="PRD_email"></span></li>
-            <li>用 途：<span name="PRD_purposefk"></span></li>
-          </ul>
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
-          </div>
+          <%-include('/components/modal/modal',{type:"Common.detailInfoCollections"})%>
+
         </div>
         <div class="modal-infopart goodsInfomation">
           <div id="InfomationArea">

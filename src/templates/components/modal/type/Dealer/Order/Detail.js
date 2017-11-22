@@ -86,19 +86,45 @@ const PRDetail = {
       PRinfoSet["_deliverydate"] = PRinfoSet["_deliverydate"] || "无"
       PRinfoSet["_deliveryaddress"] = PRinfoSet["_deliveryaddress"] || "无"
       PRinfoSet["_consignee"] = PRinfoSet["_consignee"] || "无"
+
+      // PRinfoSet["_submitter"] = PRinfoSet["_submitterdealerfk"] || PRinfoSet["_submitteremployeefk"]
+
+      var targetUser = null
       if (PRinfoSet["_requestoremployeefk"]) {
-        //Employee
-        var employee = apiConfig.employee.Get(PRinfoSet["_requestoremployeefk"])[0]
+        targetUser = apiConfig.employee.Get(PRinfoSet["_requestoremployeefk"])[0]
+        //requestor Employee
+        var employee = targetUser
         PRinfoSet["_phonenumber"] = employee["mobileField"] || "无"
         PRinfoSet["_email"] = employee["emailField"] || "无"
         PRinfoSet["_region"] = employee["regionField"] || "无"
       } else if (PRinfoSet["_requestordealerfk"]) {
-        //Dealer
-        var dealer = apiConfig.dealer.Get(PRinfoSet["_requestordealerfk"])
+        targetUser = apiConfig.dealer.Get(PRinfoSet["_requestordealerfk"])
+        //requestor Dealer
+        var dealer = targetUser
         PRinfoSet["_phonenumber"] = dealer["_phonenumber"] || "无"
         PRinfoSet["_email"] = dealer["_email"] || "无"
         PRinfoSet["_region"] = dealer["_dealerregion"] || "无"
       }
+
+      if (PRinfoSet["_submitterdealerfk"]) {
+        //submitter dealer
+        // targetUser["accountField"]
+        var dealerid = PRinfoSet["_submitterdealerfk"]
+        if (dealerid != PRinfoSet["_requestordealerfk"]) {
+          PRinfoSet["_submitter"] = apiConfig.dealer.Get(PRinfoSet["_submitterdealerfk"])
+        } else {
+          PRinfoSet["_submitter"] = targetUser["_dealername"]
+        }
+      } else if (PRinfoSet["_submitteremployeefk"]) {
+        //submitter employee
+        var employeeaccount = PRinfoSet["_submitteremployeefk"]
+        if (employeeaccount != PRinfoSet["_requestoremployeefk"]) {
+          PRinfoSet["_submitter"] = apiConfig.employee.Get(PRinfoSet["_submitteremployeefk"])[0]
+        } else {
+          PRinfoSet["_submitter"] = targetUser["nameField"]
+        }
+      }
+
 
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
       //填充PI

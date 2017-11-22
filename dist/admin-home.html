@@ -6,7 +6,7 @@
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-15a1ed6094.js"></script>
 </head>
 
 <body>
@@ -84,7 +84,7 @@
 </div>
 
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
+    
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
@@ -96,153 +96,6 @@
   </div>
 
   
-    <div class="modal fade lg-modal" id="PurchaseRequisition" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">订单申请</h4>
-      </div>
-      <div class="modal-body">
-        <form class="form" method="post" id="PurchaseRequisition_form" data-validator="true">
-          <div class="modal-infopart baseInfomation form-group clearfix">
-
-            <div class="form-group col-md-2 col-xs-12">
-              <label for="requireAgent">代填:<input type="checkbox" name="requireAgent" id="requireAgent"></label>
-              
-              <div class="checkbox" id="agentCheck">
-                <div class="">
-                  <label for="forEmployee">for Employee:</label>
-                  <label for="forEmployee" class="radio-inline">
-                    <input type="radio" data-value="forEmp" name="agent" >
-                  </label>
-                </div>
-                <div class="">
-                  <label for="forDealer">for Dealer:</label>
-                  <label for="forDealer" class="radio-inline">
-                    <input type="radio" data-value="forDea" name="agent" >
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-group col-md-4 col-xs-12">
-              <label for="_region">区域:</label>
-              <!--<select class="form-control  optionlist" data-category="代理商区域" name="_dealerregion" id="_dealerregion">
-              </select>-->
-              <input type="text" class="form-control" name="_region" id="_region" readonly>
-            </div>
-            <!--for employee-->
-            <div class="form-group col-md-3 col-xs-12 search_box_warp requestorInput" id="forEmployee">
-              <label for="requestoremployeefk">申请人:</label>
-              <select class="queryinput" name="_requestoremployeefk" id="_requestoremployeefk" data-target="requestoremployeefk" data-source="zeiss" style="display:none;">
-              </select>
-              <input name="requestoremployeefk" id="requestoremployeefk" placeholder="请输入员工" class="form-control" autocomplete="off" />
-            </div>
-            <!--for dealer-->
-            <div class="form-group col-md-3 col-xs-12 search_box_warp requestorInput" id="forDealer">
-              <label for="requestordealerfk">申请人:</label>
-              <select class="queryinput" name="_requestordealerfk" id="_requestordealerfk" data-target="requestordealerfk" data-source="dealer" style="display:none;">
-              </select>
-              <input name="requestordealerfk" id="requestordealerfk" placeholder="请输入代理商" class="form-control" autocomplete="off" />
-            </div>
-
-            <div class="form-group col-md-3 col-xs-12 search_box_warp">
-              <label for="submitter">提交人:</label>
-              <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
-              </select>
-              <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
-            </div>
-
-            <div class="form-group col-md-4 col-xs-12">
-              <label for="_deliverydate">交付时间 ：</label>
-              <input type="text" class="form-control input-append date" name="_deliverydate" id="_deliverydate" placeholder="交付时间" data-date="12-02-2012" data-date-format="dd-mm-yyyy" readonly/>
-            </div>
-
-            <div class="form-group col-md-3 col-xs-12">
-              <label for="_consignee">收货人 ：</label>
-              <input type="text" class="form-control" name="_consignee" id="_consignee" placeholder="收货人" data-regxRule="notnull" />
-            </div>
-            <div class="form-group col-md-3 col-xs-12">
-              <label for="_contactnumber">收货电话 ：</label>
-              <input type="text" class="form-control" name="_contactnumber" id="_contactnumber" placeholder="收货电话" data-regxRule="phone" />
-            </div>
-
-            <div class="form-group col-md-6 col-xs-12">
-              <label for="_deliveryaddress">收货地址 ：</label>
-              <input type="text" class="form-control" name="_deliveryaddress" id="_deliveryaddress" placeholder="收货地址" data-regxRule="notnull" />
-            </div>
-
-            <div class="form-group col-md-6 col-xs-12">
-              <label for="_purposefk">用途:</label>
-              <select name="_purposefk" id="_purposefk" class="form-control optionlist" data-category="产品彩页用途" data-regxRule="select"></select>
-            </div>
-
-
-            <input type="text" name="_requestorfk" id="_requestorfk" value="" hidden>
-            <div class="Comments editable col-md-12 col-xs-12">
-              <span>备注：</span>
-              <textarea name="_comments" rows="4" id="_comments"></textarea>
-            </div>
-          </div>
-          <div class="modal-infopart goodsInfomation">
-            <button type="button" id="addPItem" class="btn btn-primary addBtn" onclick="PurchaseItem.view.add()"><span class="glyphicon glyphicon-plus"></span></button>
-            <div id="InfomationAddArea">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer" id="operation"></div>
-    </div>
-  </div>
-</div>
-
-    <div class="modal fade" id="PruchaseItem" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">添加物品</h4>
-      </div>
-      <div class="modal-body">
-        <form id="PruchaseItem_form" class="form-horizontal" role="form" data-validator="true">
-
-          <div class="form-group">
-            <label for="brochure" class="col-sm-3 control-label">申请种类 ：</label>
-            <div class="col-sm-8 search_box_warp">
-              <select class="queryinput" name="_brochurename" id="_brochurename" data-target="brochure" data-source="brochure" style="display:none;" data-regxrule="selectBrochure">
-              </select>
-              <input name="brochure" id="brochure" placeholder="请输入产品种类" class="search_box form-control col-md-11" data-source="brochure" autocomplete="off" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label">申请数量 ：</label>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" name="_quantity" id="_quantity" placeholder="申请数量"  data-regxRule="number"  />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-3 control-label">紧急程度 ：</label>
-            <div class="col-sm-8">
-              <select class="form-control optionlist" data-category="邮寄时限" name="_deliverypriorityfk" id="_deliverypriorityfk" data-regxrule="select">
-              </select>
-            </div>
-          </div>
-
-        </form>
-      </div>
-      <div class="modal-footer" id="PIOperation">
-      </div>
-    </div>
-  </div>
-</div>
-
-  
-
-
-  
-
     
     <div class="modal fade" id="Delete">
   <div class="modal-dialog">
@@ -282,17 +135,36 @@
           </div>
         </div>
         <div class="modal-infopart baseInfomation">
-          <ul>
-            <li>申请人：<span name="PRD_demanderfk"></span></li>
-            <li>区 域：<span name="PRD_region"></span></li>
-            <li>手机号：<span name="PRD_phonenumber"></span></li>
-            <li>邮 箱：<span name="PRD_email"></span></li>
-            <li>用 途：<span name="PRD_purposefk"></span></li>
-          </ul>
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
-          </div>
+          
+    <ul>
+  <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
+</ul>
+<ul>
+  <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
+  <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+  <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+</ul>
+<ul>
+  <li>提交人：<span name="PRD_submitter" id="PRD_submitter"></span></li>
+  <li>提交人电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+  <li>提交人区域：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+  <li>提交人邮箱：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+</ul>
+<ul>
+  <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
+</ul>
+<ul>
+  <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
+</ul>
+
+<div class="comment">
+  <span>备注：</span>
+  <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+</div>
+
+  
+
+
         </div>
         <div class="modal-infopart goodsInfomation">
           <div id="InfomationArea">
@@ -465,19 +337,19 @@
     <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
 <link rel="stylesheet" href="./css/content-2f97396e13.css">
-<link rel="stylesheet" href="./css/components-546b19e0f1.css">
+<link rel="stylesheet" href="./css/components-969693989d.css">
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
 <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
 
-    <script type="text/javascript" src="./js/plugs/bootstrap-5869c96cc8.min.js"></script>
-<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-fc7104849e.min.js"></script>
-<script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
-<script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
-<script type="text/javascript" src="./js/components-83dbb635f4.js"></script>
-<script type="text/javascript" src="./js/init-89afa2bf0b.js"></script>
-<script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
-<script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
+    <script type="text/javascript" src="./js/plugs/bootstrap-82a7080715.min.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-08f2c6b127.min.js"></script>
+<script type="text/javascript" src="./js/plugs/xss-fc06e18b01.js"></script>
+<script type="text/javascript" src="./js/util/apimethod-32a022ae78.js"></script>
+<script type="text/javascript" src="./js/components-c85da8fb87.js"></script>
+<script type="text/javascript" src="./js/init-8b66c99cb7.js"></script>
+<script type="text/javascript" src="./js/content-b63f5dccfc.js"></script>
+<script type="text/javascript" src="./js/cookies-03bffaa493.js"></script>
 
 
   <script type="text/javascript">

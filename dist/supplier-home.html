@@ -6,7 +6,7 @@
   <title>HomePage - Marketing Materials Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1 ,user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <script type="text/javascript" src="./js/plugs/jquery-09dd64a64b.js"></script>
+  <script type="text/javascript" src="./js/plugs/jquery-15a1ed6094.js"></script>
 </head>
 
 <body>
@@ -183,7 +183,7 @@
 
   
 
-  
+    
     <div class="modal fade lg-modal" id="Detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -200,29 +200,35 @@
           </div>
         </div>
         <div class="modal-infopart baseInfomation">
-          <ul>
-            <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
-          </ul>
-          <ul>
-            <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
-            <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
-            <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
-          </ul>
-          <ul>
-            <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
-          </ul>
-          <ul>
-            <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
-          </ul>
+          
+    <ul>
+  <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
+</ul>
+<ul>
+  <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
+  <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+  <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+</ul>
+<ul>
+  <li>提交人：<span name="PRD_submitter" id="PRD_submitter"></span></li>
+  <li>提交人电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
+  <li>提交人区域：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+  <li>提交人邮箱：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+</ul>
+<ul>
+  <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
+</ul>
+<ul>
+  <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
+</ul>
 
-          <div class="comment">
-            <span>备注：</span>
-            <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
-          </div>
+<div class="comment">
+  <span>备注：</span>
+  <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+</div>
 
-          <div id="logistics">
+  
 
-          </div>
         </div>
         <div class="modal-infopart goodsInfomation">
           <div id="InfomationArea">
@@ -240,7 +246,7 @@
 
   
 
-      <script type="text/javascript">
+          <script type="text/javascript">
    var table_init = function(tableList) {
      for (var i in CurrentTableList) {
        var $tablecontainer = $(i)
@@ -251,62 +257,62 @@
    }
 </script>
 
-        <script>
-          //载入我的订单的申请表操作
-          var table_init = function() {
-            generateTableWithPageHelper({
-              target: "#applying",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(false),
-              datasourceAPI: apiConfig.PRSupplierView.Paging,
-              options: {
-                isCompeleted: false
-              }
-            })
-            generateTableWithPageHelper({
-              target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Success,
-              counter: apiConfig.PRSupplierView.Count(true),
-              datasourceAPI: apiConfig.PRSupplierView.Paging,
-              options: {
-                isCompeleted: true
-              }
-            })
+            <script>
+              //载入我的订单的申请表操作
+              var table_init = function() {
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Supplier.MyOrder.Approving,
+                  counter: apiConfig.PRSupplierView.Count(false),
+                  datasourceAPI: apiConfig.PRSupplierView.Paging,
+                  options: {
+                    isCompeleted: false
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Supplier.MyOrder.Success,
+                  counter: apiConfig.PRSupplierView.Count(true),
+                  datasourceAPI: apiConfig.PRSupplierView.Paging,
+                  options: {
+                    isCompeleted: true
+                  }
+                })
 
-          }
-          //订单详情操作
-          var Detail = function(PRid) {
-            PurchaseRequisition.detail(PRid)
-          }
+              }
+              //订单详情操作
+              var Detail = function(PRid) {
+                PurchaseRequisition.detail(PRid)
+              }
 
-          var search = function() {
-            var keyword = filterXSS($("input#search_box").val().trim())
-            if ("" == keyword) {
-              table_init()
-              return
-            }
-            generateTableWithPageHelper({
-              target: "#applying",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(false),
-              datasourceAPI: apiConfig.PRSupplierView.Search,
-              options: {
-                keyword: keyword,
-                isCompeleted: false
+              var search = function() {
+                var keyword = filterXSS($("input#search_box").val().trim())
+                if ("" == keyword) {
+                  table_init()
+                  return
+                }
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Supplier.MyOrder.Approving,
+                  counter: apiConfig.PRSupplierView.Count(false),
+                  datasourceAPI: apiConfig.PRSupplierView.Search,
+                  options: {
+                    keyword: keyword,
+                    isCompeleted: false
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Supplier.MyOrder.Success,
+                  counter: apiConfig.PRSupplierView.Count(true),
+                  datasourceAPI: apiConfig.PRSupplierView.Search,
+                  options: {
+                    keyword: keyword,
+                    isCompeleted: true
+                  }
+                })
               }
-            })
-            generateTableWithPageHelper({
-              target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Success,
-              counter: apiConfig.PRSupplierView.Count(true),
-              datasourceAPI: apiConfig.PRSupplierView.Search,
-              options: {
-                keyword: keyword,
-                isCompeleted: true
-              }
-            })
-          }
-        </script>
+            </script>
 
     </div>
   </div>
@@ -314,19 +320,19 @@
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
 <link rel="stylesheet" href="./css/content-2f97396e13.css">
-<link rel="stylesheet" href="./css/components-546b19e0f1.css">
+<link rel="stylesheet" href="./css/components-969693989d.css">
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
 <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
 
-  <script type="text/javascript" src="./js/plugs/bootstrap-5869c96cc8.min.js"></script>
-<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-fc7104849e.min.js"></script>
-<script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
-<script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
-<script type="text/javascript" src="./js/components-83dbb635f4.js"></script>
-<script type="text/javascript" src="./js/init-89afa2bf0b.js"></script>
-<script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
-<script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>
+  <script type="text/javascript" src="./js/plugs/bootstrap-82a7080715.min.js"></script>
+<script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-08f2c6b127.min.js"></script>
+<script type="text/javascript" src="./js/plugs/xss-fc06e18b01.js"></script>
+<script type="text/javascript" src="./js/util/apimethod-32a022ae78.js"></script>
+<script type="text/javascript" src="./js/components-c85da8fb87.js"></script>
+<script type="text/javascript" src="./js/init-8b66c99cb7.js"></script>
+<script type="text/javascript" src="./js/content-b63f5dccfc.js"></script>
+<script type="text/javascript" src="./js/cookies-03bffaa493.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {

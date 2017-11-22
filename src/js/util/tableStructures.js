@@ -154,7 +154,8 @@ const tableStructures = {
         "tablename": "approving",
         "hasHeader": true,
         "hasDetail": true,
-        "hasButton": false,
+        "hasButton": true,
+        "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated"],
         "keyArr": ["id", "prop", "key", "prop"],
         "data": [
@@ -292,7 +293,8 @@ const tableStructures = {
         "tablename": "approving",
         "hasHeader": true,
         "hasDetail": true,
-        "hasButton": false,
+        "hasButton": true,
+        "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purposefk", "_prcreated"],
         "keyArr": ["id", "prop", "key", "prop"],
         "data": [
@@ -351,7 +353,8 @@ const tableStructures = {
         "tablename": "order",
         "hasHeader": true,
         "hasDetail": true,
-        "hasButton": false,
+        "hasButton": true,
+        "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated"],
         "keyArr": ["id", "prop", "key", "prop", "prop"],
         "data": [
@@ -362,7 +365,8 @@ const tableStructures = {
         "tablename": "success",
         "hasHeader": true,
         "hasDetail": true,
-        "hasButton": false,
+        "hasButton": true,
+        "buttonPool": ["copyBtn"],
         "viewOrder": ["_id", "_prnumber", "_purpose", "_submitter", "_prcreated", "_prcompleted"],
         "keyArr": ["id", "prop", "key", "prop", "prop", "prop"],
         "data": [

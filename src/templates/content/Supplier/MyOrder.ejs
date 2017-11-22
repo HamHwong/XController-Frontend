@@ -18,61 +18,61 @@
     </div>
   </div>
   <%-include('/components/modal/modal',{type:"Supplier.Express.Detail"})%>
-  <%-include('/components/modal/modal',{type:"Dealer.Order.Detail"})%>
-      <%-include('/components/table/table.init.ejs')%>
-        <script>
-          //载入我的订单的申请表操作
-          var table_init = function() {
-            generateTableWithPageHelper({
-              target: "#applying",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(false),
-              datasourceAPI: apiConfig.PRSupplierView.Paging,
-              options: {
-                isCompeleted: false
-              }
-            })
-            generateTableWithPageHelper({
-              target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Success,
-              counter: apiConfig.PRSupplierView.Count(true),
-              datasourceAPI: apiConfig.PRSupplierView.Paging,
-              options: {
-                isCompeleted: true
-              }
-            })
+    <%-include('/components/modal/modal',{type:"Dealer.Order.Detail"})%>
+          <%-include('/components/table/table.init.ejs')%>
+            <script>
+              //载入我的订单的申请表操作
+              var table_init = function() {
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Supplier.MyOrder.Approving,
+                  counter: apiConfig.PRSupplierView.Count(false),
+                  datasourceAPI: apiConfig.PRSupplierView.Paging,
+                  options: {
+                    isCompeleted: false
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Supplier.MyOrder.Success,
+                  counter: apiConfig.PRSupplierView.Count(true),
+                  datasourceAPI: apiConfig.PRSupplierView.Paging,
+                  options: {
+                    isCompeleted: true
+                  }
+                })
 
-          }
-          //订单详情操作
-          var Detail = function(PRid) {
-            PurchaseRequisition.detail(PRid)
-          }
+              }
+              //订单详情操作
+              var Detail = function(PRid) {
+                PurchaseRequisition.detail(PRid)
+              }
 
-          var search = function() {
-            var keyword = filterXSS($("input#search_box").val().trim())
-            if ("" == keyword) {
-              table_init()
-              return
-            }
-            generateTableWithPageHelper({
-              target: "#applying",
-              templateOpts: tableStructures.Supplier.MyOrder.Approving,
-              counter: apiConfig.PRSupplierView.Count(false),
-              datasourceAPI: apiConfig.PRSupplierView.Search,
-              options: {
-                keyword: keyword,
-                isCompeleted: false
+              var search = function() {
+                var keyword = filterXSS($("input#search_box").val().trim())
+                if ("" == keyword) {
+                  table_init()
+                  return
+                }
+                generateTableWithPageHelper({
+                  target: "#applying",
+                  templateOpts: tableStructures.Supplier.MyOrder.Approving,
+                  counter: apiConfig.PRSupplierView.Count(false),
+                  datasourceAPI: apiConfig.PRSupplierView.Search,
+                  options: {
+                    keyword: keyword,
+                    isCompeleted: false
+                  }
+                })
+                generateTableWithPageHelper({
+                  target: "#success",
+                  templateOpts: tableStructures.Supplier.MyOrder.Success,
+                  counter: apiConfig.PRSupplierView.Count(true),
+                  datasourceAPI: apiConfig.PRSupplierView.Search,
+                  options: {
+                    keyword: keyword,
+                    isCompeleted: true
+                  }
+                })
               }
-            })
-            generateTableWithPageHelper({
-              target: "#success",
-              templateOpts: tableStructures.Supplier.MyOrder.Success,
-              counter: apiConfig.PRSupplierView.Count(true),
-              datasourceAPI: apiConfig.PRSupplierView.Search,
-              options: {
-                keyword: keyword,
-                isCompeleted: true
-              }
-            })
-          }
-        </script>
+            </script>

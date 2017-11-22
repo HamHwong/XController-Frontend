@@ -10,7 +10,7 @@
 
 <%-include('/components/contentTabs/tabSwitcher',{tabs:{applying:"申请中",success:"已完成",reject:"已拒绝"}})%>
   <div class="operation-menu">
-    <button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>
+    <%#<button type="button" class="btn btn-primary" onclick="PurchaseRequisition.view.create()">申领物品</button>%>
   </div>
   <div class="table-content tab-content">
     <div class="tab-pane" id="applying">
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <%-include('/components/modal/modal',{type:"Employee.PurchaseRequisition.PurchaseRequisition"})%>
+  <%#include('/components/modal/modal',{type:"Employee.PurchaseRequisition.PurchaseRequisition"})%>
     <%-include('/components/modal/modal',{type:"Common.Delete"})%>
       <%-include('/components/modal/modal',{type:"Admin.Order.Detail"})%>
 
