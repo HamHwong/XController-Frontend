@@ -1,1 +1,0 @@
-"use strict";function Adapter(r,t){var n=t;if(!t){n=[];for(var u in r[0])n.push(u)}for(var a=[],e=0;e<r.length;e++){for(var f=[],h=0;h<n.length;h++)f.push(r[e][n[h]]);a.push(f)}return a}

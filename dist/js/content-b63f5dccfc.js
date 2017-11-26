@@ -1,1 +1,0 @@
-"use strict";$("#myModal").modal({show:!1,backdrop:"static"});

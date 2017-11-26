@@ -7,6 +7,16 @@
       </div>
 
       <div class="modal-body">
+
+        <div class="modal-infopart orderStatus">
+          <div class="steps clearfix" id="steps">
+            <ul id="progressbar" class="progressbar clearfix">
+              <ul>
+          </div>
+        </div>
+        <div class="modal-infopart baseInfomation">
+          <%-include('/components/modal/modal',{type:"Common.detailInfoCollections"})%>
+        </div>
         <div class="modal-infopart expressInfomation">
           <form id="Express_form" class="form-horizontal" role="form">
             <input type="text" name="_logistics" id="_logistics" value="" hidden>

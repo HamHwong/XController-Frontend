@@ -85,11 +85,11 @@
               table_init()
               return
             }
+            debugger
             generateTableWithPageHelper({
               target: "#applying",
-
-              templateOpts: tableStructures.Admin.OrderAdmin.Order,
-              counter: apiConfig.purchaserequisition.Count(),
+              templateOpts: tableStructures.Admin.OrderAdmin.oldOrder,
+              counter: apiConfig.PRAdminView.Count(Enum.prstatus.Progress, keyword),
               datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
               options: {
                 keyword: keyword,
@@ -100,8 +100,8 @@
             })
             generateTableWithPageHelper({
               target: "#success",
-              templateOpts: tableStructures.Admin.OrderAdmin.Success,
-              counter: apiConfig.purchaserequisition.Count(),
+              templateOpts: tableStructures.Admin.OrderAdmin.oldSuccess,
+              counter: apiConfig.PRAdminView.Count(Enum.prstatus.Completed, keyword),
               datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
               options: {
                 keyword: keyword,
@@ -112,9 +112,8 @@
             })
             generateTableWithPageHelper({
               target: "#reject",
-
-              templateOpts: tableStructures.Admin.OrderAdmin.Reject,
-              counter: apiConfig.purchaserequisition.Count(),
+              templateOpts: tableStructures.Admin.OrderAdmin.oldReject,
+              counter: apiConfig.PRAdminView.Count(Enum.prstatus.Rejected, keyword),
               datasourceAPI: apiConfig.purchaserequisition.SearchByKeywordAndStatus,
               options: {
                 keyword: keyword,

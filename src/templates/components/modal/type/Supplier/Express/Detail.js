@@ -1,6 +1,10 @@
-var SupplierPRDetail = {
+const SupplierPRDetail = {
   show: function() {
     SupplierPRDetail.view.init()
+    $("#SupplierPRDetail")
+      .on("hidden.bs.modal", function() {
+        PRDetail.destory()
+      })
     $("#SupplierPRDetail").modal()
   },
   hide: function() {
@@ -15,6 +19,9 @@ var SupplierPRDetail = {
       new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea)
     }
 
+
+    getProcessChartTo(PRid, ".progressbar")
+
     var logistics = window._target.PR["_logistics"]
     $("#_logistics").val(logistics)
     var logisticsArray = logistics.split(",")
@@ -28,6 +35,7 @@ var SupplierPRDetail = {
     window._target.PR = null
     window._target = null
     $(".expressRow").remove()
+    clearProcessChart()
     // SupplierPRDetail.view.Express.destory()
   },
   view: {
@@ -45,8 +53,9 @@ var SupplierPRDetail = {
       }
     },
     update: function(PRid) {
-      window._operation = Enum.operation.Read
+      window._operation = Enum.operation.Update
       SupplierPRDetail.view.init()
+
       window._target.PR = apiConfig.purchaserequisition.Get(PRid)
       SupplierPRDetail.show()
       SupplierPRDetail.autoComplate(PRid)

@@ -87,7 +87,7 @@ const BrochureAdmin = {
     },
     init: function() {
       bindInputQuery({
-        input: "#supplierfk",
+        input: "input[name=supplierfk]",
         datasourceAPI: apiConfig.supplier.Search,
         searchObj: {},
         innerTextName: "_suppliername",

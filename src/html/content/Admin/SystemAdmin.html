@@ -24,61 +24,11 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">添加供应商</h4>
+        <h4 class="modal-title" id="myModalLabel">添加系统管理员</h4>
       </div>
 
       <div class="modal-body">
-        <form id="add_Supplier" class="form-horizontal" role="form">
-          
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="_suppliername"
-  
-  >姓名：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="_suppliername"
-    id="_suppliername"
-    
-    
-      placeholder="请输入姓名"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
-            
-<div class="form-group">
-  <label class="col-sm-2 control-label"
-  
-  for="_phonenumber"
-  
-  >手机号：</label>
-  <div class="col-sm-8">
-    <input type="text"
-    class="form-control"
-    
-    name="_phonenumber"
-    id="_phonenumber"
-    
-    
-      placeholder="请输入手机号"
-    
-    
-      required
-    
-    />
-  </div>
-  <i class="col-sm-2 input-info"></i>
-</div>
-
+        <form id="add_Admin" class="form-horizontal" role="form">
               
 <div class="form-group">
   <label class="col-sm-2 control-label"
@@ -129,30 +79,78 @@
   <i class="col-sm-2 input-info"></i>
 </div>
 
+                  
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_email"
+  
+  >邮箱：</label>
+  <div class="col-sm-8">
+    <input type="text"
+    class="form-control"
+    
+    name="_email"
+    id="_email"
+    
+    
+      placeholder="请输入邮箱"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
+                    
+<div class="form-group">
+  <label class="col-sm-2 control-label"
+  
+  for="_description"
+  
+  >描述：</label>
+  <div class="col-sm-8">
+    <input type="text"
+    class="form-control"
+    
+    name="_description"
+    id="_description"
+    
+    
+      placeholder="请输入描述"
+    
+    
+      required
+    
+    />
+  </div>
+  <i class="col-sm-2 input-info"></i>
+</div>
+
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addSupplier()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addAdmin()">完成</button>
       </div>
     </div>
   </div>
 </div>
 <script>
-function addSupplier() {
-  var data = formToSet("#add_Supplier")
-  var dealerId = apiConfig.supplier.Add(data)
-  if(dealerId>0){
-    new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
-    $("#Add").modal("hide")
-    ClearInputs("#add_Supplier")
-    ClearSelecton("#add_Supplier")
-    ClearTextArea("#add_Supplier")
-  }else{
-    new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+  function addAdmin() {
+    var data = formToSet("#add_Admin")
+    var dealerId = apiConfig.systemuser.Add(data)
+    if (dealerId > 0) {
+      new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+      $("#Add").modal("hide")
+      ClearAllFields("#add_Admin")
+    } else {
+      new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+    }
+    table_init()
   }
-  table_init()
-}
 </script>
 
   
@@ -163,19 +161,11 @@ function addSupplier() {
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">修改供应商</h4>
+        <h4 class="modal-title" id="myModalLabel">修改系统管理员</h4>
       </div>
 
       <div class="modal-body">
-        <form id="edit_Supplier" class="form-horizontal clearfix" role="form">
-          <div class="form-group col-md-12">
-            <label for="_suppliername" class="control-label">姓名:</label>
-            <input name="_suppliername" id="_suppliername" placeholder="请输入姓名" class="form-control" />
-          </div>
-          <div class="form-group col-md-12">
-            <label for="_phonenumber" class="control-label">手机号:</label>
-            <input name="_phonenumber" id="_phonenumber" placeholder="请输入手机号" class="form-control" />
-          </div>
+        <form id="edit_Admin" class="form-horizontal clearfix" role="form">
           <div class="form-group col-md-12">
             <label for="_accountname" class="control-label">账号:</label>
             <input name="_accountname" id="_accountname" placeholder="请输入账号" class="form-control" />
@@ -183,6 +173,14 @@ function addSupplier() {
           <div class="form-group col-md-12">
             <label for="_password" class="control-label">密码:</label>
             <input name="_password" id="_password" placeholder="请输入密码" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_email" class="control-label">邮箱:</label>
+            <input name="_email" id="_email" placeholder="请输入邮箱" class="form-control" />
+          </div>
+          <div class="form-group col-md-12">
+            <label for="_description" class="control-label">描述:</label>
+            <input name="_description" id="_description" placeholder="请输入描述" class="form-control" />
           </div>
         </form>
       </div>
@@ -193,19 +191,17 @@ function addSupplier() {
   </div>
 </div>
 <script>
-function editSupplier() {
-  var rawData = window.target_supplier
-  var data = formToSet("#edit_Supplier")
+function editAdmin() {
+  var rawData = window._target
+  var data = formToSet("#edit_Admin")
   for(var i in data){
     rawData[i] = data[i]
   }
-  var dealerId = apiConfig.supplier.Edit(rawData['_id'],data)
+  var dealerId = apiConfig.systemuser.Edit(rawData['_id'],data)
   if (dealerId>0) {
     new MessageAlert("修改成功", MessageAlert.Status.SUCCESS)
     $("#Edit").modal("hide")
-    ClearInputs("#edit_Supplier")
-    ClearSelecton("#edit_Supplier")
-    ClearTextArea("#edit_Supplier")
+    ClearAllFields("#edit_Admin")
   }else{
     new MessageAlert("修改失败", MessageAlert.Status.EXCEPTION)
   }
@@ -269,7 +265,7 @@ function editSupplier() {
         //编辑供应商操作
         var edit = function(rid) {
           window._target = apiConfig.systemuser.Get(rid)
-          autoComplateInfo(window._target, "#edit_Supplier")
+          autoComplateInfo(window._target, "#edit_Admin")
           var search = function() {}
           $("#Edit")
             .modal()

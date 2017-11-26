@@ -34,6 +34,7 @@
   top: 0.5rem;
 }
 .modal-infopart.baseInfomation > div.comment,
+.modal-infopart.baseInfomation > div.logistics,
 .modal-infopart.baseInfomation > ul {
   width: 100%;
   display: block;
@@ -41,11 +42,19 @@
   float: left;
 }
 .modal-infopart.baseInfomation > div.comment li,
+.modal-infopart.baseInfomation > div.logistics li,
 .modal-infopart.baseInfomation > ul li {
   list-style: none;
   display: block;
-  width: 50%;
+  width: 30%;
   float: left;
+}
+@media (max-width: 768px) {
+  .modal-infopart.baseInfomation > div.comment li,
+  .modal-infopart.baseInfomation > div.logistics li,
+  .modal-infopart.baseInfomation > ul li {
+    width: 100%;
+  }
 }
 .modal-infopart::before {
   text-align: left;

@@ -3,37 +3,35 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">添加供应商</h4>
+        <h4 class="modal-title" id="myModalLabel">添加系统管理员</h4>
       </div>
 
       <div class="modal-body">
-        <form id="add_Supplier" class="form-horizontal" role="form">
-          <%-include('/components/input/forminput',{name:"姓名",id:"_suppliername",type:"text",placeholder:"请输入姓名",required:true})%>
-            <%-include('/components/input/forminput',{name:"手机号",id:"_phonenumber",type:"text",placeholder:"请输入手机号",required:true})%>
+        <form id="add_Admin" class="form-horizontal" role="form">
               <%-include('/components/input/forminput',{name:"账号",id:"_accountname",type:"text",placeholder:"请输入账号",required:true})%>
                 <%-include('/components/input/forminput',{name:"密码",id:"_password",type:"password",placeholder:"请输入密码",required:true})%>
+                  <%-include('/components/input/forminput',{name:"邮箱",id:"_email",type:"text",placeholder:"请输入邮箱",required:true})%>
+                    <%-include('/components/input/forminput',{name:"描述",id:"_description",type:"text",placeholder:"请输入描述",required:true})%>
         </form>
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addSupplier()">完成</button>
+        <button type="submit" class="btn btn-primary center-block col-xs-12" onclick="addAdmin()">完成</button>
       </div>
     </div>
   </div>
 </div>
 <script>
-function addSupplier() {
-  var data = formToSet("#add_Supplier")
-  var dealerId = apiConfig.supplier.Add(data)
-  if(dealerId>0){
-    new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
-    $("#Add").modal("hide")
-    ClearInputs("#add_Supplier")
-    ClearSelecton("#add_Supplier")
-    ClearTextArea("#add_Supplier")
-  }else{
-    new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+  function addAdmin() {
+    var data = formToSet("#add_Admin")
+    var dealerId = apiConfig.systemuser.Add(data)
+    if (dealerId > 0) {
+      new MessageAlert("添加成功", MessageAlert.Status.SUCCESS)
+      $("#Add").modal("hide")
+      ClearAllFields("#add_Admin")
+    } else {
+      new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)
+    }
+    table_init()
   }
-  table_init()
-}
 </script>

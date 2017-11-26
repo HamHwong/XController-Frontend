@@ -141,9 +141,10 @@
 
             <div class="form-group col-md-3 col-xs-12 search_box_warp">
               <label for="submitter">提交人:</label>
-              <select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
-              </select>
-              <input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
+              <!--<select class="queryinput" name="_submitter" id="_submitter" data-target="submitter" style="display:none;">
+              </select>-->
+              <!--<input name="submitter" id="submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />-->
+              <input name="_submitter" id="_submitter" placeholder="请输入填写人" class="form-control" autocomplete="off" />
             </div>
 
             <div class="form-group col-md-4 col-xs-12">
@@ -247,36 +248,40 @@
       <div class="modal-body">
         <div class="modal-infopart orderStatus">
           <div class="steps clearfix" id="steps">
-            <ul id="progressbar" class="clearfix">
+            <ul id="progressbar" class="progressbar clearfix">
               <ul>
           </div>
         </div>
         <div class="modal-infopart baseInfomation">
           
     <ul>
-  <li>用 途：<span name="PRD_purposefk" id="PRD_purposefk"></span></li>
+  <li>用 途：<span name="PRD_purposefk"></span></li>
+  <li>交付时间：<span name="PRD_deliverydate"></span></li>
 </ul>
 <ul>
-  <li>收货人：<span name="PRD_consignee" id="PRD_consignee"></span></li>
-  <li>收货电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
-  <li>收货地址：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+  <li>收货人：<span name="PRD_consignee"></span></li>
+  <li>收货电话：<span name="PRD_contactnumber"></span></li>
+  <li>收货地址：<span name="PRD_deliveryaddress"></span></li>
 </ul>
 <ul>
-  <li>提交人：<span name="PRD_submitter" id="PRD_submitter"></span></li>
-  <li>提交人电话：<span name="PRD_contactnumber" id="PRD_contactnumber"></span></li>
-  <li>提交人区域：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
-  <li>提交人邮箱：<span name="PRD_deliveryaddress" id="PRD_deliveryaddress"></span></li>
+  <li>申请人：<span name="PRD_requestorName"></span></li>
+  <li>申请人邮箱：<span name="PRD_requestorEmail"></span></li>
+  <li>申请人电话：<span name="PRD_requestorPhone"></span></li>
+  <li>申请人区域：<span name="PRD_requestorRegion"></span></li>
 </ul>
 <ul>
-  <li>交付时间：<span name="PRD_deliverydate" id="PRD_deliverydate"></span></li>
-</ul>
-<ul>
-  <li>快递单号：<span name="PRD_logistics" id="PRD_logistics"></span></li>
+  <li>提交人：<span name="PRD_submitterName"></span></li>
+  <li>提交人邮箱：<span name="PRD_submitterEmail"></span></li>
+  <li>提交人电话：<span name="PRD_submitterPhone"></span></li>
 </ul>
 
 <div class="comment">
   <span>备注：</span>
   <textarea name="PRD_comments" id="PRD_comments" rows="4" disabled>备注</textarea>
+</div>
+<div class="logistics">
+  <span>物流单号：</span>
+  <textarea name="PRD_logistics" id="PRD_logistics" rows="4" disabled>物流单号</textarea>
 </div>
 
   

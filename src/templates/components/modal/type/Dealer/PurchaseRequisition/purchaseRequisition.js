@@ -28,29 +28,7 @@ const PurchaseRequisition = {
         minView: 2,
         forceParse: false,
         language: 'zh-CN'
-      });
-    //
-    // //HACK 超过10次之后不显示datatimepicker：
-    // //原因：在本系统中为了同时使用多个modal窗口，
-    // //为了避免第二层modal窗口被第一层窗口覆盖（官方不推荐使用多个模态窗口）
-    // //在本系统中为了同时使用多个用了一个hack方法去监听document（在modal.js），
-    // //定义一个全局变量存modal层数，然后当类为.modal的modal窗口触发shown.bs.modal事件后，counter+1
-    // //然后将modal的z-index设置为 1050+counter，从而避免多个模态窗口以同一zindex显示而造成覆盖
-    // //同时为其绑定hidden.bs.modal事件，当modal隐藏时候触发，将counter-- ，保证层数准确性
-    // //而datatimepicker插件也是基于bootstrap的modal窗口，
-    // //但是作者的实现当datatimepicker显示的时候是trigger了shown.bs.modal，
-    // //而关闭的时候没有triggerhidden.bs.modal，从而没有触发之前绑定的counter--事件，
-    // //导致PI表单层的z-index在每点一次绑定了datatimepicker的input时就触发++，但是timer消失时没触发--，
-    // //所以当触发10次以后，PI的表单modal的z-index就大于了1060，盖住了datatimepicker
-    // $('#_deliverydate')
-    //   .datetimepicker().on("hide", function(e) {
-    //     console.log("datapicker触发modal hide", e)
-    //     // e.preventdefault()
-    //     var event = $.Event("hidden.bs.modal")
-    //     $('#_deliverydate').datetimepicker().trigger("hidden.bs.modal")
-    //     // return false;
-    //   })
-
+      })
 
     bindInputQuery({
       input: "#requestordealerfk",
@@ -79,22 +57,27 @@ const PurchaseRequisition = {
       }
     })
 
-    $("#submitter").val(getCookie('account'))
-    $("#submitter").attr("readonly", "readonly")
+    // $("#submitter").val(getCookie('account'))
+    // $("#submitter").attr("readonly", "readonly")
+
+    $("#_submitter").val(getCookie('account'))
+    $("#_submitter").attr("readonly", "readonly")
 
     // //若为dealer，则自动填充名字和区域
-    switch (getCookie("role")) {
+    var role = getCookie("role")
+    var user = JSON.parse(getCookie('user'))
+    switch (role) {
       case Enum.role.DEALEAR:
-        var dealer = JSON.parse(getCookie('user'))
+        var dealer = user
         if (dealer) {
 
           $("#_requestordealerfk")
             .val(dealer["_id"])
-          $("#_submitterdealerfk")
-            .val(dealer["_id"])
+          // $("#_submitterdealerfk")
+          //   .val(dealer["_id"])
 
           $("#requestordealerfk").val(dealer["_dealername"])
-          $("#submitterdealerfk").val(dealer["_dealername"])
+          // $("#submitterdealerfk").val(dealer["_dealername"])
 
           $("#requestordealerfk")
             .attr("readonly", "readonly")
@@ -110,7 +93,8 @@ const PurchaseRequisition = {
         break
       case Enum.role.EMPLOYEE:
       case Enum.role.SYSADMIN:
-        var user = JSON.parse(getCookie('user'))
+        // var user = JSON.parse(getCookie('user'))
+        // var user = user
         //COMMON INIT
         $("#agentCheck input").on("change", function(e) {
           $(".requestorInput").hide()
@@ -133,9 +117,9 @@ const PurchaseRequisition = {
         })
         //COMMON INIT
 
-        var user = JSON.parse(getCookie('user'))
+        // var user = JSON.parse(getCookie('user'))
         if (user) {
-          if (Enum.role.EMPLOYEE == getCookie("role")) {
+          if (Enum.role.EMPLOYEE == role) {
             $("#requireAgent").on("change", function() {
               $(".requestorInput input").attr('disabled', 'true')
               if ($(this).is(":checked")) {
@@ -217,32 +201,19 @@ const PurchaseRequisition = {
 
   },
   autoComplate: function(PRid) {
-
     var targetPRArea = "#PurchaseRequisition_form"
     window._targetPITableArea = "#InfomationAddArea"
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出PR详情
+
       autoComplateInfo(PRinfoSet, targetPRArea) //将PR填充到表单
       PurchaseRequisition.loadPITable(PRid)
     }
-
   },
   loadPITable: function(PRid) {
     //填充PI
-    var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-    // //HACK api Paging单独给了view比较好绑定数据，但是因为编辑什么的都需要使用paging方法，所以可能会导致取下来填充的紧急程度变成中文而无法提交
-    // for (var i in PIinfoSet) {
-    //   switch (PIinfoSet[i]["_deliverypriorityfk"]) {
-    //     case "一般快递":
-    //       PIinfoSet[i]["_deliverypriorityfk"] = 15
-    //       break
-    //     case "紧急快递":
-    //       PIinfoSet[i]["_deliverypriorityfk"] = 16
-    //       break
-    //   }
-    // }
-    // //HACK
+    var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 1000)
     window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = PIinfoSet
     var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
     var tmp = PIinfoSet.slice(0)
@@ -260,9 +231,11 @@ const PurchaseRequisition = {
       window.__PurchaseRequisitionItem_table.remove()
       window.__PurchaseRequisitionItem_table = null
     }
-    window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
-    window.__PurchaseRequisition_tempID = null
-    window.__PurchaseRequisitionItem_Unsave_set = null
+    if (window.__PurchaseRequisitionItem_Unsave_set) {
+      window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID] = null
+      window.__PurchaseRequisition_tempID = null
+      window.__PurchaseRequisitionItem_Unsave_set = null
+    }
 
     if (window._target) {
       if (window._target.PR)
@@ -295,6 +268,14 @@ const PurchaseRequisition = {
       }
       if (!window.__PurchaseRequisitionItem_table) {
         window.__PurchaseRequisitionItem_table = new table().new(tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable, ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"])
+        window.__PurchaseRequisitionItem_table.to(window._targetPITableArea)
+      }
+      if (!window.__PurchaseRequisitionItem_table) {
+        //TODO
+        // window.__PurchaseRequisitionItem_table = new table().new(tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable, ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"])
+        var PIinfoSet = []
+        var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
+        window.__PurchaseRequisitionItem_table = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
         window.__PurchaseRequisitionItem_table.to(window._targetPITableArea)
       }
 
@@ -353,7 +334,8 @@ const PurchaseRequisition = {
     draft: function() {
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      var submitter = $("#submitter").val()
+      // var submitter = $("#submitter").val()
+      var submitter = $("#_submitter").val()
       var data = formToSet("#PurchaseRequisition_form")
       data["_prcreated"] = new Date()
       data["_prstatus"] = Enum.prstatus.Draft
@@ -387,13 +369,21 @@ const PurchaseRequisition = {
     submit: function() {
       var items = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
       items = items ? items : []
-      if (items.length <= 0) {
-        new MessageAlert("请购单item数量不能为0", MessageAlert.Status.ERROR)
-        return
-        // throw "请购单item数量不能为0"
-      }
+
       if (validator.Result("#PurchaseRequisition_form")) {
-        var submitter = $("#submitter").val()
+
+        if (items.length <= 0) {
+          new MessageAlert("请购单item数量不能为0", MessageAlert.Status.ERROR)
+          return
+          // throw "请购单item数量不能为0"
+        }
+        var checkPICountResult = apiConfig.purchaseitem.Check(items)
+        if ("" != checkPICountResult) {
+          new MessageAlert(checkPICountResult, MessageAlert.Status.EXCEPTION,1500)
+          return
+        }
+        // var submitter = $("#submitter").val()
+        var submitter = $("#_submitter").val()
         var data = formToSet("#PurchaseRequisition_form")
         data["_prcreated"] = new Date()
         data["_prstatus"] = Enum.prstatus.Progress
@@ -414,13 +404,11 @@ const PurchaseRequisition = {
             data["_requestordealerfk"] = getCookie('uid')
             break
         }
-
+        //添加PR
         var PRid = apiConfig.purchaserequisition.Add(data)
         if (PRid > 0) {
           for (var i = 0; i < items.length; i++) {
             items[i]["_purchaserequisitionfk"] = PRid
-            // items[i]["_logistics"] = null
-            // items[i]["_contactnumber"] = null
           }
           var picount = apiConfig.purchaseitem.Add(items)
 
@@ -433,8 +421,9 @@ const PurchaseRequisition = {
             new MessageAlert("采购物品信息有误！", MessageAlert.Status.EXCEPTION)
           }
         } else {
-          new MessageAlert("提交失败!请检查表单数据！", MessageAlert.Status.EXCEPTION)
+          new MessageAlert("提交失败!请联系管理员！", MessageAlert.Status.EXCEPTION)
         }
+
       } else {
         new MessageAlert("提交失败!请检查表单数据！", MessageAlert.Status.EXCEPTION)
       }

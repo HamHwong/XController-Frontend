@@ -73,6 +73,7 @@ const PurchaseItem = {
     validator.Restore()
     $("#PIOperation").empty()
     window._target.PI = null
+    window._piOperation = null
     window._operation = null
   },
   view: {
@@ -90,7 +91,7 @@ const PurchaseItem = {
       var editbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.event.edit()"><span class="glyphicon glyphicon-ok"></span></button>`
       var cancelbtn = `<button type="submit" class="btn btn-primary" onclick="PurchaseItem.hide()"><span class="glyphicon glyphicon-remove"></span></button>`
 
-      switch (window._operation) {
+      switch (window._piOperation) {
         case Enum.operation.Update:
           operationArea.append($(cancelbtn)).append($(editbtn))
           break
@@ -106,12 +107,12 @@ const PurchaseItem = {
 
     },
     add: function() {
-      window._operation = Enum.operation.Create
+      window._piOperation = Enum.operation.Create
       PurchaseItem.view.init()
       PurchaseItem.show()
     },
     edit: function(PIid) {
-      window._operation = Enum.operation.Update
+      window._piOperation = Enum.operation.Update
       PurchaseItem.view.init()
       if (PIid.search("[unsave]") >= 0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
@@ -129,6 +130,7 @@ const PurchaseItem = {
         PurchaseItem.hide()
     },
     append: function() {
+      debugger
       //是否fields全为空
       if (!validator.Result("#PruchaseItem_form")) {
         new MessageAlert("填写错误，请确认数据！", MessageAlert.Status.ERROR)
@@ -184,10 +186,11 @@ const PurchaseItem = {
     delete: function(PIid) {
       var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      if (!(PIid.search("[unsave]") >= 0)) {
-        DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid)
-      } else {
+      debugger
+      if (PIid.search("[unsave]") >= 0 || window._operation == Enum.operation.Copy) {
         DeleteRemoteData = true
+      } else {
+        DeleteRemoteData = apiConfig.purchaseitem.Delete(PIid)
       }
       if (DeleteRemoteData) {
         var newArray = deleteFromObjectArray(PItems, "_id", PIid)

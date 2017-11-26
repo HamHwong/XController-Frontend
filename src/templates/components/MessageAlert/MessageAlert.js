@@ -1,16 +1,16 @@
-var MessageAlert = function (msg, status) {
+var MessageAlert = function(msg, status, showTime) {
   this.status = status || MessageAlert.Status.SUCCESS
   this.msg = msg || "Congratulation! Action performed!"
   this.statusCode = 0
   this.html = null
   this.dropback = null
   this.showoutTime = 600
-  this.showtime = 1000
+  this.showtime = showTime || 1000
   this.hideTime = 300
   this.show(this.mse, this.status)
 }
 
-MessageAlert.prototype.new = function (msg, status) {
+MessageAlert.prototype.new = function(msg, status) {
   this.msg = msg || this.msg
   this.status = status || this.status
   if (this.html)
@@ -27,7 +27,7 @@ MessageAlert.prototype.new = function (msg, status) {
   return this.html
 }
 
-MessageAlert.prototype.generateHTML = function (msg, status) {
+MessageAlert.prototype.generateHTML = function(msg, status) {
   var mod =
     `
       <div class="MassageAlert_Warp">
@@ -45,7 +45,7 @@ MessageAlert.prototype.generateHTML = function (msg, status) {
       `
   return $(mod)
 }
-MessageAlert.prototype.destory = function () {
+MessageAlert.prototype.destory = function() {
   if (this.html) {
     this.html.remove()
   }
@@ -54,7 +54,7 @@ MessageAlert.prototype.destory = function () {
   }
 }
 
-MessageAlert.prototype.show = function (msg, status) {
+MessageAlert.prototype.show = function(msg, status) {
   if (!this.inStatus(status))
     throw "Error Status"
   this.new(msg, status)
@@ -62,9 +62,9 @@ MessageAlert.prototype.show = function (msg, status) {
   this.dropback.fadeIn(this.showoutTime)
 
   var self = this
-  setTimeout(function () {
+  setTimeout(function() {
     self.hide()
-    setTimeout(function () {
+    setTimeout(function() {
       self.destory()
     }, self.hideTime)
   }, self.showoutTime + self.showtime)
@@ -76,7 +76,7 @@ MessageAlert.prototype.show = function (msg, status) {
 //   // if(MessageAlert){}
 // }
 
-MessageAlert.prototype.hide = function () {
+MessageAlert.prototype.hide = function() {
   this.html.hide(this.hideTime)
   this.dropback.fadeOut(this.hideTime)
   return this
@@ -88,7 +88,7 @@ MessageAlert.Status = {
   ERROR: "ERROR",
 }
 
-MessageAlert.prototype.inStatus = function (status) {
+MessageAlert.prototype.inStatus = function(status) {
   var isContain = false
   if ('string' != typeof status) {
     throw 'invalid status'
