@@ -49,7 +49,7 @@ const PurchaseItem = {
   },
   update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-    var prid = window._target.PR["_id"]
+    var prid = window.target.PR["_id"]
     for (var i = 0; i < unsavePI.length; i++) {
       var item = unsavePI[i]
       item["_purchaserequisitionfk"] = prid
@@ -65,24 +65,24 @@ const PurchaseItem = {
       var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
       var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
       window.__PurchaseRequisitionItem_table = PItable
-      PItable.to(window._targetPITableArea)
+      PItable.to(window.targetPITableArea)
     }
   },
   destory: function() {
     ClearInputs("#PruchaseItem")
     validator.Restore()
     $("#PIOperation").empty()
-    window._target.PI = null
+    window.target.PI = null
     window._piOperation = null
     window._operation = null
   },
   view: {
     init: function() {
-      if (!window._target) {
-        window._target = {}
+      if (!window.target) {
+        window.target = {}
       }
-      if (!window._target.PI) {
-        window._target.PI = {}
+      if (!window.target.PI) {
+        window.target.PI = {}
       }
 
       var operationArea = $("#PIOperation")
@@ -116,12 +116,12 @@ const PurchaseItem = {
       PurchaseItem.view.init()
       if (PIid.search("[unsave]") >= 0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
-        window._target.PI = PItems[PIid]
+        window.target.PI = PItems[PIid]
       } else {
-        window._target.PI = apiConfig.purchaseitem.Get(PIid)
+        window.target.PI = apiConfig.purchaseitem.Get(PIid)
       }
       PurchaseItem.show()
-      PurchaseItem.autoComplate(window._target.PI)
+      PurchaseItem.autoComplate(window.target.PI)
     }
   },
   event: {
@@ -130,7 +130,6 @@ const PurchaseItem = {
         PurchaseItem.hide()
     },
     append: function() {
-      debugger
       //是否fields全为空
       if (!validator.Result("#PruchaseItem_form")) {
         new MessageAlert("填写错误，请确认数据！", MessageAlert.Status.ERROR)
@@ -156,8 +155,8 @@ const PurchaseItem = {
       return true
     },
     edit: function() {
-      var target = window._target.PI
-      var targetid = window._target.PI["_id"]
+      var target = window.target.PI
+      var targetid = window.target.PI["_id"]
       var set = formToSet("#PruchaseItem_form")
       for (var k in set) {
         target[k] = set[k]
@@ -186,7 +185,6 @@ const PurchaseItem = {
     delete: function(PIid) {
       var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      debugger
       if (PIid.search("[unsave]") >= 0 || window._operation == Enum.operation.Copy) {
         DeleteRemoteData = true
       } else {

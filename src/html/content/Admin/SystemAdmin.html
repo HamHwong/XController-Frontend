@@ -192,7 +192,7 @@
 </div>
 <script>
 function editAdmin() {
-  var rawData = window._target
+  var rawData = window.target
   var data = formToSet("#edit_Admin")
   for(var i in data){
     rawData[i] = data[i]
@@ -250,8 +250,8 @@ function editAdmin() {
             .modal()
         }
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             var result = apiConfig.systemuser.Delete(id)
             if (result == true) {
               new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
@@ -264,8 +264,8 @@ function editAdmin() {
         }
         //编辑供应商操作
         var edit = function(rid) {
-          window._target = apiConfig.systemuser.Get(rid)
-          autoComplateInfo(window._target, "#edit_Admin")
+          window.target = apiConfig.systemuser.Get(rid)
+          autoComplateInfo(window.target, "#edit_Admin")
           var search = function() {}
           $("#Edit")
             .modal()

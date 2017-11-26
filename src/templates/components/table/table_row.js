@@ -170,25 +170,44 @@ table_row.prototype.add = function() {
 }
 table_row.prototype.onCardLongPress = function(time, callback) {
   var timeOutEvent = null
-  console.log("longPress binded!");
+  console.log("longPress binded!")
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
       touchstart: function(e) {
-        console.log("touch start!");
-        timeOutEvent = setTimeout(callback.bind(this), time);
+        console.log("touch start!",e)
+        e.preventDefault()
+        timeOutEvent = setTimeout(callback.bind(this), time)
       },
-      touchmove: function() {
-        console.log("touch moving!");
-        clearTimeout(timeOutEvent);
-        timeOutEvent = 0;
+      touchmove: function(e) {
+        console.log("touch moving!",e)
+        e.preventDefault()
+        clearTimeout(timeOutEvent)
+        timeOutEvent = 0
       },
-      touchend: function() {
-        console.log("touch end!");
-        clearTimeout(timeOutEvent);
-        return false;
+      touchend: function(e) {
+        console.log("touch end!",e)
+        e.preventDefault()
+        clearTimeout(timeOutEvent)
+        return false
       }
     })
+  // .on({
+  //   touchstart: function(e) {
+  //     console.log("touch start!");
+  //     timeOutEvent = setTimeout(callback.bind(this), time);
+  //   },
+  //   touchmove: function() {
+  //     console.log("touch moving!");
+  //     clearTimeout(timeOutEvent);
+  //     timeOutEvent = 0;
+  //   },
+  //   touchend: function() {
+  //     console.log("touch end!");
+  //     clearTimeout(timeOutEvent);
+  //     return false;
+  //   }
+  // })
 }
 table_row.prototype.onClick = function(callback) {
   console.log("click binded");

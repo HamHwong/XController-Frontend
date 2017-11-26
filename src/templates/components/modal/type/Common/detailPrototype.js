@@ -5,8 +5,8 @@ const DetailPrototype = {
       this.init(PRid)
       this.autoComplate(PRid)
     }
-
     var that = this
+    $(this.id).unbind("hidden.bs.modal")
     $(this.id)
       .on("hidden.bs.modal", function() {
         that.destory()
@@ -20,7 +20,19 @@ const DetailPrototype = {
     $(this.id).modal('hide')
     console.log(this.id + "hidden!")
   },
-  showMe: function() {
-    console.log("my name is " + this.id);
+  destory: function() {
+    console.log("parents' destory function")
+    clearProcessChart()
+    // $("#progressbar").empty()
+    ClearAllFields(this.id)
+
+    if (window.target) {
+      if (window.target.PR)
+        window.target.PR = null
+      window.target = null
+    }
+  },
+  autoComplate: function(PRid) {
+  
   }
 }

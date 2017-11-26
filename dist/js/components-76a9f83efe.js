@@ -183,7 +183,7 @@ var MessageAlert = function(msg, status, showTime) {
   this.html = null
   this.dropback = null
   this.showoutTime = 600
-  this.showtime = showTime || 1000
+  this.showtime = showTime || 1500
   this.hideTime = 300
   this.show(this.mse, this.status)
 }
@@ -289,10 +289,20 @@ $(document).unbind('hidden.bs.modal')
   });
 $(document).unbind('show.bs.modal')
   .on('show.bs.modal', '.modal', function(e) {
-    $(this).css("z-index", 1050 + counter)
+    $(this).css("z-index", 1050 + counter + 2)
     // if ($('.modal-backdrop').length <= 1 )
     //   return
-    // $('.modal-backdrop')[counter].css("z-index", 1049 + counter)
+    console.log("chufa")
+    var setter = setTimeout(function() {
+      console.log("finding",counter,$('.modal-backdrop').length)
+      if (counter == $('.modal-backdrop').length) {
+        console.log("found")
+        $('.modal-backdrop:last-child').css("z-index", 1050 + counter)
+        clearTimeout(setter)
+        console.log("set")
+      }
+    }, 0)
+
     counter++
   });
 
@@ -645,6 +655,7 @@ table.prototype.bindEvents = function(callback) {
     return
   callback = callback ? callback : Detail
   var data = this.data
+  debugger
   for (var i in data) {
     data[i].onClick(function() {
       callback.call(this, this.dataset.primarykey)
@@ -714,7 +725,8 @@ table.prototype.addRow = function(rowJSONObj) {
   if (this.data[PrimaryKeyValue]) {
     // throw "Error! This primary key is alreay occupied , If need update , please use update function"
   }
-  this.data[PrimaryKeyValue] = row
+  // this.data[PrimaryKeyValue] = row
+  this.data[generateUUID()] = row
   tbody.append(row.HTMLObj)
   this.addInfoCard()
   this.isUpdated = true
@@ -954,25 +966,44 @@ table_row.prototype.add = function() {
 }
 table_row.prototype.onCardLongPress = function(time, callback) {
   var timeOutEvent = null
-  console.log("longPress binded!");
+  console.log("longPress binded!")
   $(this.CardHTMLObj)
     .find(".card_body")
     .on({
       touchstart: function(e) {
-        console.log("touch start!");
-        timeOutEvent = setTimeout(callback.bind(this), time);
+        console.log("touch start!",e)
+        e.preventDefault()
+        timeOutEvent = setTimeout(callback.bind(this), time)
       },
-      touchmove: function() {
-        console.log("touch moving!");
-        clearTimeout(timeOutEvent);
-        timeOutEvent = 0;
+      touchmove: function(e) {
+        console.log("touch moving!",e)
+        e.preventDefault()
+        clearTimeout(timeOutEvent)
+        timeOutEvent = 0
       },
-      touchend: function() {
-        console.log("touch end!");
-        clearTimeout(timeOutEvent);
-        return false;
+      touchend: function(e) {
+        console.log("touch end!",e)
+        e.preventDefault()
+        clearTimeout(timeOutEvent)
+        return false
       }
     })
+  // .on({
+  //   touchstart: function(e) {
+  //     console.log("touch start!");
+  //     timeOutEvent = setTimeout(callback.bind(this), time);
+  //   },
+  //   touchmove: function() {
+  //     console.log("touch moving!");
+  //     clearTimeout(timeOutEvent);
+  //     timeOutEvent = 0;
+  //   },
+  //   touchend: function() {
+  //     console.log("touch end!");
+  //     clearTimeout(timeOutEvent);
+  //     return false;
+  //   }
+  // })
 }
 table_row.prototype.onClick = function(callback) {
   console.log("click binded");
@@ -1253,8 +1284,8 @@ const DetailPrototype = {
       this.init(PRid)
       this.autoComplate(PRid)
     }
-
     var that = this
+    $(this.id).unbind("hidden.bs.modal")
     $(this.id)
       .on("hidden.bs.modal", function() {
         that.destory()
@@ -1268,9 +1299,75 @@ const DetailPrototype = {
     $(this.id).modal('hide')
     console.log(this.id + "hidden!")
   },
-  showMe: function() {
-    console.log("my name is " + this.id);
+  destory: function() {
+    console.log("parents' destory function")
+    clearProcessChart()
+    // $("#progressbar").empty()
+    ClearAllFields(this.id)
+
+    if (window.target) {
+      if (window.target.PR)
+        window.target.PR = null
+      window.target = null
+    }
+  },
+  autoComplate: function(PRid) {
+  
   }
+}
+
+function ModalAlert(obj) {
+  if (!obj)
+    var obj = new Object()
+  this.name = obj.name || "tempModalAlert"
+  this.label = obj.label || "您确认吗？"
+  this.title = obj.title || "提示信息"
+  this.okLabel = obj.okLabel || "确定"
+  this.ok = obj.ok || null
+  this.cancelLabel = obj.cancelLabel || "取消"
+  this.cancel = obj.cancel || null
+  this.model = `
+  <div class="modal fade" id="${this.name}">
+    <div class="modal-dialog">
+      <div class="modal-content message_align">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">${this.title}</h4>
+        </div>
+        <div class="modal-body">
+          <p>${this.label}</p>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>`
+  this.html = $(this.model)
+
+  var that = this
+  this.html.on("hidden.bs.modal", function() {
+    console.log(that)
+    $(that.html).remove()
+    that = null
+  })
+
+  var okbtn = $(`<button class="btn btn-danger" data-dismiss="modal">${this.okLabel}</a>`)
+  var cancelbtn = $(`<button type="button" class="btn btn-default" data-dismiss="modal">${this.cancelLabel}</button>`)
+  if (this.ok) {
+    okbtn.on("click", function() {
+      that.ok()
+      // that.ok.call(that)
+    })
+  }
+  if (this.cancel) {
+    cancelbtn.on("click", function() {
+      that.cancel()
+    })
+  }
+  this.html.find(".modal-footer").append($(okbtn))
+  this.html.find(".modal-footer").append($(cancelbtn))
+  $("body").append(this.html)
+  this.html.modal()
 }
 
 const BrochureAdmin = {
@@ -1340,7 +1437,7 @@ const BrochureAdmin = {
       table_init()
     },
     edit: function() {
-      var rawData = window._target
+      var rawData = window.target
       var data = formToSet("#edit_Brochure")
       for (var i in data) {
         rawData[i] = data[i]
@@ -1385,8 +1482,8 @@ const DealerAdmin = {
     },
     edit: {
       show: function(rid) {
-        window._target = apiConfig.dealer.Get(rid)
-        autoComplateInfo(window._target, "#edit_Dealer")
+        window.target = apiConfig.dealer.Get(rid)
+        autoComplateInfo(window.target, "#edit_Dealer")
         $("#Edit").modal()
       },
       hide: function() {
@@ -1395,7 +1492,7 @@ const DealerAdmin = {
     },
     delete: {
       show: function(rid) {
-        window._target = apiConfig.dealer.Get(rid)
+        window.target = apiConfig.dealer.Get(rid)
         $("#Delete")
           .modal()
       },
@@ -1421,7 +1518,7 @@ const DealerAdmin = {
       table_init()
     },
     edit: function() {
-      var rawData = window._target
+      var rawData = window.target
       var data = formToSet("#edit_Dealer")
       for (var i in data) {
         rawData[i] = data[i]
@@ -1494,23 +1591,6 @@ const BrochureHistory = {
 
 var PRDetail = {
   id: "#Detail",
-  // show: function(PRid) {
-  //   if (PRid) {
-  //     PRDetail.init(PRid)
-  //     PRDetail.autoComplate(PRid)
-  //   }
-  //
-  //   $(this.id)
-  //     .on("hidden.bs.modal", function() {
-  //       PRDetail.destory()
-  //     })
-  //
-  //   $(this.id).modal()
-  // },
-  // hide: function() {
-  //   PRDetail.destory()
-  //   $(this.id).modal('hide')
-  // },
   init: function(PRid) {
     var operationArea = $("#PRD_operation")
     $("#progressbar").empty()
@@ -1531,64 +1611,20 @@ var PRDetail = {
 
     if (Enum.role.EMPLOYEE == getCookie("role") || Enum.role.SYSADMIN == getCookie("role")) {
       if (Enum.prstatus.Progress == window.target.PR["_prstatus"]) {
-        // if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
         if ((getCookie("account").toLocaleLowerCase() == apiConfig.prprocess.getCurrentStep(PRid)["_taskowner"].toLocaleLowerCase()) || Enum.role.SYSADMIN == getCookie("role")) {
           $(".modal-infopart.Approval").show()
           $("#Detail textarea#PRD_approvalComments").attr("disabled", false)
-          var approvelBtn = `<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button>`
-          var rejectBtn = `<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>`
-          operationArea.append(approvelBtn).append(rejectBtn)
+          var approvelBtn = `<button type="submit" class="btn btn-primary col-xs-5 col-md-5" onclick="PRDetail.event.approve()">审核通过</button>`
+          var rejectBtn = `<button type="submit" class="btn btn-danger col-xs-5 col-md-5" onclick="PRDetail.event.reject()">拒绝通过</button>`
+          operationArea.append($(approvelBtn).addClass("col-xs-offset-1 col-md-offset-1")).append($(rejectBtn))
           return
         }
       }
     }
     $(".modal-infopart.Approval").hide()
     $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-    var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
-    operationArea.append(closebtnlbtn)
-
-
-    // if (Enum.role.EMPLOYEE == getCookie("role") || Enum.role.SYSADMIN == getCookie("role")) {
-    //   if (Enum.prstatus.Progress == window.target.PR["_prstatus"]) {
-    //     // if (apiConfig.prprocess.getStepByAccount(PRid, getCookie("account")).length != 0 || Enum.role.SYSADMIN == getCookie("role")) {
-    //     if ((getCookie("account").toLocaleLowerCase() == apiConfig.prprocess.getCurrentStep(PRid)["_taskowner"].toLocaleLowerCase()) || Enum.role.SYSADMIN == getCookie("role")) {
-    //       $("#Detail textarea#PRD_approvalComments").attr("disabled", false)
-    //       var approvelBtn = `<button type="submit" class="btn btn-primary col-md-5" onclick="PRDetail.view.approve()">审核通过</button>`
-    //       var rejectBtn = `<button type="submit" class="btn btn-danger col-md-5" onclick="PRDetail.view.reject()">拒绝通过</button>`
-    //       operationArea.append(approvelBtn).append(rejectBtn)
-    //     } else {
-    //       //TODO
-    //       //当前PR若不属于审核状态，或者当前PR审核人中没有该用户，则不给加审核按钮和审核评论框
-    //       // console.log("您没有对该PR审查的许可。")
-    //       $(".modal-infopart.Approval").hide()
-    //       $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-    //       var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
-    //       operationArea.append(closebtnlbtn)
-    //     }
-    //   } else {
-    //     $(".modal-infopart.Approval").hide()
-    //     $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-    //     var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
-    //     operationArea.append(closebtnlbtn)
-    //   }
-    // } else {
-    //   $(".modal-infopart.Approval").hide()
-    //   $("#Detail textarea#PRD_approvalComments").attr("disabled", true)
-    //   var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-12 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
-    //   operationArea.append(closebtnlbtn)
-    // }
-
-  },
-  destory: function() {
-    clearProcessChart()
-    // $("#progressbar").empty()
-    ClearAllFields("#Detail")
-
-    if (window.target) {
-      if (window.target.PR)
-        window.target.PR = null
-      window.target = null
-    }
+    var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-10 col-md-10" data-dismiss="modal" aria-hidden="true">关闭</button>`
+    operationArea.append($(closebtnlbtn).addClass("col-xs-offset-1 col-md-offset-1"))
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#Detail",
@@ -1597,42 +1633,18 @@ var PRDetail = {
     if (PRid) {
       //填充PI
       var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-      // var templateOpts = tableStructures.Dealer.MyOrder.orderDetail
       new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
-
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
       for (var i in PRinfoSet) {
         PRinfoSet[i] = PRinfoSet[i] || "无"
       }
-      PRinfoSet["_logistics"] = PRinfoSet["_logistics"] || "暂无物流信息"
-      var targetUser = null
-      if (PRinfoSet["_requestoremployeefk"]) {
-        targetUser = apiConfig.employee.Get(PRinfoSet["_requestoremployeefk"])[0]
-        //requestor Employee
-        var employee = targetUser
-        PRinfoSet["_phonenumber"] = employee["mobileField"] || "无"
-        PRinfoSet["_email"] = employee["emailField"] || "无"
-        PRinfoSet["_region"] = employee["regionField"] || "无"
-      } else if (PRinfoSet["_requestordealerfk"]) {
-        targetUser = apiConfig.dealer.Get(PRinfoSet["_requestordealerfk"])
-        //requestor Dealer
-        var dealer = targetUser
-        PRinfoSet["_phonenumber"] = dealer["_phonenumber"] || "无"
-        PRinfoSet["_email"] = dealer["_email"] || "无"
-        PRinfoSet["_region"] = dealer["_dealerregion"] || "无"
-      }
+      PRinfoSet["_logistics"] = PRinfoSet["_logistics"].replace(",",",\r\n") || "暂无物流信息"
       autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
+      getProcessChartTo(PRid, ".progressbar")
     }
-    getProcessChartTo(PRid, ".progressbar")
   },
   view: {
-    approve: function() {
-      $("#Approve").modal()
-    },
-    reject: function() {
-      $("#Reject").modal()
-    }
   },
   event: {
     approve: function() {
@@ -1724,7 +1736,7 @@ const PurchaseItem = {
   },
   update: function() {
     var unsavePI = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-    var prid = window._target.PR["_id"]
+    var prid = window.target.PR["_id"]
     for (var i = 0; i < unsavePI.length; i++) {
       var item = unsavePI[i]
       item["_purchaserequisitionfk"] = prid
@@ -1740,24 +1752,24 @@ const PurchaseItem = {
       var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
       var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
       window.__PurchaseRequisitionItem_table = PItable
-      PItable.to(window._targetPITableArea)
+      PItable.to(window.targetPITableArea)
     }
   },
   destory: function() {
     ClearInputs("#PruchaseItem")
     validator.Restore()
     $("#PIOperation").empty()
-    window._target.PI = null
+    window.target.PI = null
     window._piOperation = null
     window._operation = null
   },
   view: {
     init: function() {
-      if (!window._target) {
-        window._target = {}
+      if (!window.target) {
+        window.target = {}
       }
-      if (!window._target.PI) {
-        window._target.PI = {}
+      if (!window.target.PI) {
+        window.target.PI = {}
       }
 
       var operationArea = $("#PIOperation")
@@ -1791,12 +1803,12 @@ const PurchaseItem = {
       PurchaseItem.view.init()
       if (PIid.search("[unsave]") >= 0) {
         var PItems = arrayToSet(window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID], "_id")
-        window._target.PI = PItems[PIid]
+        window.target.PI = PItems[PIid]
       } else {
-        window._target.PI = apiConfig.purchaseitem.Get(PIid)
+        window.target.PI = apiConfig.purchaseitem.Get(PIid)
       }
       PurchaseItem.show()
-      PurchaseItem.autoComplate(window._target.PI)
+      PurchaseItem.autoComplate(window.target.PI)
     }
   },
   event: {
@@ -1805,7 +1817,6 @@ const PurchaseItem = {
         PurchaseItem.hide()
     },
     append: function() {
-      debugger
       //是否fields全为空
       if (!validator.Result("#PruchaseItem_form")) {
         new MessageAlert("填写错误，请确认数据！", MessageAlert.Status.ERROR)
@@ -1831,8 +1842,8 @@ const PurchaseItem = {
       return true
     },
     edit: function() {
-      var target = window._target.PI
-      var targetid = window._target.PI["_id"]
+      var target = window.target.PI
+      var targetid = window.target.PI["_id"]
       var set = formToSet("#PruchaseItem_form")
       for (var k in set) {
         target[k] = set[k]
@@ -1861,7 +1872,6 @@ const PurchaseItem = {
     delete: function(PIid) {
       var DeleteRemoteData = true;
       var PItems = window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID]
-      debugger
       if (PIid.search("[unsave]") >= 0 || window._operation == Enum.operation.Copy) {
         DeleteRemoteData = true
       } else {
@@ -1905,23 +1915,27 @@ $("#PruchaseItem")
 var row_counter = 0
 
 const PurchaseRequisition = {
+  id: "#PurchaseRequisition",
   show: function() {
-    PurchaseRequisition.init()
-    $("#PurchaseRequisition")
+    this.init()
+    var that = this
+    $(this.id)
+      .unbind("hidden.bs.modal")
+    $(this.id)
+      .on("hidden.bs.modal", function() {
+        that.destory()
+      })
+
+    $(this.id)
       .modal()
   },
   hide: function() {
-    PurchaseRequisition.destory()
-    $("#PurchaseRequisition")
+    this.destory()
+    $(this.id)
       .modal('hide')
   },
   init: function() {
-    $("#PurchaseRequisition")
-      .unbind("hidden.bs.modal")
-    $("#PurchaseRequisition")
-      .on("hidden.bs.modal", function() {
-        PurchaseRequisition.destory()
-      })
+
     if (!window.__PurchaseRequisitionItem_Unsave_set)
       window.__PurchaseRequisitionItem_Unsave_set = {}
     $('#_deliverydate')
@@ -2108,7 +2122,7 @@ const PurchaseRequisition = {
   },
   autoComplate: function(PRid) {
     var targetPRArea = "#PurchaseRequisition_form"
-    window._targetPITableArea = "#InfomationAddArea"
+    window.targetPITableArea = "#InfomationAddArea"
     if (PRid) {
       //填充其他信息
       var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出PR详情
@@ -2125,13 +2139,15 @@ const PurchaseRequisition = {
     var tmp = PIinfoSet.slice(0)
     var PItable = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
     window.__PurchaseRequisitionItem_table = PItable
-    PItable.to(window._targetPITableArea)
+    PItable.to(window.targetPITableArea)
   },
   detail: function(PRid) {
     window._operation = Enum.operation.Read
     PRDetail.show(PRid)
   },
   destory: function() {
+    $("#progressbar").empty()
+    $("#operation").empty()
     ClearAllFields("#PurchaseRequisition")
     if (window.__PurchaseRequisitionItem_table) {
       window.__PurchaseRequisitionItem_table.remove()
@@ -2143,28 +2159,25 @@ const PurchaseRequisition = {
       window.__PurchaseRequisitionItem_Unsave_set = null
     }
 
-    if (window._target) {
-      if (window._target.PR)
-        window._target.PR = null
-      window._target = null
+    if (window.target) {
+      if (window.target.PR)
+        window.target.PR = null
+      window.target = null
     }
     window._operation = null
-    window._targetPITableArea = null
+    window.targetPITableArea = null
     $("#operation").empty()
   },
   view: {
     init: function() {
-      window._targetPITableArea = "#InfomationAddArea"
-      ClearAllFields("#PurchaseRequisition")
-      $("#progressbar").empty()
-      $("#operation").empty()
+      window.targetPITableArea = "#InfomationAddArea"
       window.__PurchaseRequisition_tempID = generateUUID()
 
-      if (!window._target) {
-        window._target = {}
+      if (!window.target) {
+        window.target = {}
       }
-      if (!window._target.PR) {
-        window._target.PR = {}
+      if (!window.target.PR) {
+        window.target.PR = {}
       }
       if (!window.__PurchaseRequisitionItem_Unsave_set) {
         window.__PurchaseRequisitionItem_Unsave_set = {}
@@ -2174,7 +2187,7 @@ const PurchaseRequisition = {
       }
       if (!window.__PurchaseRequisitionItem_table) {
         window.__PurchaseRequisitionItem_table = new table().new(tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable, ["编号", "申请种类", "交付时间", "申请数量", "收货人", "收货电话", "收货地址"])
-        window.__PurchaseRequisitionItem_table.to(window._targetPITableArea)
+        window.__PurchaseRequisitionItem_table.to(window.targetPITableArea)
       }
       if (!window.__PurchaseRequisitionItem_table) {
         //TODO
@@ -2182,24 +2195,24 @@ const PurchaseRequisition = {
         var PIinfoSet = []
         var templateOpts = tableStructures.Dealer.MyOrder.PurchaseRequisitionItemTable
         window.__PurchaseRequisitionItem_table = new table().loadFromTemplateJson(PIinfoSet, templateOpts)
-        window.__PurchaseRequisitionItem_table.to(window._targetPITableArea)
+        window.__PurchaseRequisitionItem_table.to(window.targetPITableArea)
       }
 
       var operationArea = $("#operation")
-      var draftbtn = `<button type="button" class="btn btn-success col-xs-3 col-md-3 col-xs-offset-1" onclick="PurchaseRequisition.event.draft()">草稿</button>`
-      var submitbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="PurchaseRequisition.event.submit()">提交</button>`
+      var draftbtn = `<button type="button" class="btn btn-success col-xs-3 col-md-3" onclick="PurchaseRequisition.event.draft()">草稿</button>`
+      var submitbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="PurchaseRequisition.view.submit()">提交</button>`
       var editbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" onclick="PurchaseRequisition.event.edit()">修改</button>`
       var cancelbtn = `<button type="button" class="btn btn-danger col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">取消</button>`
       var closebtnlbtn = `<button type="button" class="btn btn-primary col-xs-3 col-md-3" data-dismiss="modal" aria-hidden="true">关闭</button>`
       switch (window._operation) {
         case Enum.operation.Update:
-          operationArea.append($(editbtn)).append($(submitbtn)).append($(cancelbtn))
+          operationArea.append($(editbtn).addClass("col-xs-offset-1 col-md-offset-1")).append($(submitbtn)).append($(cancelbtn))
           break
         case Enum.operation.Create:
-          operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+          operationArea.append($(draftbtn).addClass("col-xs-offset-1 col-md-offset-1")).append($(submitbtn)).append($(cancelbtn))
           break
         case Enum.operation.Copy:
-          operationArea.append($(draftbtn)).append($(submitbtn)).append($(cancelbtn))
+          operationArea.append($(draftbtn).addClass("col-xs-offset-1 col-md-offset-1")).append($(submitbtn)).append($(cancelbtn))
           break
         default:
           operationArea.append($(closebtnlbtn))
@@ -2215,7 +2228,7 @@ const PurchaseRequisition = {
     copy: function(PRid) {
       window._operation = Enum.operation.Copy
       PurchaseRequisition.view.init()
-      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
       //填充dealer
       PurchaseRequisition.autoComplate(PRid)
@@ -2223,17 +2236,19 @@ const PurchaseRequisition = {
     edit: function(PRid) {
       window._operation = Enum.operation.Update
       PurchaseRequisition.view.init()
-      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
       PurchaseRequisition.show()
       //填充dealer
       PurchaseRequisition.autoComplate(PRid)
-      // console.log(5, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
     },
     delete: function(PRid) {
       window._operation = Enum.operation.Delete
       PurchaseRequisition.view.init()
-      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
       $("#Delete").modal()
+    },
+    submit:function(){
+      $("#Submit").modal()
     }
   },
   event: {
@@ -2285,7 +2300,8 @@ const PurchaseRequisition = {
         }
         var checkPICountResult = apiConfig.purchaseitem.Check(items)
         if ("" != checkPICountResult) {
-          new MessageAlert(checkPICountResult, MessageAlert.Status.EXCEPTION,1500)
+          new ModalAlert({label:checkPICountResult.replace(",","<br/>").replace("库存","<br/>库存")})
+          // new MessageAlert(checkPICountResult, MessageAlert.Status.EXCEPTION,2000)
           return
         }
         // var submitter = $("#submitter").val()
@@ -2295,8 +2311,8 @@ const PurchaseRequisition = {
         data["_prstatus"] = Enum.prstatus.Progress
         //如果是Draft转Submit
         if (window._operation == Enum.operation.Update) {
-          data["_id"] = window._target.PR["_id"]
-          data["_prstatus"] = window._target.PR["_prstatus"]
+          data["_id"] = window.target.PR["_id"]
+          data["_prstatus"] = window.target.PR["_prstatus"]
         } //TODO
 
 
@@ -2339,9 +2355,9 @@ const PurchaseRequisition = {
       $("#saver").val(getCookie("name"))
       var data = formToSet("#PurchaseRequisition_form")
       for (var v in data) {
-        window._target.PR[v] = data[v]
+        window.target.PR[v] = data[v]
       }
-      var EditRemoteData = apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
+      var EditRemoteData = apiConfig.purchaserequisition.Edit(window.target.PR["_id"], window.target.PR)
       if (EditRemoteData) {
         var picount = PurchaseItem.update()
         new MessageAlert("修改成功！", MessageAlert.Status.SUCCESS)
@@ -2352,8 +2368,8 @@ const PurchaseRequisition = {
       table_init() //更新
     },
     delete: function() {
-      if (window._target.PR) {
-        var id = window._target.PR["_id"]
+      if (window.target.PR) {
+        var id = window.target.PR["_id"]
         var result = apiConfig.purchaserequisition.Delete(id)
         if (result) {
           new MessageAlert("成功删除该草稿！", MessageAlert.SUCCESS)
@@ -2393,76 +2409,62 @@ const PurchaseRequisition = {
 //   }
 // })
 
-const SupplierPRDetail = {
-  show: function() {
-    SupplierPRDetail.view.init()
-    $("#SupplierPRDetail")
-      .on("hidden.bs.modal", function() {
-        PRDetail.destory()
-      })
-    $("#SupplierPRDetail").modal()
-  },
-  hide: function() {
-    SupplierPRDetail.destory()
-    $("#SupplierPRDetail").modal('hide')
-  },
+var SupplierPRDetail = {
+  id: "#SupplierPRDetail",
+
   autoComplate: function(PRid) {
-    var targetPRITableArea = "#SupplierPRDetail .goodsInfomation",
+    var targetPRArea = "#SupplierPRDetail",
+      targetPITableArea = "#SupplierPRDetail .goodsInfomation",
       templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail
     if (PRid) {
-      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-      new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea)
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
+      //填充其他信息
+      var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
+      for (var i in PRinfoSet) {
+        PRinfoSet[i] = PRinfoSet[i] || "无"
+      }
+      PRinfoSet["_logistics"] = PRinfoSet["_logistics"].replace(",",",\r\n") || "暂无物流信息"
+      autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
+      getProcessChartTo(PRid, ".progressbar")
     }
-
-
-    getProcessChartTo(PRid, ".progressbar")
-
-    var logistics = window._target.PR["_logistics"]
+    var logistics = window.target.PR["_logistics"]
     $("#_logistics").val(logistics)
     var logisticsArray = logistics.split(",")
     for (var i = 0; i < logisticsArray.length; i++) {
       SupplierPRDetail.event.Express.appendExpress(logisticsArray[i])
     }
-
   },
   destory: function() {
-    window._target.PI = null
-    window._target.PR = null
-    window._target = null
+    this.__proto__.destory()
     $(".expressRow").remove()
-    clearProcessChart()
-    // SupplierPRDetail.view.Express.destory()
   },
   view: {
     init: function() {
       $(".expressRow").remove()
 
-      if (!window._target) {
-        window._target = {}
+      if (!window.target) {
+        window.target = {}
       }
-      if (!window._target.PR) {
-        window._target.PR = {}
-      }
-      if (!window._target.PI) {
-        window._target.PI = {}
+      if (!window.target.PR) {
+        window.target.PR = {}
       }
     },
     update: function(PRid) {
       window._operation = Enum.operation.Update
       SupplierPRDetail.view.init()
 
-      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
       SupplierPRDetail.show()
       SupplierPRDetail.autoComplate(PRid)
     },
     finish: function() {
-      // var PRid = window._target.PR["_id"]
+      // var PRid = window.target.PR["_id"]
       window._operation = Enum.operation.Update
       // apiConfig.prprocess.SupplierComplete(PRid)
-      SupplierPRDetail.destory()
+      // SupplierPRDetail.destory()
       SupplierPRDetail.hide()
-    },
-    Express: {
     }
   },
   event: {
@@ -2505,22 +2507,22 @@ const SupplierPRDetail = {
         $("#Express_form").find("#_logistics").val(str)
       },
       save: function() {
-        window._target.PR['_logistics'] = $("#Express_form").find("#_logistics").val()
-        var result = apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
-        if(result){
-          new MessageAlert("保存成功",MessageAlert.Status.SUCCESS)
+        window.target.PR['_logistics'] = $("#Express_form").find("#_logistics").val()
+        var result = apiConfig.purchaserequisition.Edit(window.target.PR["_id"], window.target.PR)
+        if (result) {
+          new MessageAlert("保存成功", MessageAlert.Status.SUCCESS)
           SupplierPRDetail.hide()
           console.log("Saved!")
-        }else{
-          new MessageAlert("保存失败",MessageAlert.Status.ERROR)
+        } else {
+          new MessageAlert("保存失败", MessageAlert.Status.ERROR)
         }
       }
       // update: function() {
-      //   var piid = window._target.PI["_id"]
-      //   var prid = window._target.PR["_id"]
+      //   var piid = window.target.PI["_id"]
+      //   var prid = window.target.PR["_id"]
       //   SupplierPRDetail.autoComplate(prid)
-      //   window._target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
-      //   var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+      //   window.target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
+      //   var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window.target.PI)
       //   if (isUpdate == true) {
       //     new MessageAlert("物流信息更新成功！", MessageAlert.Status.SUCCESS)
       //   }else{
@@ -2532,7 +2534,7 @@ const SupplierPRDetail = {
       // }
     },
     finish: function() {
-      var prid = window._target.PR["_id"]
+      var prid = window.target.PR["_id"]
       // var prprocesses = apiConfig.prprocess.Search({keyword:prid})
       // var pi = apiConfig.purchaseitem.Paging(prid, 0, 1000)
       // var isAllLogisticsFilled = true
@@ -2560,6 +2562,7 @@ const SupplierPRDetail = {
     }
   }
 }
+SupplierPRDetail.__proto__ = DetailPrototype
 
 function Adapter(data, orderArray) {
   //HACK 将后台数据转化到前台table结构 -- 最好之后统一数据结构！
@@ -3998,11 +4001,11 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": false,
         "hasDetail": false,
-        "viewOrder": ["_id", "_brochurename", "_quantity", "_deliverydate"],
-        "keyArr": ["id", "key", "prop", "prop"],
+        "viewOrder": ["_id", "_brochurename", "_quantity"],
+        "keyArr": ["id", "key", "prop"],
         // "buttonPool": ["updateBtn"],
         "data": [
-          ["序列", "物品名字", "物品数量", "交付时间"],
+          ["序列", "物品名字", "物品数量"],
         ]
       }
 

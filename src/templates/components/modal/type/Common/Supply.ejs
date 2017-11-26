@@ -26,15 +26,15 @@
 </div>
 <script>
   function quantitySupply() {
-    var before_quantity = window._target["_quantity"] ? window._target["_quantity"] : 0
-    window._target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
-    window._target["_operator"] = getCookie("account")
-    console.log(window._target);
-    // PUT('/api/brochure/' + window._target["_id"] + '/update', window._target)
-    var EditRemoteData = apiConfig.brochure.Edit(window._target["_id"], window._target)
+    var before_quantity = window.target["_quantity"] ? window.target["_quantity"] : 0
+    window.target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
+    window.target["_operator"] = getCookie("account")
+    console.log(window.target);
+    // PUT('/api/brochure/' + window.target["_id"] + '/update', window.target)
+    var EditRemoteData = apiConfig.brochure.Edit(window.target["_id"], window.target)
     if (EditRemoteData) {
-      new MessageAlert("入库成功，已入库" + $("#quantitySupply").val() + "件" + window._target["_brochurename"], MessageAlert.Status.SUCCESS)
-      window._target = null
+      new MessageAlert("入库成功，已入库" + $("#quantitySupply").val() + "件" + window.target["_brochurename"], MessageAlert.Status.SUCCESS)
+      window.target = null
       $("#Supply").modal('hide')
       ClearInputs("#Supply")
       ClearSelection("#Supply")

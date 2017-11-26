@@ -1,6 +1,7 @@
 /*HACK 解决多模态关闭之后滚轴不动的问题 */
 .modal {
   overflow: auto !important;
+  padding-right: 0!important;
 }
 @media (min-width: 768px) {
   .lg-modal > .modal-dialog {
@@ -31,7 +32,10 @@
 .modal-infopart .addBtn {
   position: absolute;
   right: 1rem;
-  top: 0.5rem;
+  top: 1.7rem;
+}
+.modal-infopart:not(:first-child) {
+  padding-top: 1rem;
 }
 .modal-infopart.baseInfomation > div.comment,
 .modal-infopart.baseInfomation > div.logistics,
@@ -40,10 +44,12 @@
   display: block;
   padding: 1rem;
   float: left;
+  background-color: #f2f2f2;
 }
 .modal-infopart.baseInfomation > div.comment li,
 .modal-infopart.baseInfomation > div.logistics li,
 .modal-infopart.baseInfomation > ul li {
+  font-size: 1.8rem;
   list-style: none;
   display: block;
   width: 30%;
@@ -53,6 +59,7 @@
   .modal-infopart.baseInfomation > div.comment li,
   .modal-infopart.baseInfomation > div.logistics li,
   .modal-infopart.baseInfomation > ul li {
+    font-size: 1.5rem;
     width: 100%;
   }
 }
@@ -63,6 +70,9 @@
   width: 100%;
   min-height: 4rem;
   background-color: #e4e6eb;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  border-radius: 0.5rem;
   font-size: 2rem;
   font-weight: bold;
   color: #000;

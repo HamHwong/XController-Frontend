@@ -155,73 +155,13 @@
       <div class="modal-footer">
         <div class="center-block">
           <button type="button" class="btn btn-success" onclick="SupplierPRDetail.event.Express.save()">保存物流信息</button>
-          <button type="button" class="btn btn-primary" onclick="finish()">完成该订单</button>
+          <button type="button" class="btn btn-primary" onclick="SupplierPRDetail.event.finish()">完成该订单</button>
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-hidden="true">关闭</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!--<div class="modal fade" id="Update" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">更新物流信息</h4>
-      </div>
-
-      <div class="modal-body">
-        <form id="update_Express" class="form-horizontal" role="form">
-          <div class="form-group">
-            <label class="col-sm-3 control-label">物流信息 ：</label>
-            <div class="col-sm-8">
-              <textarea name="_logistics" id="_logistics" class="form-control" placeholder="输入最新信息"></textarea>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" onclick="SupplierPRDetail.event.Express.update()"><span class="glyphicon glyphicon-ok"></span></button>
-        <button type="submit" class="btn btn-danger" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span></button>
-      </div>
-    </div>
-  </div>
-</div>
--->
-  <!-- 信息删除确认 -->
-<div class="modal fade" id="Finish">
-  <div class="modal-dialog">
-    <div class="modal-content message_align">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-        <h4 class="modal-title">提示信息</h4>
-      </div>
-      <div class="modal-body">
-        <p>您确认完成该订单吗？</p>
-      </div>
-      <div class="modal-footer">
-        <input type="hidden" id="url" />
-        <a onclick="SupplierPRDetail.event.finish()" class="btn btn-danger" data-dismiss="modal">确定</a>
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
-    <script>
-      // var update = function(PRid) {
-      //   SupplierPRDetail.view.Express.update(PRid)
-      // }
-
-      function finish(primarykey) {
-        $("#Finish").modal()
-      }
-    </script>
 
   
 
@@ -283,7 +223,7 @@
       </div>
       <div class="modal-footer">
         <div class="center-block">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">关闭</button>
+          <button type="button"  class="btn btn-primary col-xs-10 col-md-10 col-xs-offset-1 col-md-offset-1"  data-dismiss="modal" aria-hidden="true">关闭</button>
         </div>
       </div>
     </div>
@@ -366,7 +306,7 @@
   <link rel="stylesheet" href="./css/plugs/bootstrap-2a31dca112.css">
 <link rel="stylesheet" href="./css/main-8c511f7ad2.css">
 <link rel="stylesheet" href="./css/content-2f97396e13.css">
-<link rel="stylesheet" href="./css/components-135ff5b862.css">
+<link rel="stylesheet" href="./css/components-cc8a78f311.css">
 <link rel="stylesheet" href="./css/plugs/buttons-b4b26cbdf1.css">
 <link rel="stylesheet" href="./css/plugs/font-awesome-feda974a77.min.css">
 <link rel="stylesheet" href="./css/plugs/datetimepicker-797a04f9f5.css">
@@ -375,7 +315,7 @@
 <script type="text/javascript" src="./js/plugs/bootstrap-datetimepicker-fc7104849e.min.js"></script>
 <script type="text/javascript" src="./js/plugs/xss-3b1b5a0af8.js"></script>
 <script type="text/javascript" src="./js/util/apimethod-b477b1418e.js"></script>
-<script type="text/javascript" src="./js/components-6d6ee7854a.js"></script>
+<script type="text/javascript" src="./js/components-76a9f83efe.js"></script>
 <script type="text/javascript" src="./js/init-89afa2bf0b.js"></script>
 <script type="text/javascript" src="./js/content-6c0f26ee85.js"></script>
 <script type="text/javascript" src="./js/cookies-44d00dc1d8.js"></script>

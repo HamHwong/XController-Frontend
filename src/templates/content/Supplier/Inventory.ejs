@@ -38,13 +38,13 @@
 
         //删除物品记录操作
         var del = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
+          window.target = apiConfig.brochure.Get(rid)
           $("#Delete")
             .modal()
         }
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             apiConfig.brochure.Delete(id)
             $("#Delete").modal("hide")
           }
@@ -52,15 +52,15 @@
         }
         //补充物品数量操作
         var supply = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
+          window.target = apiConfig.brochure.Get(rid)
           $("#Supply")
             .modal()
         }
 
         //编辑操作
         var edit = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
-          autoComplateInfo(window._target, "#edit_Brochure")
+          window.target = apiConfig.brochure.Get(rid)
+          autoComplateInfo(window.target, "#edit_Brochure")
           $("#Edit")
             .modal()
         }

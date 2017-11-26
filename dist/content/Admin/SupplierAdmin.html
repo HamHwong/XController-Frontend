@@ -125,7 +125,7 @@
 </div>
 <script>
   function editSupplier() {
-    var rawData = window._target
+    var rawData = window.target
     var data = formToSet("#edit_Supplier")
     for (var i in data) {
       rawData[i] = data[i]
@@ -183,13 +183,13 @@
         }
         //删除供应商操作
         var Delete = function(rid) {
-          window._target = apiConfig.supplier.Get(rid)
+          window.target = apiConfig.supplier.Get(rid)
           $("#Delete")
             .modal()
         }
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             var result = apiConfig.supplier.Delete(id)
             if(result == true){new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)}else{new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)}
             $("#Delete").modal("hide")
@@ -199,8 +199,8 @@
         var search=function() {}
         //编辑供应商操作
         var edit = function(rid) {
-          window._target = apiConfig.supplier.Get(rid)
-          autoComplateInfo(window._target, "#edit_Supplier")
+          window.target = apiConfig.supplier.Get(rid)
+          autoComplateInfo(window.target, "#edit_Supplier")
           $("#Edit")
             .modal()
         }

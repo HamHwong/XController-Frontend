@@ -249,11 +249,11 @@ const tableStructures = {
         "hasHeader": true,
         "hasButton": false,
         "hasDetail": false,
-        "viewOrder": ["_id", "_brochurename", "_quantity", "_deliverydate"],
-        "keyArr": ["id", "key", "prop", "prop"],
+        "viewOrder": ["_id", "_brochurename", "_quantity"],
+        "keyArr": ["id", "key", "prop"],
         // "buttonPool": ["updateBtn"],
         "data": [
-          ["序列", "物品名字", "物品数量", "交付时间"],
+          ["序列", "物品名字", "物品数量"],
         ]
       }
 

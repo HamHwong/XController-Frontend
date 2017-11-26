@@ -65,7 +65,7 @@ const BrochureAdmin = {
       table_init()
     },
     edit: function() {
-      var rawData = window._target
+      var rawData = window.target
       var data = formToSet("#edit_Brochure")
       for (var i in data) {
         rawData[i] = data[i]

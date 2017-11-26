@@ -2,6 +2,7 @@
 
 .modal {
   overflow: auto !important;
+  padding-right:0!important;
 }
 
 .lg-modal > .modal-dialog {
@@ -33,12 +34,14 @@
 .modal-infopart {
   position: relative;
   clear: both;
-
   .addBtn {
     position: absolute;
     right: 1rem;
-    top: 0.5rem;
+    top: 1.7rem;
   }
+}
+.modal-infopart:not(:first-child){
+  padding-top:1rem;
 }
 
 .modal-infopart.baseInfomation > div.comment,
@@ -48,13 +51,18 @@
   display: block;
   padding: 1rem;
   float: left;
-
+  background-color: #f2f2f2;
+  li:not(:first-child) {
+    // margin-left: 10%;
+  }
   li {
+    font-size: 1.8rem;
     list-style: none;
     display: block;
     width: 30%;
     float: left;
     @media(max-width: 768px){
+      font-size: 1.5rem;
       width: 100%;
     }
   }
@@ -67,6 +75,7 @@
   width: 100%;
   min-height: 4rem;
   background-color: #e4e6eb;
+  border-radius: 0.5rem;
   font-size: 2rem;
   font-weight: bold;
   color: #000;

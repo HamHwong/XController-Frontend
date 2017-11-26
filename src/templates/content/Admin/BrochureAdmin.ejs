@@ -43,12 +43,12 @@
 
             //删除物品记录操作
             var Delete = function(rid) {
-              window._target = apiConfig.brochure.Get(rid)
+              window.target = apiConfig.brochure.Get(rid)
               BrochureAdmin.view.delete.show()
             }
             var deleteSubmit = function() {
-              if (window._target) {
-                var id = window._target["_id"]
+              if (window.target) {
+                var id = window.target["_id"]
                 var result = apiConfig.brochure.Delete(id)
                 if (result == true) {
                   new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
@@ -61,7 +61,7 @@
             }
             //补充物品数量操作
             var supply = function(rid) {
-              window._target = apiConfig.brochure.Get(rid)
+              window.target = apiConfig.brochure.Get(rid)
               BrochureAdmin.view.supply.show()
             }
             //查看出入库历史操作
@@ -70,8 +70,8 @@
             }
             //编辑操作
             var edit = function(rid) {
-              window._target = apiConfig.brochure.Get(rid)
-              autoComplateInfo(window._target, "#edit_Brochure")
+              window.target = apiConfig.brochure.Get(rid)
+              autoComplateInfo(window.target, "#edit_Brochure")
               BrochureAdmin.view.edit.show()
             }
             var search = function() {

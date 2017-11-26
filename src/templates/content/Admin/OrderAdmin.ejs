@@ -60,17 +60,14 @@
 
           //订单详情操作
           var Detail = function(PRid) {
-            console.log(PRid);
             PurchaseRequisition.detail(PRid)
           }
           //复制操作
           var copy = function(PRid) {
-            console.log(PRid);
             PurchaseRequisition.view.copy(PRid)
           }
 
           var edit = function(PRid) {
-            console.log(PRid);
             PurchaseRequisition.view.edit(PRid)
             // console.log(6, window.__PurchaseRequisition_tempID, window.__PurchaseRequisitionItem_Unsave_set[window.__PurchaseRequisition_tempID])
           }
@@ -85,7 +82,6 @@
               table_init()
               return
             }
-            debugger
             generateTableWithPageHelper({
               target: "#applying",
               templateOpts: tableStructures.Admin.OrderAdmin.oldOrder,

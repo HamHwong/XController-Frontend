@@ -5,7 +5,7 @@ var MessageAlert = function(msg, status, showTime) {
   this.html = null
   this.dropback = null
   this.showoutTime = 600
-  this.showtime = showTime || 1000
+  this.showtime = showTime || 1500
   this.hideTime = 300
   this.show(this.mse, this.status)
 }

@@ -117,15 +117,15 @@
 </div>
 <script>
   function quantitySupply() {
-    var before_quantity = window._target["_quantity"] ? window._target["_quantity"] : 0
-    window._target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
-    window._target["_operator"] = getCookie("account")
-    console.log(window._target);
-    // PUT('/api/brochure/' + window._target["_id"] + '/update', window._target)
-    var EditRemoteData = apiConfig.brochure.Edit(window._target["_id"], window._target)
+    var before_quantity = window.target["_quantity"] ? window.target["_quantity"] : 0
+    window.target["_quantity"] = parseInt($("#quantitySupply").val()) + parseInt(before_quantity)
+    window.target["_operator"] = getCookie("account")
+    console.log(window.target);
+    // PUT('/api/brochure/' + window.target["_id"] + '/update', window.target)
+    var EditRemoteData = apiConfig.brochure.Edit(window.target["_id"], window.target)
     if (EditRemoteData) {
-      new MessageAlert("入库成功，已入库" + $("#quantitySupply").val() + "件" + window._target["_brochurename"], MessageAlert.Status.SUCCESS)
-      window._target = null
+      new MessageAlert("入库成功，已入库" + $("#quantitySupply").val() + "件" + window.target["_brochurename"], MessageAlert.Status.SUCCESS)
+      window.target = null
       $("#Supply").modal('hide')
       ClearInputs("#Supply")
       ClearSelection("#Supply")
@@ -156,13 +156,13 @@
 
         //删除物品记录操作
         var del = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
+          window.target = apiConfig.brochure.Get(rid)
           $("#Delete")
             .modal()
         }
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             apiConfig.brochure.Delete(id)
             $("#Delete").modal("hide")
           }
@@ -170,15 +170,15 @@
         }
         //补充物品数量操作
         var supply = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
+          window.target = apiConfig.brochure.Get(rid)
           $("#Supply")
             .modal()
         }
 
         //编辑操作
         var edit = function(rid) {
-          window._target = apiConfig.brochure.Get(rid)
-          autoComplateInfo(window._target, "#edit_Brochure")
+          window.target = apiConfig.brochure.Get(rid)
+          autoComplateInfo(window.target, "#edit_Brochure")
           $("#Edit")
             .modal()
         }

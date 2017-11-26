@@ -163,8 +163,8 @@
           DealerAdmin.view.delete.show(rid)
         }
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             var result = apiConfig.dealer.Delete(id)
 if(result == true){new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)}else{new MessageAlert("添加失败", MessageAlert.Status.EXCEPTION)}
             DealerAdmin.view.delete.hide()

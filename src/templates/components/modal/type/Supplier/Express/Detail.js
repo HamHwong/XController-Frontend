@@ -1,73 +1,59 @@
-const SupplierPRDetail = {
-  show: function() {
-    SupplierPRDetail.view.init()
-    $("#SupplierPRDetail")
-      .on("hidden.bs.modal", function() {
-        PRDetail.destory()
-      })
-    $("#SupplierPRDetail").modal()
-  },
-  hide: function() {
-    SupplierPRDetail.destory()
-    $("#SupplierPRDetail").modal('hide')
-  },
+var SupplierPRDetail = {
+  id: "#SupplierPRDetail",
+
   autoComplate: function(PRid) {
-    var targetPRITableArea = "#SupplierPRDetail .goodsInfomation",
+    var targetPRArea = "#SupplierPRDetail",
+      targetPITableArea = "#SupplierPRDetail .goodsInfomation",
       templateOpts = tableStructures.Supplier.MyOrder.ExpressUpdateDetail
     if (PRid) {
-      var PRIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
-      new table().loadFromTemplateJson(PRIinfoSet, templateOpts).to(targetPRITableArea)
+      //填充PI
+      var PIinfoSet = apiConfig.purchaseitem.Paging(PRid, 0, 100)
+      new table().loadFromTemplateJson(PIinfoSet, templateOpts).to(targetPITableArea)
+      //填充其他信息
+      var PRinfoSet = apiConfig.purchaserequisition.Get(PRid) //查出改PR详情
+      for (var i in PRinfoSet) {
+        PRinfoSet[i] = PRinfoSet[i] || "无"
+      }
+      PRinfoSet["_logistics"] = PRinfoSet["_logistics"].replace(",",",\r\n") || "暂无物流信息"
+      autoComplateInfo(PRinfoSet, targetPRArea, "PRD") //将PR填充到表单
+      getProcessChartTo(PRid, ".progressbar")
     }
-
-
-    getProcessChartTo(PRid, ".progressbar")
-
-    var logistics = window._target.PR["_logistics"]
+    var logistics = window.target.PR["_logistics"]
     $("#_logistics").val(logistics)
     var logisticsArray = logistics.split(",")
     for (var i = 0; i < logisticsArray.length; i++) {
       SupplierPRDetail.event.Express.appendExpress(logisticsArray[i])
     }
-
   },
   destory: function() {
-    window._target.PI = null
-    window._target.PR = null
-    window._target = null
+    this.__proto__.destory()
     $(".expressRow").remove()
-    clearProcessChart()
-    // SupplierPRDetail.view.Express.destory()
   },
   view: {
     init: function() {
       $(".expressRow").remove()
 
-      if (!window._target) {
-        window._target = {}
+      if (!window.target) {
+        window.target = {}
       }
-      if (!window._target.PR) {
-        window._target.PR = {}
-      }
-      if (!window._target.PI) {
-        window._target.PI = {}
+      if (!window.target.PR) {
+        window.target.PR = {}
       }
     },
     update: function(PRid) {
       window._operation = Enum.operation.Update
       SupplierPRDetail.view.init()
 
-      window._target.PR = apiConfig.purchaserequisition.Get(PRid)
+      window.target.PR = apiConfig.purchaserequisition.Get(PRid)
       SupplierPRDetail.show()
       SupplierPRDetail.autoComplate(PRid)
     },
     finish: function() {
-      // var PRid = window._target.PR["_id"]
+      // var PRid = window.target.PR["_id"]
       window._operation = Enum.operation.Update
       // apiConfig.prprocess.SupplierComplete(PRid)
-      SupplierPRDetail.destory()
+      // SupplierPRDetail.destory()
       SupplierPRDetail.hide()
-    },
-    Express: {
     }
   },
   event: {
@@ -110,22 +96,22 @@ const SupplierPRDetail = {
         $("#Express_form").find("#_logistics").val(str)
       },
       save: function() {
-        window._target.PR['_logistics'] = $("#Express_form").find("#_logistics").val()
-        var result = apiConfig.purchaserequisition.Edit(window._target.PR["_id"], window._target.PR)
-        if(result){
-          new MessageAlert("保存成功",MessageAlert.Status.SUCCESS)
+        window.target.PR['_logistics'] = $("#Express_form").find("#_logistics").val()
+        var result = apiConfig.purchaserequisition.Edit(window.target.PR["_id"], window.target.PR)
+        if (result) {
+          new MessageAlert("保存成功", MessageAlert.Status.SUCCESS)
           SupplierPRDetail.hide()
           console.log("Saved!")
-        }else{
-          new MessageAlert("保存失败",MessageAlert.Status.ERROR)
+        } else {
+          new MessageAlert("保存失败", MessageAlert.Status.ERROR)
         }
       }
       // update: function() {
-      //   var piid = window._target.PI["_id"]
-      //   var prid = window._target.PR["_id"]
+      //   var piid = window.target.PI["_id"]
+      //   var prid = window.target.PR["_id"]
       //   SupplierPRDetail.autoComplate(prid)
-      //   window._target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
-      //   var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window._target.PI)
+      //   window.target.PI["_logistics"] = formToSet("#update_Express")["_logistics"]
+      //   var isUpdate = apiConfig.purchaseitem.UpdateLogitics(piid, window.target.PI)
       //   if (isUpdate == true) {
       //     new MessageAlert("物流信息更新成功！", MessageAlert.Status.SUCCESS)
       //   }else{
@@ -137,7 +123,7 @@ const SupplierPRDetail = {
       // }
     },
     finish: function() {
-      var prid = window._target.PR["_id"]
+      var prid = window.target.PR["_id"]
       // var prprocesses = apiConfig.prprocess.Search({keyword:prid})
       // var pi = apiConfig.purchaseitem.Paging(prid, 0, 1000)
       // var isAllLogisticsFilled = true
@@ -165,3 +151,4 @@ const SupplierPRDetail = {
     }
   }
 }
+SupplierPRDetail.__proto__ = DetailPrototype

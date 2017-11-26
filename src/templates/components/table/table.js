@@ -139,6 +139,7 @@ table.prototype.bindEvents = function(callback) {
     return
   callback = callback ? callback : Detail
   var data = this.data
+  debugger
   for (var i in data) {
     data[i].onClick(function() {
       callback.call(this, this.dataset.primarykey)
@@ -208,7 +209,8 @@ table.prototype.addRow = function(rowJSONObj) {
   if (this.data[PrimaryKeyValue]) {
     // throw "Error! This primary key is alreay occupied , If need update , please use update function"
   }
-  this.data[PrimaryKeyValue] = row
+  // this.data[PrimaryKeyValue] = row
+  this.data[generateUUID()] = row
   tbody.append(row.HTMLObj)
   this.addInfoCard()
   this.isUpdated = true

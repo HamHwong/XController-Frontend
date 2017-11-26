@@ -10,8 +10,8 @@ const DealerAdmin = {
     },
     edit: {
       show: function(rid) {
-        window._target = apiConfig.dealer.Get(rid)
-        autoComplateInfo(window._target, "#edit_Dealer")
+        window.target = apiConfig.dealer.Get(rid)
+        autoComplateInfo(window.target, "#edit_Dealer")
         $("#Edit").modal()
       },
       hide: function() {
@@ -20,7 +20,7 @@ const DealerAdmin = {
     },
     delete: {
       show: function(rid) {
-        window._target = apiConfig.dealer.Get(rid)
+        window.target = apiConfig.dealer.Get(rid)
         $("#Delete")
           .modal()
       },
@@ -46,7 +46,7 @@ const DealerAdmin = {
       table_init()
     },
     edit: function() {
-      var rawData = window._target
+      var rawData = window.target
       var data = formToSet("#edit_Dealer")
       for (var i in data) {
         rawData[i] = data[i]

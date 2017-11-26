@@ -117,7 +117,7 @@
 </div>
 <script>
   function editOptionList() {
-    var rawData = window._target
+    var rawData = window.target
     var data = formToSet("#edit_Option")
     for (var i in data) {
       rawData[i] = data[i]
@@ -175,14 +175,14 @@
 
         //删除物品记录操作
         var Delete = function(rid) {
-          window._target = apiConfig.optionlist.Get(rid)
+          window.target = apiConfig.optionlist.Get(rid)
           $("#Delete")
             .modal()
         }
 
         var deleteSubmit = function() {
-          if (window._target) {
-            var id = window._target["_id"]
+          if (window.target) {
+            var id = window.target["_id"]
             var result = apiConfig.optionlist.Delete(id)
             if (result == true) {
               new MessageAlert("删除成功", MessageAlert.Status.SUCCESS)
@@ -195,8 +195,8 @@
         }
         //编辑操作
         var edit = function(rid) {
-          window._target = apiConfig.optionlist.Get(rid)
-          autoComplateInfo(window._target, "#edit_Option")
+          window.target = apiConfig.optionlist.Get(rid)
+          autoComplateInfo(window.target, "#edit_Option")
           $("#Edit")
             .modal()
         }
